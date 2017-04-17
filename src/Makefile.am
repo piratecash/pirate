@@ -9,6 +9,7 @@ DIST_SUBDIRS = secp256k1 univalue
 AM_LDFLAGS = $(PTHREAD_CFLAGS) $(LIBTOOL_LDFLAGS) $(HARDENED_LDFLAGS) $(GPROF_LDFLAGS)
 AM_CXXFLAGS = $(HARDENED_CXXFLAGS) $(ERROR_CXXFLAGS) $(GPROF_CXXFLAGS)
 AM_CPPFLAGS = $(HARDENED_CPPFLAGS)
+AM_LIBTOOLFLAGS = --preserve-dup-deps
 EXTRA_LIBRARIES =
 
 if ENABLE_STACKTRACES
@@ -174,6 +175,7 @@ BITCOIN_CORE_H = \
   pos_kernel.h \
   interface/handler.h \
   interface/node.h \
+  interface/wallet.h \
   key.h \
   keepass.h \
   keystore.h \
@@ -381,6 +383,7 @@ endif
 libcosanta_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 libcosanta_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libcosanta_wallet_a_SOURCES = \
+  interface/wallet.cpp \
   keepass.cpp \
   pos_kernel.cpp \
   privatesend/privatesend-client.cpp \
