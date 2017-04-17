@@ -21,6 +21,10 @@ class ClientModel;
 class RPCTimerInterface;
 class WalletModel;
 
+namespace interface {
+    class Node;
+}
+
 namespace Ui {
     class RPCConsole;
 }
@@ -36,12 +40,12 @@ class RPCConsole: public QWidget
     Q_OBJECT
 
 public:
-    explicit RPCConsole(QWidget* parent);
+    explicit RPCConsole(interface::Node& node, QWidget* parent);
     ~RPCConsole();
 
-    static bool RPCParseCommandLine(std::string &strResult, const std::string &strCommand, bool fExecute, std::string * const pstrFilteredOut = nullptr, const std::string *walletID = nullptr);
-    static bool RPCExecuteCommandLine(std::string &strResult, const std::string &strCommand, std::string * const pstrFilteredOut = nullptr, const std::string *walletID = nullptr) {
-        return RPCParseCommandLine(strResult, strCommand, true, pstrFilteredOut, walletID);
+    static bool RPCParseCommandLine(interface::Node* node, std::string &strResult, const std::string &strCommand, bool fExecute, std::string * const pstrFilteredOut = nullptr, const std::string *walletID = nullptr);
+    static bool RPCExecuteCommandLine(interface::Node& node, std::string &strResult, const std::string &strCommand, std::string * const pstrFilteredOut = nullptr, const std::string *walletID = nullptr) {
+        return RPCParseCommandLine(&node, strResult, strCommand, true, pstrFilteredOut, walletID);
     }
 
     void setClientModel(ClientModel *model);
@@ -165,6 +169,7 @@ private:
 
     };
 
+    interface::Node& m_node;
     Ui::RPCConsole *ui;
     QButtonGroup pageButtons;
     ClientModel *clientModel;
