@@ -475,7 +475,7 @@ void OverviewPage::privateSendStatus()
     if(!walletModel) return;
 
     static int64_t nLastDSProgressBlockTime = 0;
-    int nBestHeight = clientModel->getNumBlocks();
+    int nBestHeight = clientModel->node().getNumBlocks();
 
     // We are processing more than 1 block per second, we'll just leave
     if(nBestHeight > privateSendClient.nCachedNumBlocks && GetTime() - nLastDSProgressBlockTime <= 1) return;
