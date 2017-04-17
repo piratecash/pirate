@@ -22,6 +22,7 @@
 
 #include <clientversion.h>
 #include <init.h>
+#include <interface/node.h>
 #include <util.h>
 
 #include <stdio.h>
@@ -34,7 +35,7 @@
 #include <QVBoxLayout>
 
 /** "Help message" or "About" dialog box */
-HelpMessageDialog::HelpMessageDialog(QWidget *parent, HelpMode helpMode) :
+HelpMessageDialog::HelpMessageDialog(interface::Node& node, QWidget *parent, HelpMode helpMode) :
     QDialog(parent),
     ui(new Ui::HelpMessageDialog)
 {
@@ -83,7 +84,7 @@ HelpMessageDialog::HelpMessageDialog(QWidget *parent, HelpMode helpMode) :
         cursor.insertText(header);
         cursor.insertBlock();
 
-        std::string strUsage = HelpMessage(HelpMessageMode::BITCOIN_QT);
+        std::string strUsage = node.helpMessage(HelpMessageMode::BITCOIN_QT);
         const bool showDebug = gArgs.GetBoolArg("-help-debug", false);
         strUsage += HelpMessageGroup(tr("UI Options:").toStdString());
         if (showDebug) {

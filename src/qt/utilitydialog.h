@@ -11,6 +11,10 @@
 
 class BitcoinGUI;
 
+namespace interface {
+    class Node;
+}
+
 namespace Ui {
     class HelpMessageDialog;
 }
@@ -27,7 +31,7 @@ public:
         pshelp
     };
 
-    explicit HelpMessageDialog(QWidget *parent, HelpMode helpMode);
+    explicit HelpMessageDialog(interface::Node& node, QWidget *parent, HelpMode helpMode);
     ~HelpMessageDialog();
 
     void printToConsole();
