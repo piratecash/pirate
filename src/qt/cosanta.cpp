@@ -160,6 +160,10 @@ class BitcoinCore: public QObject
     Q_OBJECT
 public:
     explicit BitcoinCore(interface::Node& node);
+    /** Basic initialization, before starting initialization/shutdown thread.
+     * Return true on success.
+     */
+    static bool baseInitialize();
 
 public Q_SLOTS:
     void initialize();
@@ -252,6 +256,27 @@ void BitcoinCore::handleRunawayException(const std::exception_ptr e)
 {
     PrintExceptionContinue(e, "Runaway exception");
     Q_EMIT runawayException(QString::fromStdString(m_node.getWarnings("gui")));
+}
+
+bool BitcoinCore::baseInitialize()
+{
+    if (!AppInitBasicSetup())
+    {
+        return false;
+    }
+    if (!AppInitParameterInteraction())
+    {
+        return false;
+    }
+    if (!AppInitSanityChecks())
+    {
+        return false;
+    }
+    if (!AppInitLockDataDirectory())
+    {
+        return false;
+    }
+    return true;
 }
 
 void BitcoinCore::initialize()
