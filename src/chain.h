@@ -205,7 +205,7 @@ public:
     unsigned int nChainTx;
 
     //! Verification status of this block. See enum BlockStatus
-    unsigned int nStatus;
+    uint32_t nStatus;
 
     unsigned & nStakeModifier() {
         return nNonce;
@@ -215,11 +215,11 @@ public:
     }
 
     //! block header
-    int nVersion;
+    int32_t nVersion;
     uint256 hashMerkleRoot;
-    unsigned int nTime;
-    unsigned int nBits;
-    unsigned int nNonce;
+    uint32_t nTime;
+    uint32_t nBits;
+    uint32_t nNonce;
     uint256 posStakeHash;
     uint32_t posStakeN;
     std::vector<unsigned char> posBlockSig;
