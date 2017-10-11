@@ -173,7 +173,7 @@ EXTENDED_SCRIPTS = [
     'txn_doublespend.py',
     'txn_clone.py --mineblock',
     'txindex.py',
-    'forknotify.py',
+    'notifications.py',
     'invalidateblock.py',
 ]
 
