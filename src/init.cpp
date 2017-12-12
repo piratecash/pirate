@@ -2559,12 +2559,5 @@ bool AppInitMain()
 
     g_wallet_init_interface.Start(scheduler);
 
-    // Final check if the user requested to kill the GUI during one of the last operations. If so, exit.
-    if (fRequestShutdown)
-    {
-        LogPrintf("Shutdown requested. Exiting.\n");
-        return false;
-    }
-
     return true;
 }
