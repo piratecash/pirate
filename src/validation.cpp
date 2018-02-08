@@ -3133,8 +3133,6 @@ bool CChainState::ActivateBestChain(CValidationState &state, const CChainParams&
     int nStopAtHeight = gArgs.GetArg("-stopatheight", DEFAULT_STOPATHEIGHT);
     do {
         boost::this_thread::interruption_point();
-        if (ShutdownRequested())
-            break;
 
         if (GetMainSignals().CallbacksPending() > 10) {
             // Block until the validation queue drains. This should largely
@@ -3193,6 +3191,13 @@ bool CChainState::ActivateBestChain(CValidationState &state, const CChainParams&
         // When we reach this point, we switched to a new tip (stored in pindexNewTip).
 
         if (nStopAtHeight && pindexNewTip && pindexNewTip->nHeight >= nStopAtHeight) StartShutdown();
+
+        // We check shutdown only after giving ActivateBestChainStep a chance to run once so that we
+        // never shutdown before connecting the genesis block during LoadChainTip(). Previously this
+        // caused an assert() failure during shutdown in such cases as the UTXO DB flushing checks
+        // that the best block hash is non-null.
+        if (ShutdownRequested())
+            break;
     } while (pindexNewTip != pindexMostWork);
     CheckBlockIndex(chainparams.GetConsensus());
 
