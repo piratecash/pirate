@@ -1230,10 +1230,6 @@ UniValue addmultisigaddress(const JSONRPCRequest& request)
             "  \"address\":\"multisigaddress\",    (string) The value of the new multisig address.\n"
             "  \"redeemScript\":\"script\"         (string) The string value of the hex-encoded redemption script.\n"
             "}\n"
-            "\nResult (DEPRECATED. To see this result in v0.16 instead, please start cosantad with -deprecatedrpc=addmultisigaddress).\n"
-            "        clients should transition to the new output api before upgrading to v0.17.\n"
-            "\"address\"                         (string) A cosanta address associated with the keys.\n"
-
             "\nExamples:\n"
             "\nAdd a multisig address from 2 addresses\n"
             + HelpExampleCli("addmultisigaddress", "2 \"[\\\"Xt4qk9uKvQYAonVGSZNXqxeDmtjaEWgfrS\\\",\\\"XoSoWQkpgLpppPoyyzbUFh1fq2RBvW6UK2\\\"]\"") +
@@ -1268,11 +1264,6 @@ UniValue addmultisigaddress(const JSONRPCRequest& request)
     pwallet->AddCScript(inner);
 
     pwallet->SetAddressBook(innerID, strAccount, "send");
-
-    // Return old style interface
-    if (IsDeprecatedRPCEnabled("addmultisigaddress")) {
-        return EncodeDestination(innerID);
-    }
 
     UniValue result(UniValue::VOBJ);
     result.pushKV("address", EncodeDestination(innerID));
