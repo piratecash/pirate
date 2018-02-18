@@ -2,13 +2,15 @@
 
 export LC_ALL=C
 TOPDIR=${TOPDIR:-$(git rev-parse --show-toplevel)}
-SRCDIR=${SRCDIR:-$TOPDIR/src}
+BUILDDIR=${BUILDDIR:-$TOPDIR}
+
+BINDIR=${BINDIR:-$BUILDDIR/src}
 MANDIR=${MANDIR:-$TOPDIR/doc/man}
 
-BITCOIND=${BITCOIND:-$SRCDIR/cosantad}
-BITCOINCLI=${BITCOINCLI:-$SRCDIR/cosanta-cli}
-BITCOINTX=${BITCOINTX:-$SRCDIR/cosanta-tx}
-BITCOINQT=${BITCOINQT:-$SRCDIR/qt/cosanta-qt}
+BITCOIND=${BITCOIND:-$BINDIR/cosantad}
+BITCOINCLI=${BITCOINCLI:-$BINDIR/cosanta-cli}
+BITCOINTX=${BITCOINTX:-$BINDIR/cosanta-tx}
+BITCOINQT=${BITCOINQT:-$BINDIR/qt/cosanta-qt}
 
 [ ! -x $BITCOIND ] && echo "$BITCOIND not found or not executable." && exit 1
 
