@@ -4969,6 +4969,7 @@ bool CheckProof(CValidationState &state, const CBlockHeader &block, const Consen
 }
 
 //! Guess how far we are in the verification process at the given block index
+//! require cs_main if pindex has not been validated yet (because nChainTx might be unset)
 double GuessVerificationProgress(const ChainTxData& data, CBlockIndex *pindex) {
     if (pindex == nullptr)
         return 0.0;
