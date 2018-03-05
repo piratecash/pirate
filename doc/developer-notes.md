@@ -875,7 +875,7 @@ To create a scripted-diff:
 
 The scripted-diff is verified by the tool `test/lint/commit-script-check.sh`
 
-Commit `bb81e173` is an example of a scripted-diff.
+Commit [`bb81e173`](https://github.com/bitcoin/bitcoin/commit/bb81e173) is an example of a scripted-diff.
 
 Release notes
 -------------
