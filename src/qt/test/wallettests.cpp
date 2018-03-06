@@ -11,6 +11,7 @@
 #include <qt/transactiontablemodel.h>
 #include <qt/transactionview.h>
 #include <qt/walletmodel.h>
+#include <key_io.h>
 #include <test/test_cosanta.h>
 #include <validation.h>
 #include <wallet/wallet.h>

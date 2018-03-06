@@ -18,6 +18,7 @@
 #include <consensus/validation.h>
 #include <fs.h>
 #include <key.h>
+#include <key_io.h>
 #include <keystore.h>
 #include <validation.h>
 #include <net.h>

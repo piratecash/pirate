@@ -9,7 +9,6 @@
 #define BITCOIN_WALLET_WALLET_H
 
 #include <amount.h>
-#include <base58.h>
 #include <policy/feerate.h>
 #include <saltedhasher.h>
 #include <streams.h>
@@ -90,6 +89,7 @@ static const int DEFAULT_STAKE_AUTOCOMBINE = AUTOCOMBINE_DISABLE;
 
 class CBlockIndex;
 class CCoinControl;
+class CKey;
 class COutput;
 class CReserveKey;
 class CScript;

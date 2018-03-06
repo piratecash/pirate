@@ -8,7 +8,7 @@
 
 #include <amount.h>
 #include <uint256.h>
-#include <base58.h>
+#include <key_io.h>
 
 #include <QList>
 #include <QString>
