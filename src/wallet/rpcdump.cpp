@@ -28,10 +28,6 @@
 #include <univalue.h>
 
 
-std::string static EncodeDumpTime(int64_t nTime) {
-    return DateTimeStrFormat("%Y-%m-%dT%H:%M:%SZ", nTime);
-}
-
 int64_t static DecodeDumpTime(const std::string &str) {
     static const boost::posix_time::ptime epoch = boost::posix_time::from_time_t(0);
     static const std::locale loc(std::locale::classic(),
@@ -886,16 +882,16 @@ UniValue dumpwallet(const JSONRPCRequest& request)
 
     // produce output
     file << strprintf("# Wallet dump created by Cosanta Core %s\n", CLIENT_BUILD);
-    file << strprintf("# * Created on %s\n", EncodeDumpTime(GetTime()));
+    file << strprintf("# * Created on %s\n", FormatISO8601DateTime(GetTime()));
     file << strprintf("# * Best block at time of backup was %i (%s),\n", chainActive.Height(), chainActive.Tip()->GetBlockHash().ToString());
-    file << strprintf("#   mined on %s\n", EncodeDumpTime(chainActive.Tip()->GetBlockTime()));
+    file << strprintf("#   mined on %s\n", FormatISO8601DateTime(chainActive.Tip()->GetBlockTime()));
     file << "\n";
 
     UniValue obj(UniValue::VOBJ);
     obj.pushKV("cosantacoreversion", CLIENT_BUILD);
     obj.pushKV("lastblockheight", chainActive.Height());
     obj.pushKV("lastblockhash", chainActive.Tip()->GetBlockHash().ToString());
-    obj.pushKV("lastblocktime", EncodeDumpTime(chainActive.Tip()->GetBlockTime()));
+    obj.pushKV("lastblocktime", FormatISO8601DateTime(chainActive.Tip()->GetBlockTime()));
 
     // add the base58check encoded extended master if the wallet uses HD
     CHDChain hdChainCurrent;
@@ -944,7 +940,7 @@ UniValue dumpwallet(const JSONRPCRequest& request)
 
     for (std::vector<std::pair<int64_t, CKeyID> >::const_iterator it = vKeyBirth.begin(); it != vKeyBirth.end(); it++) {
         const CKeyID &keyid = it->second;
-        std::string strTime = EncodeDumpTime(it->first);
+        std::string strTime = FormatISO8601DateTime(it->first);
         std::string strAddr = EncodeDestination(keyid);
         CKey key;
         if (pwallet->GetKey(keyid, key)) {
@@ -967,7 +963,7 @@ UniValue dumpwallet(const JSONRPCRequest& request)
         // get birth times for scripts with metadata
         auto it = pwallet->m_script_metadata.find(scriptid);
         if (it != pwallet->m_script_metadata.end()) {
-            create_time = EncodeDumpTime(it->second.nCreateTime);
+            create_time = FormatISO8601DateTime(it->second.nCreateTime);
         }
         if(pwallet->GetCScript(scriptid, script)) {
             file << strprintf("%s %s script=1", HexStr(script.begin(), script.end()), create_time);
