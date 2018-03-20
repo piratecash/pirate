@@ -13,8 +13,8 @@ from test_framework.blocktools import create_block, create_coinbase
 from test_framework.script import CScript, OP_TRUE, OP_DROP
 
 
-# TestNode: A peer we use to send messages to dashd, and store responses.
-class TestNode(P2PInterface):
+# TestP2PConn: A peer we use to send messages to dashd, and store responses.
+class TestP2PConn(P2PInterface):
     def __init__(self):
         super().__init__()
         self.last_sendcmpct = []
@@ -715,9 +715,9 @@ class CompactBlocksTest(BitcoinTestFramework):
 
     def run_test(self):
         # Setup the p2p connections and start up the network thread.
-        self.test_node = self.nodes[0].add_p2p_connection(TestNode())
-        self.second_node = self.nodes[1].add_p2p_connection(TestNode(), services=NODE_NETWORK)
-        self.old_node = self.nodes[1].add_p2p_connection(TestNode(), services=NODE_NETWORK)
+        self.test_node = self.nodes[0].add_p2p_connection(TestP2PConn())
+        self.second_node = self.nodes[1].add_p2p_connection(TestP2PConn(), services=NODE_NETWORK)
+        self.old_node = self.nodes[1].add_p2p_connection(TestP2PConn(), services=NODE_NETWORK)
 
         network_thread_start()
 
