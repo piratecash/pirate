@@ -288,7 +288,12 @@ void PaymentServer::handleURIOrFile(const QString& s)
         return;
     }
 
-    if (s.startsWith(BITCOIN_IPC_PREFIX, Qt::CaseInsensitive)) // cosanta: URI
+    if (s.startsWith("cosanta://", Qt::CaseInsensitive))
+    {
+        Q_EMIT message(tr("URI handling"), tr("'cosanta://' is not a valid URI. Use 'cosanta:' instead."),
+            CClientUIInterface::MSG_ERROR);
+    }
+    else if (s.startsWith(BITCOIN_IPC_PREFIX, Qt::CaseInsensitive)) // dash: URI
     {
         QUrlQuery uri((QUrl(s)));
 #ifdef ENABLE_BIP70
