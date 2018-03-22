@@ -299,7 +299,7 @@ def rpc_url(datadir, i, rpchost=None):
 ################
 
 def initialize_datadir(dirname, n):
-    datadir = os.path.join(dirname, "node" + str(n))
+    datadir = get_datadir_path(dirname, n)
     if not os.path.isdir(datadir):
         os.makedirs(datadir)
     with open(os.path.join(datadir, "cosanta.conf"), 'w', encoding='utf8') as f:
@@ -313,9 +313,8 @@ def initialize_datadir(dirname, n):
 def get_datadir_path(dirname, n):
     return os.path.join(dirname, "node" + str(n))
 
-def append_config(dirname, n, options):
-    datadir = get_datadir_path(dirname, n)
-    with open(os.path.join(datadir, "bitcoin.conf"), 'a', encoding='utf8') as f:
+def append_config(datadir, options):
+    with open(os.path.join(datadir, "cosanta.conf"), 'a', encoding='utf8') as f:
         for option in options:
             f.write(option + "\n")
 
