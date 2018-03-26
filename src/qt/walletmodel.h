@@ -134,6 +134,8 @@ public:
     TransactionTableModel *getTransactionTableModel();
     RecentRequestsTableModel *getRecentRequestsTableModel();
 
+    CWallet *getWallet() const { return wallet; };
+
     CAmount getBalance(const CCoinControl *coinControl = nullptr) const;
     CAmount getUnconfirmedBalance() const;
     CAmount getImmatureBalance() const;
@@ -233,6 +235,9 @@ public:
 
     int getRealOutpointPrivateSendRounds(const COutPoint& outpoint) const;
 
+    QString getWalletName() const;
+
+    static bool isMultiwallet();
 private:
     CWallet *wallet;
     bool fHaveWatchOnly;
@@ -271,7 +276,7 @@ Q_SIGNALS:
                         const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance);
 
     // Encryption status of wallet changed
-    void encryptionStatusChanged(int status);
+    void encryptionStatusChanged();
 
     // Signal emitted when wallet needs to be unlocked
     // It is valid behaviour for listeners to keep the wallet locked after this signal;
