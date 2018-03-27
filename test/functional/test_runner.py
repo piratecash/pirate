@@ -155,6 +155,7 @@ BASE_SCRIPTS= [
     'p2p_unrequested_blocks.py',
     'feature_logging.py',
     'p2p_node_network_limited.py',
+    'feature_blocksdir.py',
     'feature_config_args.py',
     'feature_help.py',
 ]
