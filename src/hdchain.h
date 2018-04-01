@@ -1,8 +1,8 @@
 // Copyright (c) 2014-2019 The Dash Core developers
 // Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
-#ifndef COSANTA_HDCHAIN_H
-#define COSANTA_HDCHAIN_H
+#ifndef BITCOIN_HDCHAIN_H
+#define BITCOIN_HDCHAIN_H
 
 #include <key.h>
 #include <sync.h>
@@ -148,4 +148,4 @@ public:
     std::string GetKeyPath() const;
 };
 
-#endif // COSANTA_HDCHAIN_H
+#endif // BITCOIN_HDCHAIN_H

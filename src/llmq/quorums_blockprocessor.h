@@ -3,8 +3,8 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef COSANTA_QUORUMS_BLOCKPROCESSOR_H
-#define COSANTA_QUORUMS_BLOCKPROCESSOR_H
+#ifndef BITCOIN_LLMQ_QUORUMS_BLOCKPROCESSOR_H
+#define BITCOIN_LLMQ_QUORUMS_BLOCKPROCESSOR_H
 
 #include <llmq/quorums_commitment.h>
 #include <llmq/quorums_utils.h>
@@ -69,4 +69,4 @@ extern CQuorumBlockProcessor* quorumBlockProcessor;
 
 } // namespace llmq
 
-#endif//COSANTA_QUORUMS_BLOCKPROCESSOR_H
+#endif // BITCOIN_LLMQ_QUORUMS_BLOCKPROCESSOR_H

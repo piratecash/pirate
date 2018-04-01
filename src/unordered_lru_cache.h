@@ -3,8 +3,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef COSANTA_UNORDERED_LRU_CACHE_H
-#define COSANTA_UNORDERED_LRU_CACHE_H
+#ifndef BITCOIN_UNORDERED_LRU_CACHE_H
+#define BITCOIN_UNORDERED_LRU_CACHE_H
 
 #include <unordered_map>
 
@@ -108,4 +108,4 @@ private:
     }
 };
 
-#endif // COSANTA_UNORDERED_LRU_CACHE_H
+#endif // BITCOIN_UNORDERED_LRU_CACHE_H

@@ -3,8 +3,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef COSANTA_QUORUMS_INSTANTSEND_H
-#define COSANTA_QUORUMS_INSTANTSEND_H
+#ifndef BITCOIN_LLMQ_QUORUMS_INSTANTSEND_H
+#define BITCOIN_LLMQ_QUORUMS_INSTANTSEND_H
 
 #include <llmq/quorums_signing.h>
 
@@ -178,4 +178,4 @@ bool IsInstantSendEnabled();
 
 } // namespace llmq
 
-#endif//COSANTA_QUORUMS_INSTANTSEND_H
+#endif // BITCOIN_LLMQ_QUORUMS_INSTANTSEND_H

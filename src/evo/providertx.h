@@ -3,8 +3,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef COSANTA_PROVIDERTX_H
-#define COSANTA_PROVIDERTX_H
+#ifndef BITCOIN_EVO_PROVIDERTX_H
+#define BITCOIN_EVO_PROVIDERTX_H
 
 #include <bls/bls.h>
 #include <consensus/validation.h>
@@ -241,4 +241,4 @@ bool CheckProUpServTx(const CTransaction& tx, const CBlockIndex* pindexPrev, CVa
 bool CheckProUpRegTx(const CTransaction& tx, const CBlockIndex* pindexPrev, CValidationState& state);
 bool CheckProUpRevTx(const CTransaction& tx, const CBlockIndex* pindexPrev, CValidationState& state);
 
-#endif //COSANTA_PROVIDERTX_H
+#endif // BITCOIN_EVO_PROVIDERTX_H

@@ -3,8 +3,8 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef COSANTA_STACKTRACES_H
-#define COSANTA_STACKTRACES_H
+#ifndef BITCOIN_STACKTRACES_H
+#define BITCOIN_STACKTRACES_H
 
 #include <string>
 #include <sstream>
@@ -40,4 +40,4 @@ inline std::string GetExceptionWhat(const T& e)
 void RegisterPrettyTerminateHander();
 void RegisterPrettySignalHandlers();
 
-#endif//COSANTA_STACKTRACES_H
+#endif//BITCOIN_STACKTRACES_H

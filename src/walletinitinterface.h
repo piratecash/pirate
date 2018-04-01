@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef WALLETINITINTERFACE_H
-#define WALLETINITINTERFACE_H
+#ifndef BITCOIN_WALLETINITINTERFACE_H
+#define BITCOIN_WALLETINITINTERFACE_H
 
 #include <string>
 
@@ -61,4 +61,4 @@ public:
 
 };
 
-#endif // WALLETINITINTERFACE_H
+#endif // BITCOIN_WALLETINITINTERFACE_H

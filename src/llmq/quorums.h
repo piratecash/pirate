@@ -3,8 +3,8 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef COSANTA_QUORUMS_H
-#define COSANTA_QUORUMS_H
+#ifndef BITCOIN_LLMQ_QUORUMS_H
+#define BITCOIN_LLMQ_QUORUMS_H
 
 #include <evo/evodb.h>
 #include <evo/deterministicmns.h>
@@ -118,4 +118,4 @@ extern CQuorumManager* quorumManager;
 
 } // namespace llmq
 
-#endif //COSANTA_QUORUMS_H
+#endif // BITCOIN_LLMQ_QUORUMS_H

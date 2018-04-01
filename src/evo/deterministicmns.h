@@ -3,8 +3,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef COSANTA_DETERMINISTICMNS_H
-#define COSANTA_DETERMINISTICMNS_H
+#ifndef BITCOIN_EVO_DETERMINISTICMNS_H
+#define BITCOIN_EVO_DETERMINISTICMNS_H
 
 #include <arith_uint256.h>
 #include <bls/bls.h>
@@ -664,4 +664,4 @@ private:
 
 extern std::unique_ptr<CDeterministicMNManager> deterministicMNManager;
 
-#endif //COSANTA_DETERMINISTICMNS_H
+#endif // BITCOIN_EVO_DETERMINISTICMNS_H

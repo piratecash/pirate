@@ -3,8 +3,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef COSANTA_EVODB_H
-#define COSANTA_EVODB_H
+#ifndef BITCOIN_EVO_EVODB_H
+#define BITCOIN_EVO_EVODB_H
 
 #include <dbwrapper.h>
 #include <sync.h>
@@ -111,4 +111,4 @@ private:
 
 extern std::unique_ptr<CEvoDB> evoDb;
 
-#endif //COSANTA_EVODB_H
+#endif // BITCOIN_EVO_EVODB_H

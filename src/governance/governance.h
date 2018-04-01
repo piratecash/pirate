@@ -3,8 +3,8 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef GOVERNANCE_H
-#define GOVERNANCE_H
+#ifndef BITCOIN_GOVERNANCE_GOVERNANCE_H
+#define BITCOIN_GOVERNANCE_GOVERNANCE_H
 
 #include <bloom.h>
 #include <cachemap.h>
@@ -433,4 +433,4 @@ private:
 
 };
 
-#endif
+#endif // BITCOIN_GOVERNANCE_GOVERNANCE_H
