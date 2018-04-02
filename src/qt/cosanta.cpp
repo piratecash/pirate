@@ -42,6 +42,7 @@
 #endif
 #include <walletinitinterface.h>
 
+#include <memory>
 #include <stdint.h>
 
 #include <boost/thread.hpp>
