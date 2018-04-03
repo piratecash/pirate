@@ -68,7 +68,7 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    if (gArgs.IsArgSet("-?") || gArgs.IsArgSet("-h") || gArgs.IsArgSet("-help")) {
+    if (HelpRequested(gArgs)) {
         std::cout << gArgs.GetHelpMessage();
         return EXIT_SUCCESS;
     }

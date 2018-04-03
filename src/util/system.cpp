@@ -691,7 +691,6 @@ std::string ArgsManager::GetHelpMessage() const
 void ArgsManager::ForceRemoveArg(const std::string& strArg)
 {
     LOCK(cs_args);
-
     const auto& ov = m_override_args.find(strArg);
     if (ov != m_override_args.end()) {
         m_override_args.erase(ov);
@@ -708,6 +707,11 @@ void ArgsManager::ForceRemoveArg(const std::string& strArg)
     if (cf != m_config_args.end()) {
         m_config_args.erase(cf);
     }
+}
+
+bool HelpRequested(const ArgsManager& args)
+{
+    return args.IsArgSet("-?") || args.IsArgSet("-h") || args.IsArgSet("-help");
 }
 
 static const int screenWidth = 79;
