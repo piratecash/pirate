@@ -22,8 +22,6 @@
 #include <llmq/quorums_init.h>
 #include <privatesend/privatesend.h>
 
-#include <memory>
-
 void CConnmanTest::AddNode(CNode& node)
 {
     LOCK(g_connman->cs_vNodes);

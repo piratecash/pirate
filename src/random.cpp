@@ -16,7 +16,6 @@
 #include <utilstrencodings.h> // for GetTime()
 
 #include <stdlib.h>
-#include <limits>
 #include <chrono>
 #include <thread>
 
