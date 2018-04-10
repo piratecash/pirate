@@ -180,9 +180,6 @@ BITCOIN_TESTS =\
   test/skiplist_tests.cpp \
   test/streams_tests.cpp \
   test/subsidy_tests.cpp \
-  test/test_cosanta.cpp \
-  test/test_cosanta.h \
-  test/main.cpp \
   test/sync_tests.cpp \
   test/util_threadnames_tests.cpp \
   test/timedata_tests.cpp \
@@ -199,17 +196,19 @@ BITCOIN_TESTS =\
 if ENABLE_WALLET
 BITCOIN_TESTS += \
   wallet/test/coinjoin_tests.cpp \
-  wallet/test/wallet_test_fixture.cpp \
-  wallet/test/wallet_test_fixture.h \
   wallet/test/accounting_tests.cpp \
   wallet/test/db_tests.cpp \
   wallet/test/psbt_wallet_tests.cpp \
   wallet/test/wallet_tests.cpp \
   wallet/test/wallet_crypto_tests.cpp \
   wallet/test/coinselector_tests.cpp
+
+BITCOIN_TEST_SUITE += \
+  wallet/test/wallet_test_fixture.cpp \
+  wallet/test/wallet_test_fixture.h
 endif
 
-test_test_cosanta_SOURCES = $(BITCOIN_TESTS) $(JSON_TEST_FILES) $(RAW_TEST_FILES)
+test_test_cosanta_SOURCES = $(BITCOIN_TEST_SUITE) $(BITCOIN_TESTS) $(JSON_TEST_FILES) $(RAW_TEST_FILES)
 test_test_cosanta_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(TESTDEFS) $(EVENT_CFLAGS)
 test_test_cosanta_LDADD =
 if ENABLE_WALLET
@@ -479,7 +478,7 @@ cosanta_test_check: $(TEST_BINARY) FORCE
 cosanta_test_clean : FORCE
 	rm -f $(CLEAN_BITCOIN_TEST) $(test_test_cosanta_OBJECTS) $(TEST_BINARY)
 
-check-local:
+check-local: $(BITCOIN_TESTS:.cpp=.cpp.test)
 	@echo "Running test/util/bitcoin-util-test.py..."
 	$(PYTHON) $(top_builddir)/test/util/bitcoin-util-test.py
 	@echo "Running test/util/rpcauth-test.py..."
@@ -488,6 +487,10 @@ check-local:
 if EMBEDDED_UNIVALUE
 	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C univalue check
 endif
+
+%.cpp.test: %.cpp
+	@echo Running tests: `cat $< | grep "BOOST_FIXTURE_TEST_SUITE(\|BOOST_AUTO_TEST_SUITE(" | cut -d '(' -f 2 | cut -d ',' -f 1 | cut -d ')' -f 1` from $<
+	$(AM_V_at)$(TEST_BINARY) -l test_suite -t "`cat $< | grep "BOOST_FIXTURE_TEST_SUITE(\|BOOST_AUTO_TEST_SUITE(" | cut -d '(' -f 2 | cut -d ',' -f 1 | cut -d ')' -f 1`" > $<.log 2>&1 || (cat $<.log && false)
 
 test/data/%.json.h: test/data/%.json
 	@$(MKDIR_P) $(@D)
