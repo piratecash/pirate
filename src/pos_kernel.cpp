@@ -494,9 +494,9 @@ bool CheckStakeKernelHash(
             LogPrintf("CheckStakeKernelHash() : using modifier %s at height=%d timestamp=%s for block from height=%d timestamp=%s\n",
                 nStakeModifier,
                 blockFrom.nHeight,
-                DateTimeStrFormat("%Y-%m-%d %H:%M:%S", blockFrom.nTime).c_str(),
+                FormatISO8601DateTime(blockFrom.nTime).c_str(),
                 blockFrom.nHeight,
-                DateTimeStrFormat("%Y-%m-%d %H:%M:%S", blockFrom.GetBlockTime()).c_str());
+                FormatISO8601DateTime(blockFrom.GetBlockTime()).c_str());
             LogPrintf("CheckStakeKernelHash() : pass protocol=%s modifier=%s nTimeBlockFrom=%u prevoutHash=%s nTimeTxPrev=%u nPrevout=%u nTimeTx=%u hashProof=%s\n",
                 "0.3",
                 boost::lexical_cast<std::string>(nStakeModifier).c_str(),
