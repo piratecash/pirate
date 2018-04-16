@@ -22,7 +22,8 @@ import argparse
 import hashlib
 import subprocess
 import sys
-import json,codecs
+import json
+import codecs
 try:
     from urllib.request import Request,urlopen
 except:
