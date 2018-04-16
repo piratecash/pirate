@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # Copyright (c) 2015-2016 The Bitcoin Core developers
 # Copyright (c) 2020-2022 The Cosanta Core developers
 # Distributed under the MIT software license, see the accompanying
@@ -6,7 +6,6 @@
 '''
 Test script for security-check.py
 '''
-from __future__ import division,print_function
 import subprocess
 import unittest
 
@@ -23,7 +22,7 @@ def write_testcode(filename):
 
 def call_security_check(cc, source, executable, options):
     subprocess.check_call([cc,source,'-o',executable] + options)
-    p = subprocess.Popen(['./security-check.py',executable], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+    p = subprocess.Popen(['./security-check.py',executable], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, universal_newlines=True)
     (stdout, stderr) = p.communicate()
     return (p.returncode, stdout.rstrip())
 
