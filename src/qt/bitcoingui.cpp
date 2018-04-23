@@ -1428,7 +1428,7 @@ bool BitcoinGUI::eventFilter(QObject *object, QEvent *event)
 
 void BitcoinGUI::powStartClicked()
 {
-    GenerateCosanta(true, vpwallets[0]);
+    GenerateCosanta(true, GetWallets()[0]);
     powStartAction->setVisible(false);
     powStopAction->setVisible(true);
 }

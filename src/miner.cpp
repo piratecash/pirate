@@ -636,7 +636,7 @@ void static CosantaMiner(CWallet *pwallet)
                 break;
             }
             isLastPoW = true;
-            auto pblocktemplate = BlockAssembler(Params()).CreateNewBlock(coinbaseScript->reserveScript, vpwallets[0]);
+            auto pblocktemplate = BlockAssembler(Params()).CreateNewBlock(coinbaseScript->reserveScript, GetWallets()[0]);
             if (!pblocktemplate.get())
             {
                 LogPrintf("Couldn't create new block");

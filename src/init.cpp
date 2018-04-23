@@ -2006,9 +2006,9 @@ bool AppInitMain(boost::thread_group& threadGroup, CScheduler& scheduler)
 
     if(fMasternodeMode) {
 #ifdef ENABLE_WALLET
-        if (!vpwallets.empty()) {
-            return InitError(_("You can not start a masternode with wallet enabled."));
-        }
+        //if (!vpwallets.empty()) {
+        //    return InitError(_("You can not start a masternode with wallet enabled."));
+        //}
 #endif //ENABLE_WALLET
         // Create and register activeMasternodeManager, will init later in ThreadImport
         activeMasternodeManager = new CActiveMasternodeManager();

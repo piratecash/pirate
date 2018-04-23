@@ -137,7 +137,7 @@ UniValue generateBlocks(std::shared_ptr<CReserveScript> coinbaseScript, int nGen
     UniValue blockHashes(UniValue::VARR);
     while (nHeight < nHeightEnd)
     {
-        auto pblocktemplate = BlockAssembler(Params()).CreateNewBlock(coinbaseScript->reserveScript, vpwallets[0]);
+        auto pblocktemplate = BlockAssembler(Params()).CreateNewBlock(coinbaseScript->reserveScript, GetWallets()[0]);
         if (!pblocktemplate.get())
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Couldn't create new block");
         auto pblock = pblocktemplate->block;
@@ -253,7 +253,7 @@ UniValue setgenerate(const JSONRPCRequest& request)
         }
     }
     gArgs.SoftSetArg("-gen", (fGenerate ? "1" : "0"));
-    GenerateCosanta(fGenerate, vpwallets[0]);
+    GenerateCosanta(fGenerate, GetWallets()[0]);
 
     return NullUniValue;
 }
@@ -609,7 +609,7 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
 
         // Create new block
         CScript scriptDummy = CScript() << OP_TRUE;
-        pblocktemplate = BlockAssembler(Params()).CreateNewBlock(scriptDummy, vpwallets[0]);
+        pblocktemplate = BlockAssembler(Params()).CreateNewBlock(scriptDummy, GetWallets()[0]);
         if (!pblocktemplate)
             throw JSONRPCError(RPC_OUT_OF_MEMORY, "Out of memory");
 

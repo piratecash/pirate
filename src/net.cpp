@@ -2453,7 +2453,7 @@ void CConnman::ThreadMessageHandler()
 // ppcoin: stake minter thread
 void CConnman::ThreadStakeMinter()
 {
-    PoSMiner(vpwallets[0], interruptNet);
+    PoSMiner(GetWallets()[0], interruptNet);
 }
 
 
@@ -2795,7 +2795,7 @@ bool CConnman::Start(CScheduler& scheduler, const Options& connOptions)
 
     // Cosanta proof-of-work blocks in the background
     if (gArgs.GetBoolArg("-gen", false)) {
-        GenerateCosanta(true, vpwallets[0]);
+        GenerateCosanta(true, GetWallets()[0]);
     }
 
     return true;
