@@ -2634,14 +2634,18 @@ bool static FlushStateToDisk(const CChainParams& chainparams, CValidationState &
 void FlushStateToDisk() {
     CValidationState state;
     const CChainParams& chainparams = Params();
-    FlushStateToDisk(chainparams, state, FlushStateMode::ALWAYS);
+    if (!FlushStateToDisk(chainparams, state, FlushStateMode::ALWAYS)) {
+        LogPrintf("%s: failed to flush state (%s)\n", __func__, FormatStateMessage(state));
+    }
 }
 
 void PruneAndFlush() {
     CValidationState state;
     fCheckForPruning = true;
     const CChainParams& chainparams = Params();
-    FlushStateToDisk(chainparams, state, FlushStateMode::NONE);
+    if (!FlushStateToDisk(chainparams, state, FlushStateMode::NONE)) {
+        LogPrintf("%s: failed to flush state (%s)\n", __func__, FormatStateMessage(state));
+    }
 }
 
 static void DoWarning(const std::string& strWarning)
@@ -4171,7 +4175,9 @@ void PruneBlockFilesManual(int nManualPruneHeight)
 {
     CValidationState state;
     const CChainParams& chainparams = Params();
-    FlushStateToDisk(chainparams, state, FlushStateMode::NONE, nManualPruneHeight);
+    if (!FlushStateToDisk(chainparams, state, FlushStateMode::NONE, nManualPruneHeight)) {
+        LogPrintf("%s: failed to flush state (%s)\n", __func__, FormatStateMessage(state));
+    }
 }
 
 /**
@@ -4442,6 +4448,7 @@ bool LoadChainTip(const CChainParams& chainparams)
         LogPrintf("%s: Connecting genesis block...\n", __func__);
         CValidationState state;
         if (!ActivateBestChain(state, chainparams)) {
+            LogPrintf("%s: failed to activate chain (%s)\n", __func__, FormatStateMessage(state));
             return false;
         }
     }
@@ -4559,7 +4566,7 @@ bool CVerifyDB::VerifyDB(const CChainParams& chainparams, CCoinsView *coinsview,
             if (!ReadBlockFromDisk(block, pindex, chainparams.GetConsensus()))
                 return error("VerifyDB(): *** ReadBlockFromDisk failed at %d, hash=%s", pindex->nHeight, pindex->GetBlockHash().ToString());
             if (!g_chainstate.ConnectBlock(block, state, pindex, coins, chainparams))
-                return error("VerifyDB(): *** found unconnectable block at %d, hash=%s", pindex->nHeight, pindex->GetBlockHash().ToString());
+                return error("VerifyDB(): *** found unconnectable block at %d, hash=%s (%s)", pindex->nHeight, pindex->GetBlockHash().ToString(), FormatStateMessage(state));
         }
     }
 
@@ -4750,7 +4757,7 @@ bool CChainState::AddGenesisBlock(const CChainParams& chainparams, const CBlock&
 {
     CDiskBlockPos blockPos = SaveBlockToDisk(block, 0, chainparams, nullptr);
     if (blockPos.IsNull())
-        return error("%s: writing genesis block to disk failed", __func__);
+        return error("%s: writing genesis block to disk failed (%s)", __func__, FormatStateMessage(state));
     CBlockIndex *pindex = AddToBlockIndex(block);
     ReceivedBlockTransactions(block, pindex, blockPos);
     return true;
