@@ -6,6 +6,7 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Base class for RPC testing."""
 
+import configparser
 import copy
 from enum import Enum
 import logging
@@ -97,10 +98,10 @@ class BitcoinTestFramework():
                           help="Leave cosantads and test.* datadir on exit or error")
         parser.add_option("--noshutdown", dest="noshutdown", default=False, action="store_true",
                           help="Don't stop cosantads after the test execution")
-        parser.add_option("--srcdir", dest="srcdir", default=os.path.normpath(os.path.dirname(os.path.realpath(__file__)) + "/../../../src"),
+        parser.add_option("--srcdir", dest="srcdir", default=os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + "/../../../src"),
                           help="Source directory containing cosantad/cosanta-cli (default: %default)")
-        parser.add_option("--cachedir", dest="cachedir", default=os.path.normpath(os.path.dirname(os.path.realpath(__file__)) + "/../../cache"),
-                          help="Directory for caching pregenerated datadirs")
+        parser.add_option("--cachedir", dest="cachedir", default=os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + "/../../cache"),
+                          help="Directory for caching pregenerated datadirs (default: %default)")
         parser.add_option("--tmpdir", dest="tmpdir", help="Root directory for datadirs")
         parser.add_option("-l", "--loglevel", dest="loglevel", default="INFO",
                           help="log events at this level and higher to the console. Can be set to DEBUG, INFO, WARNING, ERROR or CRITICAL. Passing --loglevel DEBUG will output all logs to console. Note that logs at all levels are always written to the test_framework.log file in the temporary test directory.")
@@ -111,13 +112,14 @@ class BitcoinTestFramework():
         parser.add_option("--coveragedir", dest="coveragedir",
                           help="Write tested RPC commands into this directory")
         parser.add_option("--configfile", dest="configfile",
-                          help="Location of the test framework config file")
+                          default=os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + "/../../config.ini"),
+                          help="Location of the test framework config file (default: %default)")
         parser.add_option("--pdbonfailure", dest="pdbonfailure", default=False, action="store_true",
                           help="Attach a python debugger if test fails")
         parser.add_option("--usecli", dest="usecli", default=False, action="store_true",
-                          help="use dash-cli instead of RPC for all commands")
-        parser.add_option("--dashd-arg", dest="dashd_extra_args", default=[], type='string', action='append',
-                          help="Pass extra args to all dashd instances")
+                          help="use cosanta-cli instead of RPC for all commands")
+        parser.add_option("--cosatad-arg", dest="cosantad_extra_args", default=[], type='string', action='append',
+                          help="Pass extra args to all cosantad instances")
         self.add_options(parser)
         (self.options, self.args) = parser.parse_args()
 
@@ -131,7 +133,12 @@ class BitcoinTestFramework():
 
         self.options.cachedir = os.path.abspath(self.options.cachedir)
 
-        self.extra_args_from_options = self.options.dashd_extra_args
+        config = configparser.ConfigParser()
+        config.read_file(open(self.options.configfile))
+        self.options.bitcoind = os.getenv("BITCOIND", default=config["environment"]["BUILDDIR"] + '/src/bitcoind' + config["environment"]["EXEEXT"])
+        self.options.bitcoincli = os.getenv("BITCOINCLI", default=config["environment"]["BUILDDIR"] + '/src/bitcoin-cli' + config["environment"]["EXEEXT"])
+
+        self.extra_args_from_options = self.options.cosantad_extra_args
 
         # Set up temp directory and start logging
         if self.options.tmpdir:
@@ -259,13 +266,13 @@ class BitcoinTestFramework():
         if extra_args is None:
             extra_args = [[]] * num_nodes
         if binary is None:
-            binary = [None] * num_nodes
+            binary = [self.options.bitcoind] * num_nodes
         assert_equal(len(extra_confs), num_nodes)
         assert_equal(len(extra_args), num_nodes)
         assert_equal(len(binary), num_nodes)
         old_num_nodes = len(self.nodes)
         for i in range(num_nodes):
-            self.nodes.append(TestNode(old_num_nodes + i, self.options.tmpdir, self.extra_args_from_options, rpchost=rpchost, timewait=timewait, binary=binary[i], stderr=stderr, mocktime=self.mocktime, coverage_dir=self.options.coveragedir, extra_conf=extra_confs[i], extra_args=extra_args[i], use_cli=self.options.usecli))
+            self.nodes.append(TestNode(old_num_nodes + i, self.options.tmpdir, self.extra_args_from_options, rpchost=rpchost, timewait=timewait, bitcoind=binary[i], bitcoin_cli=self.options.bitcoincli, stderr=stderr, mocktime=self.mocktime, coverage_dir=self.options.coveragedir, extra_conf=extra_confs[i], extra_args=extra_args[i], use_cli=self.options.usecli))
 
     def start_node(self, i, *args, **kwargs):
         """Start a cosantad"""
@@ -452,12 +459,12 @@ class BitcoinTestFramework():
             self.set_genesis_mocktime()
             for i in range(MAX_NODES):
                 datadir = initialize_datadir(self.options.cachedir, i)
-                args = [os.getenv("COSANTAD", "cosantad"), "-server", "-keypool=1", "-datadir=" + datadir, "-discover=0", "-mocktime="+str(GENESISTIME)]
+                args = [self.options.bitcoind, "-server", "-keypool=1", "-datadir=" + datadir, "-discover=0", "-mocktime="+str(GENESISTIME)]
                 if i > 0:
                     args.append("-connect=127.0.0.1:" + str(p2p_port(0)))
                 if extra_args is not None:
                     args.extend(extra_args)
-                self.nodes.append(TestNode(i, self.options.cachedir, extra_conf=["bind=127.0.0.1"], extra_args=[],extra_args_from_options=self.extra_args_from_options, rpchost=None, timewait=None, binary=None, stderr=stderr, mocktime=self.mocktime, coverage_dir=None))
+                self.nodes.append(TestNode(i, self.options.cachedir, extra_conf=["bind=127.0.0.1"], extra_args=[],extra_args_from_options=self.extra_args_from_options, rpchost=None, timewait=None, bitcoind=self.options.bitcoind, bitcoin_cli=self.options.bitcoincli, stderr=stderr, mocktime=self.mocktime, coverage_dir=None))
                 self.nodes[i].args = args
                 self.start_node(i)
 
@@ -509,7 +516,7 @@ class BitcoinTestFramework():
         for i in range(self.num_nodes):
             initialize_datadir(self.options.tmpdir, i)
 
-MASTERNODE_COLLATERAL = 1000
+MASTERNODE_COLLATERAL = 10000
 
 
 class MasternodeInfo:
