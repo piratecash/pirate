@@ -33,9 +33,9 @@
 #include <iomanip>
 #include <univalue.h>
 
-UniValue masternodelist(const JSONRPCRequest& request);
+static UniValue masternodelist(const JSONRPCRequest& request);
 
-void masternode_list_help()
+static void masternode_list_help()
 {
     throw std::runtime_error(
             "masternodelist ( \"mode\" \"filter\" )\n"
@@ -63,7 +63,7 @@ void masternode_list_help()
         );
 }
 
-UniValue masternode_list(const JSONRPCRequest& request)
+static UniValue masternode_list(const JSONRPCRequest& request)
 {
     if (request.fHelp)
         masternode_list_help();
@@ -76,7 +76,7 @@ UniValue masternode_list(const JSONRPCRequest& request)
     return masternodelist(newRequest);
 }
 
-void masternode_connect_help()
+static void masternode_connect_help()
 {
     throw std::runtime_error(
             "masternode connect \"address\"\n"
@@ -86,7 +86,7 @@ void masternode_connect_help()
         );
 }
 
-UniValue masternode_connect(const JSONRPCRequest& request)
+static UniValue masternode_connect(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 2)
         masternode_connect_help();
@@ -105,7 +105,7 @@ UniValue masternode_connect(const JSONRPCRequest& request)
     return "successfully connected";
 }
 
-void masternode_count_help()
+static void masternode_count_help()
 {
     throw std::runtime_error(
             "masternode count\n"
@@ -113,7 +113,7 @@ void masternode_count_help()
         );
 }
 
-UniValue masternode_count(const JSONRPCRequest& request)
+static UniValue masternode_count(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 1)
         masternode_count_help();
@@ -128,7 +128,7 @@ UniValue masternode_count(const JSONRPCRequest& request)
     return obj;
 }
 
-UniValue GetNextMasternodeForPayment(int heightShift)
+static UniValue GetNextMasternodeForPayment(int heightShift)
 {
     auto mnList = deterministicMNManager->GetListAtChainTip();
     auto payees = mnList.GetProjectedMNPayees(heightShift);
@@ -150,7 +150,7 @@ UniValue GetNextMasternodeForPayment(int heightShift)
     return obj;
 }
 
-void masternode_winner_help()
+static void masternode_winner_help()
 {
     if (!IsDeprecatedRPCEnabled("masternode_winner")) {
         throw std::runtime_error("DEPRECATED: set -deprecatedrpc=masternode_winner to enable it");
@@ -162,7 +162,7 @@ void masternode_winner_help()
         );
 }
 
-UniValue masternode_winner(const JSONRPCRequest& request)
+static UniValue masternode_winner(const JSONRPCRequest& request)
 {
     if (request.fHelp || !IsDeprecatedRPCEnabled("masternode_winner"))
         masternode_winner_help();
@@ -170,7 +170,7 @@ UniValue masternode_winner(const JSONRPCRequest& request)
     return GetNextMasternodeForPayment(10);
 }
 
-void masternode_current_help()
+static void masternode_current_help()
 {
     if (!IsDeprecatedRPCEnabled("masternode_current")) {
         throw std::runtime_error("DEPRECATED: set -deprecatedrpc=masternode_current to enable it");
@@ -182,7 +182,7 @@ void masternode_current_help()
         );
 }
 
-UniValue masternode_current(const JSONRPCRequest& request)
+static UniValue masternode_current(const JSONRPCRequest& request)
 {
     if (request.fHelp || !IsDeprecatedRPCEnabled("masternode_current"))
         masternode_current_help();
@@ -191,7 +191,7 @@ UniValue masternode_current(const JSONRPCRequest& request)
 }
 
 #ifdef ENABLE_WALLET
-void masternode_outputs_help()
+static void masternode_outputs_help()
 {
     throw std::runtime_error(
             "masternode outputs\n"
@@ -199,7 +199,7 @@ void masternode_outputs_help()
         );
 }
 
-UniValue masternode_outputs(const JSONRPCRequest& request)
+static UniValue masternode_outputs(const JSONRPCRequest& request)
 {
     std::shared_ptr<CWallet> const wallet = GetWalletForJSONRPCRequest(request);
     CWallet* const pwallet = wallet.get();
@@ -227,7 +227,7 @@ UniValue masternode_outputs(const JSONRPCRequest& request)
 
 #endif // ENABLE_WALLET
 
-void masternode_status_help()
+static void masternode_status_help()
 {
     throw std::runtime_error(
             "masternode status\n"
@@ -235,7 +235,7 @@ void masternode_status_help()
         );
 }
 
-UniValue masternode_status(const JSONRPCRequest& request)
+static UniValue masternode_status(const JSONRPCRequest& request)
 {
     if (request.fHelp)
         masternode_status_help();
@@ -264,7 +264,7 @@ UniValue masternode_status(const JSONRPCRequest& request)
     return mnObj;
 }
 
-std::string GetRequiredPaymentsString(int nBlockHeight, const CDeterministicMNCPtr &payee)
+static std::string GetRequiredPaymentsString(int nBlockHeight, const CDeterministicMNCPtr &payee)
 {
     std::string strPayments = "Unknown";
     if (payee) {
@@ -300,7 +300,7 @@ std::string GetRequiredPaymentsString(int nBlockHeight, const CDeterministicMNCP
     return strPayments;
 }
 
-void masternode_winners_help()
+static void masternode_winners_help()
 {
     throw std::runtime_error(
             "masternode winners ( count \"filter\" )\n"
@@ -311,7 +311,7 @@ void masternode_winners_help()
         );
 }
 
-UniValue masternode_winners(const JSONRPCRequest& request)
+static UniValue masternode_winners(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 3)
         masternode_winners_help();
@@ -356,7 +356,7 @@ UniValue masternode_winners(const JSONRPCRequest& request)
 
     return obj;
 }
-void masternode_payments_help()
+static void masternode_payments_help()
 {
     throw std::runtime_error(
             "masternode payments ( \"blockhash\" count )\n"
@@ -390,7 +390,7 @@ void masternode_payments_help()
         );
 }
 
-UniValue masternode_payments(const JSONRPCRequest& request)
+static UniValue masternode_payments(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 3) {
         masternode_payments_help();
@@ -496,7 +496,7 @@ UniValue masternode_payments(const JSONRPCRequest& request)
     return paymentsArr;
 }
 
-[[ noreturn ]] void masternode_help()
+[[ noreturn ]] static void masternode_help()
 {
     throw std::runtime_error(
         "masternode \"command\" ...\n"
@@ -517,7 +517,7 @@ UniValue masternode_payments(const JSONRPCRequest& request)
         );
 }
 
-UniValue masternode(const JSONRPCRequest& request)
+static UniValue masternode(const JSONRPCRequest& request)
 {
     std::string strCommand;
     if (!request.params[0].isNull()) {
@@ -553,7 +553,7 @@ UniValue masternode(const JSONRPCRequest& request)
     }
 }
 
-UniValue masternodelist(const JSONRPCRequest& request)
+static UniValue masternodelist(const JSONRPCRequest& request)
 {
     std::string strMode = "json";
     std::string strFilter = "";

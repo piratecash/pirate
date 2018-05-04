@@ -20,7 +20,7 @@ namespace llmq {
 extern const std::string CLSIG_REQUESTID_PREFIX;
 }
 
-void quorum_list_help()
+static void quorum_list_help()
 {
     throw std::runtime_error(
             "quorum list ( count )\n"
@@ -42,7 +42,7 @@ void quorum_list_help()
     );
 }
 
-UniValue quorum_list(const JSONRPCRequest& request)
+static UniValue quorum_list(const JSONRPCRequest& request)
 {
     if (request.fHelp || (request.params.size() != 1 && request.params.size() != 2))
         quorum_list_help();
@@ -75,7 +75,7 @@ UniValue quorum_list(const JSONRPCRequest& request)
     return ret;
 }
 
-void quorum_info_help()
+static void quorum_info_help()
 {
     throw std::runtime_error(
             "quorum info llmqType \"quorumHash\" ( includeSkShare )\n"
@@ -87,7 +87,7 @@ void quorum_info_help()
     );
 }
 
-UniValue BuildQuorumInfo(const llmq::CQuorumCPtr& quorum, bool includeMembers, bool includeSkShare)
+static UniValue BuildQuorumInfo(const llmq::CQuorumCPtr& quorum, bool includeMembers, bool includeSkShare)
 {
     UniValue ret(UniValue::VOBJ);
 
@@ -123,7 +123,7 @@ UniValue BuildQuorumInfo(const llmq::CQuorumCPtr& quorum, bool includeMembers, b
     return ret;
 }
 
-UniValue quorum_info(const JSONRPCRequest& request)
+static UniValue quorum_info(const JSONRPCRequest& request)
 {
     if (request.fHelp || (request.params.size() != 3 && request.params.size() != 4))
         quorum_info_help();
@@ -149,7 +149,7 @@ UniValue quorum_info(const JSONRPCRequest& request)
     return BuildQuorumInfo(quorum, true, includeSkShare);
 }
 
-void quorum_dkgstatus_help()
+static void quorum_dkgstatus_help()
 {
     throw std::runtime_error(
             "quorum dkgstatus ( detail_level )\n"
@@ -161,7 +161,7 @@ void quorum_dkgstatus_help()
     );
 }
 
-UniValue quorum_dkgstatus(const JSONRPCRequest& request)
+static UniValue quorum_dkgstatus(const JSONRPCRequest& request)
 {
     if (request.fHelp || (request.params.size() < 1 || request.params.size() > 2)) {
         quorum_dkgstatus_help();
@@ -228,7 +228,7 @@ UniValue quorum_dkgstatus(const JSONRPCRequest& request)
     return ret;
 }
 
-void quorum_memberof_help()
+static void quorum_memberof_help()
 {
     throw std::runtime_error(
             "quorum memberof \"proTxHash\" (quorumCount)\n"
@@ -240,7 +240,7 @@ void quorum_memberof_help()
     );
 }
 
-UniValue quorum_memberof(const JSONRPCRequest& request)
+static UniValue quorum_memberof(const JSONRPCRequest& request)
 {
     if (request.fHelp || (request.params.size() < 2 || request.params.size() > 3)) {
         quorum_memberof_help();
@@ -289,7 +289,7 @@ UniValue quorum_memberof(const JSONRPCRequest& request)
     return result;
 }
 
-void quorum_sign_help()
+static void quorum_sign_help()
 {
     throw std::runtime_error(
             "quorum sign llmqType \"id\" \"msgHash\" ( \"quorumHash\" submit )\n"
@@ -304,7 +304,7 @@ void quorum_sign_help()
     );
 }
 
-void quorum_verify_help()
+static void quorum_verify_help()
 {
     throw std::runtime_error(
             "quorum verify llmqType \"id\" \"msgHash\" \"signature\" ( \"quorumHash\" signHeight )\n"
@@ -321,7 +321,7 @@ void quorum_verify_help()
     );
 }
 
-void quorum_hasrecsig_help()
+static void quorum_hasrecsig_help()
 {
     throw std::runtime_error(
             "quorum hasrecsig llmqType \"id\" \"msgHash\"\n"
@@ -333,7 +333,7 @@ void quorum_hasrecsig_help()
     );
 }
 
-void quorum_getrecsig_help()
+static void quorum_getrecsig_help()
 {
     throw std::runtime_error(
             "quorum getrecsig llmqType \"id\" \"msgHash\"\n"
@@ -345,7 +345,7 @@ void quorum_getrecsig_help()
     );
 }
 
-void quorum_isconflicting_help()
+static void quorum_isconflicting_help()
 {
     throw std::runtime_error(
             "quorum isconflicting llmqType \"id\" \"msgHash\"\n"
@@ -357,7 +357,7 @@ void quorum_isconflicting_help()
     );
 }
 
-UniValue quorum_sigs_cmd(const JSONRPCRequest& request)
+static UniValue quorum_sigs_cmd(const JSONRPCRequest& request)
 {
     auto cmd = request.params[0].get_str();
     if (request.fHelp || (request.params.size() != 4)) {
@@ -476,7 +476,7 @@ UniValue quorum_sigs_cmd(const JSONRPCRequest& request)
     }
 }
 
-void quorum_selectquorum_help()
+static void quorum_selectquorum_help()
 {
     throw std::runtime_error(
             "quorum selectquorum llmqType \"id\"\n"
@@ -487,7 +487,7 @@ void quorum_selectquorum_help()
     );
 }
 
-UniValue quorum_selectquorum(const JSONRPCRequest& request)
+static UniValue quorum_selectquorum(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 3) {
         quorum_selectquorum_help();
@@ -518,7 +518,7 @@ UniValue quorum_selectquorum(const JSONRPCRequest& request)
     return ret;
 }
 
-void quorum_dkgsimerror_help()
+static void quorum_dkgsimerror_help()
 {
     throw std::runtime_error(
             "quorum dkgsimerror \"type\" rate\n"
@@ -530,7 +530,7 @@ void quorum_dkgsimerror_help()
     );
 }
 
-UniValue quorum_dkgsimerror(const JSONRPCRequest& request)
+static UniValue quorum_dkgsimerror(const JSONRPCRequest& request)
 {
     auto cmd = request.params[0].get_str();
     if (request.fHelp || (request.params.size() != 3)) {
@@ -549,7 +549,7 @@ UniValue quorum_dkgsimerror(const JSONRPCRequest& request)
     return UniValue();
 }
 
-void quorum_getdata_help()
+static void quorum_getdata_help()
 {
     throw std::runtime_error(
         "quorum getdata nodeId llmqType \"quorumHash\" dataMask ( \"proTxHash\" )\n"
@@ -566,7 +566,7 @@ void quorum_getdata_help()
         );
 }
 
-UniValue quorum_getdata(const JSONRPCRequest& request)
+static UniValue quorum_getdata(const JSONRPCRequest& request)
 {
     if (request.fHelp || (request.params.size() < 5 || request.params.size() > 6)) {
         quorum_getdata_help();
@@ -601,7 +601,7 @@ UniValue quorum_getdata(const JSONRPCRequest& request)
 }
 
 
-[[ noreturn ]] void quorum_help()
+[[ noreturn ]] static void quorum_help()
 {
     throw std::runtime_error(
             "quorum \"command\" ...\n"
@@ -625,7 +625,7 @@ UniValue quorum_getdata(const JSONRPCRequest& request)
     );
 }
 
-UniValue quorum(const JSONRPCRequest& request)
+static UniValue quorum(const JSONRPCRequest& request)
 {
     if (request.fHelp && request.params.empty()) {
         quorum_help();
@@ -657,7 +657,7 @@ UniValue quorum(const JSONRPCRequest& request)
     }
 }
 
-void verifychainlock_help()
+static void verifychainlock_help()
 {
     throw std::runtime_error(
             "verifychainlock \"blockHash\" \"signature\" ( blockHeight )\n"
@@ -669,7 +669,7 @@ void verifychainlock_help()
     );
 }
 
-UniValue verifychainlock(const JSONRPCRequest& request)
+static UniValue verifychainlock(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 2 || request.params.size() > 3) {
         verifychainlock_help();
@@ -699,7 +699,7 @@ UniValue verifychainlock(const JSONRPCRequest& request)
     return llmq::CSigningManager::VerifyRecoveredSig(llmqType, nBlockHeight, nRequestId, nBlockHash, chainLockSig);
 }
 
-void verifyislock_help()
+static void verifyislock_help()
 {
     throw std::runtime_error(
             "verifyislock \"id\" \"txid\" \"signature\" ( maxHeight )\n"
@@ -712,7 +712,7 @@ void verifyislock_help()
     );
 }
 
-UniValue verifyislock(const JSONRPCRequest& request)
+static UniValue verifyislock(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 3 || request.params.size() > 4) {
         verifyislock_help();

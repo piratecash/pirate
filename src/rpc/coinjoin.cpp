@@ -16,7 +16,7 @@
 #include <univalue.h>
 
 #ifdef ENABLE_WALLET
-UniValue coinjoin(const JSONRPCRequest& request)
+static UniValue coinjoin(const JSONRPCRequest& request)
 {
     std::shared_ptr<CWallet> const wallet = GetWalletForJSONRPCRequest(request);
     CWallet* const pwallet = wallet.get();
@@ -79,7 +79,7 @@ UniValue coinjoin(const JSONRPCRequest& request)
 }
 #endif // ENABLE_WALLET
 
-UniValue getpoolinfo(const JSONRPCRequest& request)
+static UniValue getpoolinfo(const JSONRPCRequest& request)
 {
     throw std::runtime_error(
             "getpoolinfo\n"
@@ -87,7 +87,7 @@ UniValue getpoolinfo(const JSONRPCRequest& request)
     );
 }
 
-UniValue getcoinjoininfo(const JSONRPCRequest& request)
+static UniValue getcoinjoininfo(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0) {
         throw std::runtime_error(

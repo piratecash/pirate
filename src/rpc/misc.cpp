@@ -43,7 +43,7 @@
 
 #include <univalue.h>
 
-UniValue debug(const JSONRPCRequest& request)
+static UniValue debug(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
@@ -80,7 +80,7 @@ UniValue debug(const JSONRPCRequest& request)
     return "Debug mode: " + ListActiveLogCategoriesString();
 }
 
-UniValue mnsync(const JSONRPCRequest& request)
+static UniValue mnsync(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
@@ -118,7 +118,7 @@ UniValue mnsync(const JSONRPCRequest& request)
 /*
     Used for updating/reading spork settings on the network
 */
-UniValue spork(const JSONRPCRequest& request)
+static UniValue spork(const JSONRPCRequest& request)
 {
     if (request.params.size() == 1) {
         // basic mode, show info
@@ -191,7 +191,7 @@ UniValue spork(const JSONRPCRequest& request)
 
 }
 
-UniValue validateaddress(const JSONRPCRequest& request)
+static UniValue validateaddress(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
@@ -245,7 +245,7 @@ UniValue validateaddress(const JSONRPCRequest& request)
 // Needed even with !ENABLE_WALLET, to pass (ignored) pointers around
 class CWallet;
 
-UniValue createmultisig(const JSONRPCRequest& request)
+static UniValue createmultisig(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 2 || request.params.size() > 2)
     {
@@ -300,7 +300,7 @@ UniValue createmultisig(const JSONRPCRequest& request)
     return result;
 }
 
-UniValue verifymessage(const JSONRPCRequest& request)
+static UniValue verifymessage(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 3)
         throw std::runtime_error(
@@ -356,7 +356,7 @@ UniValue verifymessage(const JSONRPCRequest& request)
     return (pubkey.GetID() == *keyID);
 }
 
-UniValue signmessagewithprivkey(const JSONRPCRequest& request)
+static UniValue signmessagewithprivkey(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw std::runtime_error(
@@ -395,7 +395,7 @@ UniValue signmessagewithprivkey(const JSONRPCRequest& request)
     return EncodeBase64(vchSig.data(), vchSig.size());
 }
 
-UniValue setmocktime(const JSONRPCRequest& request)
+static UniValue setmocktime(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
@@ -422,7 +422,7 @@ UniValue setmocktime(const JSONRPCRequest& request)
     return NullUniValue;
 }
 
-UniValue mnauth(const JSONRPCRequest& request)
+static UniValue mnauth(const JSONRPCRequest& request)
 {
     if (request.fHelp || (request.params.size() != 3))
         throw std::runtime_error(
@@ -458,7 +458,7 @@ UniValue mnauth(const JSONRPCRequest& request)
     return fSuccess;
 }
 
-bool getAddressFromIndex(const int &type, const uint160 &hash, std::string &address)
+static bool getAddressFromIndex(const int &type, const uint160 &hash, std::string &address)
 {
     if (type == 2) {
         address = EncodeDestination(CScriptID(hash));
@@ -470,7 +470,7 @@ bool getAddressFromIndex(const int &type, const uint160 &hash, std::string &addr
     return true;
 }
 
-bool getIndexKey(const std::string& str, uint160& hashBytes, int& type)
+static bool getIndexKey(const std::string& str, uint160& hashBytes, int& type)
 {
     CTxDestination dest = DecodeDestination(str);
     if (!IsValidDestination(dest)) {
@@ -484,7 +484,7 @@ bool getIndexKey(const std::string& str, uint160& hashBytes, int& type)
     return true;
 }
 
-bool getAddressesFromParams(const UniValue& params, std::vector<std::pair<uint160, int> > &addresses)
+static bool getAddressesFromParams(const UniValue& params, std::vector<std::pair<uint160, int> > &addresses)
 {
     if (params[0].isStr()) {
         uint160 hashBytes;
@@ -518,17 +518,17 @@ bool getAddressesFromParams(const UniValue& params, std::vector<std::pair<uint16
     return true;
 }
 
-bool heightSort(std::pair<CAddressUnspentKey, CAddressUnspentValue> a,
+static bool heightSort(std::pair<CAddressUnspentKey, CAddressUnspentValue> a,
                 std::pair<CAddressUnspentKey, CAddressUnspentValue> b) {
     return a.second.blockHeight < b.second.blockHeight;
 }
 
-bool timestampSort(std::pair<CMempoolAddressDeltaKey, CMempoolAddressDelta> a,
+static bool timestampSort(std::pair<CMempoolAddressDeltaKey, CMempoolAddressDelta> a,
                    std::pair<CMempoolAddressDeltaKey, CMempoolAddressDelta> b) {
     return a.second.time < b.second.time;
 }
 
-UniValue getaddressmempool(const JSONRPCRequest& request)
+static UniValue getaddressmempool(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
@@ -599,7 +599,7 @@ UniValue getaddressmempool(const JSONRPCRequest& request)
     return result;
 }
 
-UniValue getaddressutxos(const JSONRPCRequest& request)
+static UniValue getaddressutxos(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
@@ -666,7 +666,7 @@ UniValue getaddressutxos(const JSONRPCRequest& request)
     return result;
 }
 
-UniValue getaddressdeltas(const JSONRPCRequest& request)
+static UniValue getaddressdeltas(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1 || !request.params[0].isObject())
         throw std::runtime_error(
@@ -754,7 +754,7 @@ UniValue getaddressdeltas(const JSONRPCRequest& request)
     return result;
 }
 
-UniValue getaddressbalance(const JSONRPCRequest& request)
+static UniValue getaddressbalance(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
@@ -827,7 +827,7 @@ UniValue getaddressbalance(const JSONRPCRequest& request)
 
 }
 
-UniValue getaddresstxids(const JSONRPCRequest& request)
+static UniValue getaddresstxids(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
@@ -910,7 +910,7 @@ UniValue getaddresstxids(const JSONRPCRequest& request)
 
 }
 
-UniValue getspentinfo(const JSONRPCRequest& request)
+static UniValue getspentinfo(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1 || !request.params[0].isObject())
         throw std::runtime_error(
@@ -989,7 +989,7 @@ static std::string RPCMallocInfo()
 }
 #endif
 
-UniValue getmemoryinfo(const JSONRPCRequest& request)
+static UniValue getmemoryinfo(const JSONRPCRequest& request)
 {
     /* Please, avoid using the word "pool" here in the RPC interface or help,
      * as users will undoubtedly confuse it with the other "memory pool"
@@ -1036,7 +1036,7 @@ UniValue getmemoryinfo(const JSONRPCRequest& request)
     }
 }
 
-void EnableOrDisableLogCategories(UniValue cats, bool enable) {
+static void EnableOrDisableLogCategories(UniValue cats, bool enable) {
     cats = cats.get_array();
     for (unsigned int i = 0; i < cats.size(); ++i) {
         std::string cat = cats[i].get_str();
@@ -1054,7 +1054,7 @@ void EnableOrDisableLogCategories(UniValue cats, bool enable) {
     }
 }
 
-UniValue logging(const JSONRPCRequest& request)
+static UniValue logging(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 2) {
         throw std::runtime_error(
@@ -1125,7 +1125,7 @@ UniValue logging(const JSONRPCRequest& request)
     return result;
 }
 
-UniValue echo(const JSONRPCRequest& request)
+static UniValue echo(const JSONRPCRequest& request)
 {
     if (request.fHelp)
         throw std::runtime_error(
