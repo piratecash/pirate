@@ -1017,6 +1017,7 @@ static void CheckInputsAndUpdateCoins(const CTransaction& tx, CCoinsViewCache& m
 
 void CTxMemPool::check(const CCoinsViewCache *pcoins) const
 {
+    LOCK(cs);
     if (nCheckFrequency == 0)
         return;
 
@@ -1031,7 +1032,6 @@ void CTxMemPool::check(const CCoinsViewCache *pcoins) const
     CCoinsViewCache mempoolDuplicate(const_cast<CCoinsViewCache*>(pcoins));
     const int64_t spendheight = GetSpendHeight(mempoolDuplicate);
 
-    LOCK(cs);
     std::list<const CTxMemPoolEntry*> waitingOnDependants;
     for (indexed_transaction_set::const_iterator it = mapTx.begin(); it != mapTx.end(); it++) {
         unsigned int i = 0;
