@@ -8,6 +8,7 @@
 #include <blockencodings.h>
 #include <consensus/merkle.h>
 #include <chainparams.h>
+#include <pow.h>
 #include <random.h>
 
 #include <test/test_cosanta.h>
