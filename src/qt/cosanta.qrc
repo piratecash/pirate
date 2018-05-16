@@ -31,6 +31,7 @@
         <file alias="staking_inactive">res/icons/staking_inactive.png</file>
         <file alias="pow_active">res/icons/pow_active.png</file>
         <file alias="pow_inactive">res/icons/pow_inactive.png</file>
+        <file alias="proxy">res/icons/proxy.png</file>
     </qresource>
     <qresource prefix="/css">
         <file alias="general">res/css/general.css</file>
