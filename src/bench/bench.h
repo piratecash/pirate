@@ -112,9 +112,9 @@ public:
 class ConsolePrinter : public Printer
 {
 public:
-    void header();
-    void result(const State& state);
-    void footer();
+    void header() override;
+    void result(const State& state) override;
+    void footer() override;
 };
 
 // creates box plot with plotly.js
@@ -122,9 +122,9 @@ class PlotlyPrinter : public Printer
 {
 public:
     PlotlyPrinter(std::string plotly_url, int64_t width, int64_t height);
-    void header();
-    void result(const State& state);
-    void footer();
+    void header() override;
+    void result(const State& state) override;
+    void footer() override;
 
 private:
     std::string m_plotly_url;
