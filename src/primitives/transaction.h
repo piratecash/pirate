@@ -240,9 +240,7 @@ public:
         return vin.empty() && vout.empty();
     }
 
-    const uint256& GetHash() const {
-        return hash;
-    }
+    const uint256& GetHash() const { return hash; }
 
     // Return sum of txouts.
     CAmount GetValueOut() const;
@@ -287,7 +285,7 @@ struct CMutableTransaction
     std::vector<uint8_t> vExtraPayload; // only available for special transaction types
 
     CMutableTransaction();
-    CMutableTransaction(const CTransaction& tx);
+    explicit CMutableTransaction(const CTransaction& tx);
 
     ADD_SERIALIZE_METHODS;
 
