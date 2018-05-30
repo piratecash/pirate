@@ -674,9 +674,24 @@ void SetupServerArgs()
     gArgs.AddArg("-stakesplitthreshold=<n>", strprintf("Splits stake reward by threshold (default: %d)", DEFAULT_STAKE_SPLIT_THRESHOLD), false, OptionsCategory::POS);
     gArgs.AddArg("-stakemaxsplit=<n>", strprintf("Sets the number of max inputs & outputs of a stake (default: %d)", DEFAULT_STAKE_MAX_SPLIT), false, OptionsCategory::POS);
     gArgs.AddArg("-stakeautocombine=<n>", strprintf("Autocombine feature: 0 - disable, 1 - same account, 2 - any account (default: %d)", DEFAULT_STAKE_AUTOCOMBINE), false, OptionsCategory::POS);
+    gArgs.AddArg("-printcoinstake", "", false, OptionsCategory::HIDDEN);
+    gArgs.AddArg("-poshashinterval", "", false, OptionsCategory::HIDDEN);
 #endif
     gArgs.AddArg("-gen", strprintf("Generate coins (default: 0)"), false, OptionsCategory::POW);
     gArgs.AddArg("-genproclimit", strprintf("processors, -1 is unlimited. (default: -1)"), false, OptionsCategory::POW);
+
+    // Hidden options
+    gArgs.AddArg("-benchmark", "", false, OptionsCategory::HIDDEN);
+    gArgs.AddArg("-blockminsize", "", false, OptionsCategory::HIDDEN);
+    gArgs.AddArg("-dbcrashratio", "", false, OptionsCategory::HIDDEN);
+    gArgs.AddArg("-debugnet", "", false, OptionsCategory::HIDDEN);
+    gArgs.AddArg("-forcecompactdb", "", false, OptionsCategory::HIDDEN);
+    gArgs.AddArg("-h", "", false, OptionsCategory::HIDDEN);
+    gArgs.AddArg("-help", "", false, OptionsCategory::HIDDEN);
+    gArgs.AddArg("-rpcssl", "", false, OptionsCategory::HIDDEN);
+    gArgs.AddArg("-socks", "", false, OptionsCategory::HIDDEN);
+    gArgs.AddArg("-tor", "", false, OptionsCategory::HIDDEN);
+    gArgs.AddArg("-whitelistalwaysrelay", "", false, OptionsCategory::HIDDEN);
 }
 
 std::string LicenseInfo()
