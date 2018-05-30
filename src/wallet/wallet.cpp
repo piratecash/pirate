@@ -4732,7 +4732,7 @@ bool CWallet::TopUpKeyPool(unsigned int kpSize)
     return true;
 }
 
-void CWallet::ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, bool fInternal)
+bool CWallet::ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, bool fRequestedInternal)
 {
     nIndex = -1;
     keypool.vchPubKey = CPubKey();
@@ -4742,12 +4742,13 @@ void CWallet::ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, bool fIn
         if (!IsLocked(true))
             TopUpKeyPool();
 
-        fInternal = fInternal && IsHDEnabled();
-        std::set<int64_t>& setKeyPool = fInternal ? setInternalKeyPool : setExternalKeyPool;
+        bool fReturningInternal = IsHDEnabled() && fRequestedInternal;
+        std::set<int64_t>& setKeyPool = fReturningInternal ? setInternalKeyPool : setExternalKeyPool;
 
         // Get the oldest key
-        if(setKeyPool.empty())
-            return;
+        if (setKeyPool.empty()) {
+            return false;
+        }
 
         WalletBatch batch(*database);
 
@@ -4759,14 +4760,17 @@ void CWallet::ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, bool fIn
         if (!HaveKey(keypool.vchPubKey.GetID())) {
             throw std::runtime_error(std::string(__func__) + ": unknown key in key pool");
         }
-        if (keypool.fInternal != fInternal) {
+        if (keypool.fInternal != fReturningInternal) {
             throw std::runtime_error(std::string(__func__) + ": keypool entry misclassified");
         }
+        if (!keypool.vchPubKey.IsValid()) {
+            throw std::runtime_error(std::string(__func__) + ": keypool entry invalid");
+        }
 
-        assert(keypool.vchPubKey.IsValid());
         m_pool_key_to_index.erase(keypool.vchPubKey.GetID());
         WalletLogPrintf("keypool reserve %d\n", nIndex);
     }
+    return true;
 }
 
 void CWallet::KeepKey(int64_t nIndex)
@@ -4807,10 +4811,8 @@ bool CWallet::GetKeyFromPool(CPubKey& result, bool internal)
     CKeyPool keypool;
     {
         LOCK(cs_wallet);
-        int64_t nIndex = 0;
-        ReserveKeyFromKeyPool(nIndex, keypool, internal);
-        if (nIndex == -1)
-        {
+        int64_t nIndex;
+        if (!ReserveKeyFromKeyPool(nIndex, keypool, internal)) {
             if (IsLocked(true)) return false;
             // TODO: implement keypool for all accouts?
 
@@ -5013,13 +5015,10 @@ bool CReserveKey::GetReservedKey(CPubKey& pubkey, bool fInternalIn)
     if (nIndex == -1)
     {
         CKeyPool keypool;
-        pwallet->ReserveKeyFromKeyPool(nIndex, keypool, fInternalIn);
-        if (nIndex != -1) {
-            vchPubKey = keypool.vchPubKey;
-        }
-        else {
+        if (!pwallet->ReserveKeyFromKeyPool(nIndex, keypool, fInternalIn)) {
             return false;
         }
+        vchPubKey = keypool.vchPubKey;
         fInternal = keypool.fInternal;
     }
     assert(vchPubKey.IsValid());
