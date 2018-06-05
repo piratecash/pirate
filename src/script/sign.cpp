@@ -165,12 +165,6 @@ void UpdateInput(CTxIn& input, const SignatureData& data)
     input.scriptSig = data.scriptSig;
 }
 
-void UpdateTransaction(CMutableTransaction& tx, unsigned int nIn, const SignatureData& data)
-{
-    assert(tx.vin.size() > nIn);
-    UpdateInput(tx.vin[nIn], data);
-}
-
 bool SignSignature(const SigningProvider &provider, const CScript& fromPubKey, CMutableTransaction& txTo, unsigned int nIn, const CAmount& amount, int nHashType)
 {
     assert(nIn < txTo.vin.size());
@@ -180,7 +174,7 @@ bool SignSignature(const SigningProvider &provider, const CScript& fromPubKey, C
 
     SignatureData sigdata;
     bool ret = ProduceSignature(provider, creator, fromPubKey, sigdata);
-    UpdateTransaction(txTo, nIn, sigdata);
+    UpdateInput(txTo.vin.at(nIn), sigdata);
     return ret;
 }
 
