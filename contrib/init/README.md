@@ -5,7 +5,7 @@ Upstart: cosantad.conf
 OpenRC:  cosantad.openrc
          cosantad.openrcconf
 CentOS:  cosantad.init
-OS X:    org.cosanta.cosantad.plist
+macOS:   net.cosanta.cosantad.plist
 ```
 have been made available to assist packagers in creating node packages here.
 

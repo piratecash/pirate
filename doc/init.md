@@ -15,7 +15,7 @@ Service User
 
 All three Linux startup configurations assume the existence of a "cosantacore" user
 and group.  They must be created before attempting to use these scripts.
-The OS X configuration assumes cosantad will be set up for the current user.
+The macOS configuration assumes cosantad will be set up for the current user.
 
 Configuration
 ---------------------------------
@@ -65,7 +65,7 @@ reasons to make the configuration file and data directory only readable by the
 cosantacore user and group.  Access to cosanta-cli and other cosantad rpc clients
 can then be controlled by group membership.
 
-### Mac OS X
+### macOS
 
 Binary:              `/usr/local/bin/cosantad`  
 Configuration file:  `~/Library/Application Support/CosantaCore/cosanta.conf`  
@@ -107,7 +107,7 @@ Using this script, you can adjust the path and flags to the cosantad program by
 setting the COSANTAD and FLAGS environment variables in the file
 /etc/sysconfig/cosantad. You can also use the DAEMONOPTS environment variable here.
 
-### Mac OS X
+### macOS
 
 Copy org.cosanta.cosantad.plist into ~/Library/LaunchAgents. Load the launch agent by
 running `launchctl load ~/Library/LaunchAgents/org.cosanta.cosantad.plist`.
