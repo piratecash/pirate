@@ -524,4 +524,10 @@ bool IsPowActiveHeight(int nBlockHeight);
 bool CheckProof(CValidationState& state, const CBlockIndex &pindex, const Consensus::Params& params);
 bool CheckProof(CValidationState& state, const CBlockHeader &block, const Consensus::Params& params);
 
+//! Check whether the block associated with this index entry is pruned or not.
+inline bool IsBlockPruned(const CBlockIndex* pblockindex)
+{
+    return (fHavePruned && !(pblockindex->nStatus & BLOCK_HAVE_DATA) && pblockindex->nTx > 0);
+}
+
 #endif // BITCOIN_VALIDATION_H
