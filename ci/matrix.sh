@@ -82,5 +82,5 @@ elif [ "$BUILD_TARGET" = "mac" ]; then
   export HOST=x86_64-apple-darwin16
   export BITCOIN_CONFIG="--enable-gui --enable-reduce-exports --disable-miner"
   export OSX_SDK=10.11
-  export GOAL="deploy"
+  export GOAL="all deploy"
 fi
