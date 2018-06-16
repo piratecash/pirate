@@ -11,7 +11,7 @@ argument:
     nodes_main.txt
     nodes_test.txt
 
-These files must consist of lines in the format 
+These files must consist of lines in the format
 
     <ip>
     <ip>:<port>
@@ -127,13 +127,13 @@ def main():
     g.write(' * Each line contains a 16-byte IPv6 address and a port.\n')
     g.write(' * IPv4 as well as onion addresses are wrapped inside an IPv6 address accordingly.\n')
     g.write(' */\n')
-    with open(os.path.join(indir,'nodes_main.txt'),'r') as f:
+    with open(os.path.join(indir,'nodes_main.txt'), 'r', encoding="utf8") as f:
         process_nodes(g, f, 'pnSeed6_main', 60606)
     g.write('\n')
-    with open(os.path.join(indir,'nodes_test.txt'),'r') as f:
+    with open(os.path.join(indir,'nodes_test.txt'), 'r', encoding="utf8") as f:
         process_nodes(g, f, 'pnSeed6_test', 60696)
     g.write('#endif // COSANTA_CHAINPARAMSSEEDS_H\n')
-            
+
 if __name__ == '__main__':
     main()
 
