@@ -361,6 +361,7 @@ libcosanta_server_a_SOURCES = \
   rpc/rpcquorums.cpp \
   rpc/server.cpp \
   rpc/privatesend.cpp \
+  rpc/util.cpp \
   script/sigcache.cpp \
   spork.cpp \
   statsd_client.cpp \
@@ -585,7 +586,6 @@ libcosanta_util_a_SOURCES = \
   logging.cpp \
   random.cpp \
   rpc/protocol.cpp \
-  rpc/util.cpp \
   stacktraces.cpp \
   support/cleanse.cpp \
   sync.cpp \
