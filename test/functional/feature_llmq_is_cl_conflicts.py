@@ -55,7 +55,6 @@ class LLMQ_IS_CL_Conflicts(CosantaTestFramework):
         self.activate_dip8()
 
         self.test_node = self.nodes[0].add_p2p_connection(TestP2PConn())
-        network_thread_start()
         self.nodes[0].p2p.wait_for_verack()
 
         self.nodes[0].spork("SPORK_17_QUORUM_DKG_ENABLED", 0)

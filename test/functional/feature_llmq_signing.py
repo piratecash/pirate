@@ -106,7 +106,6 @@ class LLMQSigningTest(CosantaTestFramework):
             mn = self.get_mninfo(q['recoveryMembers'][0])
             # Open a P2P connection to it
             p2p_interface = mn.node.add_p2p_connection(P2PInterface())
-            network_thread_start()
             mn.node.p2p.wait_for_verack()
             # Send the last required QSIGSHARE message to the recovery member
             p2p_interface.send_message(msg_qsigshare([sig_share]))
@@ -118,7 +117,6 @@ class LLMQSigningTest(CosantaTestFramework):
 
         if self.options.spork21:
             mn.node.disconnect_p2ps()
-            network_thread_join()
 
         # Test `quorum verify` rpc
         node = self.mninfo[0].node
