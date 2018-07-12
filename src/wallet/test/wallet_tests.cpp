@@ -143,8 +143,8 @@ BOOST_FIXTURE_TEST_CASE(importwallet_rescan, TestChain100Setup)
 
         JSONRPCRequest request;
         request.params.setArray();
-        request.params.push_back((pathTemp / "wallet.backup").string());
-        vpwallets.insert(vpwallets.begin(), &wallet);
+        request.params.push_back(backup_file);
+        AddWallet(&wallet);
         ::dumpwallet(request);
     }
 
@@ -155,8 +155,8 @@ BOOST_FIXTURE_TEST_CASE(importwallet_rescan, TestChain100Setup)
 
         JSONRPCRequest request;
         request.params.setArray();
-        request.params.push_back((pathTemp / "wallet.backup").string());
-        vpwallets[0] = &wallet;
+        request.params.push_back(backup_file);
+        AddWallet(&wallet);
         ::importwallet(request);
 
         LOCK(wallet.cs_wallet);
