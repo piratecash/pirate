@@ -210,6 +210,7 @@ static const CRPCConvertParam vRPCConvertParams[] =
     { "reservebalance", 1, "amount" },
     { "rescanblockchain", 0, "start_height"},
     { "rescanblockchain", 1, "stop_height"},
+    { "createwallet", 1, "disable_private_keys"},
     { "stop", 0, "wait" },
 };
 
