@@ -20,9 +20,9 @@ class TestBitcoinCli(BitcoinTestFramework):
         """Main test logic"""
 
         cli_response = self.nodes[0].cli("-version").send_cli()
-        assert "Cosanta Core RPC client version" in cli_response
+        assert("Cosanta Core RPC client version" in cli_response)
 
-        self.log.info("Compare responses from getwalletinfo RPC and `cosanta-cli getwalletinfo`")
+        self.log.info("Compare responses from gewalletinfo RPC and `cosanta-cli getwalletinfo`")
         cli_response = self.nodes[0].cli.getwalletinfo()
         rpc_response = self.nodes[0].getwalletinfo()
         assert_equal(cli_response, rpc_response)
