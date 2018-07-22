@@ -448,7 +448,7 @@ bool ArgsManager::ParseParameters(int argc, const char* const argv[], std::strin
 
         // Check that the arg is known
         if (!(IsSwitchChar(key[0]) && key.size() == 1)) {
-            if (!IsArgKnown(key, error)) {
+            if (!IsArgKnown(key)) {
                 error = strprintf("Invalid parameter %s", key.c_str());
                 return false;
             }
@@ -468,7 +468,7 @@ bool ArgsManager::ParseParameters(int argc, const char* const argv[], std::strin
     return true;
 }
 
-bool ArgsManager::IsArgKnown(const std::string& key, std::string& error)
+bool ArgsManager::IsArgKnown(const std::string& key) const
 {
     size_t option_index = key.find('.');
     std::string arg_no_net;
@@ -595,7 +595,7 @@ void ArgsManager::AddHiddenArgs(const std::vector<std::string>& names)
     }
 }
 
-std::string ArgsManager::GetHelpMessage()
+std::string ArgsManager::GetHelpMessage() const
 {
     const bool show_debug = gArgs.GetBoolArg("-help-debug", false);
 
@@ -921,7 +921,7 @@ bool ArgsManager::ReadConfigStream(std::istream& stream, const std::string& file
         }
 
         // Check that the arg is known
-        if (!IsArgKnown(strKey, error) && !ignore_invalid_keys) {
+        if (!IsArgKnown(strKey) && !ignore_invalid_keys) {
             error = strprintf("Invalid configuration value %s", option.first.c_str());
             return false;
         }
