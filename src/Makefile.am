@@ -406,6 +406,7 @@ libcosanta_wallet_a_SOURCES = \
   interfaces/wallet.cpp \
   pos_kernel.cpp \
   keepass.cpp \
+  wallet/coincontrol.cpp \
   wallet/crypter.cpp \
   wallet/db.cpp \
   wallet/fees.cpp \
