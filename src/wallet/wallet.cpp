@@ -5485,7 +5485,7 @@ std::shared_ptr<CWallet> CWallet::CreateWalletFromFile(const WalletLocation& loc
 
         // Top up the keypool
         if (!walletInstance->TopUpKeyPool()) {
-            return error(_("Unable to generate initial keys") += "\n");
+            return error(_("Unable to generate initial keys"));
         }
 
         walletInstance->SetBestChain(chainActive.GetLocator());
