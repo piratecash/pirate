@@ -10,7 +10,7 @@
 #include <list>
 #include <vector>
 
-static void AddTx(const CTransaction& tx, const CAmount& nFee, CTxMemPool& pool)
+static void AddTx(const CTransaction& tx, const CAmount& nFee, CTxMemPool& pool) EXCLUSIVE_LOCKS_REQUIRED(pool.cs)
 {
     int64_t nTime = 0;
     unsigned int nHeight = 1;
@@ -98,6 +98,7 @@ static void MempoolEviction(benchmark::State& state)
     tx7.vout[1].nValue = 10 * COIN;
 
     CTxMemPool pool;
+    LOCK(pool.cs);
 
     while (state.KeepRunning()) {
         AddTx(tx1, 10000LL, pool);
