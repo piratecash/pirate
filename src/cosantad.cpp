@@ -108,7 +108,7 @@ static bool AppInit(int argc, char* argv[])
             tfm::format(std::cerr, "Error: Specified data directory \"%s\" does not exist.\n", gArgs.GetArg("-datadir", "").c_str());
             return false;
         }
-        if (!gArgs.ReadConfigFiles(error)) {
+        if (!gArgs.ReadConfigFiles(error, true)) {
             tfm::format(std::cerr, "Error reading configuration file: %s\n", error.c_str());
             return false;
         }
