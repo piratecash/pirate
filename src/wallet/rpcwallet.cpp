@@ -3219,7 +3219,7 @@ static UniValue upgradetohd(const JSONRPCRequest& request)
         secureMnemonicPassphrase = request.params[1].get_str().c_str();
     }
 
-    LogPrintf("Upgrading wallet to HD\n");
+    pwallet->WalletLogPrintf("Upgrading wallet to HD\n");
     pwallet->SetMinVersion(FEATURE_HD);
 
     if (prev_encrypted) {
