@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
-# Copyright (c) 2015-2020 The Dash Core developers
+# Copyright (c) 2015-2021 The Dash Core developers
 # Copyright (c) 2020-2022 The Cosanta Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
-import time
-
-from test_framework.test_framework import CosantaTestFramework
-from test_framework.util import *
 
 '''
 feature_llmq_simplepose.py
@@ -15,6 +10,12 @@ feature_llmq_simplepose.py
 Checks simple PoSe system based on LLMQ commitments
 
 '''
+
+import time
+
+from test_framework.test_framework import DashTestFramework
+from test_framework.util import connect_nodes, force_finish_mnsync, p2p_port, wait_until
+
 
 class LLMQSimplePoSeTest(CosantaTestFramework):
     def set_test_params(self):
