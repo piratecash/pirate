@@ -80,13 +80,10 @@ static void InitMessage(const std::string &message)
     LogPrintf("init message: %s\n", message);
 }
 
-/*
-   Translate string to current locale using Qt.
- */
-static std::string Translate(const char* psz)
-{
+/** Translate string to current locale using Qt. */
+const std::function<std::string(const char*)> G_TRANSLATION_FUN = [](const char* psz) {
     return QCoreApplication::translate("cosanta-core", psz).toStdString();
-}
+};
 
 static QString GetLangTerritory()
 {
@@ -630,7 +627,6 @@ int main(int argc, char *argv[])
     // Now that QSettings are accessible, initialize translations
     QTranslator qtTranslatorBase, qtTranslator, translatorBase, translator;
     initTranslations(qtTranslatorBase, qtTranslator, translatorBase, translator);
-    translationInterface.Translate.connect(Translate);
 
     if (gArgs.IsArgSet("-printcrashinfo")) {
         auto crashInfo = GetCrashInfoStrFromSerializedStr(gArgs.GetArg("-printcrashinfo", ""));
