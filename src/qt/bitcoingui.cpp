@@ -904,8 +904,11 @@ void BitcoinGUI::createTrayIcon(const NetworkStyle *networkStyle)
 void BitcoinGUI::createIconMenu(QMenu *pmenu)
 {
     // Configuration of the tray icon (or dock icon) icon menu
-    pmenu->addAction(toggleHideAction);
-    pmenu->addSeparator();
+#ifndef Q_OS_MAC
+    // Note: On Mac, the dock icon's menu already has show / hide action.
+    trayIconMenu->addAction(toggleHideAction);
+    trayIconMenu->addSeparator();
+#endif
     if (enableWallet) {
         pmenu->addAction(sendCoinsMenuAction);
         pmenu->addAction(coinJoinCoinsMenuAction);
