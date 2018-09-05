@@ -993,7 +993,7 @@ class FullBlockTest(BitcoinTestFramework):
         assert_equal(get_legacy_sigopcount_block(b73), MAX_BLOCK_SIGOPS + 1)
         self.send_blocks([b73], False, 16, b'bad-blk-sigops', reconnect=True)
 
-        # b74/75 - if we push an invalid script element, all prevous sigops are counted,
+        # b74/75 - if we push an invalid script element, all previous sigops are counted,
         #          but sigops after the element are not counted.
         #
         #       The invalid script element is that the push_data indicates that
