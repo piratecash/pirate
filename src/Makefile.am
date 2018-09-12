@@ -350,6 +350,8 @@ libcosanta_server_a_SOURCES = \
   index/base.cpp \
   index/blockfilterindex.cpp \
   index/txindex.cpp \
+  interfaces/handler.cpp \
+  interfaces/node.cpp \
   init.cpp \
   dbwrapper.cpp \
   governance/governance.cpp \
@@ -644,8 +646,6 @@ libcosanta_util_a_SOURCES = \
   compat/glibcxx_sanity.cpp \
   compat/strnlen.cpp \
   fs.cpp \
-  interfaces/handler.cpp \
-  interfaces/node.cpp \
   logging.cpp \
   random.cpp \
   rpc/protocol.cpp \
