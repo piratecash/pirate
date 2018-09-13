@@ -65,6 +65,13 @@ TEST_EXIT_SKIPPED = 77
 
 GENESISTIME = 1417713337
 
+class SkipTest(Exception):
+    """This exception is raised to skip a test"""
+
+    def __init__(self, message):
+        self.message = message
+
+
 class BitcoinTestMetaClass(type):
     """Metaclass for BitcoinTestFramework.
 
@@ -183,6 +190,7 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
         try:
             if self.options.usecli and not self.supports_cli:
                 raise SkipTest("--usecli specified but test does not support using CLI")
+            self.skip_test_if_missing_module()
             self.setup_chain()
             self.setup_network()
             self.import_deterministic_coinbase_privkeys()
@@ -250,6 +258,10 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
 
     def add_options(self, parser):
         """Override this method to add command-line options to the test"""
+        pass
+
+    def skip_test_if_missing_module(self):
+        """Override this method to skip a test if a module is not compiled"""
         pass
 
     def setup_chain(self):
@@ -546,6 +558,50 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
         for i in range(self.num_nodes):
             initialize_datadir(self.options.tmpdir, i, self.chain)
 
+    def skip_if_no_py3_zmq(self):
+        """Attempt to import the zmq package and skip the test if the import fails."""
+        try:
+            import zmq  # noqa
+        except ImportError:
+            raise SkipTest("python3-zmq module not available.")
+
+    def skip_if_no_bitcoind_zmq(self):
+        """Skip the running test if dashd has not been compiled with zmq support."""
+        if not self.is_zmq_compiled():
+            raise SkipTest("dashd has not been built with zmq enabled.")
+
+    def skip_if_no_wallet(self):
+        """Skip the running test if wallet has not been compiled."""
+        if not self.is_wallet_compiled():
+            raise SkipTest("wallet has not been compiled.")
+
+    def skip_if_no_cli(self):
+        """Skip the running test if dash-cli has not been compiled."""
+        if not self.is_cli_compiled():
+            raise SkipTest("dash-cli has not been compiled.")
+
+    def is_cli_compiled(self):
+        """Checks whether dash-cli was compiled."""
+        config = configparser.ConfigParser()
+        config.read_file(open(self.options.configfile))
+
+        return config["components"].getboolean("ENABLE_UTILS")
+
+    def is_wallet_compiled(self):
+        """Checks whether the wallet module was compiled."""
+        config = configparser.ConfigParser()
+        config.read_file(open(self.options.configfile))
+
+        return config["components"].getboolean("ENABLE_WALLET")
+
+    def is_zmq_compiled(self):
+        """Checks whether the zmq module was compiled."""
+        config = configparser.ConfigParser()
+        config.read_file(open(self.options.configfile))
+
+        return config["components"].getboolean("ENABLE_ZMQ")
+
+
 MASTERNODE_COLLATERAL = 10000
 
 
@@ -565,6 +621,9 @@ class CosantaTestFramework(BitcoinTestFramework):
     def set_test_params(self):
         """Tests must this method to change default values for number of nodes, topology, etc"""
         raise NotImplementedError
+
+    def skip_test_if_missing_module(self):
+        self.skip_if_no_wallet()
 
     def run_test(self):
         """Tests must override this method to define test logic"""
@@ -1181,60 +1240,3 @@ class CosantaTestFramework(BitcoinTestFramework):
                     c += 1
             return c >= count
         wait_until(test, timeout=timeout)
-
-
-class ComparisonTestFramework(BitcoinTestFramework):
-    """Test framework for doing p2p comparison testing
-
-    Sets up some cosantad binaries:
-    - 1 binary: test binary
-    - 2 binaries: 1 test binary, 1 ref binary
-    - n>2 binaries: 1 test binary, n-1 ref binaries"""
-
-    def set_test_params(self):
-        self.num_nodes = 2
-        self.setup_clean_chain = True
-
-    def add_options(self, parser):
-        parser.add_option("--testbinary", dest="testbinary",
-                          default=os.getenv("BITCOIND", "cosantad"),
-                          help="cosantad binary to test")
-        parser.add_option("--refbinary", dest="refbinary",
-                          default=os.getenv("BITCOIND", "cosantad"),
-                          help="cosantad binary to use for reference nodes (if any)")
-
-    def setup_network(self):
-        extra_args = [['-whitelist=127.0.0.1']] * self.num_nodes
-        if hasattr(self, "extra_args"):
-            extra_args = self.extra_args
-        self.add_nodes(self.num_nodes, extra_args,
-                       binary=[self.options.testbinary] +
-                       [self.options.refbinary] * (self.num_nodes - 1))
-        self.start_nodes()
-
-class SkipTest(Exception):
-    """This exception is raised to skip a test"""
-    def __init__(self, message):
-        self.message = message
-
-
-def skip_if_no_py3_zmq():
-    """Attempt to import the zmq package and skip the test if the import fails."""
-    try:
-        import zmq  # noqa
-    except ImportError:
-        raise SkipTest("python3-zmq module not available.")
-
-
-def skip_if_no_bitcoind_zmq(test_instance):
-    """Skip the running test if dashd has not been compiled with zmq support."""
-    if not is_zmq_enabled(test_instance):
-        raise SkipTest("dashd has not been built with zmq enabled.")
-
-
-def is_zmq_enabled(test_instance):
-    """Checks whether zmq is enabled or not."""
-    config = configparser.ConfigParser()
-    config.read_file(open(test_instance.options.configfile))
-
-    return config["components"].getboolean("ENABLE_ZMQ")

@@ -18,6 +18,9 @@ class ImportPrunedFundsTest(BitcoinTestFramework):
         self.num_nodes = 2
         self.extra_args = [['-deprecatedrpc=accounts']] * 2
 
+    def skip_test_if_missing_module(self):
+        self.skip_if_no_wallet()
+
     def run_test(self):
         self.log.info("Mining blocks...")
         self.nodes[0].generate(101)
