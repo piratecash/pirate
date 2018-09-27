@@ -8,6 +8,10 @@ if ENABLE_QT
   dist_man1_MANS+=cosanta-qt.1
 endif
 
-if BUILD_BITCOIN_UTILS
-  dist_man1_MANS+=cosanta-cli.1 cosanta-tx.1
+if BUILD_BITCOIN_CLI
+  dist_man1_MANS+=cosanta-cli.1
+endif
+
+if BUILD_BITCOIN_TX
+  dist_man1_MANS+=cosanta-tx.1
 endif
