@@ -10,7 +10,12 @@ CBlock, CTransaction, CBlockHeader, CTxIn, CTxOut, etc....:
     bitcoin/primitives
 msg_block, msg_tx, msg_headers, etc.:
     data structures that represent network messages
-ser_*, deser_*: functions that handle serialization/deserialization."""
+
+ser_*, deser_*: functions that handle serialization/deserialization.
+
+Classes use __slots__ to ensure extraneous attributes aren't accidentally added
+by tests, compromising their intended effect.
+"""
 from codecs import encode
 import copy
 from collections import namedtuple
@@ -215,7 +220,9 @@ def ToHex(obj):
 
 # Objects that map to dashd objects, which can be serialized/deserialized
 
-class CService():
+class CService:
+    __slots__ = ("ip", "port")
+
     def __init__(self):
         self.ip = ""
         self.port = 0
@@ -234,7 +241,7 @@ class CService():
         return "CService(ip=%s port=%i)" % (self.ip, self.port)
 
 
-class CAddress():
+class CAddress:
     __slots__ = ("net", "ip", "nServices", "port", "time")
 
     # see https://github.com/bitcoin/bips/blob/master/bip-0155.mediawiki
@@ -313,7 +320,9 @@ class CAddress():
                 % (self.nServices, self.ADDRV2_NET_NAME[self.net], self.ip, self.port))
 
 
-class CInv():
+class CInv:
+    __slots__ = ("hash", "type")
+
     typemap = {
         0: "Error",
         1: "TX",
@@ -340,7 +349,9 @@ class CInv():
                % (self.typemap.get(self.type, "%d" % self.type), self.hash)
 
 
-class CBlockLocator():
+class CBlockLocator:
+    __slots__ = ("nVersion", "vHave")
+
     def __init__(self):
         self.nVersion = MY_VERSION
         self.vHave = []
@@ -360,7 +371,9 @@ class CBlockLocator():
                % (self.nVersion, repr(self.vHave))
 
 
-class COutPoint():
+class COutPoint:
+    __slots__ = ("hash", "n")
+
     def __init__(self, hash=0, n=0xFFFFFFFF):
         self.hash = hash
         self.n = n
@@ -379,7 +392,9 @@ class COutPoint():
         return "COutPoint(hash=%064x n=%i)" % (self.hash, self.n)
 
 
-class CTxIn():
+class CTxIn:
+    __slots__ = ("nSequence", "prevout", "scriptSig")
+
     def __init__(self, outpoint=None, scriptSig=b"", nSequence=0):
         if outpoint is None:
             self.prevout = COutPoint()
@@ -407,7 +422,9 @@ class CTxIn():
                   self.nSequence)
 
 
-class CTxOut():
+class CTxOut:
+    __slots__ = ("nValue", "scriptPubKey")
+
     def __init__(self, nValue=0, scriptPubKey=b""):
         self.nValue = nValue
         self.scriptPubKey = scriptPubKey
@@ -428,7 +445,10 @@ class CTxOut():
                   self.scriptPubKey.hex())
 
 
-class CTransaction():
+class CTransaction:
+    __slots__ = ("hash", "nLockTime", "nVersion", "sha256", "vin", "vout",
+                 "nType", "vExtraPayload")
+
     def __init__(self, tx=None):
         if tx is None:
             self.nVersion = 1
@@ -494,7 +514,10 @@ class CTransaction():
                % (self.nVersion, repr(self.vin), repr(self.vout), self.nLockTime)
 
 
-class CBlockHeader():
+class CBlockHeader:
+    __slots__ = ("hash", "hashMerkleRoot", "hashPrevBlock", "nBits", "nNonce",
+                 "nTime", "nVersion", "sha256")
+
     def __init__(self, header=None):
         if header is None:
             self.set_null()
@@ -563,6 +586,8 @@ class CBlockHeader():
 
 
 class CBlock(CBlockHeader):
+    __slots__ = ("vtx",)
+
     def __init__(self, header=None):
         super(CBlock, self).__init__(header)
         self.vtx = []
@@ -619,7 +644,9 @@ class CBlock(CBlockHeader):
                % (self.nVersion, self.hashPrevBlock, self.hashMerkleRoot,
                   time.ctime(self.nTime), self.nBits, self.nNonce, repr(self.vtx))
 
-class PrefilledTransaction():
+class PrefilledTransaction:
+    __slots__ = ("index", "tx")
+
     def __init__(self, index=0, tx = None):
         self.index = index
         self.tx = tx
@@ -638,8 +665,12 @@ class PrefilledTransaction():
     def __repr__(self):
         return "PrefilledTransaction(index=%d, tx=%s)" % (self.index, repr(self.tx))
 
+
 # This is what we send on the wire, in a cmpctblock message.
-class P2PHeaderAndShortIDs():
+class P2PHeaderAndShortIDs:
+    __slots__ = ("header", "nonce", "prefilled_txn", "prefilled_txn_length",
+                 "shortids", "shortids_length")
+
     def __init__(self):
         self.header = CBlockHeader()
         self.nonce = 0
@@ -680,9 +711,12 @@ def calculate_shortid(k0, k1, tx_hash):
     expected_shortid &= 0x0000ffffffffffff
     return expected_shortid
 
+
 # This version gets rid of the array lengths, and reinterprets the differential
 # encoding into indices that can be used for lookup.
-class HeaderAndShortIDs():
+class HeaderAndShortIDs:
+    __slots__ = ("header", "nonce", "prefilled_txn", "shortids")
+
     def __init__(self, p2pheaders_and_shortids = None):
         self.header = CBlockHeader()
         self.nonce = 0
@@ -734,7 +768,8 @@ class HeaderAndShortIDs():
         return "HeaderAndShortIDs(header=%s, nonce=%d, shortids=%s, prefilledtxn=%s" % (repr(self.header), self.nonce, repr(self.shortids), repr(self.prefilled_txn))
 
 
-class BlockTransactionsRequest():
+class BlockTransactionsRequest:
+    __slots__ = ("blockhash", "indexes")
 
     def __init__(self, blockhash=0, indexes = None):
         self.blockhash = blockhash
@@ -774,7 +809,8 @@ class BlockTransactionsRequest():
         return "BlockTransactionsRequest(hash=%064x indexes=%s)" % (self.blockhash, repr(self.indexes))
 
 
-class BlockTransactions():
+class BlockTransactions:
+    __slots__ = ("blockhash", "transactions")
 
     def __init__(self, blockhash=0, transactions = None):
         self.blockhash = blockhash
@@ -840,7 +876,9 @@ class CMerkleBlock():
         return "CMerkleBlock(header=%s, txn=%s)" % (repr(self.header), repr(self.txn))
 
 
-class CPartialMerkleTree():
+class CPartialMerkleTree:
+    __slots__ = ("fBad", "nTransactions", "vBits", "vHash")
+
     def __init__(self):
         self.nTransactions = 0
         self.vBits = []
@@ -862,7 +900,9 @@ class CPartialMerkleTree():
         return "CPartialMerkleTree(nTransactions=%d vBits.size=%d vHash.size=%d)" % (self.nTransactions, len(self.vBits), len(self.vHash))
 
 
-class CMerkleBlock():
+class CMerkleBlock:
+    __slots__ = ("header", "txn")
+
     def __init__(self, header=CBlockHeader(), txn=CPartialMerkleTree()):
         self.header = header
         self.txn = txn
@@ -881,7 +921,9 @@ class CMerkleBlock():
         return "CMerkleBlock(header=%s txn=%s)" % (repr(self.header), repr(self.txn))
 
 
-class CCbTx():
+class CCbTx:
+    __slots__ = ("version", "height", "merkleRootMNList", "merkleRootQuorums")
+
     def __init__(self, version=None, height=None, merkleRootMNList=None, merkleRootQuorums=None):
         self.set_null()
         if version is not None:
@@ -915,7 +957,9 @@ class CCbTx():
         return r
 
 
-class CSimplifiedMNListEntry():
+class CSimplifiedMNListEntry:
+    __slots__ = ("proRegTxHash", "confirmedHash", "service", "pubKeyOperator", "keyIDVoting", "isValid")
+
     def __init__(self):
         self.set_null()
 
@@ -947,6 +991,9 @@ class CSimplifiedMNListEntry():
 
 
 class CFinalCommitment:
+    __slots__ = ("nVersion", "llmqType", "quorumHash", "signers", "validMembers", "quorumPublicKey",
+                 "quorumVvecHash", "quorumSig", "membersSig")
+
     def __init__(self):
         self.set_null()
 
@@ -987,6 +1034,9 @@ class CFinalCommitment:
 
 
 class CGovernanceObject:
+    __slots__ = ("nHashParent", "nRevision", "nTime", "nCollateralHash", "vchData", "nObjectType",
+                 "masternodeOutpoint", "vchSig")
+
     def __init__(self):
         self.nHashParent = 0
         self.nRevision = 0
@@ -1027,6 +1077,8 @@ class CGovernanceObject:
 
 
 class CGovernanceVote:
+    __slots__ = ("masternodeOutpoint", "nParentHash", "nVoteOutcome", "nVoteSignal", "nTime", "vchSig")
+
     def __init__(self):
         self.masternodeOutpoint = COutPoint()
         self.nParentHash = 0
@@ -1058,6 +1110,8 @@ class CGovernanceVote:
 
 
 class CRecoveredSig:
+    __slots__ = ("llmqType", "quorumHash", "id", "msgHash", "sig")
+
     def __init__(self):
         self.llmqType = 0
         self.quorumHash = 0
@@ -1083,6 +1137,8 @@ class CRecoveredSig:
 
 
 class CSigShare:
+    __slots__ = ("llmqType", "quorumHash", "quorumMember", "id", "msgHash", "sigShare")
+
     def __init__(self):
         self.llmqType = 0
         self.quorumHash = 0
@@ -1111,6 +1167,8 @@ class CSigShare:
 
 
 class CBLSPublicKey:
+    __slots__ = ("data")
+
     def __init__(self):
         self.data = b'\\x0' * 48
 
@@ -1124,6 +1182,8 @@ class CBLSPublicKey:
 
 
 class CBLSIESEncryptedSecretKey:
+    __slots__ = ("ephemeral_pubKey", "iv", "data")
+
     def __init__(self):
         self.ephemeral_pubKey = b'\\x0' * 48
         self.iv = b'\\x0' * 32
@@ -1145,7 +1205,9 @@ class CBLSIESEncryptedSecretKey:
 
 
 # Objects that correspond to messages on the wire
-class msg_version():
+class msg_version:
+    __slots__ = ("addrFrom", "addrTo", "nNonce", "nRelay", "nServices",
+                 "nStartingHeight", "nTime", "nVersion", "strSubVer")
     command = b"version"
 
     def __init__(self):
@@ -1202,7 +1264,8 @@ class msg_version():
                   self.strSubVer, self.nStartingHeight, self.nRelay)
 
 
-class msg_verack():
+class msg_verack:
+    __slots__ = ()
     command = b"verack"
 
     def __init__(self):
@@ -1218,7 +1281,8 @@ class msg_verack():
         return "msg_verack()"
 
 
-class msg_addr():
+class msg_addr:
+    __slots__ = ("addrs",)
     command = b"addr"
 
     def __init__(self):
@@ -1234,8 +1298,8 @@ class msg_addr():
         return "msg_addr(addrs=%s)" % (repr(self.addrs))
 
 
-class msg_addrv2():
-    # __slots__ = ("addrs",)
+class msg_addrv2:
+    __slots__ = ("addrs",)
     # msgtype = b"addrv2"
     command = b"addrv2"
 
@@ -1252,8 +1316,8 @@ class msg_addrv2():
         return "msg_addrv2(addrs=%s)" % (repr(self.addrs))
 
 
-class msg_sendaddrv2():
-    # __slots__ = ()
+class msg_sendaddrv2:
+    __slots__ = ()
     # msgtype = b"sendaddrv2"
     command = b"sendaddrv2"
 
@@ -1270,7 +1334,8 @@ class msg_sendaddrv2():
         return "msg_sendaddrv2()"
 
 
-class msg_inv():
+class msg_inv:
+    __slots__ = ("inv",)
     command = b"inv"
 
     def __init__(self, inv=None):
@@ -1289,7 +1354,8 @@ class msg_inv():
         return "msg_inv(inv=%s)" % (repr(self.inv))
 
 
-class msg_getdata():
+class msg_getdata:
+    __slots__ = ("inv",)
     command = b"getdata"
 
     def __init__(self, inv=None):
@@ -1305,7 +1371,8 @@ class msg_getdata():
         return "msg_getdata(inv=%s)" % (repr(self.inv))
 
 
-class msg_getblocks():
+class msg_getblocks:
+    __slots__ = ("locator", "hashstop")
     command = b"getblocks"
 
     def __init__(self):
@@ -1328,7 +1395,8 @@ class msg_getblocks():
                % (repr(self.locator), self.hashstop)
 
 
-class msg_tx():
+class msg_tx:
+    __slots__ = ("tx",)
     command = b"tx"
 
     def __init__(self, tx=CTransaction()):
@@ -1344,7 +1412,8 @@ class msg_tx():
         return "msg_tx(tx=%s)" % (repr(self.tx))
 
 
-class msg_block():
+class msg_block:
+    __slots__ = ("block",)
     command = b"block"
 
     def __init__(self, block=None):
@@ -1364,7 +1433,9 @@ class msg_block():
 
 # for cases where a user needs tighter control over what is sent over the wire
 # note that the user must supply the name of the command, and the data
-class msg_generic():
+class msg_generic:
+    __slots__ = ("command", "data")
+
     def __init__(self, command, data=None):
         self.command = command
         self.data = data
@@ -1375,7 +1446,9 @@ class msg_generic():
     def __repr__(self):
         return "msg_generic()"
 
-class msg_getaddr():
+
+class msg_getaddr:
+    __slots__ = ()
     command = b"getaddr"
 
     def __init__(self):
@@ -1391,7 +1464,8 @@ class msg_getaddr():
         return "msg_getaddr()"
 
 
-class msg_ping():
+class msg_ping:
+    __slots__ = ("nonce",)
     command = b"ping"
 
     def __init__(self, nonce=0):
@@ -1409,7 +1483,8 @@ class msg_ping():
         return "msg_ping(nonce=%08x)" % self.nonce
 
 
-class msg_pong():
+class msg_pong:
+    __slots__ = ("nonce",)
     command = b"pong"
 
     def __init__(self, nonce=0):
@@ -1427,7 +1502,8 @@ class msg_pong():
         return "msg_pong(nonce=%08x)" % self.nonce
 
 
-class msg_mempool():
+class msg_mempool:
+    __slots__ = ()
     command = b"mempool"
 
     def __init__(self):
@@ -1459,7 +1535,8 @@ class msg_notfound:
         return "msg_notfound(vec=%s)" % (repr(self.vec))
 
 
-class msg_sendheaders():
+class msg_sendheaders:
+    __slots__ = ()
     command = b"sendheaders"
 
     def __init__(self):
@@ -1479,7 +1556,8 @@ class msg_sendheaders():
 # number of entries
 # vector of hashes
 # hash_stop (hash of last desired block header, 0 to get as many as possible)
-class msg_getheaders():
+class msg_getheaders:
+    __slots__ = ("hashstop", "locator",)
     command = b"getheaders"
 
     def __init__(self):
@@ -1504,7 +1582,8 @@ class msg_getheaders():
 
 # headers message has
 # <count> <vector of block headers>
-class msg_headers():
+class msg_headers:
+    __slots__ = ("headers",)
     command = b"headers"
 
     def __init__(self, headers=None):
@@ -1524,7 +1603,8 @@ class msg_headers():
         return "msg_headers(headers=%s)" % repr(self.headers)
 
 
-class msg_reject():
+class msg_reject:
+    __slots__ = ("code", "data", "message", "reason")
     command = b"reject"
     REJECT_MALFORMED = 1
 
@@ -1556,7 +1636,8 @@ class msg_reject():
                % (self.message, self.code, self.reason, self.data)
 
 
-class msg_sendcmpct():
+class msg_sendcmpct:
+    __slots__ = ("announce", "version")
     command = b"sendcmpct"
 
     def __init__(self):
@@ -1576,7 +1657,9 @@ class msg_sendcmpct():
     def __repr__(self):
         return "msg_sendcmpct(announce=%s, version=%lu)" % (self.announce, self.version)
 
-class msg_cmpctblock():
+
+class msg_cmpctblock:
+    __slots__ = ("header_and_shortids",)
     command = b"cmpctblock"
 
     def __init__(self, header_and_shortids = None):
@@ -1594,7 +1677,9 @@ class msg_cmpctblock():
     def __repr__(self):
         return "msg_cmpctblock(HeaderAndShortIDs=%s)" % repr(self.header_and_shortids)
 
-class msg_getblocktxn():
+
+class msg_getblocktxn:
+    __slots__ = ("block_txn_request",)
     command = b"getblocktxn"
 
     def __init__(self):
@@ -1612,7 +1697,9 @@ class msg_getblocktxn():
     def __repr__(self):
         return "msg_getblocktxn(block_txn_request=%s)" % (repr(self.block_txn_request))
 
-class msg_blocktxn():
+
+class msg_blocktxn:
+    __slots__ = ("block_transactions",)
     command = b"blocktxn"
 
     def __init__(self):
@@ -1629,7 +1716,9 @@ class msg_blocktxn():
     def __repr__(self):
         return "msg_blocktxn(block_transactions=%s)" % (repr(self.block_transactions))
 
-class msg_getmnlistd():
+
+class msg_getmnlistd:
+    __slots__ = ("baseBlockHash", "blockHash",)
     command = b"getmnlistd"
 
     def __init__(self, baseBlockHash=0, blockHash=0):
@@ -1651,7 +1740,8 @@ class msg_getmnlistd():
 
 QuorumId = namedtuple('QuorumId', ['llmqType', 'quorumHash'])
 
-class msg_mnlistdiff():
+class msg_mnlistdiff:
+    __slots__ = ("baseBlockHash", "blockHash", "merkleProof", "cbTx", "deletedMNs", "mnList", "deletedQuorums", "newQuorums",)
     command = b"mnlistdiff"
 
     def __init__(self):
@@ -1693,7 +1783,8 @@ class msg_mnlistdiff():
         return "msg_mnlistdiff(baseBlockHash=%064x, blockHash=%064x)" % (self.baseBlockHash, self.blockHash)
 
 
-class msg_clsig():
+class msg_clsig:
+    __slots__ = ("height", "blockHash", "sig",)
     command = b"clsig"
 
     def __init__(self, height=0, blockHash=0, sig=b'\\x0' * 96):
@@ -1717,7 +1808,8 @@ class msg_clsig():
         return "msg_clsig(height=%d, blockHash=%064x)" % (self.height, self.blockHash)
 
 
-class msg_islock():
+class msg_islock:
+    __slots__ = ("inputs", "txid", "sig",)
     command = b"islock"
 
     def __init__(self, inputs=[], txid=0, sig=b'\\x0' * 96):
@@ -1741,7 +1833,8 @@ class msg_islock():
         return "msg_islock(inputs=%s, txid=%064x)" % (repr(self.inputs), self.txid)
 
 
-class msg_qsigshare():
+class msg_qsigshare:
+    __slots__ = ("sig_shares",)
     command = b"qsigshare"
 
     def __init__(self, sig_shares=[]):
@@ -1759,7 +1852,8 @@ class msg_qsigshare():
         return "msg_qsigshare(sigShares=%d)" % (len(self.sig_shares))
 
 
-class msg_qwatch():
+class msg_qwatch:
+    __slots__ = ()
     command = b"qwatch"
 
     def __init__(self):
@@ -1775,7 +1869,8 @@ class msg_qwatch():
         return "msg_qwatch()"
 
 
-class msg_qgetdata():
+class msg_qgetdata:
+    __slots__ = ("quorum_hash", "quorum_type", "data_mask", "protx_hash")
     command = b"qgetdata"
 
     def __init__(self, quorum_hash=0, quorum_type=-1, data_mask=0, protx_hash=0):
@@ -1806,7 +1901,8 @@ class msg_qgetdata():
                                                                                 self.protx_hash)
 
 
-class msg_qdata():
+class msg_qdata:
+    __slots__ = ("quorum_hash", "quorum_type", "data_mask", "protx_hash", "error", "quorum_vvec", "enc_contributions",)
     command = b"qdata"
 
     def __init__(self):
