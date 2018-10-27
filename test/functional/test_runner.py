@@ -155,6 +155,7 @@ BASE_SCRIPTS = [
     'rpc_preciousblock.py',
     'wallet_importprunedfunds.py',
     'rpc_zmq.py',
+    'p2p_leak_tx.py',
     'rpc_signmessage.py',
     'feature_nulldummy.py',
     'mempool_accept.py',
