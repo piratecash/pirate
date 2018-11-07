@@ -8,3 +8,4 @@ export LC_ALL=C
 
 travis_retry pip install codespell
 travis_retry pip install flake8==3.5.0
+travis_retry pip install vulture==0.29

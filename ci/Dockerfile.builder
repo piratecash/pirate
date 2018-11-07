@@ -17,6 +17,7 @@ RUN pip3 install pyzmq # really needed?
 RUN pip3 install jinja2
 RUN pip3 install flake8==3.5.0
 RUN pip3 install codespell==1.13.0
+RUN pip3 install vulture==0.29
 
 # cosanta_hash
 RUN git clone https://github.com/dashpay/cosanta_hash
