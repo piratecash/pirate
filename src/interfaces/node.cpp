@@ -13,6 +13,7 @@
 #include <governance/governance.h>
 #include <governance/object.h>
 #include <init.h>
+#include <interfaces/chain.h>
 #include <interfaces/handler.h>
 #include <interfaces/wallet.h>
 #include <llmq/instantsend.h>
@@ -167,6 +168,9 @@ public:
 
 class NodeImpl : public Node
 {
+public:
+    NodeImpl() { m_interfaces.chain = MakeChain(); }
+
     EVOImpl m_evo;
     GOVImpl m_gov;
     LLMQImpl m_llmq;
@@ -193,17 +197,17 @@ class NodeImpl : public Node
         return AppInitBasicSetup() && AppInitParameterInteraction() && AppInitSanityChecks() &&
                AppInitLockDataDirectory();
     }
-    bool appInitMain() override { return AppInitMain(); }
+    bool appInitMain() override { return AppInitMain(m_interfaces); }
     void appShutdown() override
     {
         Interrupt();
-        Shutdown();
+        Shutdown(m_interfaces);
     }
     void appPrepareShutdown() override
     {
         Interrupt();
         StartRestart();
-        PrepareShutdown();
+        PrepareShutdown(m_interfaces);
     }
     void startShutdown() override { StartShutdown(); }
     bool shutdownRequested() override { return ShutdownRequested(); }
@@ -463,6 +467,7 @@ class NodeImpl : public Node
                 fn(nSyncProgress);
             }));
     }
+    InitInterfaces m_interfaces;
 };
 
 } // namespace

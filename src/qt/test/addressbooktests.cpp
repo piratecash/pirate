@@ -2,6 +2,7 @@
 #include <qt/test/util.h>
 #include <test/test_cosanta.h>
 
+#include <interfaces/chain.h>
 #include <interfaces/node.h>
 #include <qt/addressbookpage.h>
 #include <qt/addresstablemodel.h>
@@ -55,7 +56,8 @@ void EditAddressAndSubmit(
 void TestAddAddressesToSendBook()
 {
     TestChain100Setup test;
-    std::shared_ptr<CWallet> wallet = std::make_shared<CWallet>(WalletLocation(), WalletDatabase::CreateMock());
+    auto chain = interfaces::MakeChain();
+    std::shared_ptr<CWallet> wallet = std::make_shared<CWallet>(*chain, WalletLocation(), WalletDatabase::CreateMock());
     bool firstRun;
     wallet->LoadWallet(firstRun);
 
