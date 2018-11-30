@@ -10,10 +10,8 @@
 #include <coins.h>
 #include <dbwrapper.h>
 #include <chain.h>
-#include <limitedmap.h>
 #include <primitives/block.h>
 #include <spentindex.h>
-#include <sync.h>
 
 #include <map>
 #include <memory>
@@ -92,10 +90,6 @@ private:
 /** Access to the block database (blocks/index/) */
 class CBlockTreeDB : public CDBWrapper
 {
-private:
-    CCriticalSection cs;
-    unordered_limitedmap<uint256, bool> mapHasTxIndexCache;
-
 public:
     explicit CBlockTreeDB(size_t nCacheSize, bool fMemory = false, bool fWipe = false);
 

@@ -163,7 +163,7 @@ void CInstantSendDb::WriteInstantSendLockArchived(CDBBatch& batch, const uint256
     batch.Write(std::make_tuple(DB_ARCHIVED_BY_HASH, hash), true);
 }
 
-std::unordered_map<uint256, CInstantSendLockPtr> CInstantSendDb::RemoveConfirmedInstantSendLocks(int nUntilHeight)
+std::unordered_map<uint256, CInstantSendLockPtr, StaticSaltedHasher> CInstantSendDb::RemoveConfirmedInstantSendLocks(int nUntilHeight)
 {
     if (nUntilHeight <= best_confirmed_height) {
         LogPrint(BCLog::ALL, "CInstantSendDb::%s -- Attempting to confirm height %d, however we've already confirmed height %d. This should never happen.\n", __func__,
@@ -179,7 +179,7 @@ std::unordered_map<uint256, CInstantSendLockPtr> CInstantSendDb::RemoveConfirmed
     it->Seek(firstKey);
 
     CDBBatch batch(*db);
-    std::unordered_map<uint256, CInstantSendLockPtr> ret;
+    std::unordered_map<uint256, CInstantSendLockPtr, StaticSaltedHasher> ret;
     while (it->Valid()) {
         decltype(firstKey) curKey;
         if (!it->GetKey(curKey) || std::get<0>(curKey) != DB_MINED_BY_HEIGHT_AND_HASH) {
@@ -872,12 +872,12 @@ bool CInstantSendManager::ProcessPendingInstantSendLocks()
     return fMoreWork;
 }
 
-std::unordered_set<uint256> CInstantSendManager::ProcessPendingInstantSendLocks(int signOffset, const std::unordered_map<uint256, std::pair<NodeId, CInstantSendLockPtr>, StaticSaltedHasher>& pend, bool ban)
+std::unordered_set<uint256, StaticSaltedHasher> CInstantSendManager::ProcessPendingInstantSendLocks(int signOffset, const std::unordered_map<uint256, std::pair<NodeId, CInstantSendLockPtr>, StaticSaltedHasher>& pend, bool ban)
 {
     auto llmqType = Params().GetConsensus().llmqTypeInstantSend;
 
     CBLSBatchVerifier<NodeId, uint256> batchVerifier(false, true, 8);
-    std::unordered_map<uint256, CRecoveredSig> recSigs;
+    std::unordered_map<uint256, CRecoveredSig, StaticSaltedHasher> recSigs;
 
     size_t verifyCount = 0;
     size_t alreadyVerified = 0;
@@ -949,7 +949,7 @@ std::unordered_set<uint256> CInstantSendManager::ProcessPendingInstantSendLocks(
     LogPrint(BCLog::INSTANTSEND, "CInstantSendManager::%s -- verified locks. count=%d, alreadyVerified=%d, vt=%d, nodes=%d\n", __func__,
             verifyCount, alreadyVerified, verifyTimer.count(), batchVerifier.GetUniqueSourceCount());
 
-    std::unordered_set<uint256> badISLocks;
+    std::unordered_set<uint256, StaticSaltedHasher> badISLocks;
 
     if (ban && !batchVerifier.badSources.empty()) {
         LOCK(cs_main);
@@ -1321,7 +1321,7 @@ void CInstantSendManager::HandleFullyConfirmedBlock(const CBlockIndex* pindex)
 
 void CInstantSendManager::RemoveMempoolConflictsForLock(const uint256& hash, const CInstantSendLock& islock)
 {
-    std::unordered_map<uint256, CTransactionRef> toDelete;
+    std::unordered_map<uint256, CTransactionRef, StaticSaltedHasher> toDelete;
 
     {
         LOCK(mempool.cs);

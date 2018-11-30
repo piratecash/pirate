@@ -328,7 +328,7 @@ public:
 
     unsigned int GetStakeEntropyBit() const
     {
-        unsigned int nEntropyBit = ((GetBlockHash().GetCheapHash()) & 1);
+        unsigned int nEntropyBit = (ReadLE64(GetBlockHash().begin()) & 1);
         return nEntropyBit;
     }
 

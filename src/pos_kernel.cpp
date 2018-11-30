@@ -16,6 +16,7 @@
 #include "timedata.h"
 #include "util/system.h"
 #include "consensus/validation.h"
+#include <crypto/common.h>
 
 using namespace std;
 
@@ -310,7 +311,7 @@ bool ComputeNextStakeModifierV2(const uint32_t blockTime, const CBlockIndex* pin
     ss << poldest->GetBlockHash();
 
     // The first 64 bits
-    nStakeModifier = Hash(ss.begin(), ss.end()).GetCheapHash();
+    nStakeModifier = ReadLE64(Hash(ss.begin(), ss.end()).begin());
 
     LogPrint(BCLog::STAKING, "%s: new modifier=%llx time=%llu, prevblk=%s\n",
              __func__, nStakeModifier,

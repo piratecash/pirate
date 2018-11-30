@@ -17,6 +17,7 @@
 #include <crypto/sph_streebog.h>
 #include <crypto/scrypt.h>
 #include <crypto/algos/Lyra2Z/Lyra2.h>
+#include <crypto/common.h>
 #include <crypto/ripemd160.h>
 #include <crypto/sha256.h>
 #include <prevector.h>
@@ -216,6 +217,15 @@ public:
         uint256 result;
         ctx.Finalize(result);
         return result;
+    }
+
+    /**
+     * Returns the first 64 bits from the resulting hash.
+     */
+    inline uint64_t GetCheapHash() {
+        unsigned char result[CHash256::OUTPUT_SIZE];
+        ctx.Finalize(result);
+        return ReadLE64(result);
     }
 
     template<typename T>

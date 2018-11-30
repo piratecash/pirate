@@ -14,6 +14,7 @@
 
 #include <amount.h>
 #include <coins.h>
+#include <crypto/common.h> // for ReadLE64
 #include <fs.h>
 #include <protocol.h> // For CMessageHeader::MessageStartChars
 #include <policy/feerate.h>
@@ -124,12 +125,15 @@ static const uint64_t MIN_DISK_SPACE_FOR_BLOCK_FILES = 945 * 1024 * 1024;
 
 struct BlockHasher
 {
-    size_t operator()(const uint256& hash) const { return hash.GetCheapHash(); }
+    // this used to call `GetCheapHash()` in uint256, which was later moved; the
+    // cheap hash function simply calls ReadLE64() however, so the end result is
+    // identical
+    size_t operator()(const uint256& hash) const { return ReadLE64(hash.begin()); }
 };
 
 struct StakeHasher
 {
-    size_t operator()(const COutPoint& op) const { return op.hash.GetCheapHash() + op.n; }
+    size_t operator()(const COutPoint& op) const { return ReadLE64(op.hash.begin()) + op.n; }
 };
 
 extern CCriticalSection cs_main;

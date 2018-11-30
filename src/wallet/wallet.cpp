@@ -16,6 +16,7 @@
 #include <wallet/coinselection.h>
 #include <consensus/consensus.h>
 #include <consensus/validation.h>
+#include <crypto/common.h>
 #include <fs.h>
 #include <key.h>
 #include <key_io.h>
@@ -1635,7 +1636,7 @@ bool CWallet::IsFullyMixed(const COutPoint& outpoint) const
         ss << outpoint << nCoinJoinSalt;
         uint256 nHash;
         CSHA256().Write((const unsigned char*)ss.data(), ss.size()).Finalize(nHash.begin());
-        if (nHash.GetCheapHash() % 2 == 0) {
+        if (ReadLE64(nHash.begin()) % 2 == 0) {
             return false;
         }
     }
