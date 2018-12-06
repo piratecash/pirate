@@ -38,7 +38,6 @@
 #include <interfaces/node.h>
 #include <qt/governancelist.h>
 #include <qt/masternodelist.h>
-#include <noui.h>
 #include <ui_interface.h>
 #include <util/system.h>
 
@@ -1857,9 +1856,6 @@ void BitcoinGUI::showModalOverlay()
 
 static bool ThreadSafeMessageBox(BitcoinGUI* gui, const std::string& message, const std::string& caption, unsigned int style)
 {
-    // Redundantly log and print message in non-gui fashion
-    noui_ThreadSafeMessageBox(message, caption, style);
-
     bool modal = (style & CClientUIInterface::MODAL);
     // The SECURE flag has no effect in the Qt GUI.
     // bool secure = (style & CClientUIInterface::SECURE);
