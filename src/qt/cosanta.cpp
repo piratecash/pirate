@@ -216,7 +216,7 @@ Q_SIGNALS:
     void requestedRestart(QStringList args);
     void requestedShutdown();
     void stopThread();
-    void splashFinished(QWidget *window);
+    void splashFinished();
 
 private:
     QThread *coreThread;
@@ -365,9 +365,9 @@ void BitcoinApplication::createSplashScreen(const NetworkStyle *networkStyle)
 {
     SplashScreen *splash = new SplashScreen(m_node, nullptr, networkStyle);
     // We don't hold a direct pointer to the splash screen after creation, but the splash
-    // screen will take care of deleting itself when slotFinish happens.
+    // screen will take care of deleting itself when finish() happens.
     splash->show();
-    connect(this, &BitcoinApplication::splashFinished, splash, &SplashScreen::slotFinish);
+    connect(this, &BitcoinApplication::splashFinished, splash, &SplashScreen::finish);
     connect(this, &BitcoinApplication::requestedShutdown, splash, &QWidget::close);
 }
 
@@ -501,11 +501,7 @@ void BitcoinApplication::initializeResult(bool success)
         {
             window->showMinimized();
         }
-        else
-        {
-            window->show();
-        }
-        Q_EMIT splashFinished(window);
+        Q_EMIT splashFinished();
 
         // Let the users setup their preferred appearance if there are no settings for it defined yet.
         GUIUtil::setupAppearance(window, clientModel->getOptionsModel());
@@ -522,7 +518,7 @@ void BitcoinApplication::initializeResult(bool success)
 #endif
         pollShutdownTimer->start(200);
     } else {
-        Q_EMIT splashFinished(window); // Make sure splash screen doesn't stick around during shutdown
+        Q_EMIT splashFinished(); // Make sure splash screen doesn't stick around during shutdown
         quit(); // Exit first main loop invocation
     }
 }
