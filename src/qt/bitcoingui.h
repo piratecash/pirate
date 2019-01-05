@@ -251,7 +251,7 @@ public Q_SLOTS:
     void powStopClicked();
 
 #ifdef ENABLE_WALLET
-    bool setCurrentWallet(const QString& name);
+    bool setCurrentWallet(WalletModel* wallet_model);
     bool setCurrentWalletBySelectorIndex(int index);
     /** Set the UI status indicators based on the currently selected wallet.
     */
