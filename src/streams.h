@@ -119,12 +119,6 @@ class CVectorWriter
     {
         return nType;
     }
-    void seek(size_t nSize)
-    {
-        nPos += nSize;
-        if(nPos > vchData.size())
-            vchData.resize(nPos);
-    }
     size_t size() const
     {
         return vchData.size() - nPos;
@@ -155,9 +149,11 @@ public:
      * @param[in]  pos Starting position. Vector index where reads should start.
      */
     VectorReader(int type, int version, const std::vector<unsigned char>& data, size_t pos)
-        : m_type(type), m_version(version), m_data(data)
+        : m_type(type), m_version(version), m_data(data), m_pos(pos)
     {
-        seek(pos);
+        if (m_pos > m_data.size()) {
+            throw std::ios_base::failure("VectorReader(...): end of data (m_pos > m_data.size())");
+        }
     }
 
     /*
@@ -199,14 +195,6 @@ public:
         }
         memcpy(dst, m_data.data() + m_pos, n);
         m_pos = pos_next;
-    }
-
-    void seek(size_t n)
-    {
-        m_pos += n;
-        if (m_pos > m_data.size()) {
-            throw std::ios_base::failure("VectorReader::seek(): end of data");
-        }
     }
 };
 
