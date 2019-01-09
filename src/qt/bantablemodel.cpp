@@ -41,8 +41,8 @@ class BanTablePriv
 public:
     /** Local cache of peer information */
     QList<CCombinedBan> cachedBanlist;
-    /** Column to sort nodes by */
-    int sortColumn;
+    /** Column to sort nodes by (default to unsorted) */
+    int sortColumn{-1};
     /** Order (ascending or descending) to sort nodes by */
     Qt::SortOrder sortOrder;
 
@@ -88,8 +88,6 @@ BanTableModel::BanTableModel(interfaces::Node& node, ClientModel *parent) :
 {
     columns << tr("IP/Netmask") << tr("Banned Until");
     priv.reset(new BanTablePriv());
-    // default to unsorted
-    priv->sortColumn = -1;
 
     // load initial data
     refresh();

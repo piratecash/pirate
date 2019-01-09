@@ -453,7 +453,6 @@ public:
 private:
     const char* GetCommandInternal() const;
 
-    // TODO: make private (improves encapsulation)
 public:
     int type;
     uint256 hash;
