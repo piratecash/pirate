@@ -224,6 +224,7 @@ BITCOIN_CORE_H = \
   netfulfilledman.h \
   netmessagemaker.h \
   node/coinstats.h \
+  node/transaction.h \
   noui.h \
   policy/feerate.h \
   policy/fees.h \
@@ -375,6 +376,7 @@ libcosanta_server_a_SOURCES = \
   netfulfilledman.cpp \
   net_processing.cpp \
   node/coinstats.cpp \
+  node/transaction.cpp \
   noui.cpp \
   policy/fees.cpp \
   policy/policy.cpp \
