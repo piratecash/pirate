@@ -485,6 +485,8 @@ public:
         pchMessageStart[3] = 0x61;
         nDefaultPort = 60606;
         nPruneAfterHeight = 100000;
+        m_assumed_blockchain_size = 1;
+        m_assumed_chain_state_size = 1;
 
         genesis = CreateGenesisBlock(1626442320, 9542573, 0x1e0ffff0, 1, 0 * COIN); //  2021-07-16 13:32:00
         consensus.hashGenesisBlock = genesis.GetHash();
@@ -681,6 +683,8 @@ public:
         pchMessageStart[3] = 0x54;
         nDefaultPort = 60696;
         nPruneAfterHeight = 1000;
+        m_assumed_blockchain_size = 1;
+        m_assumed_chain_state_size = 1;
 
         genesis = CreateGenesisBlock(1618221600, 3068881, 0x1e0ffff0, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
@@ -874,6 +878,8 @@ public:
         pchMessageStart[3] = 0xce;
         nDefaultPort = 63636;
         nPruneAfterHeight = 1000;
+        m_assumed_blockchain_size = 0;
+        m_assumed_chain_state_size = 0;
 
         genesis = CreateGenesisBlock(1618221600, 98745, 0x207fffff, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
@@ -1042,6 +1048,8 @@ public:
         pchMessageStart[3] = 0x03;
         nDefaultPort = 63646;
         nPruneAfterHeight = 1000;
+        m_assumed_blockchain_size = 0;
+        m_assumed_chain_state_size = 0;
 
         genesis = CreateGenesisBlock(1618221600, 98745, 0x207fffff, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
