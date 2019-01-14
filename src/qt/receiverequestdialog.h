@@ -29,7 +29,7 @@ class QRImageWidget : public QLabel
     Q_OBJECT
 
 public:
-    explicit QRImageWidget(QWidget *parent = 0);
+    explicit QRImageWidget(QWidget *parent = nullptr);
     QImage exportImage();
 
 public Q_SLOTS:
@@ -49,7 +49,7 @@ class ReceiveRequestDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ReceiveRequestDialog(QWidget *parent = 0);
+    explicit ReceiveRequestDialog(QWidget *parent = nullptr);
     ~ReceiveRequestDialog();
 
     void setModel(WalletModel *model);

@@ -26,7 +26,7 @@ class AddressTableModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    explicit AddressTableModel(WalletModel *parent = 0);
+    explicit AddressTableModel(WalletModel *parent = nullptr);
     ~AddressTableModel();
 
     enum ColumnIndex {

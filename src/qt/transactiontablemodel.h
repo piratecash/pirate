@@ -28,7 +28,7 @@ class TransactionTableModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    explicit TransactionTableModel(WalletModel *parent = 0);
+    explicit TransactionTableModel(WalletModel *parent = nullptr);
     ~TransactionTableModel();
 
     enum ColumnIndex {

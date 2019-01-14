@@ -113,8 +113,8 @@ OverviewPage::OverviewPage(QWidget* parent) :
     QWidget(parent),
     timer(nullptr),
     ui(new Ui::OverviewPage),
-    clientModel(0),
-    walletModel(0),
+    clientModel(nullptr),
+    walletModel(nullptr),
     cachedNumISLocks(-1),
     txdelegate(new TxViewDelegate(this))
 {
