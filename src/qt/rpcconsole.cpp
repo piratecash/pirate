@@ -1146,10 +1146,9 @@ void RPCConsole::startExecutor()
 
 void RPCConsole::on_stackedWidgetRPC_currentChanged(int index)
 {
-    if (ui->stackedWidgetRPC->widget(index) == ui->pageConsole)
+    if (ui->stackedWidgetRPC->widget(index) == ui->pageConsole) {
         ui->lineEdit->setFocus();
-    else if (ui->stackedWidgetRPC->widget(index) != ui->pagePeers)
-        clearSelectedNode();
+    }
 }
 
 void RPCConsole::on_openDebugLogfileButton_clicked()
