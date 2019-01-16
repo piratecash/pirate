@@ -4,7 +4,6 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-bin_PROGRAMS += test/test_cosanta
 
 FUZZ_TARGETS = \
   test/fuzz/address_deserialize \
@@ -31,6 +30,8 @@ FUZZ_TARGETS = \
 
 if ENABLE_FUZZ
 noinst_PROGRAMS += $(FUZZ_TARGETS:=)
+else
+bin_PROGRAMS += test/test_cosanta
 endif
 
 TEST_SRCDIR = test
