@@ -119,6 +119,7 @@ BITCOIN_CORE_H = \
   spentindex.h \
   addrman.h \
   attributes.h \
+  banman.h \
   base58.h \
   batchedlogger.h \
   bech32.h \
@@ -313,6 +314,7 @@ libcosanta_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libcosanta_server_a_SOURCES = \
   addrdb.cpp \
   addrman.cpp \
+  banman.cpp \
   batchedlogger.cpp \
   bloom.cpp \
   blockencodings.cpp \
