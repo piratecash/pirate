@@ -1265,6 +1265,9 @@ public:
     /** Watch-only address added */
     boost::signals2::signal<void (bool fHaveWatchOnly)> NotifyWatchonlyChanged;
 
+    /** Keypool has new keys */
+    boost::signals2::signal<void ()> NotifyCanGetAddressesChanged;
+
     /** IS-lock received */
     boost::signals2::signal<void ()> NotifyISLockReceived;
 
