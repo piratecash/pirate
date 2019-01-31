@@ -6,13 +6,14 @@ reset-files.bash
 *.tar.gz
 
 *.exe
-src/dash
-<<<<<<< HEAD
+src/piratecash
 src/piratecashd
 src/piratecash-cli
 src/piratecash-tx
+src/piratecash-wallet
+src/test/fuzz
+!src/test/fuzz/*.*
 src/test/test_piratecash
-src/test/test_piratecash_fuzzy
 src/qt/test/test_piratecash-qt
 src/qt/res/css/colors/*
 src/bench/bench_piratecash
