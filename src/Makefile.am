@@ -299,6 +299,7 @@ BITCOIN_CORE_H = \
   ui_interface.h \
   undo.h \
   unordered_lru_cache.h \
+  util/bip32.h \
   util/bytevectorhash.h \
   util/check.h \
   util/error.h \
@@ -678,6 +679,7 @@ libpiratecash_util_a_SOURCES = \
   support/cleanse.cpp \
   sync.cpp \
   threadinterrupt.cpp \
+  util/bip32.cpp \
   util/bytevectorhash.cpp \
   util/error.cpp \
   util/fees.cpp \
