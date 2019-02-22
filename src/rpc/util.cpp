@@ -6,7 +6,6 @@
 #include <keystore.h>
 #include <policy/fees.h>
 #include <pubkey.h>
-#include <rpc/protocol.h>
 #include <rpc/util.h>
 #include <tinyformat.h>
 #include <util/strencodings.h>
