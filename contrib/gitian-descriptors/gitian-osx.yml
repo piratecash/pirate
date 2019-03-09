@@ -33,6 +33,8 @@ remotes:
 files:
 - "Xcode-12.1-12A7403-extracted-SDK-with-libcxx-headers.tar.gz"
 script: |
+  set -e -o pipefail
+
   WRAP_DIR=$HOME/wrapped
   HOSTS="x86_64-apple-darwin19"
   CONFIGFLAGS="--enable-reduce-exports --disable-miner --disable-bench --disable-gui-tests XORRISOFS=${WRAP_DIR}/xorrisofs DMG=${WRAP_DIR}/dmg --enable-crash-hooks"
