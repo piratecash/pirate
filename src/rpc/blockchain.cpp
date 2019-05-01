@@ -1631,6 +1631,7 @@ static UniValue getchaintips(const JSONRPCRequest& request)
 UniValue MempoolInfoToJSON(const CTxMemPool& pool)
 {
     UniValue ret(UniValue::VOBJ);
+    ret.pushKV("loaded", pool.IsLoaded());
     ret.pushKV("size", (int64_t)pool.size());
     ret.pushKV("bytes", (int64_t)pool.GetTotalTxSize());
     ret.pushKV("usage", (int64_t)pool.DynamicMemoryUsage());
@@ -1651,6 +1652,7 @@ static UniValue getmempoolinfo(const JSONRPCRequest& request)
             "\nReturns details on the active state of the TX memory pool.\n"
             "\nResult:\n"
             "{\n"
+            "  \"loaded\": true|false         (boolean) True if the mempool is fully loaded\n"
             "  \"size\": xxxxx,               (numeric) Current tx count\n"
             "  \"bytes\": xxxxx,              (numeric) Sum of all tx sizes\n"
             "  \"usage\": xxxxx,              (numeric) Total memory usage for the mempool\n"
@@ -2226,11 +2228,11 @@ static UniValue savemempool(const JSONRPCRequest& request)
         );
     }
 
-    if (!g_is_mempool_loaded) {
+    if (!::mempool.IsLoaded()) {
         throw JSONRPCError(RPC_MISC_ERROR, "The mempool was not loaded yet");
     }
 
-    if (!DumpMempool()) {
+    if (!DumpMempool(::mempool)) {
         throw JSONRPCError(RPC_MISC_ERROR, "Unable to dump mempool to disk");
     }
 
