@@ -5008,4 +5008,5 @@ public:
         mapOrphanTransactionsByPrev.clear();
         nMapOrphanTransactionsSize = 0;
     }
-} instance_of_cnetprocessingcleanup;
+};
+static CNetProcessingCleanup instance_of_cnetprocessingcleanup;
