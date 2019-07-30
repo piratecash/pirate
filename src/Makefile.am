@@ -117,7 +117,7 @@ if BUILD_BITCOIN_TX
 endif
 if ENABLE_WALLET
 if BUILD_BITCOIN_WALLET
-  bin_PROGRAMS += cosanta-wallet
+  bin_PROGRAMS += piratecash-wallet
 endif
 endif
 
@@ -443,7 +443,7 @@ libpiratecash_server_a_SOURCES += dummywallet.cpp
 endif
 
 if ENABLE_ZMQ
-libpiratecash_zmq_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(ZMQ_CFLAGS)
+libpiratecash_zmq_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(ZMQ_CFLAGS)
 libpiratecash_zmq_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libpiratecash_zmq_a_SOURCES = \
   zmq/zmqabstractnotifier.cpp \
@@ -479,9 +479,9 @@ libpiratecash_wallet_a_SOURCES = \
   wallet/coinselection.cpp \
   $(BITCOIN_CORE_H)
 
-libcosanta_wallet_tool_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libcosanta_wallet_tool_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libcosanta_wallet_tool_a_SOURCES = \
+libpiratecash_wallet_tool_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libpiratecash_wallet_tool_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libpiratecash_wallet_tool_a_SOURCES = \
   wallet/wallettool.cpp \
   $(BITCOIN_CORE_H)
 
