@@ -696,6 +696,8 @@ endif
 libpiratecash_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 libpiratecash_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libpiratecash_cli_a_SOURCES = \
+  compat/stdin.h \
+  compat/stdin.cpp \
   rpc/client.cpp \
   $(BITCOIN_CORE_H)
 
