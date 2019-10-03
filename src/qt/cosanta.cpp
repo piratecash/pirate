@@ -442,7 +442,7 @@ int GuiMain(int argc, char* argv[])
     RegisterPrettySignalHandlers();
 
     SetupEnvironment();
-    util::ThreadRename("main");
+    util::ThreadSetInternalName("main");
 
     std::unique_ptr<interfaces::Node> node = interfaces::MakeNode();
 
