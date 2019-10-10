@@ -917,10 +917,10 @@ void BitcoinGUI::createIconMenu(QMenu *pmenu)
         pmenu->addAction(signMessageAction);
         pmenu->addAction(verifyMessageAction);
         pmenu->addSeparator();
-        pmenu->addAction(openRPCConsoleAction);
     }
     pmenu->addAction(optionsAction);
     pmenu->addAction(openInfoAction);
+    pmenu->addAction(openRPCConsoleAction);
     pmenu->addAction(openGraphAction);
     pmenu->addAction(openPeersAction);
     if (enableWallet) {
