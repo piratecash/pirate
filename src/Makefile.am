@@ -894,6 +894,8 @@ include Makefile.crc32c.include
 include Makefile.leveldb.include
 endif
 
+include Makefile.test_util.include
+
 if ENABLE_TESTS
 include Makefile.test.include
 endif
