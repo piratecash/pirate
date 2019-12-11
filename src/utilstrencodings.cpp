@@ -5,6 +5,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <utilstrencodings.h>
+#include <utilstring.h>
 
 #include <tinyformat.h>
 
@@ -268,7 +269,7 @@ NODISCARD static bool ParsePrechecks(const std::string& str)
         return false;
     if (str.size() >= 1 && (isspace(str[0]) || isspace(str[str.size()-1]))) // No padding allowed
         return false;
-    if (str.size() != strlen(str.c_str())) // No embedded NUL characters allowed
+    if (!ValidAsCString(str)) // No embedded NUL characters allowed
         return false;
     return true;
 }
