@@ -40,6 +40,7 @@ class TestNode(NodeConnCB):
 class LLMQCoinbaseCommitmentsTest(CosantaTestFramework):
     def set_test_params(self):
         self.set_cosanta_test_params(6, 5, fast_dip3_enforcement=True)
+        self.set_cosanta_dip8_activation(200)
 
     def run_test(self):
         self.test_node = TestNode()
