@@ -1360,7 +1360,7 @@ static const CRPCCommand commands[] =
 
     /* Cosanta features */
     { "cosanta",               "mnsync",                 &mnsync,                 {} },
-    { "cosanta",               "spork",                  &spork,                  {"value"} },
+    { "cosanta",               "spork",                  &spork,                  {"arg0","value"} },
 
     /* Not shown in help */
     { "hidden",             "setmocktime",            &setmocktime,            {"timestamp"}},
