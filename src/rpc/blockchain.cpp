@@ -1814,7 +1814,7 @@ UniValue getchaintxstats(const JSONRPCRequest& request)
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Block is not in main chain");
         }
     }
-    
+
     assert(pindex != nullptr);
 
     if (request.params[0].isNull()) {
