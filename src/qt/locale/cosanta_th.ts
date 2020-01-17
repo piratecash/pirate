@@ -70,12 +70,12 @@
         <translation>ที่อยู่ผู้รับ</translation>
     </message>
     <message>
-        <source>These are your Cosanta addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>นี่คือที่อยู่ Cosanta ของคุณสำหรับการส่งการชำระเงิน โปรดตรวจสอบจำนวนเงินและที่อยู่ผู้รับก่อนที่จะส่งเหรียญ</translation>
+        <source>These are your Dash addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>นี่คือที่อยู่ Dash ของคุณสำหรับการส่งการชำระเงิน โปรดตรวจสอบจำนวนเงินและที่อยู่ผู้รับก่อนที่จะส่งเหรียญ</translation>
     </message>
     <message>
-        <source>These are your Cosanta addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>นี่เป็นที่อยู่ Cosanta ของคุณสำหรับการรับการชำระเงิน แนะนำให้ใช้ที่อยู่รับใหม่สำหรับแต่ละธุรกรรม</translation>
+        <source>These are your Dash addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>นี่เป็นที่อยู่ Dash ของคุณสำหรับการรับการชำระเงิน แนะนำให้ใช้ที่อยู่รับใหม่สำหรับแต่ละธุรกรรม</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -188,8 +188,8 @@
         <translation>ยืนยันการเข้ารหัสกระเป๋าสตางค์</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR COSANTA&lt;/b&gt;!</source>
-        <translation>คำเตือน : ถ้าคุณเข้ารหัส Wallet ของคุณแล้วทำรหัสวลีหาย คุณจะ&lt;b&gt;สูญเสีย Cosanta ของคุณทั้งหมด&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR DASH&lt;/b&gt;!</source>
+        <translation>คำเตือน : ถ้าคุณเข้ารหัส Wallet ของคุณแล้วทำรหัสวลีหาย คุณจะ&lt;b&gt;สูญเสีย Dash ของคุณทั้งหมด&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -258,12 +258,12 @@
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <source>A fatal error occurred. Cosanta Core can no longer continue safely and will quit.</source>
-        <translation>เกิดข้อผิดพลาดร้ายแรงขึ้น Cosanta Core ไม่สามารถดำเนินการต่อได้อย่างปลอดภัยและจะออกจากระบบ</translation>
+        <source>A fatal error occurred. Dash Core can no longer continue safely and will quit.</source>
+        <translation>เกิดข้อผิดพลาดร้ายแรงขึ้น Dash Core ไม่สามารถดำเนินการต่อได้อย่างปลอดภัยและจะออกจากระบบ</translation>
     </message>
     <message>
-        <source>Cosanta Core</source>
-        <translation>Cosanta Core</translation>
+        <source>Dash Core</source>
+        <translation>Dash Core</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -286,16 +286,16 @@
         <translation>&amp;ส่ง</translation>
     </message>
     <message>
-        <source>Send coins to a Cosanta address</source>
-        <translation>ส่ง เหรียญ ไปยัง ที่อยู่ Cosanta</translation>
+        <source>Send coins to a Dash address</source>
+        <translation>ส่ง เหรียญ ไปยัง ที่อยู่ Dash</translation>
     </message>
     <message>
         <source>&amp;Receive</source>
         <translation>&amp;รับ</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and cosanta: URIs)</source>
-        <translation>เรียกเก็บ การชำระเงิน (สร้าง QR codes และ Cosanta: URIs)</translation>
+        <source>Request payments (generates QR codes and dash: URIs)</source>
+        <translation>เรียกเก็บ การชำระเงิน (สร้าง QR codes และ Dash: URIs)</translation>
     </message>
     <message>
         <source>&amp;Transactions</source>
@@ -322,8 +322,8 @@
         <translation>ออกจากโปรแกรม</translation>
     </message>
     <message>
-        <source>Show information about Cosanta Core</source>
-        <translation>แสดงข้อมูลเกี่ยวกับ Cosanta Core</translation>
+        <source>Show information about Dash Core</source>
+        <translation>แสดงข้อมูลเกี่ยวกับ Dash Core</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
@@ -394,16 +394,16 @@
         <translation>เซ็นต์ชื่อด้วย &amp;ข้อความ...</translation>
     </message>
     <message>
-        <source>Sign messages with your Cosanta addresses to prove you own them</source>
-        <translation>เซ็นชื่อด้วยข้อความ ที่เก็บ Cosanta เพื่อแสดงว่าท่านเป็นเจ้าของ Cosanta นี้จริง</translation>
+        <source>Sign messages with your Dash addresses to prove you own them</source>
+        <translation>เซ็นชื่อด้วยข้อความ ที่เก็บ Dash เพื่อแสดงว่าท่านเป็นเจ้าของ Dash นี้จริง</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
         <translation>&amp;ยืนยันข้อความ...</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Cosanta addresses</source>
-        <translation>ตรวจสอบ ข้อความ เพื่อให้แน่ใจว่า การเซ็นต์ชื่อ ด้วยที่เก็บ Cosanta แล้ว</translation>
+        <source>Verify messages to ensure they were signed with specified Dash addresses</source>
+        <translation>ตรวจสอบ ข้อความ เพื่อให้แน่ใจว่า การเซ็นต์ชื่อ ด้วยที่เก็บ Dash แล้ว</translation>
     </message>
     <message>
         <source>&amp;Information</source>
@@ -482,16 +482,16 @@
         <translation>เปิด URI</translation>
     </message>
     <message>
-        <source>Open a cosanta: URI or payment request</source>
-        <translation>เปิด Cosanta: URI หรือคำขอการชำระเงิน</translation>
+        <source>Open a dash: URI or payment request</source>
+        <translation>เปิด Dash: URI หรือคำขอการชำระเงิน</translation>
     </message>
     <message>
         <source>&amp;Command-line options</source>
         <translation>ตัวเลือก Command-line</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible Cosanta command-line options</source>
-        <translation>แสดง %1 ข้อความช่วยเหลือ เพื่อแสดงรายการ ตัวเลือกที่เป็นไปได้สำหรับ Cosanta command-line</translation>
+        <source>Show the %1 help message to get a list with possible Dash command-line options</source>
+        <translation>แสดง %1 ข้อความช่วยเหลือ เพื่อแสดงรายการ ตัวเลือกที่เป็นไปได้สำหรับ Dash command-line</translation>
     </message>
     <message>
         <source>%1 client</source>
@@ -526,8 +526,8 @@
         <translation>แถบเครื่องมือ</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to Cosanta network</source>
-        <translation><numerusform>%n เชื่อมต่อใช้งานกับเครือข่าย Cosanta</numerusform></translation>
+        <source>%n active connection(s) to Dash network</source>
+        <translation><numerusform>%n เชื่อมต่อใช้งานกับเครือข่าย Dash</numerusform></translation>
     </message>
     <message>
         <source>Network activity disabled</source>
@@ -866,8 +866,8 @@
         <translation>แก้ไขที่อยู่ผู้ส่ง</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid Cosanta address.</source>
-        <translation>ที่อยู่ที่ป้อน "%1" ไม่ใช่ที่อยู่ Cosanta ที่ถูกต้อง</translation>
+        <source>The entered address "%1" is not a valid Dash address.</source>
+        <translation>ที่อยู่ที่ป้อน "%1" ไม่ใช่ที่อยู่ Dash ที่ถูกต้อง</translation>
     </message>
     <message>
         <source>The entered address "%1" is already in the address book.</source>
@@ -1007,8 +1007,8 @@
         <translation>ประมาณ %1 GB ของข้อมูลจะถูกเก็บอยู่ในแฟ้มเอกสารนี้</translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the Cosanta block chain.</source>
-        <translation>%1 จะกดาวน์โหลดและเก็บสำเนาของ Cosanta block chain</translation>
+        <source>%1 will download and store a copy of the Dash block chain.</source>
+        <translation>%1 จะกดาวน์โหลดและเก็บสำเนาของ Dash block chain</translation>
     </message>
     <message>
         <source>The wallet will also be stored in this directory.</source>
@@ -1133,12 +1133,12 @@
         <translation>รูป</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the Cosanta network, as detailed below.</source>
-        <translation>การทำธุรกรรมล่าสุดอาจยังไม่สามารถเห็นได้และทำให้ยอดคงเหลือของ wallet ของคุณไม่ถูกต้อง ข้อมูลนี้จะถูกต้องก่อนที่ Wallet ของคุณจะเสร็จสิ้นการซิงค์กับเครือข่าย Cosanta ตามรายละเอียดด้านล่างนี้</translation>
+        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the Dash network, as detailed below.</source>
+        <translation>การทำธุรกรรมล่าสุดอาจยังไม่สามารถเห็นได้และทำให้ยอดคงเหลือของ wallet ของคุณไม่ถูกต้อง ข้อมูลนี้จะถูกต้องก่อนที่ Wallet ของคุณจะเสร็จสิ้นการซิงค์กับเครือข่าย Dash ตามรายละเอียดด้านล่างนี้</translation>
     </message>
     <message>
-        <source>Attempting to spend Cosanta that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
-        <translation>เครือข่ายจะไม่ยอมรับความพยายามที่จะใช้ Cosanta ที่ได้รับผลกระทบจากการทำธุรกรรมที่ยังไม่ได้แสดงผล</translation>
+        <source>Attempting to spend Dash that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <translation>เครือข่ายจะไม่ยอมรับความพยายามที่จะใช้ Dash ที่ได้รับผลกระทบจากการทำธุรกรรมที่ยังไม่ได้แสดงผล</translation>
     </message>
     <message>
         <source>Number of blocks left</source>
@@ -1275,12 +1275,12 @@
         <translation>จำนวนนี้ทำหน้าที่เป็นเกณฑ์เพื่อปิดการใช้งาน PrivateSend เมื่อถึงขีดจำกัดแล้ว</translation>
     </message>
     <message>
-        <source>Automatically open the Cosanta Core client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>เปิดพอร์ต Cosanta Core client บนเราเตอร์โดยอัตโนมัติ การทำงานนี้ใช้ได้เฉพาะเมื่อเราเตอร์ของคุณรองรับ UPnP และเปิดใช้งานแล้ว</translation>
+        <source>Automatically open the Dash Core client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>เปิดพอร์ต Dash Core client บนเราเตอร์โดยอัตโนมัติ การทำงานนี้ใช้ได้เฉพาะเมื่อเราเตอร์ของคุณรองรับ UPnP และเปิดใช้งานแล้ว</translation>
     </message>
     <message>
-        <source>Connect to the Cosanta network through a SOCKS5 proxy.</source>
-        <translation>เชื่อมต่อกับเครือข่าย Cosanta ผ่านพร็อกซี่แบบ SOCKS5</translation>
+        <source>Connect to the Dash network through a SOCKS5 proxy.</source>
+        <translation>เชื่อมต่อกับเครือข่าย Dash ผ่านพร็อกซี่แบบ SOCKS5</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1379,8 +1379,8 @@
         <translation>Tor</translation>
     </message>
     <message>
-        <source>Connect to the Cosanta network through a separate SOCKS5 proxy for Tor hidden services.</source>
-        <translation>เชื่อมต่อกับ เครือข่าย Cosanta ผ่านทาง พร้อกซี่ SOCKS5 แยกต่างหาก สำหรับ Tor เซอร์วิส</translation>
+        <source>Connect to the Dash network through a separate SOCKS5 proxy for Tor hidden services.</source>
+        <translation>เชื่อมต่อกับ เครือข่าย Dash ผ่านทาง พร้อกซี่ SOCKS5 แยกต่างหาก สำหรับ Tor เซอร์วิส</translation>
     </message>
     <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services:</source>
@@ -1504,8 +1504,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>รูป</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Cosanta network after a connection is established, but this process has not completed yet.</source>
-        <translation>ข้อมูลที่แสดงอาจล้าสมัย  Wallet ของคุณจะทำข้อมูลให้ตรงกับเครือข่าย Cosanta โดยอัตโนมัติหลังจากที่มีการเชื่อมต่อแล้ว แต่กระบวนการนี้ยังไม่เสร็จสมบูรณ์</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Dash network after a connection is established, but this process has not completed yet.</source>
+        <translation>ข้อมูลที่แสดงอาจล้าสมัย  Wallet ของคุณจะทำข้อมูลให้ตรงกับเครือข่าย Dash โดยอัตโนมัติหลังจากที่มีการเชื่อมต่อแล้ว แต่กระบวนการนี้ยังไม่เสร็จสมบูรณ์</translation>
     </message>
     <message>
         <source>Available:</source>
@@ -1588,8 +1588,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>จำนวนและรอบ:</translation>
     </message>
     <message>
-        <source>0 COSANTA / 0 Rounds</source>
-        <translation>0 COSANTA / 0 รอบ</translation>
+        <source>0 DASH / 0 Rounds</source>
+        <translation>0 DASH / 0 รอบ</translation>
     </message>
     <message>
         <source>Submitted Denom:</source>
@@ -1737,8 +1737,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>คำขอการชำระเงินผิดพลาด</translation>
     </message>
     <message>
-        <source>Cannot start cosanta: click-to-pay handler</source>
-        <translation>ไม่สามารถเริ่มต้น Cosanta: คลิกเพื่อจ่ายเงิน</translation>
+        <source>Cannot start dash: click-to-pay handler</source>
+        <translation>ไม่สามารถเริ่มต้น Dash: คลิกเพื่อจ่ายเงิน</translation>
     </message>
     <message>
         <source>URI handling</source>
@@ -1753,8 +1753,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>ที่อยู่การชำระเงินไม่ถูกต้อง %1</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid Cosanta address or malformed URI parameters.</source>
-        <translation>ไม่สามารถประมวลผล URI ได้สำเร็จ ! ซึ่งอาจเกิดจากที่อยู่ Cosanta ไม่ถูกต้องหรือพารามิเตอร์ URI ที่มีรูปแบบไม่ถูกต้อง</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Dash address or malformed URI parameters.</source>
+        <translation>ไม่สามารถประมวลผล URI ได้สำเร็จ ! ซึ่งอาจเกิดจากที่อยู่ Dash ไม่ถูกต้องหรือพารามิเตอร์ URI ที่มีรูปแบบไม่ถูกต้อง</translation>
     </message>
     <message>
         <source>Payment request file handling</source>
@@ -1851,8 +1851,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>จำนวน</translation>
     </message>
     <message>
-        <source>Enter a Cosanta address (e.g. %1)</source>
-        <translation>ป้อนที่อยู่ Cosanta (เช่น %1)</translation>
+        <source>Enter a Dash address (e.g. %1)</source>
+        <translation>ป้อนที่อยู่ Dash (เช่น %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2377,8 +2377,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>ใช้ที่อยู่รับที่มีอยู่ (ไม่แนะนำ)</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Cosanta network.</source>
-        <translation>ข้อความเสริมที่จะแนบไปกับคำขอการชำระเงินซึ่งจะแสดงขึ้นเมื่อมีการเปิดคำขอ หมายเหตุ: ข้อความจะไม่ถูกส่งพร้อมกับการชำระเงินผ่านเครือข่าย Cosanta</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Dash network.</source>
+        <translation>ข้อความเสริมที่จะแนบไปกับคำขอการชำระเงินซึ่งจะแสดงขึ้นเมื่อมีการเปิดคำขอ หมายเหตุ: ข้อความจะไม่ถูกส่งพร้อมกับการชำระเงินผ่านเครือข่าย Dash</translation>
     </message>
     <message>
         <source>&amp;Message:</source>
@@ -2389,8 +2389,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>ป้ายกำกับเพิ่มเติมสำหรับเชื่อมโยงกับที่อยู่รับใหม่</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened.&lt;br&gt;Note: The message will not be sent with the payment over the Cosanta network.</source>
-        <translation>ข้อความเสริมที่จะแนบไปกับคำขอการชำระเงินซึ่งจะแสดงขึ้นเมื่อมีการเปิดคำขอ&lt;br&gt; หมายเหตุ: ข้อความจะไม่ถูกส่งพร้อมกับการชำระเงินผ่านเครือข่าย Cosanta</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened.&lt;br&gt;Note: The message will not be sent with the payment over the Dash network.</source>
+        <translation>ข้อความเสริมที่จะแนบไปกับคำขอการชำระเงินซึ่งจะแสดงขึ้นเมื่อมีการเปิดคำขอ&lt;br&gt; หมายเหตุ: ข้อความจะไม่ถูกส่งพร้อมกับการชำระเงินผ่านเครือข่าย Dash</translation>
     </message>
     <message>
         <source>Use this form to request payments. All fields are &lt;b&gt;optional&lt;/b&gt;.</source>
@@ -2626,8 +2626,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>หากค่าธรรมเนียมที่กำหนดเองถูกตั้งค่าเป็น 1000 duffs และการทำธุรกรรมนี้มีเพียง 250 ไบต์   ซึ่ง "ต่อกิโลไบต์" จะจ่ายเพียง 250 duffs ในขณะที่ "อย่างน้อย" จ่าย 1000 duffs สำหรับธุรกรรมที่มีขนาดใหญ่กว่ากิโลไบต์จะต้องจ่ายเป็นกิโลไบต์</translation>
     </message>
     <message>
-        <source>Paying only the minimum fee is just fine as long as there is less transaction volume than space in the blocks.&lt;br /&gt;But be aware that this can end up in a never confirming transaction once there is more demand for cosanta transactions than the network can process.</source>
-        <translation>การจ่ายเงินเพียงค่าขั้นต่ำก็ทำได้ดีตราบเท่าที่ปริมาณธุรกรรมมีน้อยกว่าพื้นที่ในบล็อก&lt;br /&gt; แต่โปรดทราบว่าการจ่ายนี้จะสิ้นสุดลงในธุรกรรมที่ไม่เคยมีการยืนยัน ความต้องการใช้การทำธุรกรรมแบบ Cosanta มีมากกว่าที่เครือข่ายสามารถดำเนินการได้</translation>
+        <source>Paying only the minimum fee is just fine as long as there is less transaction volume than space in the blocks.&lt;br /&gt;But be aware that this can end up in a never confirming transaction once there is more demand for dash transactions than the network can process.</source>
+        <translation>การจ่ายเงินเพียงค่าขั้นต่ำก็ทำได้ดีตราบเท่าที่ปริมาณธุรกรรมมีน้อยกว่าพื้นที่ในบล็อก&lt;br /&gt; แต่โปรดทราบว่าการจ่ายนี้จะสิ้นสุดลงในธุรกรรมที่ไม่เคยมีการยืนยัน ความต้องการใช้การทำธุรกรรมแบบ Dash มีมากกว่าที่เครือข่ายสามารถดำเนินการได้</translation>
     </message>
     <message>
         <source>per kilobyte</source>
@@ -2798,8 +2798,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation><numerusform>คาดว่าจะเริ่มการยืนยันภายใน %n บล็อค</numerusform></translation>
     </message>
     <message>
-        <source>Warning: Invalid Cosanta address</source>
-        <translation>คำเตือน: ที่อยู่ Cosanta ไม่ถูกต้อง</translation>
+        <source>Warning: Invalid Dash address</source>
+        <translation>คำเตือน: ที่อยู่ Dash ไม่ถูกต้อง</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
@@ -2829,8 +2829,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>จ่ายไปยัง:</translation>
     </message>
     <message>
-        <source>The Cosanta address to send the payment to</source>
-        <translation>ที่อยู่ Cosanta เพื่อส่งการชำระเงินไปที่</translation>
+        <source>The Dash address to send the payment to</source>
+        <translation>ที่อยู่ Dash เพื่อส่งการชำระเงินไปที่</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -2865,8 +2865,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>จำนวน:</translation>
     </message>
     <message>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive a lower amount of Cosanta than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
-        <translation>ค่าธรรมเนียมจะถูกหักออกจากจำนวนเงินที่ส่ง ผู้รับจะได้รับ Cosanta น้อยกว่าที่คุณป้อนในฟิลด์ หากมีการเลือกผู้รับหลายรายค่าธรรมเนียมจะแบ่งเท่า ๆ กัน</translation>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive a lower amount of Dash than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <translation>ค่าธรรมเนียมจะถูกหักออกจากจำนวนเงินที่ส่ง ผู้รับจะได้รับ Dash น้อยกว่าที่คุณป้อนในฟิลด์ หากมีการเลือกผู้รับหลายรายค่าธรรมเนียมจะแบ่งเท่า ๆ กัน</translation>
     </message>
     <message>
         <source>S&amp;ubtract fee from amount</source>
@@ -2877,8 +2877,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>ข้อความ: </translation>
     </message>
     <message>
-        <source>A message that was attached to the cosanta: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Cosanta network.</source>
-        <translation>ข้อความที่แนบมาไปยัง Cosanta: URI ซึ่งจะถูกเก็บไว้กับธุรกรรมเพื่อเป็นข้อมูลอ้างอิงของคุณ  หมายเหตุ: ข้อความนี้จะถูกส่งไปยังเครือข่าย Cosanta </translation>
+        <source>A message that was attached to the dash: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Dash network.</source>
+        <translation>ข้อความที่แนบมาไปยัง Dash: URI ซึ่งจะถูกเก็บไว้กับธุรกรรมเพื่อเป็นข้อมูลอ้างอิงของคุณ  หมายเหตุ: ข้อความนี้จะถูกส่งไปยังเครือข่าย Dash </translation>
     </message>
     <message>
         <source>This is an unauthenticated payment request.</source>
@@ -2930,12 +2930,12 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>ลงนามข้อความ</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your addresses to prove you can receive Cosanta sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>คุณสามารถลงนามในข้อความ / ข้อตกลงกับที่อยู่ของคุณเพื่อพิสูจน์ว่าคุณสามารถรับ Cosanta ส่งถึงพวกเขาได้  ระวังอย่าเซ็นชื่ออะไรที่กำกวม เนื่องจากการโจมตีแบบฟิชชิ่งอาจพยายามหลอกล่อให้คุณเซ็นชื่อตัวคุณเอง เพียงลงนามในคำชี้แจงอย่างละเอียดที่คุณเห็นด้วยเท่านั้น</translation>
+        <source>You can sign messages/agreements with your addresses to prove you can receive Dash sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <translation>คุณสามารถลงนามในข้อความ / ข้อตกลงกับที่อยู่ของคุณเพื่อพิสูจน์ว่าคุณสามารถรับ Dash ส่งถึงพวกเขาได้  ระวังอย่าเซ็นชื่ออะไรที่กำกวม เนื่องจากการโจมตีแบบฟิชชิ่งอาจพยายามหลอกล่อให้คุณเซ็นชื่อตัวคุณเอง เพียงลงนามในคำชี้แจงอย่างละเอียดที่คุณเห็นด้วยเท่านั้น</translation>
     </message>
     <message>
-        <source>The Cosanta address to sign the message with</source>
-        <translation>ที่อยู่ Cosanta เพื่อเซ็นชื่อ</translation>
+        <source>The Dash address to sign the message with</source>
+        <translation>ที่อยู่ Dash เพื่อเซ็นชื่อ</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -2966,8 +2966,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>คัดลอกลายเซ็นปัจจุบันไปยังคลิปบอร์ดของระบบ</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this Cosanta address</source>
-        <translation>ลงนามข้อความเพื่อพิสูจน์ว่าคุณเป็นเจ้าของที่อยู่ Cosanta นี้</translation>
+        <source>Sign the message to prove you own this Dash address</source>
+        <translation>ลงนามข้อความเพื่อพิสูจน์ว่าคุณเป็นเจ้าของที่อยู่ Dash นี้</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -2990,12 +2990,12 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>ป้อนที่อยู่ของผู้รับข้อความ (ตรวจสอบให้แน่ใจว่าคุณได้คัดลอกเว้นวรรค ช่องว่าง ย่อหน้า ฯลฯ ) และลายเซ็นด้านล่างเพื่อยืนยันข้อความ โปรดระวังอย่าใช้ข้อมูลมากกว่าข้อความที่เซ็นชื่อไว้เพื่อหลีกเลี่ยงการฉ้อโกงโดยอาศัยการโจมตีแบบ man-in-the-middle โปรดทราบว่าสิ่งนี้พิสูจน์ให้เห็นว่าบุคคลที่ลงนามได้รับพร้อมกับที่อยู่แล้วไม่สามารถพิสูจน์ว่ามีผู้ส่งรายการใด ๆ !</translation>
     </message>
     <message>
-        <source>The Cosanta address the message was signed with</source>
-        <translation>ข้อความที่อยู่ Cosanta ถูกเซ็นชื่อด้วย</translation>
+        <source>The Dash address the message was signed with</source>
+        <translation>ข้อความที่อยู่ Dash ถูกเซ็นชื่อด้วย</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified Cosanta address</source>
-        <translation>ยืนยันข้อความเพื่อให้แน่ใจว่าข้อความถูกเซ็นชื่อด้วยที่อยู่ Cosanta ที่ระบุ</translation>
+        <source>Verify the message to ensure it was signed with the specified Dash address</source>
+        <translation>ยืนยันข้อความเพื่อให้แน่ใจว่าข้อความถูกเซ็นชื่อด้วยที่อยู่ Dash ที่ระบุ</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -3669,7 +3669,7 @@ https://www.transifex.com/projects/p/dash/</translation>
     </message>
 </context>
 <context>
-    <name>cosanta-core</name>
+    <name>dash-core</name>
     <message>
         <source>Bind to given address and always listen on it. Use [host]:port notation for IPv6</source>
         <translation>เชื่อมโยงไปยังที่อยู่ที่กำหนดและฟังเสมอ โปรดใช้รูปแบบ  [host]:port สำหรับ IPv6</translation>
@@ -4211,8 +4211,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>คีย์ KeePassHttp สำหรับการสื่อสารที่เข้ารหัสด้วย AES กับ KeePass</translation>
     </message>
     <message>
-        <source>Disable all Cosanta specific functionality (Masternodes, PrivateSend, InstantSend, Governance) (0-1, default: %u)</source>
-        <translation>ปิดใช้ฟังก์ชันการทำงานเฉพาะ Cosanta ทั้งหมด  (Masternodes, PrivateSend, InstantSend, Governance) (0-1, ค่าดีฟอลต์: %u)</translation>
+        <source>Disable all Dash specific functionality (Masternodes, PrivateSend, InstantSend, Governance) (0-1, default: %u)</source>
+        <translation>ปิดใช้ฟังก์ชันการทำงานเฉพาะ Dash ทั้งหมด  (Masternodes, PrivateSend, InstantSend, Governance) (0-1, ค่าดีฟอลต์: %u)</translation>
     </message>
     <message>
         <source>%s file contains all private keys from this wallet. Do not share it with anyone!</source>
@@ -4683,8 +4683,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>ตัวเลือกเซิร์ฟเวอร์ RPC:</translation>
     </message>
     <message>
-        <source>Cosanta Core</source>
-        <translation>Cosanta Core</translation>
+        <source>Dash Core</source>
+        <translation>Dash Core</translation>
     </message>
     <message>
         <source>The %s developers</source>
@@ -4811,8 +4811,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Whitelist peers กำลังเชื่อมต่อจากที่อยู่ IP ที่ระบุ (เช่น 1.2.3.4) หรือเครือข่ายที่ได้รับการจดบันทึก CIDR (เช่น 1.2.3.0/24) สามารถระบุได้หลายครั้ง</translation>
     </message>
     <message>
-        <source>You are starting in lite mode, most Cosanta-specific functionality is disabled.</source>
-        <translation>คุณกำลังเริ่มต้นใน Lite Mode ฟังก์ชันการทำงานเฉพาะ Cosanta ส่วนใหญ่จะถูกปิดใช้งาน</translation>
+        <source>You are starting in lite mode, most Dash-specific functionality is disabled.</source>
+        <translation>คุณกำลังเริ่มต้นใน Lite Mode ฟังก์ชันการทำงานเฉพาะ Dash ส่วนใหญ่จะถูกปิดใช้งาน</translation>
     </message>
     <message>
         <source>%d of last 100 blocks have unexpected version</source>

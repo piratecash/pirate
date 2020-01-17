@@ -992,8 +992,13 @@
         <translation>PrivateSend informatie</translation>
     </message>
     <message>
+<<<<<<< HEAD:src/qt/locale/cosanta_nl.ts
         <source>&lt;h3&gt;PrivateSend Basics&lt;/h3&gt; PrivateSend gives you true financial privacy by obscuring the origins of your funds. All the Cosanta in your wallet is comprised of different "inputs" which you can think of as separate, discrete coins.&lt;br&gt; PrivateSend uses an innovative process to mix your inputs with the inputs of two other people, without having your coins ever leave your wallet. You retain control of your money at all times.&lt;hr&gt; &lt;b&gt;The PrivateSend process works like this:&lt;/b&gt;&lt;ol type="1"&gt; &lt;li&gt;PrivateSend begins by breaking your transaction inputs down into standard denominations. These denominations are 0.001 COSANTA, 0.01 COSANTA, 0.1 COSANTA, 1 COSANTA and 10 COSANTA -- sort of like the paper money you use every day.&lt;/li&gt; &lt;li&gt;Your wallet then sends requests to specially configured software nodes on the network, called "masternodes." These masternodes are informed then that you are interested in mixing a certain denomination. No identifiable information is sent to the masternodes, so they never know "who" you are.&lt;/li&gt; &lt;li&gt;When two other people send similar messages, indicating that they wish to mix the same denomination, a mixing session begins. The masternode mixes up the inputs and instructs all three users' wallets to pay the now-transformed input back to themselves. Your wallet pays that denomination directly to itself, but in a different address (called a change address).&lt;/li&gt; &lt;li&gt;In order to fully obscure your funds, your wallet must repeat this process a number of times with each denomination. Each time the process is completed, it's called a "round." Each round of PrivateSend makes it exponentially more difficult to determine where your funds originated.&lt;/li&gt; &lt;li&gt;This mixing process happens in the background without any intervention on your part. When you wish to make a transaction, your funds will already be mixed. No additional waiting is required.&lt;/li&gt; &lt;/ol&gt; &lt;hr&gt;&lt;b&gt;IMPORTANT:&lt;/b&gt; Your wallet only contains 1000 of these "change addresses." Every time a mixing event happens, up to 9 of your addresses are used up. This means those 1000 addresses last for about 100 mixing events. When 900 of them are used, your wallet must create more addresses. It can only do this, however, if you have automatic backups enabled.&lt;br&gt; Consequently, users who have backups disabled will also have PrivateSend disabled. &lt;hr&gt;For more information, see the &lt;a href="https://docs.dash.org/en/stable/wallets/cosantacore/privatesend-instantsend.html"&gt;PrivateSend documentation&lt;/a&gt;.</source>
         <translation>&lt;h3&gt;PrivateSend Basics&lt;/h3&gt; PrivateSend geeft u een echte financiële privacy door de oorsprong van uw geld te verschuilen. Alle Cosanta in uw portefeuille bestaat uit verschillende "inputs" die u kunt beschouwen als afzonderlijke, discrete munten.&lt;br&gt; PrivateSend maakt gebruik van een innovatief proces om uw invoer te mengen met de invoer van twee andere mensen, zonder dat uw munten ooit uw portemonnee verlaten . U behoudt de controle over uw geld te allen tijde. &lt;hr&gt; &lt;b&gt;Het PrivateSend-proces werkt als volgt: &lt;/b&gt;&lt;ol type="1"&gt; &lt;li&gt;PrivateSend begint door uw transactie-inputs in de standaard denominaties te breken. Deze denominaties zijn 0,001 COSANTA, 0,01 COSANTA, 0,1 COSANTA, 1 COSANTA en 10 COSANTA - zoals het papiergeld dat u elke dag gebruikt.&lt;/li&gt; &lt;li&gt;Uw portemonnee stuurt dan verzoeken naar speciaal geconfigureerde software nodes op het netwerk, genaamd "masternodes." Deze masternodes worden dan op de hoogte gesteld dat u geïnteresseerd bent in het mengen van een bepaalde denominaties. Er wordt geen identificeerbare informatie naar de masternodes gestuurd, zodat ze nooit weten wie u bent.&lt;/li&gt; &lt;li&gt;Wanneer twee andere mensen dezelfde berichten sturen, die aanduiden dat ze dezelfde denominaties willen vermengen, begint een mengsessie. De masternode mengt alle invoeren en instrueert de portefeuilles van alle drie de gebruikers om de nu getransformeerde invoer aan zichzelf terug te betalen. Uw portemonnee betaalt die denominaties rechtstreeks naar zichzelf, maar met een ander adres (een wijzigingadres genoemd).&lt;/li&gt; &lt;li&gt;Om uw geld volledig te verschuilen, moet uw portemonnee dit proces een aantal keren herhalen voor alle denominaties. Elke keer dat het proces wordt voltooid, heet dit een 'ronde'. Elke ronde van PrivateSend maakt het exponentieel moeilijker om te bepalen waar uw geld van afkomstig is.&lt;/li&gt; &lt;li&gt;Dit mengproces gebeurt op de achtergrond zonder enige interventie van uw kant. Wanneer u een transactie wenst uit te voeren, is uw saldo al geanonimiseerd. Er is geen extra wachttijd nodig.&lt;/li&gt; &lt;/ol&gt; &lt;hr&gt;&lt;b&gt;BELANGRIJK:&lt;/b&gt; Uw portemonnee bevat slechts 1000 van deze "wijzigingsadressen". Elke keer dat er een mengsessie plaatsvindt, worden maximaal 9 van uw adressen opgebruikt. Dit betekent dat deze 1000 adressen voor ongeveer 100 mengsessies volstaat. Wanneer er 900 zijn verbruikt, moet uw portemonnee meer adressen aanmaken. Dit kan alleen maar als u automatische back-ups hebt ingeschakeld.&lt;br&gt; Daarom zodra gebruikers die back-ups hebben uitgeschakeld, ook PrivateSend is uitgeschakeld. &lt;hr&gt;Voor meer informatie zie de &lt;a href="https://docs.dash.org/en/stable/wallets/cosantacore/privatesend-instantsend.html"&gt;PrivateSend documentatie&lt;/a&gt;.</translation>
+=======
+        <source>&lt;h3&gt;PrivateSend Basics&lt;/h3&gt; PrivateSend gives you true financial privacy by obscuring the origins of your funds. All the Dash in your wallet is comprised of different "inputs" which you can think of as separate, discrete coins.&lt;br&gt; PrivateSend uses an innovative process to mix your inputs with the inputs of two other people, without having your coins ever leave your wallet. You retain control of your money at all times.&lt;hr&gt; &lt;b&gt;The PrivateSend process works like this:&lt;/b&gt;&lt;ol type="1"&gt; &lt;li&gt;PrivateSend begins by breaking your transaction inputs down into standard denominations. These denominations are 0.001 DASH, 0.01 DASH, 0.1 DASH, 1 DASH and 10 DASH -- sort of like the paper money you use every day.&lt;/li&gt; &lt;li&gt;Your wallet then sends requests to specially configured software nodes on the network, called "masternodes." These masternodes are informed then that you are interested in mixing a certain denomination. No identifiable information is sent to the masternodes, so they never know "who" you are.&lt;/li&gt; &lt;li&gt;When two other people send similar messages, indicating that they wish to mix the same denomination, a mixing session begins. The masternode mixes up the inputs and instructs all three users' wallets to pay the now-transformed input back to themselves. Your wallet pays that denomination directly to itself, but in a different address (called a change address).&lt;/li&gt; &lt;li&gt;In order to fully obscure your funds, your wallet must repeat this process a number of times with each denomination. Each time the process is completed, it's called a "round." Each round of PrivateSend makes it exponentially more difficult to determine where your funds originated.&lt;/li&gt; &lt;li&gt;This mixing process happens in the background without any intervention on your part. When you wish to make a transaction, your funds will already be mixed. No additional waiting is required.&lt;/li&gt; &lt;/ol&gt; &lt;hr&gt;&lt;b&gt;IMPORTANT:&lt;/b&gt; Your wallet only contains 1000 of these "change addresses." Every time a mixing event happens, up to 9 of your addresses are used up. This means those 1000 addresses last for about 100 mixing events. When 900 of them are used, your wallet must create more addresses. It can only do this, however, if you have automatic backups enabled.&lt;br&gt; Consequently, users who have backups disabled will also have PrivateSend disabled. &lt;hr&gt;For more information, see the &lt;a href="https://docs.dash.org/en/stable/wallets/dashcore/privatesend-instantsend.html"&gt;PrivateSend documentation&lt;/a&gt;.</source>
+        <translation>&lt;h3&gt;PrivateSend Basics&lt;/h3&gt; PrivateSend geeft u een echte financiële privacy door de oorsprong van uw geld te verschuilen. Alle Dash in uw portefeuille bestaat uit verschillende "inputs" die u kunt beschouwen als afzonderlijke, discrete munten.&lt;br&gt; PrivateSend maakt gebruik van een innovatief proces om uw invoer te mengen met de invoer van twee andere mensen, zonder dat uw munten ooit uw portemonnee verlaten . U behoudt de controle over uw geld te allen tijde. &lt;hr&gt; &lt;b&gt;Het PrivateSend-proces werkt als volgt: &lt;/b&gt;&lt;ol type="1"&gt; &lt;li&gt;PrivateSend begint door uw transactie-inputs in de standaard denominaties te breken. Deze denominaties zijn 0,001 DASH, 0,01 DASH, 0,1 DASH, 1 DASH en 10 DASH - zoals het papiergeld dat u elke dag gebruikt.&lt;/li&gt; &lt;li&gt;Uw portemonnee stuurt dan verzoeken naar speciaal geconfigureerde software nodes op het netwerk, genaamd "masternodes." Deze masternodes worden dan op de hoogte gesteld dat u geïnteresseerd bent in het mengen van een bepaalde denominaties. Er wordt geen identificeerbare informatie naar de masternodes gestuurd, zodat ze nooit weten wie u bent.&lt;/li&gt; &lt;li&gt;Wanneer twee andere mensen dezelfde berichten sturen, die aanduiden dat ze dezelfde denominaties willen vermengen, begint een mengsessie. De masternode mengt alle invoeren en instrueert de portefeuilles van alle drie de gebruikers om de nu getransformeerde invoer aan zichzelf terug te betalen. Uw portemonnee betaalt die denominaties rechtstreeks naar zichzelf, maar met een ander adres (een wijzigingadres genoemd).&lt;/li&gt; &lt;li&gt;Om uw geld volledig te verschuilen, moet uw portemonnee dit proces een aantal keren herhalen voor alle denominaties. Elke keer dat het proces wordt voltooid, heet dit een 'ronde'. Elke ronde van PrivateSend maakt het exponentieel moeilijker om te bepalen waar uw geld van afkomstig is.&lt;/li&gt; &lt;li&gt;Dit mengproces gebeurt op de achtergrond zonder enige interventie van uw kant. Wanneer u een transactie wenst uit te voeren, is uw saldo al geanonimiseerd. Er is geen extra wachttijd nodig.&lt;/li&gt; &lt;/ol&gt; &lt;hr&gt;&lt;b&gt;BELANGRIJK:&lt;/b&gt; Uw portemonnee bevat slechts 1000 van deze "wijzigingsadressen". Elke keer dat er een mengsessie plaatsvindt, worden maximaal 9 van uw adressen opgebruikt. Dit betekent dat deze 1000 adressen voor ongeveer 100 mengsessies volstaat. Wanneer er 900 zijn verbruikt, moet uw portemonnee meer adressen aanmaken. Dit kan alleen maar als u automatische back-ups hebt ingeschakeld.&lt;br&gt; Daarom zodra gebruikers die back-ups hebben uitgeschakeld, ook PrivateSend is uitgeschakeld. &lt;hr&gt;Voor meer informatie zie de &lt;a href="https://docs.dash.org/en/stable/wallets/dashcore/privatesend-instantsend.html"&gt;PrivateSend documentatie&lt;/a&gt;.</translation>
+>>>>>>> 5edaad4b2 (Translations 2020-01 (#3192)):src/qt/locale/dash_nl.ts
     </message>
 </context>
 <context>
@@ -1330,6 +1335,7 @@ Dit heeft ook invloed op de manier waarop uw saldo wordt berekend.</translation>
     <message>
         <source>Target PrivateSend balance</source>
         <translation>Target PrivateSend Saldo</translation>
+<<<<<<< HEAD:src/qt/locale/cosanta_nl.ts
     </message>
     <message>
         <source>Automatically open the Cosanta Core client port on the router. This only works when your router supports UPnP and it is enabled.</source>
@@ -1338,6 +1344,16 @@ Dit heeft ook invloed op de manier waarop uw saldo wordt berekend.</translation>
     <message>
         <source>Connect to the Cosanta network through a SOCKS5 proxy.</source>
         <translation>Verbind met het Cosanta netwerk via een SOCKS proxy.</translation>
+=======
+    </message>
+    <message>
+        <source>Automatically open the Dash Core client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Open automatisch de Dash client poort op de router. Dit werkt alleen als uw router UPnP ondersteunt en dit is ingeschakeld.</translation>
+    </message>
+    <message>
+        <source>Connect to the Dash network through a SOCKS5 proxy.</source>
+        <translation>Verbind met het Dash netwerk via een SOCKS proxy.</translation>
+>>>>>>> 5edaad4b2 (Translations 2020-01 (#3192)):src/qt/locale/dash_nl.ts
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -4100,8 +4116,13 @@ Nota: Het bericht zal niet verzonden worden met de betaling over het Cosanta net
         <translation>Ongeldig minumum aantal spork ondertekenaars zoals ingesteld met -minsporkkeys</translation>
     </message>
     <message>
+<<<<<<< HEAD:src/qt/locale/cosanta_nl.ts
         <source>Keep N COSANTA mixed (%u-%u, default: %u)</source>
         <translation>Houdt N COSANTA gemixt (%u-%u, standaard: %u)</translation>
+=======
+        <source>Keep N DASH mixed (%u-%u, default: %u)</source>
+        <translation>Houdt N DASH gemixt (%u-%u, standaard: %u)</translation>
+>>>>>>> 5edaad4b2 (Translations 2020-01 (#3192)):src/qt/locale/dash_nl.ts
     </message>
     <message>
         <source>Keep at most &lt;n&gt; unconnectable transactions in memory (default: %u)</source>
@@ -4320,8 +4341,13 @@ Nota: Het bericht zal niet verzonden worden met de betaling over het Cosanta net
         <translation>KeePassHttp sleutel voor AES versleutelde communicatie met KeePass</translation>
     </message>
     <message>
+<<<<<<< HEAD:src/qt/locale/cosanta_nl.ts
         <source>Disable all Cosanta specific functionality (Masternodes, PrivateSend, InstantSend, Governance) (0-1, default: %u)</source>
         <translation>Uitschakelen van alle Cosanta specifieke functies (Masternodes, PrivateSend, InstantSend, Governance) (0-1, standaard: %u)</translation>
+=======
+        <source>Disable all Dash specific functionality (Masternodes, PrivateSend, InstantSend, Governance) (0-1, default: %u)</source>
+        <translation>Uitschakelen van alle Dash specifieke functies (Masternodes, PrivateSend, InstantSend, Governance) (0-1, standaard: %u)</translation>
+>>>>>>> 5edaad4b2 (Translations 2020-01 (#3192)):src/qt/locale/dash_nl.ts
     </message>
     <message>
         <source>%s file contains all private keys from this wallet. Do not share it with anyone!</source>
@@ -4956,8 +4982,13 @@ Nota: Het bericht zal niet verzonden worden met de betaling over het Cosanta net
         <translation>Goedgekeurde peers die verbinden vanaf een bepaald IP adres (vb. 1.2.3.4) of CIDR genoteerd netwerk (vb. 1.2.3.0/24). Kan meerdere keren worden gespecificeerd.</translation>
     </message>
     <message>
+<<<<<<< HEAD:src/qt/locale/cosanta_nl.ts
         <source>You are starting in lite mode, most Cosanta-specific functionality is disabled.</source>
         <translation>U start in lite-modus, de meeste Cosanta-specifieke functionaliteit is uitgeschakeld.</translation>
+=======
+        <source>You are starting in lite mode, most Dash-specific functionality is disabled.</source>
+        <translation>U start in lite-modus, de meeste Dash-specifieke functionaliteit is uitgeschakeld.</translation>
+>>>>>>> 5edaad4b2 (Translations 2020-01 (#3192)):src/qt/locale/dash_nl.ts
     </message>
     <message>
         <source>%d of last 100 blocks have unexpected version</source>

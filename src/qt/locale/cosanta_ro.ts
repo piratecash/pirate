@@ -70,12 +70,12 @@
         <translation>Adresa de primire</translation>
     </message>
     <message>
-        <source>These are your Cosanta addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Acestea sunt adresele tale Cosanta pentru efectuarea platilor. Intotdeauna verifica atent suma de plata si adresa beneficiarului inainte de a trimite monede.</translation>
+        <source>These are your Dash addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Acestea sunt adresele tale Dash pentru efectuarea platilor. Intotdeauna verifica atent suma de plata si adresa beneficiarului inainte de a trimite monede.</translation>
     </message>
     <message>
-        <source>These are your Cosanta addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>Acestea sunt adresele tale Cosanta pentru receptionarea platilor. Este recomandat sa folosesti mereu o adresa noua pentru primirea platilor.</translation>
+        <source>These are your Dash addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>Acestea sunt adresele tale Dash pentru receptionarea platilor. Este recomandat sa folosesti mereu o adresa noua pentru primirea platilor.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -188,8 +188,8 @@
         <translation>Confirmaţi criptarea portofelului</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR COSANTA&lt;/b&gt;!</source>
-        <translation>Avertisment: dacă criptezi portofelul și pierzi fraza de acces, vei &lt;b&gt;PIERDE TOATE MONEDELE TALE COSANTA&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR DASH&lt;/b&gt;!</source>
+        <translation>Avertisment: dacă criptezi portofelul și pierzi fraza de acces, vei &lt;b&gt;PIERDE TOATE MONEDELE TALE DASH&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -258,12 +258,12 @@
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <source>A fatal error occurred. Cosanta Core can no longer continue safely and will quit.</source>
-        <translation>A apărut o eroare fatală. Cosanta Core nu mai poate continua în siguranță și se va opri.</translation>
+        <source>A fatal error occurred. Dash Core can no longer continue safely and will quit.</source>
+        <translation>A apărut o eroare fatală. Dash Core nu mai poate continua în siguranță și se va opri.</translation>
     </message>
     <message>
-        <source>Cosanta Core</source>
-        <translation>Cosanta Core</translation>
+        <source>Dash Core</source>
+        <translation>Dash Core</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -286,16 +286,16 @@
         <translation>Trimite</translation>
     </message>
     <message>
-        <source>Send coins to a Cosanta address</source>
-        <translation>Trimite monede către o adresă Cosanta</translation>
+        <source>Send coins to a Dash address</source>
+        <translation>Trimite monede către o adresă Dash</translation>
     </message>
     <message>
         <source>&amp;Receive</source>
         <translation>P&amp;rimeşte</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and cosanta: URIs)</source>
-        <translation>Cereţi plăţi (generează coduri QR şi Cosanta-uri: URls)</translation>
+        <source>Request payments (generates QR codes and dash: URIs)</source>
+        <translation>Cereţi plăţi (generează coduri QR şi Dash-uri: URls)</translation>
     </message>
     <message>
         <source>&amp;Transactions</source>
@@ -322,8 +322,8 @@
         <translation>Închide aplicaţia</translation>
     </message>
     <message>
-        <source>Show information about Cosanta Core</source>
-        <translation>Arată informații despre Cosanta Core</translation>
+        <source>Show information about Dash Core</source>
+        <translation>Arată informații despre Dash Core</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
@@ -394,16 +394,16 @@
         <translation>Semnează &amp;mesaj...</translation>
     </message>
     <message>
-        <source>Sign messages with your Cosanta addresses to prove you own them</source>
-        <translation>Semnaţi mesaje cu adresa dvs. Cosanta pentru a dovedi că vă aparţin</translation>
+        <source>Sign messages with your Dash addresses to prove you own them</source>
+        <translation>Semnaţi mesaje cu adresa dvs. Dash pentru a dovedi că vă aparţin</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
         <translation>&amp;Verifică mesaj...</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Cosanta addresses</source>
-        <translation>Verificaţi mesaje pentru a vă asigura că au fost semnate cu adresa Cosanta specificată</translation>
+        <source>Verify messages to ensure they were signed with specified Dash addresses</source>
+        <translation>Verificaţi mesaje pentru a vă asigura că au fost semnate cu adresa Dash specificată</translation>
     </message>
     <message>
         <source>&amp;Information</source>
@@ -482,16 +482,16 @@
         <translation>Deschide &amp;URI...</translation>
     </message>
     <message>
-        <source>Open a cosanta: URI or payment request</source>
-        <translation>Deschidere Cosanta: o adresa URI sau o cerere de plată</translation>
+        <source>Open a dash: URI or payment request</source>
+        <translation>Deschidere Dash: o adresa URI sau o cerere de plată</translation>
     </message>
     <message>
         <source>&amp;Command-line options</source>
         <translation>Opţiuni linie de &amp;comandă</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible Cosanta command-line options</source>
-        <translation>Arată mesajul de ajutor %1 pentru a obţine o listă cu opţiunile posibile de linii de comandă Cosanta</translation>
+        <source>Show the %1 help message to get a list with possible Dash command-line options</source>
+        <translation>Arată mesajul de ajutor %1 pentru a obţine o listă cu opţiunile posibile de linii de comandă Dash</translation>
     </message>
     <message>
         <source>%1 client</source>
@@ -526,8 +526,8 @@
         <translation>Bara de file</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to Cosanta network</source>
-        <translation><numerusform>%n conexiune activă la rețeaua Cosanta</numerusform><numerusform>%n conexiuni active la rețeaua Cosanta</numerusform><numerusform>%n conexiuni active la rețeaua Cosanta </numerusform></translation>
+        <source>%n active connection(s) to Dash network</source>
+        <translation><numerusform>%n conexiune activă la rețeaua Dash</numerusform><numerusform>%n conexiuni active la rețeaua Dash</numerusform><numerusform>%n conexiuni active la rețeaua Dash </numerusform></translation>
     </message>
     <message>
         <source>Network activity disabled</source>
@@ -866,8 +866,8 @@
         <translation>Editează adresa de trimitere</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid Cosanta address.</source>
-        <translation>Adresa introdusă "%1" nu este o adresă Cosanta validă</translation>
+        <source>The entered address "%1" is not a valid Dash address.</source>
+        <translation>Adresa introdusă "%1" nu este o adresă Dash validă</translation>
     </message>
     <message>
         <source>The entered address "%1" is already in the address book.</source>
@@ -1007,8 +1007,8 @@
         <translation>Aproximativ %1 GB de date vor fi stocate in acest director.</translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the Cosanta block chain.</source>
-        <translation>%1 va descarca si stoca o copie a blockchainului Cosanta</translation>
+        <source>%1 will download and store a copy of the Dash block chain.</source>
+        <translation>%1 va descarca si stoca o copie a blockchainului Dash</translation>
     </message>
     <message>
         <source>The wallet will also be stored in this directory.</source>
@@ -1133,12 +1133,12 @@
         <translation>Form</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the Cosanta network, as detailed below.</source>
-        <translation>Tranzactiile recente pot sa nu fie inca vizibile, de aceea balanta portofelului poate fi incorecta. Aceasta informatie va fi corecta de indata ce portofelul va fi complet sincronizat cu reteaua Cosanta, asa cum este detaliat mai jos.</translation>
+        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the Dash network, as detailed below.</source>
+        <translation>Tranzactiile recente pot sa nu fie inca vizibile, de aceea balanta portofelului poate fi incorecta. Aceasta informatie va fi corecta de indata ce portofelul va fi complet sincronizat cu reteaua Dash, asa cum este detaliat mai jos.</translation>
     </message>
     <message>
-        <source>Attempting to spend Cosanta that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
-        <translation>Încercarea de a cheltui monede Cosanta care sunt afectate de tranzacțiile care nu au fost încă afișate nu va fi acceptată de rețea.</translation>
+        <source>Attempting to spend Dash that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <translation>Încercarea de a cheltui monede Dash care sunt afectate de tranzacțiile care nu au fost încă afișate nu va fi acceptată de rețea.</translation>
     </message>
     <message>
         <source>Number of blocks left</source>
@@ -1275,12 +1275,12 @@
         <translation>Această sumă acționează ca un prag pentru a dezactiva TrimitePrivat după ce a fost atins.</translation>
     </message>
     <message>
-        <source>Automatically open the Cosanta Core client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Deschide automat portul client Cosanta Core de pe router. Asta funcționează numai atunci când routerul dvs. acceptă UPnP și este activat.</translation>
+        <source>Automatically open the Dash Core client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Deschide automat portul client Dash Core de pe router. Asta funcționează numai atunci când routerul dvs. acceptă UPnP și este activat.</translation>
     </message>
     <message>
-        <source>Connect to the Cosanta network through a SOCKS5 proxy.</source>
-        <translation>Conectare la reţeaua Cosanta printr-un proxy SOCKS.</translation>
+        <source>Connect to the Dash network through a SOCKS5 proxy.</source>
+        <translation>Conectare la reţeaua Dash printr-un proxy SOCKS.</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1379,8 +1379,8 @@
         <translation>Tor</translation>
     </message>
     <message>
-        <source>Connect to the Cosanta network through a separate SOCKS5 proxy for Tor hidden services.</source>
-        <translation>Conectare la reteaua Cosanta printr-un proxy SOCKS5 separat pentru serviciile TOR ascunse.</translation>
+        <source>Connect to the Dash network through a separate SOCKS5 proxy for Tor hidden services.</source>
+        <translation>Conectare la reteaua Dash printr-un proxy SOCKS5 separat pentru serviciile TOR ascunse.</translation>
     </message>
     <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services:</source>
@@ -1504,8 +1504,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Form</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Cosanta network after a connection is established, but this process has not completed yet.</source>
-        <translation>Informatia afisata poate fi depasita.  Portofel se sincronizează automat cu rețeaua Cosanta după ce se stabilește o conexiune, dar acest proces nu s-a finalizat încă.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Dash network after a connection is established, but this process has not completed yet.</source>
+        <translation>Informatia afisata poate fi depasita.  Portofel se sincronizează automat cu rețeaua Dash după ce se stabilește o conexiune, dar acest proces nu s-a finalizat încă.</translation>
     </message>
     <message>
         <source>Available:</source>
@@ -1588,8 +1588,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Suma și Runde:</translation>
     </message>
     <message>
-        <source>0 COSANTA / 0 Rounds</source>
-        <translation>0 COSANTA / 0 Runde</translation>
+        <source>0 DASH / 0 Rounds</source>
+        <translation>0 DASH / 0 Runde</translation>
     </message>
     <message>
         <source>Submitted Denom:</source>
@@ -1737,8 +1737,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Eroare la cererea de plată</translation>
     </message>
     <message>
-        <source>Cannot start cosanta: click-to-pay handler</source>
-        <translation>Cosanta nu poate porni: click-to-pay handler</translation>
+        <source>Cannot start dash: click-to-pay handler</source>
+        <translation>Dash nu poate porni: click-to-pay handler</translation>
     </message>
     <message>
         <source>URI handling</source>
@@ -1753,8 +1753,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Adresă pentru plată invalidă %1</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid Cosanta address or malformed URI parameters.</source>
-        <translation>URI nu poate fi analizat! Acest lucru poate fi cauzat de o adresă Cosanta invalidă sau parametri URI deformaţi.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Dash address or malformed URI parameters.</source>
+        <translation>URI nu poate fi analizat! Acest lucru poate fi cauzat de o adresă Dash invalidă sau parametri URI deformaţi.</translation>
     </message>
     <message>
         <source>Payment request file handling</source>
@@ -1851,8 +1851,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Cantitate</translation>
     </message>
     <message>
-        <source>Enter a Cosanta address (e.g. %1)</source>
-        <translation>Introduceţi o adresă Cosanta (de exemplu %1)</translation>
+        <source>Enter a Dash address (e.g. %1)</source>
+        <translation>Introduceţi o adresă Dash (de exemplu %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2377,8 +2377,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>R&amp;eutilizează o adresă de primire existentă (nerecomandat)</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Cosanta network.</source>
-        <translation>Un mesaj opţional de ataşat la cererea de plată, care va fi afişat cînd cererea este deschisă. Notă: Acest mesaj nu va fi trimis cu plata către reţeaua Cosanta.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Dash network.</source>
+        <translation>Un mesaj opţional de ataşat la cererea de plată, care va fi afişat cînd cererea este deschisă. Notă: Acest mesaj nu va fi trimis cu plata către reţeaua Dash.</translation>
     </message>
     <message>
         <source>&amp;Message:</source>
@@ -2389,8 +2389,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>O etichetă opţională de asociat cu adresa de primire.</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened.&lt;br&gt;Note: The message will not be sent with the payment over the Cosanta network.</source>
-        <translation>Un mesaj opțional pentru a atașa solicitării de plată, care va fi afișat la deschiderea cererii.&lt;br&gt;Notă: mesajul nu va fi trimis cu plata prin rețeaua Cosanta.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened.&lt;br&gt;Note: The message will not be sent with the payment over the Dash network.</source>
+        <translation>Un mesaj opțional pentru a atașa solicitării de plată, care va fi afișat la deschiderea cererii.&lt;br&gt;Notă: mesajul nu va fi trimis cu plata prin rețeaua Dash.</translation>
     </message>
     <message>
         <source>Use this form to request payments. All fields are &lt;b&gt;optional&lt;/b&gt;.</source>
@@ -2626,7 +2626,7 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Dacă taxa vamală este stabilită la 1000 de duffi și tranzacția are doar 250 de octeți, atunci "per kilobyte" plătește doar 250 de duffi în taxă,&lt;br /&gt;în timp ce "cel puțin" plătește 1000 de duffi. Pentru tranzacțiile mai mari decât un kilobyte, ambele plătesc cu kilobyte.</translation>
     </message>
     <message>
-        <source>Paying only the minimum fee is just fine as long as there is less transaction volume than space in the blocks.&lt;br /&gt;But be aware that this can end up in a never confirming transaction once there is more demand for cosanta transactions than the network can process.</source>
+        <source>Paying only the minimum fee is just fine as long as there is less transaction volume than space in the blocks.&lt;br /&gt;But be aware that this can end up in a never confirming transaction once there is more demand for dash transactions than the network can process.</source>
         <translation>Plata numai a taxei minime este ok, atâta timp cât există un volum mai mic de tranzacții decât spațiul din block-uri.&lt;br /&gt;Dar trebuie să știi că acest lucru se poate încheia într-o tranzacție care nu se confirmă odată ce există mai multă cerere pentru tranzacții dash decât poate procesa rețeaua.</translation>
     </message>
     <message>
@@ -2798,8 +2798,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation><numerusform>Înceaperea confirmării estimată într-un %n block.</numerusform><numerusform>Înceaperea confirmării estimată în %n block-uri.</numerusform><numerusform>Înceaperea confirmării estimată în %n block-uri.</numerusform></translation>
     </message>
     <message>
-        <source>Warning: Invalid Cosanta address</source>
-        <translation>Atenţie: Adresa Cosanta nevalidă!</translation>
+        <source>Warning: Invalid Dash address</source>
+        <translation>Atenţie: Adresa Dash nevalidă!</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
@@ -2829,8 +2829,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Plăteşte că&amp;tre:</translation>
     </message>
     <message>
-        <source>The Cosanta address to send the payment to</source>
-        <translation>Adresa Cosanta către care se face plata</translation>
+        <source>The Dash address to send the payment to</source>
+        <translation>Adresa Dash către care se face plata</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -2865,8 +2865,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Su&amp;mă:</translation>
     </message>
     <message>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive a lower amount of Cosanta than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
-        <translation>Taxa va fi dedusă din suma trimisă. Destinatarul va primi o sumă mai mică de Cosanta decât introduci în câmpul pentru suma. Dacă sunt selectați mai mulți destinatari, taxa este împărțită în mod egal.</translation>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive a lower amount of Dash than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <translation>Taxa va fi dedusă din suma trimisă. Destinatarul va primi o sumă mai mică de Dash decât introduci în câmpul pentru suma. Dacă sunt selectați mai mulți destinatari, taxa este împărțită în mod egal.</translation>
     </message>
     <message>
         <source>S&amp;ubtract fee from amount</source>
@@ -2877,8 +2877,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Mesaj:</translation>
     </message>
     <message>
-        <source>A message that was attached to the cosanta: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Cosanta network.</source>
-        <translation>un mesaj a fost ataşat la Cosanta: URI care va fi stocat cu tranzacţia pentru referinţa dvs. Notă: Acest mesaj nu va fi trimis către reţeaua Cosanta.</translation>
+        <source>A message that was attached to the dash: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Dash network.</source>
+        <translation>un mesaj a fost ataşat la Dash: URI care va fi stocat cu tranzacţia pentru referinţa dvs. Notă: Acest mesaj nu va fi trimis către reţeaua Dash.</translation>
     </message>
     <message>
         <source>This is an unauthenticated payment request.</source>
@@ -2930,11 +2930,11 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>&amp;Semnează mesaj</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your addresses to prove you can receive Cosanta sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>Poți semna mesaje / acorduri cu adreseletale pentru a dovedi că poți primi Cosanta trimis la ele. Ai grijă să nu semnezi nimic vag sau întâmplător, deoarece atacurile de tip phishing pot încerca să te păcălească să le dai identitatea ta. Semnează declarații complet-detaliate cu care ești de acord.</translation>
+        <source>You can sign messages/agreements with your addresses to prove you can receive Dash sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <translation>Poți semna mesaje / acorduri cu adreseletale pentru a dovedi că poți primi Dash trimis la ele. Ai grijă să nu semnezi nimic vag sau întâmplător, deoarece atacurile de tip phishing pot încerca să te păcălească să le dai identitatea ta. Semnează declarații complet-detaliate cu care ești de acord.</translation>
     </message>
     <message>
-        <source>The Cosanta address to sign the message with</source>
+        <source>The Dash address to sign the message with</source>
         <translation>Adresa cu care semnaţi mesajul</translation>
     </message>
     <message>
@@ -2966,8 +2966,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Copiaza semnatura curenta in clipboard-ul sistemului</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this Cosanta address</source>
-        <translation>Semnează mesajul pentru a dovedi ca deţineţi acestă adresă Cosanta</translation>
+        <source>Sign the message to prove you own this Dash address</source>
+        <translation>Semnează mesajul pentru a dovedi ca deţineţi acestă adresă Dash</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -2990,12 +2990,12 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Introduceţi adresa de semnatură, mesajul (asiguraţi-vă că aţi copiat spaţiile, taburile etc. exact) şi semnatura dedesubt pentru a verifica mesajul. Aveţi grijă să nu citiţi mai mult în semnatură decît mesajul în sine, pentru a evita să fiţi păcăliţi de un atac de tip man-in-the-middle. De notat ca aceasta dovedeste doar ca semnatarul primeste odata cu adresa, nu dovedesta insa trimiterea vreunei tranzactii.</translation>
     </message>
     <message>
-        <source>The Cosanta address the message was signed with</source>
-        <translation>Introduceţi o adresă Cosanta</translation>
+        <source>The Dash address the message was signed with</source>
+        <translation>Introduceţi o adresă Dash</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified Cosanta address</source>
-        <translation>Verificaţi mesajul pentru a vă asigura că a fost semnat cu adresa Cosanta specificată</translation>
+        <source>Verify the message to ensure it was signed with the specified Dash address</source>
+        <translation>Verificaţi mesajul pentru a vă asigura că a fost semnat cu adresa Dash specificată</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -3669,7 +3669,7 @@ https://www.transifex.com/projects/p/dash/</translation>
     </message>
 </context>
 <context>
-    <name>cosanta-core</name>
+    <name>dash-core</name>
     <message>
         <source>Bind to given address and always listen on it. Use [host]:port notation for IPv6</source>
         <translation>Leagă-te de adresa dată și ascultă întotdeauna. Utilizează [host]: Notation port pentru IPv6</translation>
@@ -4211,8 +4211,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Cheie KeePassHttp pentru comunicarea criptată AES cu KeePass</translation>
     </message>
     <message>
-        <source>Disable all Cosanta specific functionality (Masternodes, PrivateSend, InstantSend, Governance) (0-1, default: %u)</source>
-        <translation>Dezactivează toate funcționalitățile specifice Cosanta (Masternode-uri, TrimitePrivat, TrimiteInstant, Guvernanță) (0-1, implicit: %u)</translation>
+        <source>Disable all Dash specific functionality (Masternodes, PrivateSend, InstantSend, Governance) (0-1, default: %u)</source>
+        <translation>Dezactivează toate funcționalitățile specifice Dash (Masternode-uri, TrimitePrivat, TrimiteInstant, Guvernanță) (0-1, implicit: %u)</translation>
     </message>
     <message>
         <source>%s file contains all private keys from this wallet. Do not share it with anyone!</source>
@@ -4349,10 +4349,6 @@ https://www.transifex.com/projects/p/dash/</translation>
     <message>
         <source>Warning: Unknown block versions being mined! It's possible unknown rules are in effect</source>
         <translation>Atentie: se mineaza blocuri cu versiune necunoscuta! Este posibil sa fie in vigoare reguli necunoscute.</translation>
-    </message>
-    <message>
-        <source>You need to rebuild the database using -reindex to change -timestampindex</source>
-        <translation>Trebuie să reconstruiești baza de date utilizând -reindex pentru a schimba -timestampindex</translation>
     </message>
     <message>
         <source>You need to rebuild the database using -reindex to go back to unpruned mode.  This will redownload the entire blockchain</source>
@@ -4667,14 +4663,6 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Nu poți porni un masternode cu portofelul activat.</translation>
     </message>
     <message>
-        <source>You need to rebuild the database using -reindex to change -addressindex</source>
-        <translation>Trebuie să reconstruiești baza de date utilizând -reindex pentru a schimba -addressindex</translation>
-    </message>
-    <message>
-        <source>You need to rebuild the database using -reindex to change -spentindex</source>
-        <translation>Trebuie să reconstruiești baza de date utilizând -reindex pentru a schimba -spentindex</translation>
-    </message>
-    <message>
         <source>You need to rebuild the database using -reindex to change -txindex</source>
         <translation>Trebuie să reconstruiești baza de date utilizând -reindex pentru a schimba -txindex</translation>
     </message>
@@ -4695,8 +4683,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Opțiuni server RPC:</translation>
     </message>
     <message>
-        <source>Cosanta Core</source>
-        <translation>Cosanta Core</translation>
+        <source>Dash Core</source>
+        <translation>Dash Core</translation>
     </message>
     <message>
         <source>The %s developers</source>
@@ -4823,8 +4811,8 @@ https://www.transifex.com/projects/p/dash/</translation>
         <translation>Whitelist peers care se conectează de la adresa IP dată (ex. 1.2.3.4) sau rețeaua notată CIDR (ex. 1.2.3.0/24). Poate fi specificat de mai multe ori.</translation>
     </message>
     <message>
-        <source>You are starting in lite mode, most Cosanta-specific functionality is disabled.</source>
-        <translation>Începeți în modul lite, cele mai multe funcționalități specifice Cosanta sunt dezactivate.</translation>
+        <source>You are starting in lite mode, most Dash-specific functionality is disabled.</source>
+        <translation>Începeți în modul lite, cele mai multe funcționalități specifice Dash sunt dezactivate.</translation>
     </message>
     <message>
         <source>%d of last 100 blocks have unexpected version</source>
