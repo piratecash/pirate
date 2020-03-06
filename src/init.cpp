@@ -276,6 +276,7 @@ void PrepareShutdown()
 
     // After everything has been shut down, but before things get flushed, stop the
     // CScheduler/checkqueue threadGroup
+    scheduler.stop();
     threadGroup.interrupt_all();
     threadGroup.join_all();
     StopScriptCheckWorkerThreads();

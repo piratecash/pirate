@@ -42,7 +42,7 @@ CChainLocksHandler::CChainLocksHandler()
 
 CChainLocksHandler::~CChainLocksHandler()
 {
-    scheduler_thread->interrupt();
+    scheduler->stop();
     scheduler_thread->join();
     delete scheduler_thread;
     delete scheduler;
