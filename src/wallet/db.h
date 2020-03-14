@@ -22,7 +22,14 @@
 #include <unordered_map>
 #include <vector>
 
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsuggest-override"
+#endif
 #include <db_cxx.h>
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 
 static const unsigned int DEFAULT_WALLET_DBLOGSIZE = 100;
 static const bool DEFAULT_WALLET_PRIVDB = true;
@@ -419,5 +426,7 @@ public:
 
     bool static Rewrite(BerkeleyDatabase& database, const char* pszSkip = nullptr);
 };
+
+std::string BerkeleyDatabaseVersion();
 
 #endif // BITCOIN_WALLET_DB_H
