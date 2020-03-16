@@ -139,26 +139,20 @@ std::set<uint256> CLLMQUtils::GetQuorumRelayMembers(Consensus::LLMQType llmqType
     auto mns = GetAllQuorumMembers(llmqType, pindexQuorum);
     std::set<uint256> result;
 
-    auto calcOutbound = [&](size_t i, const uint256 proTxHash) {
-        // Relay to nodes at indexes (i+2^k)%n, where
-        //   k: 0..max(1, floor(log2(n-1))-1)
-        //   n: size of the quorum/ring
-        std::set<uint256> r;
-        int gap = 1;
-        int gap_max = (int)mns.size() - 1;
-        int k = 0;
-        while ((gap_max >>= 1) || k <= 1) {
-            size_t idx = (i + gap) % mns.size();
-            auto& otherDmn = mns[idx];
-            if (otherDmn->proTxHash == proTxHash) {
-                continue;
+    if (sporkManager.IsSporkActive(SPORK_21_QUORUM_ALL_CONNECTED)) {
+        for (auto& dmn : mns) {
+            // this will cause deterministic behaviour between incoming and outgoing connections.
+            // Each member needs a connection to all other members, so we have each member paired. The below check
+            // will be true on one side and false on the other side of the pairing, so we avoid having both members
+            // initiating the connection.
+            if (dmn->proTxHash < forMember) {
+                result.emplace(dmn->proTxHash);
             }
-            r.emplace(otherDmn->proTxHash);
-            gap <<= 1;
-            k++;
         }
-        return r;
-    };
+        return result;
+    }
+
+    // TODO remove this after activation of SPORK_21_QUORUM_ALL_CONNECTED
 
     for (size_t i = 0; i < mns.size(); i++) {
         auto& dmn = mns[i];
