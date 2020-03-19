@@ -218,7 +218,7 @@ bool CLLMQUtils::EnsureQuorumConnections(Consensus::LLMQType llmqType, const CBl
         relayMembers = connections;
     }
     if (!connections.empty()) {
-        if (LogAcceptCategory(BCLog::LLMQ)) {
+        if (!g_connman->HasMasternodeQuorumNodes(llmqType, pindexQuorum->GetBlockHash()) && LogAcceptCategory(BCLog::LLMQ)) {
             auto mnList = deterministicMNManager->GetListAtChainTip();
             std::string debugMsg = strprintf("CLLMQUtils::%s -- adding masternodes quorum connections for quorum %s:\n", __func__, pindexQuorum->GetBlockHash().ToString());
             for (auto& c : connections) {
