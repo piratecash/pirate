@@ -5,8 +5,8 @@
 
 #include <iostream>
 
-#include "bench.h"
-#include "bloom.h"
+#include <bench/bench.h>
+#include <bloom.h>
 
 static void RollingBloom(benchmark::State& state)
 {

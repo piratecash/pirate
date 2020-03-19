@@ -1,21 +1,20 @@
 // Copyright (c) 2011-2015 The Bitcoin Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 // Unit tests for denial-of-service detection/prevention code
 
-#include "chainparams.h"
-#include "keystore.h"
-#include "net.h"
-#include "net_processing.h"
-#include "pow.h"
-#include "script/sign.h"
-#include "serialize.h"
-#include "util.h"
-#include "validation.h"
+#include <chainparams.h>
+#include <keystore.h>
+#include <net.h>
+#include <net_processing.h>
+#include <pow.h>
+#include <script/sign.h>
+#include <serialize.h>
+#include <util.h>
+#include <validation.h>
 
-#include "test/test_cosanta.h"
+#include <test/test_cosanta.h>
 
 #include <stdint.h>
 

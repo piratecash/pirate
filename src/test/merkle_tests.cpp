@@ -1,10 +1,9 @@
 // Copyright (c) 2015 The Bitcoin Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "consensus/merkle.h"
-#include "test/test_cosanta.h"
+#include <consensus/merkle.h>
+#include <test/test_cosanta.h>
 
 #include <boost/test/unit_test.hpp>
 

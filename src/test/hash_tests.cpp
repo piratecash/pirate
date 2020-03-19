@@ -1,11 +1,10 @@
 // Copyright (c) 2013-2015 The Bitcoin Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "hash.h"
-#include "utilstrencodings.h"
-#include "test/test_cosanta.h"
+#include <hash.h>
+#include <utilstrencodings.h>
+#include <test/test_cosanta.h>
 
 #include <vector>
 

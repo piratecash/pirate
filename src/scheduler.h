@@ -15,7 +15,7 @@
 #include <boost/thread.hpp>
 #include <map>
 
-#include "sync.h"
+#include <sync.h>
 
 //
 // Simple class for background tasks that should be run

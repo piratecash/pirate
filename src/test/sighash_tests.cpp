@@ -1,20 +1,19 @@
 // Copyright (c) 2013-2015 The Bitcoin Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "consensus/tx_verify.h"
-#include "consensus/validation.h"
-#include "data/sighash.json.h"
-#include "hash.h"
-#include "script/interpreter.h"
-#include "script/script.h"
-#include "serialize.h"
-#include "streams.h"
-#include "test/test_cosanta.h"
-#include "util.h"
-#include "utilstrencodings.h"
-#include "version.h"
+#include <consensus/tx_verify.h>
+#include <consensus/validation.h>
+#include <test/data/sighash.json.h>
+#include <hash.h>
+#include <script/interpreter.h>
+#include <script/script.h>
+#include <serialize.h>
+#include <streams.h>
+#include <test/test_cosanta.h>
+#include <util.h>
+#include <utilstrencodings.h>
+#include <version.h>
 
 #include <iostream>
 

@@ -1,20 +1,19 @@
 // Copyright (c) 2014-2015 The Bitcoin Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include "config/cosanta-config.h"
+#include <config/cosanta-config.h>
 #endif
 
-#include "timedata.h"
+#include <timedata.h>
 
-#include "netaddress.h"
-#include "sync.h"
-#include "ui_interface.h"
-#include "util.h"
-#include "utilstrencodings.h"
-#include "warnings.h"
+#include <netaddress.h>
+#include <sync.h>
+#include <ui_interface.h>
+#include <util.h>
+#include <utilstrencodings.h>
+#include <warnings.h>
 
 
 static CCriticalSection cs_nTimeOffset;

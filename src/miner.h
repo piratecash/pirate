@@ -1,16 +1,15 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef BITCOIN_MINER_H
 #define BITCOIN_MINER_H
 
-#include "primitives/block.h"
-#include "threadinterrupt.h"
-#include "wallet/wallet.h"
-#include "txmempool.h"
+#include <threadinterrupt.h>
+#include <wallet/wallet.h>
+#include <primitives/block.h>
+#include <txmempool.h>
 
 #include <stdint.h>
 #include <memory>

@@ -5,24 +5,23 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "chainparams.h"
-#include "consensus/merkle.h"
+#include <chainparams.h>
+#include <consensus/merkle.h>
 
-#include "tinyformat.h"
-#include "util.h"
-#include "utilstrencodings.h"
+#include <tinyformat.h>
+#include <util.h>
+#include <utilstrencodings.h>
 
-#include "arith_uint256.h"
+#include <arith_uint256.h>
 
 #include <assert.h>
 
-#include "chainparamsseeds.h"
 #include "versionbits.h"
 
 //#define COSANTA_MINE_NEW_GENESIS_BLOCK
 #ifdef COSANTA_MINE_NEW_GENESIS_BLOCK
 
-#include "validation.h"
+#include <validation.h>
 
 #include <chrono>
 #include <iomanip>
@@ -69,6 +68,7 @@ struct GenesisMiner
 };
 #endif // COSANTA_MINE_NEW_GENESIS_BLOCK
 
+#include <chainparamsseeds.h>
 
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {

@@ -1,12 +1,11 @@
 // Copyright (c) 2012-2015 The Bitcoin Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "random.h"
-#include "scheduler.h"
+#include <random.h>
+#include <scheduler.h>
 
-#include "test/test_cosanta.h"
+#include <test/test_cosanta.h>
 
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
