@@ -2315,6 +2315,9 @@ void CConnman::ThreadOpenMasternodeConnections()
 
         didConnect = false;
 
+        if (!fNetworkActive)
+            continue;
+
         std::set<CService> connectedNodes;
         std::set<uint256> connectedProRegTxHashes;
         ForEachNode([&](const CNode* pnode) {
