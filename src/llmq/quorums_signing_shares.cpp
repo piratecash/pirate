@@ -1031,7 +1031,7 @@ void CSigSharesManager::CollectSigSharesToSendConcentrated(std::unordered_map<No
         proTxToNode.emplace(pnode->verifiedProRegTxHash, pnode);
     }
 
-    auto curTime = GetAdjustedTime();
+    auto curTime = GetTime();
 
     for (auto& p : signedSessions) {
         if (!CLLMQUtils::IsAllMembersConnectedEnabled(p.second.quorum->params.type)) {
