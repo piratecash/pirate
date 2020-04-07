@@ -530,15 +530,20 @@ void CConnman::DumpBanlist()
         banmap.size(), GetTimeMillis() - nStart);
 }
 
-void CNode::CloseSocketDisconnect()
+void CNode::CloseSocketDisconnect(CConnman* connman)
 {
+    AssertLockHeld(connman->cs_vNodes);
+
     fDisconnect = true;
     LOCK(cs_hSocket);
-    if (hSocket != INVALID_SOCKET)
-    {
-        LogPrint(BCLog::NET, "disconnecting peer=%d\n", id);
-        CloseSocket(hSocket);
+    if (hSocket == INVALID_SOCKET) {
+        return;
     }
+
+    connman->mapSocketToNode.erase(hSocket);
+
+    LogPrint(BCLog::NET, "disconnecting peer=%d\n", id);
+    CloseSocket(hSocket);
 }
 
 void CConnman::ClearBanned()
@@ -1249,6 +1254,7 @@ void CConnman::AcceptConnection(const ListenSocket& hListenSocket) {
     {
         LOCK(cs_vNodes);
         vNodes.push_back(pnode);
+        mapSocketToNode.emplace(pnode->hSocket, pnode);
         WakeSelect();
     }
 }
@@ -1289,7 +1295,7 @@ void CConnman::DisconnectNodes()
                 pnode->grantOutbound.Release();
 
                 // close socket and cleanup
-                pnode->CloseSocketDisconnect();
+                pnode->CloseSocketDisconnect(this);
 
                 // hold in disconnected pool until all refs are released
                 pnode->Release();
@@ -1646,8 +1652,10 @@ size_t CConnman::SocketRecvData(CNode *pnode)
     if (nBytes > 0)
     {
         bool notify = false;
-        if (!pnode->ReceiveMsgBytes(pchBuf, nBytes, notify))
-            pnode->CloseSocketDisconnect();
+        if (!pnode->ReceiveMsgBytes(pchBuf, nBytes, notify)) {
+            LOCK(cs_vNodes);
+            pnode->CloseSocketDisconnect(this);
+        }
         RecordBytesRecv(nBytes);
         if (notify) {
             size_t nSizeAdded = 0;
@@ -1672,7 +1680,8 @@ size_t CConnman::SocketRecvData(CNode *pnode)
         if (!pnode->fDisconnect) {
             LogPrint(BCLog::NET, "socket closed\n");
         }
-        pnode->CloseSocketDisconnect();
+        LOCK(cs_vNodes);
+        pnode->CloseSocketDisconnect(this);
     }
     else if (nBytes < 0)
     {
@@ -1682,7 +1691,8 @@ size_t CConnman::SocketRecvData(CNode *pnode)
         {
             if (!pnode->fDisconnect)
                 LogPrintf("socket recv error %s\n", NetworkErrorString(nErr));
-            pnode->CloseSocketDisconnect();
+            LOCK(cs_vNodes);
+            pnode->CloseSocketDisconnect(this);
         }
     }
     if (nBytes < 0) {
@@ -2408,6 +2418,11 @@ void CConnman::OpenNetworkConnection(const CAddress& addrConnect, bool fCountFai
     if (fConnectToMasternode)
         pnode->fMasternode = true;
 
+    {
+        LOCK(cs_vNodes);
+        mapSocketToNode.emplace(pnode->hSocket, pnode);
+    }
+
     m_msgproc->InitializeNode(pnode);
     {
         LOCK(cs_vNodes);
@@ -2881,9 +2896,13 @@ void CConnman::Stop()
         fAddressesInitialized = false;
     }
 
-    // Close sockets
-    for (CNode* pnode : vNodes)
-        pnode->CloseSocketDisconnect();
+    {
+        LOCK(cs_vNodes);
+
+        // Close sockets
+        for (CNode *pnode : vNodes)
+            pnode->CloseSocketDisconnect(this);
+    }
     for (ListenSocket& hListenSocket : vhListenSocket)
         if (hListenSocket.socket != INVALID_SOCKET)
             if (!CloseSocket(hListenSocket.socket))
@@ -2897,6 +2916,7 @@ void CConnman::Stop()
         DeleteNode(pnode);
     }
     vNodes.clear();
+    mapSocketToNode.clear();
     vNodesDisconnected.clear();
     vhListenSocket.clear();
     semOutbound.reset();
