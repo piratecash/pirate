@@ -1856,7 +1856,7 @@ void CConnman::SocketHandler()
     for (CNode* pnode : vErrorNodes)
     {
         if (interruptNet) {
-            return;
+            break;
         }
         // let recv() return errors and then handle it
         SocketRecvData(pnode);
@@ -1865,7 +1865,7 @@ void CConnman::SocketHandler()
     for (CNode* pnode : vReceivableNodes)
     {
         if (interruptNet) {
-            return;
+            break;
         }
         if (pnode->fPauseRecv) {
             continue;
@@ -1876,7 +1876,7 @@ void CConnman::SocketHandler()
 
     for (CNode* pnode : vSendableNodes) {
         if (interruptNet) {
-            return;
+            break;
         }
 
         LOCK(pnode->cs_vSend);
@@ -1889,6 +1889,10 @@ void CConnman::SocketHandler()
     ReleaseNodeVector(vErrorNodes);
     ReleaseNodeVector(vReceivableNodes);
     ReleaseNodeVector(vSendableNodes);
+
+    if (interruptNet) {
+        return;
+    }
 
     {
         LOCK(cs_vNodes);
