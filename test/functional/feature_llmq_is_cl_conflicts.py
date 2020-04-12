@@ -9,7 +9,7 @@ from decimal import Decimal
 from test_framework.blocktools import get_masternode_payment, create_coinbase, create_block
 from test_framework.mininode import *
 from test_framework.test_framework import CosantaTestFramework
-from test_framework.util import assert_raises_rpc_error, get_bip9_status
+from test_framework.util import sync_blocks, sync_mempools, p2p_port, assert_raises_rpc_error
 
 '''
 feature_llmq_is_cl_conflicts.py
@@ -175,7 +175,6 @@ class LLMQ_IS_CL_Conflicts(CosantaTestFramework):
 
         # fast forward 11 minutes, so that the TX is considered safe and included in the next block
         self.bump_mocktime(int(60 * 11))
-        set_node_times(self.nodes, self.mocktime)
 
         # Mine the conflicting TX into a block
         good_tip = self.nodes[0].getbestblockhash()

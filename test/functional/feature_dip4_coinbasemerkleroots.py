@@ -5,7 +5,7 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 from test_framework.mininode import *
 from test_framework.test_framework import CosantaTestFramework
-from test_framework.util import assert_equal
+from test_framework.util import p2p_port, assert_equal, sync_blocks
 
 '''
 feature_dip4_coinbasemerkleroots.py
@@ -267,7 +267,6 @@ class LLMQCoinbaseCommitmentsTest(CosantaTestFramework):
             assert_equal(merkleRootQuorums, 0)
 
         self.bump_mocktime(1)
-        set_node_times(self.nodes, self.mocktime)
         self.nodes[0].spork("SPORK_17_QUORUM_DKG_ENABLED", 0)
         self.wait_for_sporks_same()
 

@@ -375,7 +375,7 @@ class BitcoinTestFramework():
             if 'wait' not in kwargs:
                 kwargs['wait'] = 0.1
             if 'wait_func' not in kwargs:
-                kwargs['wait_func'] = lambda: self.bump_mocktime(3, True, nodes=nodes)
+                kwargs['wait_func'] = lambda: self.bump_mocktime(3, nodes=nodes)
 
         sync_mempools(nodes or self.nodes, **kwargs)
 
@@ -388,7 +388,7 @@ class BitcoinTestFramework():
         for node in self.nodes:
             node.mocktime = 0
 
-    def bump_mocktime(self, t, update_nodes=False, nodes=None):
+    def bump_mocktime(self, t, update_nodes=True, nodes=None):
         self.mocktime += t
         if update_nodes:
             set_node_times(nodes or self.nodes, self.mocktime)
@@ -694,7 +694,6 @@ class CosantaTestFramework(BitcoinTestFramework):
         self.log.info("Generating %d coins" % required_balance)
         while self.nodes[0].getbalance() < required_balance:
             self.bump_mocktime(1)
-            set_node_times(self.nodes, self.mocktime)
             self.nodes[0].generate(10)
         num_simple_nodes = self.num_nodes - self.mn_count - 1
         self.log.info("Creating and starting %s simple nodes", num_simple_nodes)
@@ -718,7 +717,6 @@ class CosantaTestFramework(BitcoinTestFramework):
             connect_nodes(self.nodes[i+1], 0)
 
         self.bump_mocktime(1)
-        set_node_times(self.nodes, self.mocktime)
         self.nodes[0].generate(1)
         # sync nodes
         self.sync_all()
@@ -728,7 +726,6 @@ class CosantaTestFramework(BitcoinTestFramework):
         self.nodes[0].spork("SPORK_19_CHAINLOCKS_ENABLED", 0)
         self.wait_for_sporks_same()
         self.bump_mocktime(1)
-        set_node_times(self.nodes, self.mocktime)
 
         mn_info = self.nodes[0].masternodelist("status")
         assert (len(mn_info) == self.mn_count)
@@ -952,50 +949,41 @@ class CosantaTestFramework(BitcoinTestFramework):
         # move forward to next DKG
         skip_count = 24 - (self.nodes[0].getblockcount() % 24)
         if skip_count != 0:
-            self.bump_mocktime(1)
-            set_node_times(nodes, self.mocktime)
+            self.bump_mocktime(1, nodes=nodes)
             self.nodes[0].generate(skip_count)
         sync_blocks(nodes)
 
         q = self.nodes[0].getbestblockhash()
 
         self.log.info("Waiting for phase 1 (init)")
-        def bump_time():
-            self.bump_mocktime(1)
-            set_node_times(nodes, self.mocktime)
         self.wait_for_quorum_phase(q, 1, expected_members, None, 0, mninfos)
-        self.wait_for_quorum_connections(expected_connections, nodes, wait_proc=bump_time)
-        self.wait_for_masternode_probes(expected_probes, mninfos, wait_proc=bump_time)
-        self.bump_mocktime(1)
-        set_node_times(nodes, self.mocktime)
+        self.wait_for_quorum_connections(expected_connections, nodes, wait_proc=lambda: self.bump_mocktime(1, nodes=nodes))
+        self.wait_for_masternode_probes(expected_probes, mninfos, wait_proc=lambda: self.bump_mocktime(1, nodes=nodes))
+        self.bump_mocktime(1, nodes=nodes)
         self.nodes[0].generate(2)
         sync_blocks(nodes)
 
         self.log.info("Waiting for phase 2 (contribute)")
         self.wait_for_quorum_phase(q, 2, expected_members, "receivedContributions", expected_contributions, mninfos)
-        self.bump_mocktime(1)
-        set_node_times(nodes, self.mocktime)
+        self.bump_mocktime(1, nodes=nodes)
         self.nodes[0].generate(2)
         sync_blocks(nodes)
 
         self.log.info("Waiting for phase 3 (complain)")
         self.wait_for_quorum_phase(q, 3, expected_members, "receivedComplaints", expected_complaints, mninfos)
-        self.bump_mocktime(1)
-        set_node_times(nodes, self.mocktime)
+        self.bump_mocktime(1, nodes=nodes)
         self.nodes[0].generate(2)
         sync_blocks(nodes)
 
         self.log.info("Waiting for phase 4 (justify)")
         self.wait_for_quorum_phase(q, 4, expected_members, "receivedJustifications", expected_justifications, mninfos)
-        self.bump_mocktime(1)
-        set_node_times(nodes, self.mocktime)
+        self.bump_mocktime(1, nodes=nodes)
         self.nodes[0].generate(2)
         sync_blocks(nodes)
 
         self.log.info("Waiting for phase 5 (commit)")
         self.wait_for_quorum_phase(q, 5, expected_members, "receivedPrematureCommitments", expected_commitments, mninfos)
-        self.bump_mocktime(1)
-        set_node_times(nodes, self.mocktime)
+        self.bump_mocktime(1, nodes=nodes)
         self.nodes[0].generate(2)
         sync_blocks(nodes)
 
@@ -1006,13 +994,11 @@ class CosantaTestFramework(BitcoinTestFramework):
         self.wait_for_quorum_commitment(q, nodes)
 
         self.log.info("Mining final commitment")
-        self.bump_mocktime(1)
-        set_node_times(nodes, self.mocktime)
+        self.bump_mocktime(1, nodes=nodes)
         self.nodes[0].generate(1)
         while quorums == self.nodes[0].quorum("list"):
             time.sleep(2)
-            self.bump_mocktime(1)
-            set_node_times(nodes, self.mocktime)
+            self.bump_mocktime(1, nodes=nodes)
             self.nodes[0].generate(1)
             sync_blocks(nodes)
         new_quorum = self.nodes[0].quorum("list", 1)["llmq_test"][0]
