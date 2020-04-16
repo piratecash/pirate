@@ -120,14 +120,12 @@ std::set<uint256> CLLMQUtils::GetQuorumConnections(Consensus::LLMQType llmqType,
         std::set<uint256> result;
 
     if (sporkManager.IsSporkActive(SPORK_21_QUORUM_ALL_CONNECTED)) {
-        uint256 forMemberHashed = ::SerializeHash(std::make_pair(forMember, pindexQuorum->GetBlockHash()));
         for (auto& dmn : mns) {
-            // this will cause deterministic behaviour between incoming and outgoing connections.
-            // Each member needs a connection to all other members, so we have each member paired. The below check
-            // will be true on one side and false on the other side of the pairing, so we avoid having both members
-            // initiating the connection.
-            uint256 otherMemberHashed = ::SerializeHash(std::make_pair(dmn->proTxHash, pindexQuorum->GetBlockHash()));
-            if (!onlyOutbound || otherMemberHashed < forMemberHashed) {
+            // Determine which of the two MNs (forMember vs dmn) should initiate the outbound connection and which
+            // one should wait for the inbound connection. We do this in a deterministic way, so that even when we
+            // end up with both connecting to each other, we know which one to disconnect
+            uint256 deterministicOutbound = DeterministicOutboundConnection(forMember, dmn->proTxHash);
+            if (!onlyOutbound || deterministicOutbound == dmn->proTxHash) {
                 result.emplace(dmn->proTxHash);
             }
         }
