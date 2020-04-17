@@ -3681,10 +3681,8 @@ static bool SendRejectsAndCheckIfBanned(CNode* pnode, CConnman* connman, bool en
     AssertLockHeld(cs_main);
     CNodeState &state = *State(pnode->GetId());
 
-    if (enable_bip61) {
-        for (const CBlockReject& reject : state.rejects) {
-            connman->PushMessage(pnode, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::REJECT, std::string(NetMsgType::BLOCK), reject.chRejectCode, reject.strRejectReason, reject.hashBlock));
-        }
+    for (const CBlockReject& reject : state.rejects) {
+        connman->PushMessage(pnode, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::REJECT, (std::string)NetMsgType::BLOCK, reject.chRejectCode, reject.strRejectReason, reject.hashBlock));
     }
     state.rejects.clear();
 
