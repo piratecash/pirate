@@ -46,29 +46,21 @@
 #include <util.h>
 #include <utilmoneystr.h>
 #include <validationinterface.h>
-#ifdef ENABLE_WALLET
-#include <wallet/init.h>
-#endif
 
 #include <masternode/activemasternode.h>
 #include <dsnotificationinterface.h>
 #include <flat-database.h>
 #include <governance/governance.h>
-#ifdef ENABLE_WALLET
-#include <keepass.h>
-#endif
 #include <masternode/masternode-meta.h>
 #include <masternode/masternode-payments.h>
 #include <masternode/masternode-sync.h>
 #include <masternode/masternode-utils.h>
 #include <messagesigner.h>
 #include <netfulfilledman.h>
-#ifdef ENABLE_WALLET
-#include <privatesend/privatesend-client.h>
-#endif // ENABLE_WALLET
 #include <privatesend/privatesend-server.h>
 #include <spork.h>
 #include <warnings.h>
+#include <walletinitinterface.h>
 
 #include <evo/deterministicmns.h>
 #include <llmq/quorums_init.h>
@@ -105,6 +97,7 @@ static const bool DEFAULT_STOPAFTERBLOCKIMPORT = false;
 
 std::unique_ptr<CConnman> g_connman;
 std::unique_ptr<PeerLogicValidation> peerLogic;
+std::unique_ptr<WalletInitInterface> g_wallet_init_interface;
 
 #if ENABLE_ZMQ
 static CZMQNotificationInterface* pzmqNotificationInterface = nullptr;
@@ -232,14 +225,7 @@ void PrepareShutdown()
     std::string statusmessage;
     bool fRPCInWarmup = RPCIsInWarmup(&statusmessage);
 
-#ifdef ENABLE_WALLET
-    if (privateSendClient.fEnablePrivateSend && !fRPCInWarmup) {
-        // Stop PrivateSend, release keys
-        privateSendClient.fPrivateSendRunning = false;
-        privateSendClient.ResetPool();
-    }
-    FlushWallets();
-#endif
+    g_wallet_init_interface->Flush();
     MapPort(false);
 
     // Because these depend on each-other, we make sure that neither can be
@@ -305,9 +291,7 @@ void PrepareShutdown()
         deterministicMNManager.reset();
         evoDb.reset();
     }
-#ifdef ENABLE_WALLET
-    StopWallets();
-#endif
+    g_wallet_init_interface->Stop();
 
 #if ENABLE_ZMQ
     if (pzmqNotificationInterface) {
@@ -359,9 +343,8 @@ void Shutdown()
     }
    // Shutdown part 2: Stop TOR thread and delete wallet instance
     StopTorControl();
-#ifdef ENABLE_WALLET
-    CloseWallets();
-#endif
+    g_wallet_init_interface->Close();
+    g_wallet_init_interface.reset();
     globalVerifyHandle.reset();
     ECC_Stop();
     LogPrintf("%s: done\n", __func__);
@@ -508,11 +491,9 @@ std::string HelpMessage(HelpMessageMode mode)
         " " + _("Whitelisted peers cannot be DoS banned and their transactions are always relayed, even if they are already in the mempool, useful e.g. for a gateway"));
     strUsage += HelpMessageOpt("-maxuploadtarget=<n>", strprintf(_("Tries to keep outbound traffic under the given target (in MiB per 24h), 0 = no limit (default: %d)"), DEFAULT_MAX_UPLOAD_TARGET));
 
-#ifdef ENABLE_WALLET
-    strUsage += GetWalletHelpString(showDebug);
+    strUsage += g_wallet_init_interface->GetHelpString(showDebug);
     if (mode == HMM_BITCOIN_QT)
-        strUsage += HelpMessageOpt("-windowtitle=<name>", _("Wallet window title"));
-#endif
+        strUsage += HelpMessageOpt("-windowtitle=<name>", _("Sets a window title which is appended to \"Dash Core - \""));
 
     strUsage += HelpMessageOpt("-stakesplitthreshold=<n>", strprintf(_("Splits stake reward by threshold (default: %d)"), DEFAULT_STAKE_SPLIT_THRESHOLD));
     strUsage += HelpMessageOpt("-stakemaxsplit=<n>", strprintf(_("Sets the number of max inputs & outputs of a stake (default: %d)"), DEFAULT_STAKE_MAX_SPLIT));
@@ -597,17 +578,6 @@ std::string HelpMessage(HelpMessageMode mode)
 
     strUsage += HelpMessageGroup(_("Masternode options:"));
     strUsage += HelpMessageOpt("-masternodeblsprivkey=<hex>", _("Set the masternode BLS private key and enable the client to act as a masternode"));
-
-#ifdef ENABLE_WALLET
-    strUsage += HelpMessageGroup(_("PrivateSend options:"));
-    strUsage += HelpMessageOpt("-enableprivatesend", strprintf(_("Enable use of PrivateSend for funds stored in this wallet (0-1, default: %u)"), 0));
-    strUsage += HelpMessageOpt("-privatesendautostart", strprintf(_("Start PrivateSend automatically (0-1, default: %u)"), DEFAULT_PRIVATESEND_AUTOSTART));
-    strUsage += HelpMessageOpt("-privatesendmultisession", strprintf(_("Enable multiple PrivateSend mixing sessions per block, experimental (0-1, default: %u)"), DEFAULT_PRIVATESEND_MULTISESSION));
-    strUsage += HelpMessageOpt("-privatesendsessions=<n>", strprintf(_("Use N separate masternodes in parallel to mix funds (%u-%u, default: %u)"), MIN_PRIVATESEND_SESSIONS, MAX_PRIVATESEND_SESSIONS, DEFAULT_PRIVATESEND_SESSIONS));
-    strUsage += HelpMessageOpt("-privatesendrounds=<n>", strprintf(_("Use N separate masternodes for each denominated input to mix funds (%u-%u, default: %u)"), MIN_PRIVATESEND_ROUNDS, MAX_PRIVATESEND_ROUNDS, DEFAULT_PRIVATESEND_ROUNDS));
-    strUsage += HelpMessageOpt("-privatesendamount=<n>", strprintf(_("Target PrivateSend balance (%u-%u, default: %u)"), MIN_PRIVATESEND_AMOUNT, MAX_PRIVATESEND_AMOUNT, DEFAULT_PRIVATESEND_AMOUNT));
-    strUsage += HelpMessageOpt("-privatesenddenoms=<n>", strprintf(_("Create up to N inputs of each denominated amount (%u-%u, default: %u)"), MIN_PRIVATESEND_DENOMS, MAX_PRIVATESEND_DENOMS, DEFAULT_PRIVATESEND_DENOMS));
-#endif // ENABLE_WALLET
 
     strUsage += HelpMessageGroup(_("InstantSend options:"));
     strUsage += HelpMessageOpt("-instantsendnotify=<cmd>", _("Execute command when a wallet InstantSend transaction is successfully locked (%s in cmd is replaced by TxID)"));
@@ -851,12 +821,7 @@ void ThreadImport(std::vector<fs::path> vImportFiles)
         activeMasternodeManager->Init(pindexTip);
     }
 
-#ifdef ENABLE_WALLET
-    // we can't do this before DIP3 is fully initialized
-    for (CWalletRef pwallet : vpwallets) {
-        pwallet->AutoLockMasternodeCollaterals();
-    }
-#endif
+    g_wallet_init_interface->AutoLockMasternodeCollaterals();
 
     if (gArgs.GetArg("-persistmempool", DEFAULT_PERSIST_MEMPOOL)) {
         LoadMempool();
@@ -986,14 +951,6 @@ void InitParameterInteraction()
         if (gArgs.SoftSetBoolArg("-whitelistrelay", true))
             LogPrintf("%s: parameter interaction: -whitelistforcerelay=1 -> setting -whitelistrelay=1\n", __func__);
     }
-
-#ifdef ENABLE_WALLET
-    if (gArgs.IsArgSet("-hdseed") && IsHex(gArgs.GetArg("-hdseed", "not hex")) && (gArgs.IsArgSet("-mnemonic") || gArgs.IsArgSet("-mnemonicpassphrase"))) {
-        gArgs.ForceRemoveArg("-mnemonic");
-        gArgs.ForceRemoveArg("-mnemonicpassphrase");
-        LogPrintf("%s: parameter interaction: can't use -hdseed and -mnemonic/-mnemonicpassphrase together, will prefer -seed\n", __func__);
-    }
-#endif // ENABLE_WALLET
 
     // Make sure additional indexes are recalculated correctly in VerifyDB
     // (we must reconnect blocks whenever we disconnect them for these indexes to work)
@@ -1314,10 +1271,7 @@ bool AppInitParameterInteraction()
         return InitError(strprintf("acceptnonstdtxn is not currently supported for %s chain", chainparams.NetworkIDString()));
     nBytesPerSigOp = gArgs.GetArg("-bytespersigop", nBytesPerSigOp);
 
-#ifdef ENABLE_WALLET
-    if (!WalletParameterInteraction())
-        return false;
-#endif // ENABLE_WALLET
+    if (!g_wallet_init_interface->ParameterInteraction()) return false;
 
     fIsBareMultisigStd = gArgs.GetBoolArg("-permitbaremultisig", DEFAULT_PERMIT_BAREMULTISIG);
     fAcceptDatacarrier = gArgs.GetBoolArg("-datacarrier", DEFAULT_ACCEPT_DATACARRIER);
@@ -1599,9 +1553,7 @@ bool AppInitMain(boost::thread_group& threadGroup, CScheduler& scheduler)
      * available in the GUI RPC console even if external calls are disabled.
      */
     RegisterAllCoreRPCCommands(tableRPC);
-#ifdef ENABLE_WALLET
-    RegisterWalletRPC(tableRPC);
-#endif
+    g_wallet_init_interface->RegisterRPC(tableRPC);
 
     /* Start the RPC server already.  It will be started in "warmup" mode
      * and not really process calls already (but it will signify connections
@@ -1626,17 +1578,13 @@ bool AppInitMain(boost::thread_group& threadGroup, CScheduler& scheduler)
     }
 #endif
 
-    // ********************************************************* Step 5: Backup wallet and verify wallet database integrity
-#ifdef ENABLE_WALLET
-    if (!CWallet::InitAutoBackup())
-        return false;
+    // ********************************************************* Step 5: verify wallet database integrity
 
-    if (!VerifyWallets())
-        return false;
+    if(!g_wallet_init_interface->InitAutoBackup()) return false;
+    if (!g_wallet_init_interface->Verify()) return false;
 
     // Initialize KeePass Integration
-    keePassInt.init();
-#endif // ENABLE_WALLET
+    g_wallet_init_interface->InitKeePass();
     // ********************************************************* Step 6: network initialization
     // Note that we absolutely cannot open any actual connections
     // until the very end ("start node") as the UTXO/block state
@@ -2004,12 +1952,7 @@ bool AppInitMain(boost::thread_group& threadGroup, CScheduler& scheduler)
     fFeeEstimatesInitialized = true;
 
     // ********************************************************* Step 8: load wallet
-#ifdef ENABLE_WALLET
-    if (!OpenWallets())
-        return false;
-#else
-    LogPrintf("No wallet support compiled in!\n");
-#endif
+    if (!g_wallet_init_interface->Open()) return false;
 
     // As InitLoadWallet can take several minutes, it's possible the user
     // requested to kill the GUI during the last operation. If so, exit.
@@ -2081,30 +2024,7 @@ bool AppInitMain(boost::thread_group& threadGroup, CScheduler& scheduler)
 
     // ********************************************************* Step 10b: setup PrivateSend
 
-#ifdef ENABLE_WALLET
-    int nMaxRounds = MAX_PRIVATESEND_ROUNDS;
-
-    if (vpwallets.empty()) {
-        privateSendClient.fEnablePrivateSend = privateSendClient.fPrivateSendRunning = false;
-    } else {
-        privateSendClient.fEnablePrivateSend = gArgs.GetBoolArg("-enableprivatesend", !fLiteMode);
-        privateSendClient.fPrivateSendRunning = vpwallets[0]->IsLocked() ? false : gArgs.GetBoolArg("-privatesendautostart", DEFAULT_PRIVATESEND_AUTOSTART);
-    }
-    privateSendClient.fPrivateSendMultiSession = gArgs.GetBoolArg("-privatesendmultisession", DEFAULT_PRIVATESEND_MULTISESSION);
-    privateSendClient.nPrivateSendSessions = std::min(std::max((int)gArgs.GetArg("-privatesendsessions", DEFAULT_PRIVATESEND_SESSIONS), MIN_PRIVATESEND_SESSIONS), MAX_PRIVATESEND_SESSIONS);
-    privateSendClient.nPrivateSendRounds = std::min(std::max((int)gArgs.GetArg("-privatesendrounds", DEFAULT_PRIVATESEND_ROUNDS), MIN_PRIVATESEND_ROUNDS), nMaxRounds);
-    privateSendClient.nPrivateSendAmount = std::min(std::max((int)gArgs.GetArg("-privatesendamount", DEFAULT_PRIVATESEND_AMOUNT), MIN_PRIVATESEND_AMOUNT), MAX_PRIVATESEND_AMOUNT);
-    privateSendClient.nPrivateSendDenoms = std::min(std::max((int)gArgs.GetArg("-privatesenddenoms", DEFAULT_PRIVATESEND_DENOMS), MIN_PRIVATESEND_DENOMS), MAX_PRIVATESEND_DENOMS);
-
-    if (privateSendClient.fEnablePrivateSend) {
-        LogPrintf("PrivateSend: autostart=%d, multisession=%d, "
-            "sessions=%d, rounds=%d, amount=%d, denoms=%d\n",
-            privateSendClient.fPrivateSendRunning, privateSendClient.fPrivateSendMultiSession,
-            privateSendClient.nPrivateSendSessions, privateSendClient.nPrivateSendRounds,
-            privateSendClient.nPrivateSendAmount, privateSendClient.nPrivateSendDenoms);
-    }
-#endif // ENABLE_WALLET
-
+    g_wallet_init_interface->InitPrivateSendSettings();
     CPrivateSend::InitStandardDenominations();
 
     // ********************************************************* Step 10b: Load cache data
@@ -2178,10 +2098,6 @@ bool AppInitMain(boost::thread_group& threadGroup, CScheduler& scheduler)
 
     if (fMasternodeMode) {
         scheduler.scheduleEvery(boost::bind(&CPrivateSendServer::DoMaintenance, boost::ref(privateSendServer), boost::ref(*g_connman)), 1 * 1000);
-#ifdef ENABLE_WALLET
-    } else if (privateSendClient.fEnablePrivateSend) {
-        scheduler.scheduleEvery(boost::bind(&CPrivateSendClientManager::DoMaintenance, boost::ref(privateSendClient), boost::ref(*g_connman)), 1 * 1000);
-#endif // ENABLE_WALLET
     }
 
     llmq::StartLLMQSystem();
@@ -2306,9 +2222,7 @@ bool AppInitMain(boost::thread_group& threadGroup, CScheduler& scheduler)
     SetRPCWarmupFinished();
     uiInterface.InitMessage(_("Done loading"));
 
-#ifdef ENABLE_WALLET
-    StartWallets(scheduler);
-#endif
+    g_wallet_init_interface->Start(scheduler);
 
     // Final check if the user requested to kill the GUI during one of the last operations. If so, exit.
     if (fRequestShutdown)

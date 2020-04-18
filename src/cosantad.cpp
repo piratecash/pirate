@@ -21,6 +21,10 @@
 #include <httpserver.h>
 #include <httprpc.h>
 #include <utilstrencodings.h>
+#if ENABLE_WALLET
+#include <wallet/init.h>
+#endif
+#include <walletinitinterface.h>
 #include <stacktraces.h>
 
 #include <boost/thread.hpp>
@@ -66,6 +70,12 @@ bool AppInit(int argc, char* argv[])
     CScheduler scheduler;
 
     bool fRet = false;
+
+#if ENABLE_WALLET
+    g_wallet_init_interface.reset(new WalletInit);
+#else
+    g_wallet_init_interface.reset(new DummyWalletInit);
+#endif
 
     //
     // Parameters
