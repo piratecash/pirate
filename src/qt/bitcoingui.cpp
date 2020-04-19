@@ -258,7 +258,7 @@ BitcoinGUI::BitcoinGUI(const PlatformStyle *_platformStyle, const NetworkStyle *
 #ifndef Q_OS_MAC
     // Apply some styling to scrollbars
     QString theme = settings.value("theme", "").toString();
-    if (theme != "trad") { // No scrollbar styling for the traditional theme
+    if (theme != "Traditional") { // No scrollbar styling for the traditional theme
         QFile qFile(QString(":/css/scrollbars"));
         QString styleSheet;
         if (qFile.open(QFile::ReadOnly)) {
@@ -653,7 +653,13 @@ void BitcoinGUI::createToolBars()
         toolbar->addWidget(spacer);
 
         QLabel *logoLabel = new QLabel();
-        QPixmap logoPixmap(":/images/cosanta_logo_toolbar");
+        QString theme = settings.value("theme", "").toString();
+        QString logoImage = ":/images/cosanta_logo_toolbar";
+        if (theme == "Traditional") {
+            logoImage = ":/images/cosanta_logo_toolbar_blue";
+        }
+
+        QPixmap logoPixmap(logoImage);
         logoLabel->setPixmap(logoPixmap);
         toolbar->addWidget(logoLabel);
 
