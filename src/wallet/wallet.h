@@ -90,8 +90,6 @@ enum {
  };
 static const int DEFAULT_STAKE_AUTOCOMBINE = AUTOCOMBINE_DISABLE;
 
-bool AutoBackupWallet (CWallet* wallet, const std::string& strWalletFile_, std::string& strBackupWarningRet, std::string& strBackupErrorRet);
-
 class CBlockIndex;
 class CCoinControl;
 class COutput;
@@ -1258,8 +1256,9 @@ public:
      */
     void postInitProcess(CScheduler& scheduler);
 
-    /* Initialize AutoBackup functionality */
+    /* AutoBackup functionality */
     static bool InitAutoBackup();
+    bool AutoBackupWallet(const fs::path& wallet_path, std::string& strBackupWarningRet, std::string& strBackupErrorRet);
 
     bool BackupWallet(const std::string& strDest);
 
