@@ -741,11 +741,9 @@ UniValue signrawtransaction(const JSONRPCRequest& request)
         );
 
     ObserveSafeMode();
-#ifdef ENABLE_WALLET
-    LOCK2(cs_main, pwallet ? &pwallet->cs_wallet : nullptr);
-#else
+
     LOCK(cs_main);
-#endif
+
     RPCTypeCheck(request.params, {UniValue::VSTR, UniValue::VARR, UniValue::VARR, UniValue::VSTR}, true);
 
     CMutableTransaction mtx;
@@ -767,6 +765,10 @@ UniValue signrawtransaction(const JSONRPCRequest& request)
 
         view.SetBackend(viewDummy); // switch back to avoid locking mempool for too long
     }
+
+#ifdef ENABLE_WALLET
+    LOCK(pwallet ? &pwallet->cs_wallet : nullptr);
+#endif
 
     bool fGivenKeys = false;
     CBasicKeyStore tempKeystore;

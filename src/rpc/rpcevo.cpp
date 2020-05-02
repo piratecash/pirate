@@ -10,6 +10,7 @@
 #include <messagesigner.h>
 #include <rpc/safemode.h>
 #include <rpc/server.h>
+#include <txmempool.h>
 #include <utilmoneystr.h>
 #include <validation.h>
 
@@ -183,7 +184,8 @@ static void FundSpecialTx(CWallet* pwallet, CMutableTransaction& tx, const Speci
     // the user could have gotten from another RPC command prior to now
     pwallet->BlockUntilSyncedToCurrentChain();
 
-    LOCK2(cs_main, pwallet->cs_wallet);
+    LOCK2(cs_main, mempool.cs);
+    LOCK(pwallet->cs_wallet);
 
     CTxDestination nodest = CNoDestination();
     if (fundDest == nodest) {
