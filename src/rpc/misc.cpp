@@ -16,6 +16,7 @@
 #include <netbase.h>
 #include <rpc/blockchain.h>
 #include <rpc/server.h>
+#include <rpc/util.h>
 #include <timedata.h>
 #include <txmempool.h>
 #include <util.h>
@@ -429,88 +430,21 @@ UniValue validateaddress(const JSONRPCRequest& request)
 // Needed even with !ENABLE_WALLET, to pass (ignored) pointers around
 class CWallet;
 
-/**
- * Used by addmultisigaddress / createmultisig:
- */
-CScript _createmultisig_redeemScript(CWallet * const pwallet, const UniValue& params)
-{
-    int nRequired = params[0].get_int();
-    const UniValue& keys = params[1].get_array();
-
-    // Gather public keys
-    if (nRequired < 1)
-        throw std::runtime_error("a multisignature address must require at least one key to redeem");
-    if ((int)keys.size() < nRequired)
-        throw std::runtime_error(
-            strprintf("not enough keys supplied "
-                      "(got %u keys, but need at least %d to redeem)", keys.size(), nRequired));
-    if (keys.size() > 16)
-        throw std::runtime_error("Number of addresses involved in the multisignature address creation > 16\nReduce the number");
-    std::vector<CPubKey> pubkeys;
-    pubkeys.resize(keys.size());
-    for (unsigned int i = 0; i < keys.size(); i++)
-    {
-        const std::string& ks = keys[i].get_str();
-#ifdef ENABLE_WALLET
-        // Case 1: Cosanta address and we have full public key:
-        CTxDestination dest = DecodeDestination(ks);
-        if (pwallet && IsValidDestination(dest)) {
-            const CKeyID *keyID = boost::get<CKeyID>(&dest);
-            if (!keyID) {
-                throw std::runtime_error(strprintf("%s does not refer to a key", ks));
-            }
-            CPubKey vchPubKey;
-            if (!pwallet->GetPubKey(*keyID, vchPubKey)) {
-                throw std::runtime_error(strprintf("no full public key for address %s", ks));
-            }
-            if (!vchPubKey.IsFullyValid())
-                throw std::runtime_error(" Invalid public key: "+ks);
-            pubkeys[i] = vchPubKey;
-        }
-
-        // Case 2: hex public key
-        else
-#endif
-        if (IsHex(ks))
-        {
-            CPubKey vchPubKey(ParseHex(ks));
-            if (!vchPubKey.IsFullyValid())
-                throw std::runtime_error(" Invalid public key: "+ks);
-            pubkeys[i] = vchPubKey;
-        }
-        else
-        {
-            throw std::runtime_error(" Invalid public key: "+ks);
-        }
-    }
-    CScript result = GetScriptForMultisig(nRequired, pubkeys);
-
-    if (result.size() > MAX_SCRIPT_ELEMENT_SIZE)
-        throw std::runtime_error(
-                strprintf("redeemScript exceeds size limit: %d > %d", result.size(), MAX_SCRIPT_ELEMENT_SIZE));
-
-    return result;
-}
-
 UniValue createmultisig(const JSONRPCRequest& request)
 {
-#ifdef ENABLE_WALLET
-    CWallet * const pwallet = GetWalletForJSONRPCRequest(request);
-#else
-    CWallet * const pwallet = nullptr;
-#endif
-
     if (request.fHelp || request.params.size() < 2 || request.params.size() > 2)
     {
         std::string msg = "createmultisig nrequired [\"key\",...]\n"
             "\nCreates a multi-signature address with n signature of m keys required.\n"
             "It returns a json object with the address and redeemScript.\n"
-
+            "DEPRECATION WARNING: Using addresses with createmultisig is deprecated. Clients must\n"
+            "transition to using addmultisigaddress to create multisig addresses with addresses known\n"
+            "to the wallet before upgrading to v0.17. To use the deprecated functionality, start cosantad with -deprecatedrpc=createmultisig\n"
             "\nArguments:\n"
-            "1. nrequired      (numeric, required) The number of required signatures out of the n keys or addresses.\n"
-            "2. \"keys\"       (string, required) A json array of keys which are cosanta addressges or hex-encoded public keys\n"
+            "1. nrequired                    (numeric, required) The number of required signatures out of the n keys or addresses.\n"
+            "2. \"keys\"                       (string, required) A json array of hex-encoded public keys\n"
             "     [\n"
-            "       \"key\"    (string) cosanta addressg or hex-encoded public key\n"
+            "       \"key\"                    (string) The hex-encoded public key\n"
             "       ,...\n"
             "     ]\n"
 
@@ -521,16 +455,37 @@ UniValue createmultisig(const JSONRPCRequest& request)
             "}\n"
 
             "\nExamples:\n"
-            "\nCreate a multisig address from 2 addresses\n"
-            + HelpExampleCli("createmultisig", "2 \"[\\\"Xt4qk9uKvQYAonVGSZNXqxeDmtjaEWgfrs\\\",\\\"XoSoWQkpgLpppPoyyzbUFh1fq2RBvW6UK1\\\"]\"") +
+            "\nCreate a multisig address from 2 public keys\n"
+            + HelpExampleCli("createmultisig", "2 \"[\\\"03789ed0bb717d88f7d321a368d905e7430207ebbd82bd342cf11ae157a7ace5fd\\\",\\\"03dbc6764b8884a92e871274b87583e6d5c2a58819473e17e107ef3f6aa5a61626\\\"]\"") +
             "\nAs a json rpc call\n"
-            + HelpExampleRpc("createmultisig", "2, \"[\\\"Xt4qk9uKvQYAonVGSZNXqxeDmtjaEWgfrs\\\",\\\"XoSoWQkpgLpppPoyyzbUFh1fq2RBvW6UK1\\\"]\"")
+            + HelpExampleRpc("createmultisig", "2, \"[\\\"03789ed0bb717d88f7d321a368d905e7430207ebbd82bd342cf11ae157a7ace5fd\\\",\\\"03dbc6764b8884a92e871274b87583e6d5c2a58819473e17e107ef3f6aa5a61626\\\"]\"")
         ;
         throw std::runtime_error(msg);
     }
 
+    int required = request.params[0].get_int();
+
+    // Get the public keys
+    const UniValue& keys = request.params[1].get_array();
+    std::vector<CPubKey> pubkeys;
+    for (unsigned int i = 0; i < keys.size(); ++i) {
+        if (IsHex(keys[i].get_str()) && (keys[i].get_str().length() == 66 || keys[i].get_str().length() == 130)) {
+            pubkeys.push_back(HexToPubKey(keys[i].get_str()));
+        } else {
+#ifdef ENABLE_WALLET
+            CWallet* const pwallet = GetWalletForJSONRPCRequest(request);
+            if (IsDeprecatedRPCEnabled("createmultisig") && EnsureWalletIsAvailable(pwallet, false)) {
+                pubkeys.push_back(AddrToPubKey(pwallet, keys[i].get_str()));
+            } else
+#endif
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, strprintf("Invalid public key: %s\nNote that from v0.16, createmultisig no longer accepts addresses."
+            " Clients must transition to using addmultisigaddress to create multisig addresses with addresses known to the wallet before upgrading to v0.17."
+            " To use the deprecated functionality, start cosantad with -deprecatedrpc=createmultisig", keys[i].get_str()));
+        }
+    }
+
     // Construct using pay-to-script-hash:
-    CScript inner = _createmultisig_redeemScript(pwallet, request.params);
+    CScript inner = CreateMultisigRedeemscript(required, pubkeys);
     CScriptID innerID(inner);
 
     UniValue result(UniValue::VOBJ);
@@ -1321,7 +1276,7 @@ UniValue echo(const JSONRPCRequest& request)
             "echo|echojson \"message\" ...\n"
             "\nSimply echo back the input arguments. This command is for testing.\n"
             "\nThe difference between echo and echojson is that echojson has argument conversion enabled in the client-side table in"
-            "dash-cli and the GUI. There is no server-side difference."
+            "cosanta-cli and the GUI. There is no server-side difference."
         );
 
     return request.params;
@@ -1335,7 +1290,7 @@ static UniValue getinfo_deprecated(const JSONRPCRequest& request)
         "- getblockchaininfo: blocks, difficulty, chain\n"
         "- getnetworkinfo: version, protocolversion, timeoffset, connections, proxy, relayfee, warnings\n"
         "- getwalletinfo: balance, privatesend_balance, keypoololdest, keypoolsize, paytxfee, unlocked_until, walletversion\n"
-        "\ndash-cli has the option -getinfo to collect and format these in the old format."
+        "\ncosanta-cli has the option -getinfo to collect and format these in the old format."
     );
 }
 
