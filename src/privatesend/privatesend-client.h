@@ -175,8 +175,6 @@ private:
     // Keep track of the used Masternodes
     std::vector<COutPoint> vecMasternodesUsed;
 
-    std::vector<CAmount> vecDenominationsSkipped;
-
     // TODO: or map<denom, CPrivateSendClientSession> ??
     std::deque<CPrivateSendClientSession> deqSessions;
     mutable CCriticalSection cs_deqsessions;
@@ -207,7 +205,6 @@ public:
 
     CPrivateSendClientManager() :
         vecMasternodesUsed(),
-        vecDenominationsSkipped(),
         deqSessions(),
         nCachedLastSuccessBlock(0),
         nMinBlocksToWait(1),
@@ -225,10 +222,6 @@ public:
     }
 
     void ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStream& vRecv, CConnman& connman, bool enable_bip61);
-
-    bool IsDenomSkipped(const CAmount& nDenomValue);
-    void AddSkippedDenom(const CAmount& nDenomValue);
-    void RemoveSkippedDenom(const CAmount& nDenomValue);
 
     void ResetPool();
 
