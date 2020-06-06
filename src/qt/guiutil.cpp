@@ -172,7 +172,11 @@ QString dateTimeStr(qint64 nTime)
 
 QFont fixedPitchFont()
 {
-    return QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    if (dashThemeActive()) {
+        return getFontNormal();
+    } else {
+        return QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    }
 }
 
 // Just some dummy data to generate an convincing random-looking (but consistent) address
@@ -197,7 +201,7 @@ void setupAddressWidget(QValidatedLineEdit *widget, QWidget *parent, bool fAllow
 {
     parent->setFocusProxy(widget);
 
-    widget->setFont(fixedPitchFont());
+    setFixedPitchFont({widget});
     // We don't want translators to use own addresses in translations
     // and this is the only place, where this address is supplied.
     widget->setPlaceholderText(QObject::tr("Enter a Cosanta address (e.g. %1)").arg(
@@ -1094,6 +1098,13 @@ void setFont(const std::vector<QWidget*> &vecWidgets, QFont::Weight weight, bool
 
     for (auto it : vecWidgets) {
         it->setFont(font);
+    }
+}
+
+void setFixedPitchFont(const std::vector<QWidget*>& vecWidgets)
+{
+    for (auto it : vecWidgets) {
+        it->setFont(fixedPitchFont());
     }
 }
 
