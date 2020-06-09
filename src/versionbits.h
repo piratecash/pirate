@@ -22,12 +22,12 @@ static const int32_t VERSIONBITS_POSV2_BITS = CBlockHeader::POSV2_BITS;
 /** Total bits available for versionbits */
 static const int32_t VERSIONBITS_NUM_BITS = 27;
 
-enum ThresholdState {
-    THRESHOLD_DEFINED,
-    THRESHOLD_STARTED,
-    THRESHOLD_LOCKED_IN,
-    THRESHOLD_ACTIVE,
-    THRESHOLD_FAILED,
+enum class ThresholdState {
+    DEFINED,
+    STARTED,
+    LOCKED_IN,
+    ACTIVE,
+    FAILED,
 };
 
 // A map that gives the state for blocks whose height is a multiple of Period().
