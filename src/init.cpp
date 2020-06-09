@@ -1913,7 +1913,7 @@ bool AppInitMain()
                 evoDb.reset(new CEvoDB(nEvoDbCache, false, fReset || fReindexChainState));
                 deterministicMNManager.reset(new CDeterministicMNManager(*evoDb));
 
-                llmq::InitLLMQSystem(*evoDb, &scheduler, false, fReset || fReindexChainState);
+                llmq::InitLLMQSystem(*evoDb, false, fReset || fReindexChainState);
 
                 if (fReset) {
                     pblocktree->WriteReindexing(true);
