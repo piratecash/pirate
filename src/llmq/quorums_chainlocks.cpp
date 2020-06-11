@@ -41,6 +41,8 @@ CChainLocksHandler::CChainLocksHandler()
 
 CChainLocksHandler::~CChainLocksHandler()
 {
+    scheduler_thread->interrupt();
+    scheduler_thread->join();
     delete scheduler_thread;
     delete scheduler;
 }
@@ -58,9 +60,8 @@ void CChainLocksHandler::Start()
 
 void CChainLocksHandler::Stop()
 {
+    scheduler->stop();
     quorumSigningManager->UnregisterRecoveredSigsListener(this);
-    scheduler_thread->interrupt();
-    scheduler_thread->join();
 }
 
 bool CChainLocksHandler::AlreadyHave(const CInv& inv)
