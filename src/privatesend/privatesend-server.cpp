@@ -28,7 +28,6 @@ CPrivateSendServer privateSendServer;
 void CPrivateSendServer::ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStream& vRecv, CConnman& connman)
 {
     if (!fMasternodeMode) return;
-    if (fLiteMode) return; // ignore all Cosanta related functionality
     if (!masternodeSync.IsBlockchainSynced()) return;
 
     if (strCommand == NetMsgType::DSACCEPT) {
@@ -861,7 +860,6 @@ void CPrivateSendServer::SetState(PoolState nStateNew)
 
 void CPrivateSendServer::DoMaintenance(CConnman& connman)
 {
-    if (fLiteMode) return;        // disable all Cosanta specific functionality
     if (!fMasternodeMode) return; // only run on masternodes
 
     if (!masternodeSync.IsBlockchainSynced() || ShutdownRequested()) return;
