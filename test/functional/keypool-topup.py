@@ -18,7 +18,6 @@ from test_framework.test_framework import BitcoinTestFramework
 from test_framework.util import (
     assert_equal,
     connect_nodes_bi,
-    sync_blocks,
 )
 
 class KeypoolRestoreTest(BitcoinTestFramework):

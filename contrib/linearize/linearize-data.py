@@ -14,7 +14,6 @@ import re
 import os
 import os.path
 import sys
-import hashlib
 import cosanta_hash
 import datetime
 import time

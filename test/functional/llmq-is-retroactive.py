@@ -6,8 +6,7 @@
 
 from test_framework.mininode import *
 from test_framework.test_framework import CosantaTestFramework
-from test_framework.util import sync_blocks, set_node_times, \
-    isolate_node, reconnect_isolated_node
+from test_framework.util import set_node_times, isolate_node, reconnect_isolated_node
 
 '''
 llmq-is-retroactive.py

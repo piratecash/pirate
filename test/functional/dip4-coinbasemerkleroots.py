@@ -3,11 +3,9 @@
 # Copyright (c) 2020-2022 The Cosanta Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
-from collections import namedtuple
-
 from test_framework.mininode import *
 from test_framework.test_framework import CosantaTestFramework
-from test_framework.util import p2p_port, assert_equal, sync_blocks, set_node_times
+from test_framework.util import assert_equal
 
 '''
 dip4-coinbasemerkleroots.py
