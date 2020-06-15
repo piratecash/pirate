@@ -42,6 +42,13 @@ SendCoinsEntry::SendCoinsEntry(const PlatformStyle *_platformStyle, QWidget *par
     // just a label for displaying cosanta address(es)
     ui->payTo_is->setFont(GUIUtil::fixedPitchFont());
 
+    GUIUtil::setFont({ui->payToLabel,
+                     ui->labellLabel,
+                     ui->amountLabel,
+                     ui->messageLabel}, GUIUtil::getFontWeightNormal(), 15);
+
+    GUIUtil::updateFonts();
+
     // Connect signals
     connect(ui->payAmount, SIGNAL(valueChanged()), this, SIGNAL(payAmountChanged()));
     connect(ui->checkboxSubtractFeeFromAmount, SIGNAL(toggled(bool)), this, SIGNAL(subtractFeeFromAmountChanged()));
