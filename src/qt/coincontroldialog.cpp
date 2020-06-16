@@ -57,7 +57,7 @@ CoinControlDialog::CoinControlDialog(QWidget* parent) :
                       ui->labelCoinControlFeeText,
                       ui->labelCoinControlAfterFeeText,
                       ui->labelCoinControlChangeText
-                     }, GUIUtil::getFontWeightBold());
+                     }, GUIUtil::FontWeight::Bold);
 
     GUIUtil::updateFonts();
 

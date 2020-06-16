@@ -30,7 +30,7 @@ foreverHidden(false)
                       ui->labelSyncDone,
                       ui->labelProgressIncrease,
                       ui->labelEstimatedTimeLeft,
-                     }, GUIUtil::getFontWeightBold());
+                     }, GUIUtil::FontWeight::Bold);
 
     connect(ui->closeButton, SIGNAL(clicked()), this, SLOT(closeClicked()));
     if (parent) {

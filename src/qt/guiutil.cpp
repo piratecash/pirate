@@ -125,7 +125,7 @@ QFont::Weight fontWeightBold = defaultFontWeightBold;
 int fontScale = defaultFontScale;
 
 // Contains all widgets and its font attributes (weight, italic) with font changes due to GUIUtil::setFont
-static std::map<QWidget*, std::pair<QFont::Weight, bool>> mapNormalFontUpdates;
+static std::map<QWidget*, std::pair<FontWeight, bool>> mapNormalFontUpdates;
 // Contains all widgets where a fixed pitch font has been set with GUIUtil::setFixedPitchFont
 static std::set<QWidget*> setFixedPitchFontUpdates;
 // Contains all widgets where a non-default fontsize has been seet with GUIUtil::setFont
@@ -1125,6 +1125,11 @@ QFont::Weight getFontWeightNormalDefault()
     return defaultFontWeightNormal;
 }
 
+QFont::Weight toQFontWeight(FontWeight weight)
+{
+    return weight == FontWeight::Bold ? getFontWeightBold() : getFontWeightNormal();
+}
+
 QFont::Weight getFontWeightNormal()
 {
     return fontWeightNormal;
@@ -1262,7 +1267,7 @@ void setApplicationFont()
                 " match: " << qApp->font().exactMatch();
 }
 
-void setFont(const std::vector<QWidget*>& vecWidgets, QFont::Weight weight, int nPointSize, bool fItalic)
+void setFont(const std::vector<QWidget*>& vecWidgets, FontWeight weight, int nPointSize, bool fItalic)
 {
     QFont font = getFont(weight, fItalic, nPointSize);
 
@@ -1302,7 +1307,7 @@ void updateFonts()
     for (QWidget* w : qApp->allWidgets()) {
         QFont font = w->font();
         font.setFamily(qApp->font().family());
-        font.setWeight(qApp->font().weight());
+        font.setWeight(getFontWeightNormal());
         font.setStyleName(qApp->font().styleName());
         font.setStyle(qApp->font().style());
         // Set the font size based on the widgets default font size + the font scale
@@ -1351,9 +1356,11 @@ void updateFonts()
     }
 }
 
-QFont getFont(QFont::Weight weight, bool fItalic, int nPointSize)
+QFont getFont(FontWeight weight, bool fItalic, int nPointSize)
 {
     QFont font;
+    QFont::Weight qWeight = toQFontWeight(weight);
+
     if (dashThemeActive()) {
 
         static std::map<QFont::Weight, QString> mapMontserratMapping{
@@ -1373,11 +1380,11 @@ QFont getFont(QFont::Weight weight, bool fItalic, int nPointSize)
 #endif
         };
 
-        assert(mapMontserratMapping.count(weight));
+        assert(mapMontserratMapping.count(qWeight));
 
 #ifdef Q_OS_MAC
 
-        QString styleName = mapMontserratMapping[weight];
+        QString styleName = mapMontserratMapping[qWeight];
 
         if (fItalic) {
             if (styleName == "Regular") {
@@ -1390,13 +1397,13 @@ QFont getFont(QFont::Weight weight, bool fItalic, int nPointSize)
         font.setFamily(defaultFontFamily);
         font.setStyleName(styleName);
 #else
-        font.setFamily(defaultFontFamily + " " + mapMontserratMapping[weight]);
-        font.setWeight(weight);
+        font.setFamily(defaultFontFamily + " " + mapMontserratMapping[qWeight]);
+        font.setWeight(qWeight);
         font.setStyle(fItalic ? QFont::StyleItalic : QFont::StyleNormal);
 #endif
     } else {
         font.setFamily(QApplication::font().family());
-        font.setWeight(weight > QFont::Normal ? QFont::Bold : QFont::Normal);
+        font.setWeight(qWeight);
         font.setStyle(fItalic ? QFont::StyleItalic : QFont::StyleNormal);
     }
 
@@ -1413,12 +1420,12 @@ QFont getFont(QFont::Weight weight, bool fItalic, int nPointSize)
 
 QFont getFontNormal()
 {
-    return getFont(getFontWeightNormal());
+    return getFont(FontWeight::Normal);
 }
 
 QFont getFontBold()
 {
-    return getFont(getFontWeightBold());
+    return getFont(FontWeight::Bold);
 }
 
 QString getActiveTheme()
