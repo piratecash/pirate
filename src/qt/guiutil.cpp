@@ -103,7 +103,7 @@ static const std::map<QString, QString> mapStyleToTheme{
 };
 
 /** Font related default values. */
-static const QString defaultFontFamily = "Montserrat";
+static const FontFamily defaultFontFamily = FontFamily::SystemDefault;
 static const int defaultFontSize = 12;
 static const double fontScaleSteps = 0.01;
 #ifdef Q_OS_MAC
@@ -117,6 +117,7 @@ static const int defaultFontScale = 0;
 #endif
 
 /** Font related variables. */
+FontFamily fontFamily = defaultFontFamily;
 // Weight for normal text
 QFont::Weight fontWeightNormal = defaultFontWeightNormal;
 // Weight for bold text
@@ -1090,6 +1091,44 @@ void loadStyleSheet(QWidget* widget, bool fForceUpdate)
     }
 }
 
+FontFamily fontFamilyFromString(const QString& strFamily)
+{
+    if (strFamily == "SystemDefault") {
+        return FontFamily::SystemDefault;
+    }
+    if (strFamily == "Montserrat") {
+        return FontFamily::Montserrat;
+    }
+    throw std::invalid_argument(strprintf("Invalid font-family: %s", strFamily.toStdString()));
+}
+
+QString fontFamilyToString(FontFamily family)
+{
+    switch (family) {
+    case FontFamily::SystemDefault:
+        return "SystemDefault";
+    case FontFamily::Montserrat:
+        return "Montserrat";
+    default:
+        assert(false);
+    }
+}
+
+void setFontFamily(FontFamily family)
+{
+    fontFamily = family;
+}
+
+FontFamily getFontFamilyDefault()
+{
+    return defaultFontFamily;
+}
+
+FontFamily getFontFamily()
+{
+    return fontFamily;
+}
+
 bool weightFromArg(int nArg, QFont::Weight& weight)
 {
     const std::map<int, QFont::Weight> mapWeight{
@@ -1185,7 +1224,7 @@ double getScaledFontSize(int nSize)
 
 bool loadFonts()
 {
-    QString family = defaultFontFamily;
+    QString family = fontFamilyToString(FontFamily::Montserrat);
     QString italic = "Italic";
 
     std::map<QString, bool> mapStyles{
@@ -1250,24 +1289,27 @@ void setApplicationFont()
 {
     static QFont osDefaultFont = QApplication::font();
 
-    if (dashThemeActive()) {
-        QString family = defaultFontFamily;
-        QFont appFont = QFont(family);
+    std::unique_ptr<QFont> font;
+
+    if (fontFamily == FontFamily::Montserrat) {
+        QString family = fontFamilyToString(FontFamily::Montserrat);
 #ifdef Q_OS_MAC
-        if (getFontWeightNormal() != defaultFontWeightNormal) {
-            appFont = getFontNormal();
+        if (getFontWeightNormal() != getFontWeightNormalDefault()) {
+            font = std::make_unique<QFont>(getFontNormal());
         } else {
-            appFont.setWeight(defaultFontWeightNormal);
+            font = std::make_unique<QFont>(family);
+            font->setWeight(getFontWeightNormalDefault());
         }
-        appFont.setPointSizeF(getScaledFontSize(defaultFontSize));
 #else
-        appFont.setWeight(getFontWeightNormal());
-        appFont.setPointSizeF(getScaledFontSize(defaultFontSize));
+        font = std::make_unique<QFont>(family);
+        font->setWeight(getFontWeightNormal());
 #endif
-        qApp->setFont(appFont);
     } else {
-        qApp->setFont(osDefaultFont);
+        font = std::make_unique<QFont>(osDefaultFont);
     }
+
+    font->setPointSizeF(defaultFontSize);
+    qApp->setFont(*font);
 
     qDebug() << __func__ << ": " << qApp->font().toString() <<
                 " family: " << qApp->font().family() <<
@@ -1369,7 +1411,7 @@ QFont getFont(FontWeight weight, bool fItalic, int nPointSize)
     QFont font;
     QFont::Weight qWeight = toQFontWeight(weight);
 
-    if (dashThemeActive()) {
+    if (fontFamily == FontFamily::Montserrat) {
 
         static std::map<QFont::Weight, QString> mapMontserratMapping{
             {QFont::Thin, "Thin"},
@@ -1402,10 +1444,10 @@ QFont getFont(FontWeight weight, bool fItalic, int nPointSize)
             }
         }
 
-        font.setFamily(defaultFontFamily);
+        font.setFamily(fontFamilyToString(FontFamily::Montserrat));
         font.setStyleName(styleName);
 #else
-        font.setFamily(defaultFontFamily + " " + mapMontserratMapping[qWeight]);
+        font.setFamily(fontFamilyToString(FontFamily::Montserrat) + " " + mapMontserratMapping[qWeight]);
         font.setWeight(qWeight);
         font.setStyle(fItalic ? QFont::StyleItalic : QFont::StyleNormal);
 #endif
