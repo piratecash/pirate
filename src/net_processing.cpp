@@ -14,7 +14,6 @@
 #include <consensus/validation.h>
 #include <hash.h>
 #include <init.h>
-#include <validation.h>
 #include <merkleblock.h>
 #include <netmessagemaker.h>
 #include <netbase.h>

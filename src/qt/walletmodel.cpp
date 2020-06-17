@@ -26,7 +26,6 @@
 #include <ui_interface.h>
 #include <util.h> // for GetBoolArg
 #include <wallet/coincontrol.h>
-#include <wallet/wallet.h>
 #include <wallet/walletdb.h> // for BackupWallet
 
 #include <spork.h>
