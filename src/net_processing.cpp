@@ -2430,7 +2430,7 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
         // nodes)
         connman->PushMessage(pfrom, msgMaker.Make(NetMsgType::SENDHEADERS));
 
-        if (!pfrom->fMasternode) {
+        if (pfrom->nVersion >= SHORT_IDS_BLOCKS_VERSION && !pfrom->fMasternode) {
             // Tell our peer we are willing to provide version-1 cmpctblocks
             // However, we do not request new block announcements using
             // cmpctblock messages.
