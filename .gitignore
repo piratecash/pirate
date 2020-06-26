@@ -7,12 +7,14 @@ reset-files.bash
 
 *.exe
 src/dash
+<<<<<<< HEAD
 src/cosantad
 src/cosanta-cli
 src/cosanta-tx
 src/test/test_cosanta
 src/test/test_cosanta_fuzzy
 src/qt/test/test_cosanta-qt
+src/qt/res/css/colors/*
 src/bench/bench_cosanta
 
 # autoreconf
