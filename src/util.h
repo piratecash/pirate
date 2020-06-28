@@ -51,7 +51,7 @@
 //Cosanta only features
 
 extern bool fMasternodeMode;
-extern bool fLiteMode;
+extern bool fDisableGovernance;
 extern int nWalletBackups;
 
 // Application startup time (used for uptime calculation)

@@ -93,7 +93,7 @@ const int64_t nStartupTime = GetTime();
 
 //Cosanta only features
 bool fMasternodeMode = false;
-bool fLiteMode = false;
+bool fDisableGovernance = false;
 /**
     nWalletBackups:
         1..10   - number of automatic backups to keep
