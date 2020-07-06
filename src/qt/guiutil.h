@@ -288,9 +288,6 @@ namespace GUIUtil
         Montserrat,
     };
 
-    /** Application font family */
-    extern FontFamily fontFamily;
-
     FontFamily fontFamilyFromString(const QString& strFamily);
     QString fontFamilyToString(FontFamily family);
 
@@ -303,13 +300,6 @@ namespace GUIUtil
         Normal, // Font weight for normal text
         Bold,   // Font weight for bold text
     };
-
-    /** Application font weight for normal text. May be overwritten by -font-weight-normal. */
-    extern QFont::Weight fontWeightNormal;
-    /** Application font weight for bold text. May be overwritten by -font-weight-bold. */
-    extern QFont::Weight fontWeightBold;
-    /** Application font scale value. May be overwritten by -font-scale. */
-    extern int fontScale;
 
     /** Convert weight value from args (0-8) to QFont::Weight */
     bool weightFromArg(int nArg, QFont::Weight& weight);
