@@ -22,6 +22,8 @@ SendCoinsEntry::SendCoinsEntry(QWidget* parent) :
 {
     ui->setupUi(this);
 
+    GUIUtil::disableMacFocusRect(this);
+
     setCurrentWidget(ui->SendCoins);
 
     ui->addAsLabel->setPlaceholderText(tr("Enter a label for this address to add it to your address book"));
