@@ -47,6 +47,7 @@ from .util import (
     initialize_datadir,
     p2p_port,
     set_node_times,
+    set_timeout_scale,
     satoshi_round,
     sync_blocks,
     sync_mempools,
@@ -150,11 +151,18 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
         parser.add_option("--pdbonfailure", dest="pdbonfailure", default=False, action="store_true",
                           help="Attach a python debugger if test fails")
         parser.add_option("--usecli", dest="usecli", default=False, action="store_true",
-                          help="use cosanta-cli instead of RPC for all commands")
-        parser.add_option("--cosatad-arg", dest="cosantad_extra_args", default=[], type='string', action='append',
-                          help="Pass extra args to all cosantad instances")
+                          help="use dash-cli instead of RPC for all commands")
+        parser.add_option("--dashd-arg", dest="dashd_extra_args", default=[], type='string', action='append',
+                          help="Pass extra args to all dashd instances")
+        parser.add_option("--timeoutscale", dest="timeout_scale", default=1, type='int' ,
+                          help="Scale the test timeouts by multiplying them with the here provided value (defaul: 1)")
         self.add_options(parser)
         (self.options, self.args) = parser.parse_args()
+
+        if self.options.timeout_scale < 1:
+            raise RuntimeError("--timeoutscale can't be less than 1")
+
+        set_timeout_scale(self.options.timeout_scale)
 
         PortSeed.n = self.options.port_seed
 
