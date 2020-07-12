@@ -4661,7 +4661,7 @@ bool CWallet::NewKeyPool()
             batch.ErasePool(nIndex);
         }
         setExternalKeyPool.clear();
-        privateSendClient.fPrivateSendRunning = false;
+        privateSendClient.StopMixing();
         nKeysLeftSinceAutoBackup = 0;
 
         m_pool_key_to_index.clear();
