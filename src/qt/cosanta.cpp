@@ -789,6 +789,11 @@ int main(int argc, char *argv[])
 
         GUIUtil::setStyleSheetDirectory(strCustomDir);
     }
+    // Validate -debug-ui
+    if (gArgs.GetBoolArg("-debug-ui", false)) {
+        QMessageBox::warning(0, QObject::tr(PACKAGE_NAME),
+                                "Warning: UI debug mode (-debug-ui) enabled" + QString(gArgs.IsArgSet("-custom-css-dir") ? "." : " without a custom css directory set with -custom-css-dir."));
+    }
 
     // Subscribe to global signals from core
     std::unique_ptr<interface::Handler> handler = node->handleInitMessage(InitMessage);
