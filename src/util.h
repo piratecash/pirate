@@ -336,9 +336,9 @@ void RenameThreadPool(ctpl::thread_pool& tp, const char* baseName);
 /**
  * .. and a wrapper that just calls func once
  */
-template <typename Callable> void TraceThread(const char* name,  Callable func)
+template <typename Callable> void TraceThread(const std::string name,  Callable func)
 {
-    std::string s = strprintf("cosanta-%s", name);
+    std::string s = "cosa-" + name;
     RenameThread(s.c_str());
     try
     {
@@ -352,7 +352,7 @@ template <typename Callable> void TraceThread(const char* name,  Callable func)
         throw;
     }
     catch (...) {
-        PrintExceptionContinue(std::current_exception(), name);
+        PrintExceptionContinue(std::current_exception(), name.c_str());
         throw;
     }
 }
