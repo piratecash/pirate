@@ -903,8 +903,8 @@ void BitcoinGUI::setWalletActionsEnabled(bool enabled)
     sendCoinsAction->setEnabled(enabled);
     sendCoinsMenuAction->setEnabled(enabled);
 #ifdef ENABLE_WALLET
-    privateSendCoinsAction->setEnabled(enabled && privateSendClient.fEnablePrivateSend);
-    privateSendCoinsMenuAction->setEnabled(enabled && privateSendClient.fEnablePrivateSend);
+    privateSendCoinsAction->setEnabled(enabled && privateSendClientOptions.fEnablePrivateSend);
+    privateSendCoinsMenuAction->setEnabled(enabled && privateSendClientOptions.fEnablePrivateSend);
 #else
     privateSendCoinsAction->setEnabled(enabled);
     privateSendCoinsMenuAction->setEnabled(enabled);
@@ -1229,7 +1229,7 @@ void BitcoinGUI::setNumBlocks(int count, const QDateTime& blockDate, const QStri
     // Disabling macOS App Nap on initial sync, disk, reindex operations and mixing.
     bool disableAppNap = !masternodeSync.IsSynced();
 #ifdef ENABLE_WALLET
-    disableAppNap |= privateSendClient.IsMixing();
+    disableAppNap |= privateSendClientManager.IsMixing();
 #endif // ENABLE_WALLET
     if (disableAppNap) {
         m_app_nap_inhibitor->disableAppNap();
