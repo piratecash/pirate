@@ -17,9 +17,14 @@ Loaded in GUIUtil::loadStyleSheet() in guitil.cpp.
 /* do not modify! section updated by update-css-files.py
 <colors>
 
-# Used colors in traditional.css for commit 3bebd1a5c
+# Used colors in traditional.css for commit a50bd2371b
 
+#00000000
+#333
 #fff
+#008de4
+#047ac2
+#a84832
 #ccfafafa
 
 </colors>
@@ -57,12 +62,10 @@ QPushButton - Special case, tabbar replacement buttons
 #btnVerifyMessage {
     background: none;
     border-radius: 0px;
-    color: red;
     border-bottom: 3px solid red;
     padding-bottom: 5px;
-    background-color: transparent;
+    background-color: #00000000;
     border-color: #008de4;
-    color: #333;
 }
 
 /* Debug window buttons */
@@ -82,12 +85,10 @@ QPushButton - Special case, tabbar replacement buttons
 #btnSignMessage:hover:checked,
 #btnVerifyMessage:hover:checked {
     border: none;
-    color: red;
     border-radius: 0px;
     border-bottom: 3px solid red;
-    background-color:transparent;
+    background-color: #00000000;
     border-color: #333;
-    color: #333;
 }
 
 /* Debug window buttons */
@@ -107,12 +108,10 @@ QPushButton - Special case, tabbar replacement buttons
 #btnSignMessage:hover:!checked,
 #btnVerifyMessage:hover:!checked {
     border: none;
-    color: red;
     border-radius: 0px;
     border-bottom: 3px solid red;
-    background-color:transparent;
+    background-color: #00000000;
     border-color: #047ac2;
-    color: #666;
 }
 
 /* Debug window buttons */
@@ -132,12 +131,10 @@ QPushButton - Special case, tabbar replacement buttons
 #btnSignMessage:checked,
 #btnVerifyMessage:checked {
     border: none;
-    color: red;
     border-radius: 0px;
     border-bottom: 3px solid red;
-    background-color:transparent;
+    background-color: #00000000;
     border-color: #333;
-    color: #333;
 }
 
 /******************************************************
@@ -234,7 +231,7 @@ OverviewPage
 QWidget .QFrame#frame .QLabel#labelWalletStatus, /* Wallet Sync Status */
 QWidget .QFrame#framePrivateSend .QLabel#labelPrivateSendSyncStatus, /* PrivateSend Sync Status */
 QWidget .QFrame#frame_2 .QLabel#labelTransactionsStatus { /* Recent Transactions Sync Status */
-    color: red;
+    color: #a84832;
 }
 
 /******************************************************
@@ -247,5 +244,5 @@ QDialog#SendCoinsDialog QLabel#labelBalance {
 }
 
 QDialog#SendCoinsDialog .QFrame#frameCoinControl .QLabel#labelCoinControlInsuffFunds { /* Insufficient Funds Label */
-    color: red;
+    color: #a84832;
 }
