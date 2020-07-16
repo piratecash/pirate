@@ -61,6 +61,7 @@ bool AddWallet(CWallet* wallet)
     std::vector<CWallet*>::const_iterator i = std::find(vpwallets.begin(), vpwallets.end(), wallet);
     if (i != vpwallets.end()) return false;
     vpwallets.push_back(wallet);
+    privateSendClientManagers.emplace(std::make_pair(wallet->GetName(), new CPrivateSendClientManager()));
     return true;
 }
 
@@ -71,6 +72,10 @@ bool RemoveWallet(CWallet* wallet)
     std::vector<CWallet*>::iterator i = std::find(vpwallets.begin(), vpwallets.end(), wallet);
     if (i == vpwallets.end()) return false;
     vpwallets.erase(i);
+    auto it = privateSendClientManagers.find(wallet->GetName());
+    delete it->second;
+    it->second = nullptr;
+    privateSendClientManagers.erase(it);
     return true;
 }
 
@@ -4696,7 +4701,7 @@ bool CWallet::NewKeyPool()
             batch.ErasePool(nIndex);
         }
         setExternalKeyPool.clear();
-        privateSendClientManager.StopMixing();
+        privateSendClientManagers.at(GetName())->StopMixing();
         nKeysLeftSinceAutoBackup = 0;
 
         m_pool_key_to_index.clear();
