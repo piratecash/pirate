@@ -121,6 +121,8 @@ private:
 
     CKeyHolderStorage keyHolderStorage; // storage for keys used in PrepareDenominate
 
+    CWallet* mixingWallet;
+
     /// Create denominations
     bool CreateDenominated(CAmount nBalanceToDenominate, CConnman& connman);
     bool CreateDenominated(CAmount nBalanceToDenominate, const CompactTallyItem& tallyItem, bool fCreateMixingCollaterals, CConnman& connman);
@@ -156,14 +158,15 @@ private:
     void SetNull();
 
 public:
-    CPrivateSendClientSession() :
+    CPrivateSendClientSession(CWallet* pwallet) :
         vecOutPointLocked(),
         strLastMessage(),
         strAutoDenomResult(),
         mixingMasternode(),
         txMyCollateral(),
         pendingDsaRequest(),
-        keyHolderStorage()
+        keyHolderStorage(),
+        mixingWallet(pwallet)
     {
     }
 
@@ -176,7 +179,6 @@ public:
     std::string GetStatus(bool fWaitForBlock);
 
     bool GetMixingMasternodeInfo(CDeterministicMNCPtr& ret) const;
-    CWallet* GetMixingWallet() const;
 
     /// Passively run mixing in the background according to the configuration in settings
     bool DoAutomaticDenominating(CConnman& connman, bool fDryRun = false);
@@ -255,8 +257,6 @@ public:
     std::string GetSessionDenoms();
 
     bool GetMixingMasternodesInfo(std::vector<CDeterministicMNCPtr>& vecDmnsRet) const;
-
-    CWallet* GetMixingWallet() const;
 
     /// Passively run mixing in the background according to the configuration in settings
     bool DoAutomaticDenominating(CConnman& connman, bool fDryRun = false);
