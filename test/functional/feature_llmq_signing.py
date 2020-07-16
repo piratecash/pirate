@@ -11,7 +11,7 @@ from test_framework.test_framework import CosantaTestFramework
 from test_framework.util import *
 
 '''
-llmq-signing.py
+feature_llmq_signing.py
 
 Checks LLMQs signing sessions
 

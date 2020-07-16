@@ -10,7 +10,7 @@ from test_framework.test_framework import CosantaTestFramework
 from test_framework.util import *
 
 '''
-llmq-simplepose.py
+feature_llmq_simplepose.py
 
 Checks simple PoSe system based on LLMQ commitments
 

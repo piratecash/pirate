@@ -11,7 +11,7 @@ from test_framework.test_framework import CosantaTestFramework
 from test_framework.util import *
 
 '''
-llmq-chainlocks.py
+feature_llmq_chainlocks.py
 
 Checks LLMQs based ChainLocks
 

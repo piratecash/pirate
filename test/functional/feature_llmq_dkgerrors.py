@@ -7,7 +7,7 @@
 from test_framework.test_framework import CosantaTestFramework
 
 '''
-llmq-dkgerrors.py
+feature_llmq_dkgerrors.py
 
 Simulate and check DKG errors
 
