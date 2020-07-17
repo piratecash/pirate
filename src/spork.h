@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2019 The Dash Core developers
+// Copyright (c) 2014-2021 The Dash Core developers
 // Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -31,6 +31,7 @@ enum SporkId : int32_t {
     SPORK_19_CHAINLOCKS_ENABLED                            = 10018,
     SPORK_20_INSTANTSEND_LLMQ_BASED                        = 10019,
     SPORK_21_QUORUM_ALL_CONNECTED                          = 10020,
+    SPORK_22_PS_MORE_PARTICIPANTS                          = 10021,
     SPORK_23_QUORUM_POSE                                   = 10022,
     SPORK_31_FIRST_POS_BLOCK                               = 60001,
     SPORK_32_FIRST_POS_V2_BLOCK                            = 60002,
