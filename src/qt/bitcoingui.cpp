@@ -130,8 +130,6 @@ BitcoinGUI::BitcoinGUI(const NetworkStyle* networkStyle, QWidget* parent) :
     prevBlocks(0),
     spinnerFrame(0)
 {
-    GUIUtil::loadStyleSheet(this);
-
     QSettings settings;
     if (!restoreGeometry(settings.value("MainWindowGeometry").toByteArray())) {
         // Restore failed (perhaps missing setting), center the window
@@ -894,6 +892,7 @@ void BitcoinGUI::optionsClicked()
 
     OptionsDialog dlg(this, enableWallet);
     dlg.setModel(clientModel->getOptionsModel());
+    connect(&dlg, &OptionsDialog::themeChanged, [=]() { GUIUtil::loadTheme(); });
     dlg.exec();
 }
 
