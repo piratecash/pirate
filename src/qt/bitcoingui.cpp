@@ -234,6 +234,7 @@ BitcoinGUI::BitcoinGUI(interface::Node& node, const NetworkStyle* networkStyle, 
     // Progress bar and label for blocks download
     progressBarLabel = new QLabel();
     progressBarLabel->setVisible(true);
+    progressBarLabel->setObjectName("lblStatusBarProgress");
     progressBar = new GUIUtil::ProgressBar();
     progressBar->setAlignment(Qt::AlignCenter);
     progressBar->setVisible(true);
