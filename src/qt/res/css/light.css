@@ -216,6 +216,7 @@ QPushButton - Special case, tabbar replacement buttons
 #btnNetwork,
 #btnWindow,
 #btnDisplay,
+#btnAppearance,
 /* Sign/Verify dialog buttons */
 #btnSignMessage,
 #btnVerifyMessage {
@@ -235,6 +236,7 @@ QPushButton - Special case, tabbar replacement buttons
 #btnNetwork:hover:checked,
 #btnWindow:hover:checked,
 #btnDisplay:hover:checked,
+#btnAppearance:hover:checked,
 /* Sign/Verify dialog buttons */
 #btnSignMessage:hover:checked,
 #btnVerifyMessage:hover:checked {
@@ -254,6 +256,7 @@ QPushButton - Special case, tabbar replacement buttons
 #btnNetwork:hover:!checked,
 #btnWindow:hover:!checked,
 #btnDisplay:hover:!checked,
+#btnAppearance:hover:!checked,
 /* Sign/Verify dialog buttons */
 #btnSignMessage:hover:!checked,
 #btnVerifyMessage:hover:!checked {
@@ -273,6 +276,7 @@ QPushButton - Special case, tabbar replacement buttons
 #btnNetwork:checked,
 #btnWindow:checked,
 #btnDisplay:checked,
+#btnAppearance:checked,
 /* Sign/Verify dialog buttons */
 #btnSignMessage:checked,
 #btnVerifyMessage:checked {
@@ -413,6 +417,20 @@ AddressBookPage
 QWidget#AddressBookPage {
     background-color: #f6f6f6;
 }
+
+/******************************************************
+AppearanceSetup
+******************************************************/
+
+QDialog#AppearanceSetup > QFrame {
+    border-color: #dcdcdc;
+}
+
+/******************************************************
+AppearanceWidget
+******************************************************/
+
+/***** No light.css specific coloring here yet *****/
 
 /******************************************************
 AskPassphraseDialog
