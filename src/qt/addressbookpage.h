@@ -10,7 +10,6 @@
 
 class AddressBookSortFilterProxyModel;
 class AddressTableModel;
-class PlatformStyle;
 
 namespace Ui {
     class AddressBookPage;
@@ -39,7 +38,7 @@ public:
         ForEditing  /**< Open address book for editing */
     };
 
-    explicit AddressBookPage(const PlatformStyle *platformStyle, Mode mode, Tabs tab, QWidget *parent);
+    explicit AddressBookPage(Mode mode, Tabs tab, QWidget* parent);
     ~AddressBookPage();
 
     void setModel(AddressTableModel *model);
