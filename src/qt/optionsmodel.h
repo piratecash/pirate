@@ -95,7 +95,7 @@ public:
     /* Restart flag helper */
     void setRestartRequired(bool fRequired);
     bool isRestartRequired() const;
-    bool resetSettings;
+    bool resetSettingsOnShutdown{false};
 
     interfaces::Node& node() const { return m_node; }
 
