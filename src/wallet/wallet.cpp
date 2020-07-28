@@ -4457,8 +4457,6 @@ DBErrors CWallet::LoadWallet(bool& fFirstRunRet)
     if (nLoadWalletRet != DBErrors::LOAD_OK)
         return nLoadWalletRet;
 
-    uiInterface.LoadWallet(this);
-
     return DBErrors::LOAD_OK;
 }
 
@@ -5544,6 +5542,7 @@ std::shared_ptr<CWallet> CWallet::CreateWalletFromFile(const std::string& name, 
             if (!reserver.reserve()) {
                 return error(_("Failed to rescan the wallet during initialization"));
             }
+            uiInterface.LoadWallet(walletInstance); // TODO: move it up when backporting 13063
             walletInstance->ScanForWalletTransactions(pindexRescan, nullptr, reserver, true);
         }
         LogPrintf(" rescan      %15dms\n", GetTimeMillis() - nStart);
