@@ -154,9 +154,9 @@ namespace GUIUtil
 
     // Open debug.log
     void openDebugLogfile();
-	
+
     // Open cosanta.conf
-    void openConfigfile();	
+    void openConfigfile();
 
     // Browse backup folder
     void showBackups();

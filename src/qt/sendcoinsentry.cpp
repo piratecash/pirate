@@ -38,10 +38,10 @@ SendCoinsEntry::SendCoinsEntry(const PlatformStyle *_platformStyle, QWidget *par
     ui->deleteButton->setIcon(QIcon(":/icons/remove"));
     ui->deleteButton_is->setIcon(QIcon(":/icons/remove"));
     ui->deleteButton_s->setIcon(QIcon(":/icons/remove"));
-      
-    // normal cosanta addressg field
-    GUIUtil::setupAddressWidget(ui->payTo, this);
-    // just a label for displaying cosanta addressg(es)
+
+    // normal cosanta address field
+    GUIUtil::setupAddressWidget(ui->payTo, this, true);
+    // just a label for displaying cosanta address(es)
     ui->payTo_is->setFont(GUIUtil::fixedPitchFont());
 
     // Connect signals
