@@ -593,7 +593,7 @@ public:
         consensus.BIP65Height = 2431; // 00000073c09c20fe2ad2b2d17fb71a87b9f97d8dfee9bc75a51c8cf7c3b04127
         consensus.BIP66Height = 2075; // 00000071708936a4853ff8d2da260c9b3dc23ed99f72324ddf4a20c320bb4b68
         consensus.DIP0001Height = 5500;
-        consensus.DIP0003Height = 300;
+        consensus.DIP0003Height = 7000;
         consensus.DIP0003EnforcementHeight = 7300;
         consensus.DIP0003EnforcementHash = uint256();
         consensus.DIP0008Height = 300; // 000000000e9329d964d80e7dab2e704b43b6bd2b91fea1e9315d38932e55fb55
