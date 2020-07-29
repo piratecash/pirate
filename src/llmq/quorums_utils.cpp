@@ -185,7 +185,7 @@ void CLLMQUtils::EnsureQuorumConnections(Consensus::LLMQType llmqType, const CBl
                     debugMsg += strprintf("  %s (%s)\n", c.ToString(), dmn->pdmnState->addr.ToString(false));
                 }
             }
-            LogPrint(BCLog::NET_NETCONN, debugMsg.c_str());
+            LogPrint(BCLog::NET_NETCONN, debugMsg.c_str()); /* Continued */
         }
         g_connman->AddMasternodeQuorumNodes(llmqType, pindexQuorum->GetBlockHash(), connections);
     }
@@ -221,7 +221,7 @@ void CLLMQUtils::AddQuorumProbeConnections(Consensus::LLMQType llmqType, const C
                     debugMsg += strprintf("  %s (%s)\n", c.ToString(), dmn->pdmnState->addr.ToString(false));
                 }
             }
-            LogPrint(BCLog::NET_NETCONN, debugMsg.c_str());
+            LogPrint(BCLog::NET_NETCONN, debugMsg.c_str()); /* Continued */
         }
         g_connman->AddPendingProbeConnections(probeConnections);
     }
