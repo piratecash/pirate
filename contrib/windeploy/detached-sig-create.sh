@@ -9,7 +9,7 @@ if [ -z "$OSSLSIGNCODE" ]; then
   OSSLSIGNCODE=osslsigncode
 fi
 
-if [ ! -n "$1" ]; then
+if [ -z "$1" ]; then
   echo "usage: $0 <osslcodesign args>"
   echo "example: $0 -key codesign.key"
   exit 1
