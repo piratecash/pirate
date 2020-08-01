@@ -189,7 +189,7 @@ private:
  * The quorum manager maintains quorums which were mined on chain. When a quorum is requested from the manager,
  * it will lookup the commitment (through CQuorumBlockProcessor) and build a CQuorum object from it.
  *
- * It is also responsible for initialization of the inter-quorum connections for new quorums.
+ * It is also responsible for initialization of the intra-quorum connections for new quorums.
  */
 class CQuorumManager
 {
