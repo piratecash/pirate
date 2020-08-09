@@ -188,9 +188,7 @@ CSigSharesManager::CSigSharesManager()
     workInterrupt.reset();
 }
 
-CSigSharesManager::~CSigSharesManager()
-{
-}
+CSigSharesManager::~CSigSharesManager() = default;
 
 void CSigSharesManager::StartWorkerThread()
 {
@@ -556,8 +554,8 @@ bool CSigSharesManager::PreVerifyBatchedSigShares(NodeId nodeId, const CSigShare
 
     std::unordered_set<uint16_t> dupMembers;
 
-    for (size_t i = 0; i < batchedSigShares.sigShares.size(); i++) {
-        auto quorumMember = batchedSigShares.sigShares[i].first;
+    for (const auto& sigShare : batchedSigShares.sigShares) {
+        auto quorumMember = sigShare.first;
         if (!dupMembers.emplace(quorumMember).second) {
             retBan = true;
             return false;
