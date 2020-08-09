@@ -6,7 +6,6 @@
 #include <evo/cbtx.h>
 #include <core_io.h>
 #include <evo/deterministicmns.h>
-#include <llmq/quorums.h>
 #include <llmq/quorums_blockprocessor.h>
 #include <llmq/quorums_commitment.h>
 #include <evo/simplifiedmns.h>
@@ -89,13 +88,9 @@ uint256 CSimplifiedMNList::CalcMerkleRoot(bool* pmutated) const
     return ComputeMerkleRoot(leaves, pmutated);
 }
 
-CSimplifiedMNListDiff::CSimplifiedMNListDiff()
-{
-}
+CSimplifiedMNListDiff::CSimplifiedMNListDiff() = default;
 
-CSimplifiedMNListDiff::~CSimplifiedMNListDiff()
-{
-}
+CSimplifiedMNListDiff::~CSimplifiedMNListDiff() = default;
 
 bool CSimplifiedMNListDiff::BuildQuorumsDiff(const CBlockIndex* baseBlockIndex, const CBlockIndex* blockIndex)
 {
