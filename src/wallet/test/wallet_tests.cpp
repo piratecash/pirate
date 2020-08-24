@@ -169,7 +169,6 @@ BOOST_FIXTURE_TEST_CASE(importwallet_rescan, TestChain100Setup)
             bool expected = i >= 100;
             BOOST_CHECK_EQUAL(found, expected);
         }
-        RemoveWallet(&wallet);
     }
 
     SetMockTime(0);
