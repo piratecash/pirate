@@ -352,7 +352,7 @@ public:
     bool CheckSignature(const CBLSPublicKey& blsPubKey) const;
 
     void SetConfirmedHeight(int nConfirmedHeightIn) { nConfirmedHeight = nConfirmedHeightIn; }
-    bool IsExpired(const CBlockIndex* pindex);
+    bool IsExpired(const CBlockIndex* pindex) const;
     bool IsValidStructure();
 };
 
@@ -419,8 +419,8 @@ class CPrivateSend
 {
 private:
     // make constructor, destructor and copying not available
-    CPrivateSend() {}
-    ~CPrivateSend() {}
+    CPrivateSend() = default;
+    ~CPrivateSend() = default;
     CPrivateSend(CPrivateSend const&) = delete;
     CPrivateSend& operator=(CPrivateSend const&) = delete;
 

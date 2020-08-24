@@ -330,7 +330,7 @@ std::string CPrivateSendClientSession::GetStatus(bool fWaitForBlock)
 {
     static int nStatusMessageProgress = 0;
     nStatusMessageProgress += 10;
-    std::string strSuffix = "";
+    std::string strSuffix;
 
     if (fWaitForBlock || !masternodeSync.IsBlockchainSynced()) {
         return strAutoDenomResult;
@@ -720,7 +720,7 @@ void CPrivateSendClientManager::UpdatedSuccessBlock()
     nCachedLastSuccessBlock = nCachedBlockHeight;
 }
 
-bool CPrivateSendClientManager::WaitForAnotherBlock()
+bool CPrivateSendClientManager::WaitForAnotherBlock() const
 {
     if (!masternodeSync.IsBlockchainSynced()) return true;
 
@@ -1471,7 +1471,7 @@ bool CPrivateSendClientSession::MakeCollateralAmounts(const CompactTallyItem& ta
     CWalletTx wtx;
     CAmount nFeeRet = 0;
     int nChangePosRet = -1;
-    std::string strFail = "";
+    std::string strFail;
     std::vector<CRecipient> vecSend;
 
     // make our collateral address
@@ -1756,7 +1756,7 @@ bool CPrivateSendClientSession::CreateDenominated(CAmount nBalanceToDenominate, 
     CWalletTx wtx;
     CAmount nFeeRet = 0;
     int nChangePosRet = -1;
-    std::string strFail = "";
+    std::string strFail;
     // make our change address
     CReserveKey reservekeyChange(mixingWallet);
 
