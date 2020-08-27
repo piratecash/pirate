@@ -17,7 +17,6 @@
 #include <qt/utilitydialog.h>
 #include <qt/walletmodel.h>
 
-#include <masternode/masternode-sync.h>
 #include <privatesend/privatesend-client.h>
 
 #include <QAbstractItemDelegate>
@@ -354,7 +353,7 @@ void OverviewPage::showOutOfSyncWarning(bool fShow)
 
 void OverviewPage::updatePrivateSendProgress()
 {
-    if(!masternodeSync.IsBlockchainSynced() || ShutdownRequested()) return;
+    if(!clientModel->masternodeSync().isBlockchainSynced() || ShutdownRequested()) return;
 
     if(!walletModel) return;
 
@@ -476,7 +475,7 @@ void OverviewPage::updateAdvancedPSUI(bool fShowAdvancedPSUI) {
 
 void OverviewPage::privateSendStatus(bool fForce)
 {
-    if (!fForce && (!masternodeSync.IsBlockchainSynced() || ShutdownRequested())) return;
+    if (!fForce && (!clientModel->masternode().isBlockchainSynced() || ShutdownRequested())) return;
 
     if(!walletModel) return;
 
