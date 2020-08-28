@@ -22,8 +22,6 @@
 #include <wallet/fees.h>
 #include <wallet/wallet.h>
 
-#include <privatesend/privatesend-client.h>
-
 #include <QApplication>
 #include <QCheckBox>
 #include <QCursor>
@@ -693,7 +691,7 @@ void CoinControlDialog::updateView()
     ui->radioTreeMode->setVisible(fNormalMode);
     ui->radioListMode->setVisible(fNormalMode);
 
-    if (!CPrivateSendClientOptions::IsEnabled()) {
+    if (!model->node().privateSendOptions().isEnabled()) {
         fHideAdditional = false;
         ui->hideButton->setVisible(false);
     }
@@ -759,7 +757,7 @@ void CoinControlDialog::updateView()
             const interface::WalletTxOut& out = std::get<1>(outpair);
             bool fFullyMixed{false};
             CAmount nAmount = out.txout.nValue;
-            bool fPrivateSendAmount = CPrivateSend::IsDenominatedAmount(nAmount) || CPrivateSend::IsCollateralAmount(nAmount);
+            bool fPrivateSendAmount = model->node().privateSendOptions().isDenominated(nAmount) || model->node().privateSendOptions().isCollateralAmount(nAmount);
 
             if (coinControl()->IsUsingPrivateSend()) {
                 fFullyMixed = model->isFullyMixed(output);
