@@ -7,6 +7,7 @@
 #include <qt/guiutil.h>
 #include <init.h>
 #include <netbase.h>
+#include <validation.h>
 #include <qt/walletmodel.h>
 
 #include <univalue.h>

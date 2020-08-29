@@ -50,10 +50,10 @@ private:
     Ui::OverviewPage *ui;
     ClientModel *clientModel;
     WalletModel *walletModel;
+    interfaces::WalletBalances m_balances;
     int nDisplayUnit;
     bool fShowAdvancedPSUI;
     int cachedNumISLocks;
-    interface::WalletBalances m_balances;
 
     TxViewDelegate *txdelegate;
     std::unique_ptr<TransactionFilterProxy> filter;

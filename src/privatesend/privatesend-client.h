@@ -8,8 +8,6 @@
 
 #include <privatesend/privatesend-util.h>
 #include <privatesend/privatesend.h>
-#include <wallet/wallet.h>
-
 #include <evo/deterministicmns.h>
 
 class CPrivateSendClientOptions;
