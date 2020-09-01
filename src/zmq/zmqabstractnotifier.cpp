@@ -6,6 +6,7 @@
 #include <zmq/zmqabstractnotifier.h>
 #include <util/system.h>
 
+#include <cassert>
 
 CZMQAbstractNotifier::~CZMQAbstractNotifier()
 {
