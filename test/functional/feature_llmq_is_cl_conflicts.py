@@ -9,7 +9,7 @@ from decimal import Decimal
 from test_framework.blocktools import get_masternode_payment, create_coinbase, create_block
 from test_framework.mininode import *
 from test_framework.test_framework import CosantaTestFramework
-from test_framework.util import assert_raises_rpc_error
+from test_framework.util import assert_raises_rpc_error, get_bip9_status
 
 '''
 feature_llmq_is_cl_conflicts.py
@@ -243,7 +243,11 @@ class LLMQ_IS_CL_Conflicts(CosantaTestFramework):
         coinbasevalue -= bt_fees
         coinbasevalue += new_fees
 
-        mn_amount = get_masternode_payment(height, coinbasevalue)
+        realloc_info = get_bip9_status(self.nodes[0], 'realloc')
+        realloc_height = 99999999
+        if realloc_info['status'] == 'active':
+            realloc_height = realloc_info['since']
+        mn_amount = get_masternode_payment(height, coinbasevalue, realloc_height)
         miner_amount = coinbasevalue - mn_amount
 
         outputs = {miner_address: str(Decimal(miner_amount) / COIN)}
