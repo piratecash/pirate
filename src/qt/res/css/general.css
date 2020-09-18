@@ -622,7 +622,6 @@ QPushButton - Special case, tabbar replacement buttons
 #btnMain,
 #btnWallet,
 #btnNetwork,
-#btnWindow,
 #btnDisplay,
 #btnAppearance,
 /* Sign/Verify dialog buttons */
@@ -645,7 +644,6 @@ QPushButton - Special case, tabbar replacement buttons
 #btnMain:hover:checked,
 #btnWallet:hover:checked,
 #btnNetwork:hover:checked,
-#btnWindow:hover:checked,
 #btnDisplay:hover:checked,
 #btnAppearance:hover:checked,
 /* Sign/Verify dialog buttons */
@@ -668,7 +666,6 @@ QPushButton - Special case, tabbar replacement buttons
 #btnMain:hover:!checked,
 #btnWallet:hover:!checked,
 #btnNetwork:hover:!checked,
-#btnWindow:hover:!checked,
 #btnDisplay:hover:!checked,
 #btnAppearance:hover:!checked,
 /* Sign/Verify dialog buttons */
@@ -691,7 +688,6 @@ QPushButton - Special case, tabbar replacement buttons
 #btnMain:checked,
 #btnWallet:checked,
 #btnNetwork:checked,
-#btnWindow:checked,
 #btnDisplay:checked,
 #btnAppearance:checked,
 /* Sign/Verify dialog buttons */
@@ -713,7 +709,6 @@ QPushButton - Special case, tabbar replacement buttons
 #btnMain:hover:pressed,
 #btnWallet:hover:pressed,
 #btnNetwork:hover:pressed,
-#btnWindow:hover:pressed,
 #btnDisplay:hover:pressed,
 #btnAppearance:hover:pressed,
 /* Sign/Verify dialog buttons */
@@ -1042,17 +1037,6 @@ QDialog#AppearanceSetup > AppearanceWidget {
 AppearanceWidget
 ******************************************************/
 
-AppearanceWidget #lblSmaller,
-AppearanceWidget #lblBigger,
-AppearanceWidget #lblBolderNormal,
-AppearanceWidget #lblBolderBold,
-AppearanceWidget #lblLighterNormal,
-AppearanceWidget #lblLighterBold {
-    /* Exceptional use of font-size here to
-    avoid changes of the slider postions */
-    font-size: 13px;
-}
-
 AppearanceWidget #lblTheme,
 AppearanceWidget #lblFontFamily,
 AppearanceWidget #lblFontScale,
@@ -1072,8 +1056,8 @@ AppearanceWidget #lblFontFamily,
 AppearanceWidget #lblFontScale,
 AppearanceWidget #lblFontWeightNormal,
 AppearanceWidget #lblFontWeightBold {
-    min-width: 170px;
-    max-width: 170px;
+    min-width: 200px;
+    max-width: 200px;
 }
 
 /******************************************************
@@ -1276,6 +1260,7 @@ OptionsDialog
 ******************************************************/
 
 QDialog#OptionsDialog {
+    min-width: 585px;
 }
 
 QDialog#OptionsDialog QValueComboBox,
@@ -1310,6 +1295,11 @@ QDialog#OptionsDialog #frame {
 
 QDialog#OptionsDialog QGroupBox {
     margin-top: 10px;
+}
+
+QDialog#OptionsDialog QCheckBox#connectSocksTor,
+QDialog#OptionsDialog QLabel#overriddenByCommandLineInfoLabel {
+    min-width: 550px;
 }
 
 /******************************************************
