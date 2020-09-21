@@ -23,11 +23,10 @@ class WalletModelTransaction
 {
 public:
     explicit WalletModelTransaction(const QList<SendCoinsRecipient> &recipients);
-    ~WalletModelTransaction();
 
     QList<SendCoinsRecipient> getRecipients() const;
 
-    CWalletTx *getTransaction() const;
+    CTransactionRef& getTransaction();
     unsigned int getTransactionSize();
 
     void setTransactionFee(const CAmount& newFee);
@@ -42,7 +41,7 @@ public:
 
 private:
     QList<SendCoinsRecipient> recipients;
-    CWalletTx *walletTransaction;
+    CTransactionRef walletTransaction;
     std::unique_ptr<CReserveKey> keyChange;
     CAmount fee;
 };

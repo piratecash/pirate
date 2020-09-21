@@ -12,12 +12,6 @@ WalletModelTransaction::WalletModelTransaction(const QList<SendCoinsRecipient> &
     walletTransaction(0),
     fee(0)
 {
-    walletTransaction = new CWalletTx();
-}
-
-WalletModelTransaction::~WalletModelTransaction()
-{
-    delete walletTransaction;
 }
 
 QList<SendCoinsRecipient> WalletModelTransaction::getRecipients() const
@@ -25,14 +19,14 @@ QList<SendCoinsRecipient> WalletModelTransaction::getRecipients() const
     return recipients;
 }
 
-CWalletTx *WalletModelTransaction::getTransaction() const
+CTransactionRef& WalletModelTransaction::getTransaction()
 {
     return walletTransaction;
 }
 
 unsigned int WalletModelTransaction::getTransactionSize()
 {
-    return (!walletTransaction ? 0 : (::GetSerializeSize(*walletTransaction->tx, SER_NETWORK, PROTOCOL_VERSION)));
+    return (!walletTransaction ? 0 : (::GetSerializeSize(*walletTransaction, SER_NETWORK, PROTOCOL_VERSION)));
 }
 
 CAmount WalletModelTransaction::getTransactionFee() const
@@ -62,7 +56,7 @@ void WalletModelTransaction::reassignAmounts()
                 if (out.amount() <= 0) continue;
                 const unsigned char* scriptStr = (const unsigned char*)out.script().data();
                 CScript scriptPubKey(scriptStr, scriptStr+out.script().size());
-                for (const auto& txout : walletTransaction->tx->vout) {
+                for (const auto& txout : walletTransaction->vout) {
                     if (txout.scriptPubKey == scriptPubKey) {
                         subtotal += txout.nValue;
                         break;
@@ -73,7 +67,7 @@ void WalletModelTransaction::reassignAmounts()
         }
         else // normal recipient (no payment request)
         {
-            for (const auto& txout : walletTransaction->tx->vout) {
+            for (const auto& txout : walletTransaction->vout) {
                 CScript scriptPubKey = GetScriptForDestination(DecodeDestination(rcp.address.toStdString()));
                 if (txout.scriptPubKey == scriptPubKey) {
                     rcp.amount = txout.nValue;
