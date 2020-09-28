@@ -42,6 +42,8 @@ foreverHidden(false)
 
     blockProcessTime.clear();
     setVisible(false);
+
+    GUIUtil::updateFonts();
 }
 
 ModalOverlay::~ModalOverlay()

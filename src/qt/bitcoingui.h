@@ -349,6 +349,8 @@ private Q_SLOTS:
     void showModalOverlay();
 
     void updatePrivateSendVisibility();
+
+    void updateWidth();
 };
 
 class UnitDisplayStatusBarControl : public QLabel

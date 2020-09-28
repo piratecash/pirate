@@ -32,8 +32,6 @@ SendCoinsEntry::SendCoinsEntry(QWidget* parent) :
 
     // normal cosanta address field
     GUIUtil::setupAddressWidget(ui->payTo, this, true);
-    // just a label for displaying cosanta address(es)
-    ui->payTo_is->setFont(GUIUtil::fixedPitchFont());
 
     GUIUtil::setFont({ui->payToLabel,
                      ui->labellLabel,
