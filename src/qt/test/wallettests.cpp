@@ -4,6 +4,7 @@
 #include <interfaces/node.h>
 #include <qt/bitcoinamountfield.h>
 #include <qt/callback.h>
+#include <qt/clientmodel.h>
 #include <qt/optionsmodel.h>
 #include <qt/qvalidatedlineedit.h>
 #include <qt/sendcoinsdialog.h>
@@ -140,6 +141,7 @@ void TestGUI()
     TransactionView transactionView;
     auto node = interfaces::MakeNode();
     OptionsModel optionsModel(*node);
+    ClientModel clientModel(*node, &optionsModel);
     WalletModel walletModel(std::move(node->getWallets()[0]), *node, &optionsModel);;
     sendCoinsDialog.setModel(&walletModel);
     transactionView.setModel(&walletModel);
@@ -155,6 +157,7 @@ void TestGUI()
 
     // Check current balance on OverviewPage
     OverviewPage overviewPage;
+    overviewPage.setClientModel(&clientModel);
     overviewPage.setWalletModel(&walletModel);
     QLabel* balanceLabel = overviewPage.findChild<QLabel*>("labelBalance");
     QString balanceText = balanceLabel->text();
