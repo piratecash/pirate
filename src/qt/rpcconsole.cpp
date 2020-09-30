@@ -1317,7 +1317,7 @@ void RPCConsole::changeEvent(QEvent* e)
 {
     if (e->type() == QEvent::StyleChange) {
         clear();
-        ui->promptIcon->setHidden(GUIUtil::dashThemeActive());
+        ui->promptLabel->setHidden(GUIUtil::dashThemeActive());
         // Adjust button icon colors on theme changes
         setButtonIcons();
     }

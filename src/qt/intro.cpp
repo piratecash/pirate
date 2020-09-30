@@ -210,7 +210,7 @@ bool Intro::pickDataDirectory(interfaces::Node& node)
         GUIUtil::disableMacFocusRect(&intro);
         GUIUtil::loadStyleSheet(node, &intro);
         intro.setDataDirectory(dataDirDefaultCurrent);
-        intro.setWindowIcon(QIcon(":icons/bitcoin"));
+        intro.setWindowIcon(QIcon(":icons/cosanta"));
 
         while(true)
         {
