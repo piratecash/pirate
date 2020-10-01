@@ -173,9 +173,9 @@ BITCOIN_CORE_H = \
   indirectmap.h \
   init.h \
   pos_kernel.h \
-  interface/handler.h \
-  interface/node.h \
-  interface/wallet.h \
+  interfaces/handler.h \
+  interfaces/node.h \
+  interfaces/wallet.h \
   key.h \
   keepass.h \
   keystore.h \
@@ -383,7 +383,7 @@ endif
 libcosanta_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 libcosanta_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libcosanta_wallet_a_SOURCES = \
-  interface/wallet.cpp \
+  interfaces/wallet.cpp \
   keepass.cpp \
   pos_kernel.cpp \
   privatesend/privatesend-client.cpp \
@@ -570,8 +570,8 @@ libcosanta_util_a_SOURCES = \
   compat/glibcxx_sanity.cpp \
   compat/strnlen.cpp \
   fs.cpp \
-  interface/handler.cpp \
-  interface/node.cpp \
+  interfaces/handler.cpp \
+  interfaces/node.cpp \
   logging.cpp \
   random.cpp \
   rpc/protocol.cpp \

@@ -13,7 +13,7 @@
 #include <QList>
 #include <QString>
 
-namespace interface {
+namespace interfaces {
 class Node;
 class Wallet;
 struct WalletTx;
@@ -130,7 +130,7 @@ public:
     /** Decompose CWallet transaction to model transaction records.
      */
     static bool showTransaction();
-    static QList<TransactionRecord> decomposeTransaction(const interface::WalletTx& wtx);
+    static QList<TransactionRecord> decomposeTransaction(const interfaces::WalletTx& wtx);
 
     /** @name Immutable transaction attributes
       @{*/
@@ -161,7 +161,7 @@ public:
 
     /** Update status from core wallet tx.
      */
-    void updateStatus(const interface::WalletTxStatus& wtx, int numBlocks, int64_t adjustedTime, int chainLockHeight);
+    void updateStatus(const interfaces::WalletTxStatus& wtx, int numBlocks, int64_t adjustedTime, int chainLockHeight);
 
     /** Return whether a status update is needed.
      */

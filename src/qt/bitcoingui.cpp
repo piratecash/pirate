@@ -33,8 +33,8 @@
 #include <miner.h>
 #include <chainparams.h>
 #include <init.h>
-#include <interface/handler.h>
-#include <interface/node.h>
+#include <interfaces/handler.h>
+#include <interfaces/node.h>
 #include <ui_interface.h>
 #include <util.h>
 #include <qt/masternodelist.h>
@@ -77,7 +77,7 @@ const std::string BitcoinGUI::DEFAULT_UIPLATFORM =
 #endif
         ;
 
-BitcoinGUI::BitcoinGUI(interface::Node& node, const NetworkStyle* networkStyle, QWidget* parent) :
+BitcoinGUI::BitcoinGUI(interfaces::Node& node, const NetworkStyle* networkStyle, QWidget* parent) :
     QMainWindow(parent),
     enableWallet(false),
     m_node(node),

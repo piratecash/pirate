@@ -9,7 +9,7 @@
 #include <qt/guiutil.h>
 #include <qt/walletmodel.h>
 
-#include <interface/node.h>
+#include <interfaces/node.h>
 
 #include <QFont>
 #include <QDebug>
@@ -74,7 +74,7 @@ public:
     AddressTablePriv(AddressTableModel *_parent):
         parent(_parent) {}
 
-    void refreshAddressTable(interface::Wallet& wallet)
+    void refreshAddressTable(interfaces::Wallet& wallet)
     {
         cachedAddressTable.clear();
         {
