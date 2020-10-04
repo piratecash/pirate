@@ -195,6 +195,7 @@ public:
 
     static bool isWalletEnabled();
 
+    int getNumBlocks() const;
     int getNumISLocks() const;
 
     int getRealOutpointPrivateSendRounds(const COutPoint& outpoint) const;
