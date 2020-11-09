@@ -16,7 +16,6 @@
 #include <netmessagemaker.h>
 #include <spork.h>
 #include <validation.h>
-#include <validationinterface.h>
 
 CGovernanceManager governance;
 
@@ -256,8 +255,6 @@ void CGovernanceManager::ProcessMessage(CNode* pfrom, const std::string& strComm
             }
             return;
         }
-        // SEND NOTIFICATION TO SCRIPT/ZMQ
-        GetMainSignals().NotifyGovernanceVote(vote);
     }
 }
 
