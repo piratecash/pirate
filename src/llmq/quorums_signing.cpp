@@ -735,6 +735,8 @@ void CSigningManager::ProcessRecoveredSig(const CRecoveredSig& recoveredSig)
     for (auto& l : listeners) {
         l->HandleNewRecoveredSig(recoveredSig);
     }
+
+    GetMainSignals().NotifyRecoveredSig(recoveredSig);
 }
 
 void CSigningManager::PushReconstructedRecoveredSig(const llmq::CRecoveredSig& recoveredSig)

@@ -37,7 +37,7 @@ protected:
     void NotifyGovernanceVote(const CGovernanceVote& vote) override;
     void NotifyGovernanceObject(const CGovernanceObject& object) override;
     void NotifyInstantSendDoubleSpendAttempt(const CTransaction &currentTx, const CTransaction &previousTx) override;
-
+    void NotifyRecoveredSig(const llmq::CRecoveredSig& sig) override;
 
 private:
     CZMQNotificationInterface();

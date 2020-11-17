@@ -52,6 +52,7 @@ CZMQNotificationInterface* CZMQNotificationInterface::Create()
     factories["pubhashgovernancevote"] = CZMQAbstractNotifier::Create<CZMQPublishHashGovernanceVoteNotifier>;
     factories["pubhashgovernanceobject"] = CZMQAbstractNotifier::Create<CZMQPublishHashGovernanceObjectNotifier>;
     factories["pubhashinstantsenddoublespend"] = CZMQAbstractNotifier::Create<CZMQPublishHashInstantSendDoubleSpendNotifier>;
+    factories["pubhashrecoveredsig"] = CZMQAbstractNotifier::Create<CZMQPublishHashRecoveredSigNotifier>;
     factories["pubrawblock"] = CZMQAbstractNotifier::Create<CZMQPublishRawBlockNotifier>;
     factories["pubrawchainlock"] = CZMQAbstractNotifier::Create<CZMQPublishRawChainLockNotifier>;
     factories["pubrawchainlocksig"] = CZMQAbstractNotifier::Create<CZMQPublishRawChainLockSigNotifier>;
@@ -61,6 +62,7 @@ CZMQNotificationInterface* CZMQNotificationInterface::Create()
     factories["pubrawgovernancevote"] = CZMQAbstractNotifier::Create<CZMQPublishRawGovernanceVoteNotifier>;
     factories["pubrawgovernanceobject"] = CZMQAbstractNotifier::Create<CZMQPublishRawGovernanceObjectNotifier>;
     factories["pubrawinstantsenddoublespend"] = CZMQAbstractNotifier::Create<CZMQPublishRawInstantSendDoubleSpendNotifier>;
+    factories["pubrawrecoveredsig"] = CZMQAbstractNotifier::Create<CZMQPublishRawRecoveredSigNotifier>;
 
     for (const auto& entry : factories)
     {
@@ -276,6 +278,19 @@ void CZMQNotificationInterface::NotifyInstantSendDoubleSpendAttempt(const CTrans
     for (auto it = notifiers.begin(); it != notifiers.end();) {
         CZMQAbstractNotifier *notifier = *it;
         if (notifier->NotifyInstantSendDoubleSpendAttempt(currentTx, previousTx)) {
+            ++it;
+        } else {
+            notifier->Shutdown();
+            it = notifiers.erase(it);
+        }
+    }
+}
+
+void CZMQNotificationInterface::NotifyRecoveredSig(const llmq::CRecoveredSig& sig)
+{
+    for (auto it = notifiers.begin(); it != notifiers.end();) {
+        CZMQAbstractNotifier *notifier = *it;
+        if (notifier->NotifyRecoveredSig(sig)) {
             ++it;
         } else {
             notifier->Shutdown();
