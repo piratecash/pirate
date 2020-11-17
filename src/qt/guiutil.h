@@ -32,6 +32,7 @@ class Node;
 QT_BEGIN_NAMESPACE
 class QAbstractButton;
 class QAbstractItemView;
+class QButtonGroup;
 class QDateTime;
 class QFont;
 class QLineEdit;
@@ -375,6 +376,9 @@ namespace GUIUtil
 
     /** Enable/Disable the macOS focus rects depending on the current theme. */
     void updateMacFocusRects();
+
+    /** Update shortcuts for individual buttons in QButtonGroup based on their visibility. */
+    void updateButtonGroupShortcuts(QButtonGroup* buttonGroup);
 
     /* Convert QString to OS specific boost path through UTF-8 */
     fs::path qstringToBoostPath(const QString &path);

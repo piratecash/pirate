@@ -46,6 +46,7 @@
 #include <QAbstractButton>
 #include <QAbstractItemView>
 #include <QApplication>
+#include <QButtonGroup>
 #include <QClipboard>
 #include <QDateTime>
 #include <QDebug>
@@ -1789,6 +1790,26 @@ void updateMacFocusRects()
         }
     }
 #endif
+}
+
+void updateButtonGroupShortcuts(QButtonGroup* buttonGroup)
+{
+    if (buttonGroup == nullptr) {
+        return;
+    }
+#ifdef Q_OS_MAC
+    auto modifier = Qt::CTRL;
+#else
+    auto modifier = Qt::ALT;
+#endif
+    int nKey = 0;
+    for (auto button : buttonGroup->buttons()) {
+        if (button->isVisible()) {
+            button->setShortcut(QKeySequence(modifier + Qt::Key_1 + nKey++));
+        } else {
+            button->setShortcut(QKeySequence());
+        }
+    }
 }
 
 void setClipboard(const QString& str)

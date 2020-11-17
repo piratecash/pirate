@@ -44,6 +44,7 @@ class Node;
 
 QT_BEGIN_NAMESPACE
 class QAction;
+class QButtonGroup;
 class QComboBox;
 class QProgressBar;
 class QProgressDialog;
@@ -211,8 +212,6 @@ private:
     void updateHeadersSyncProgressLabel();
 
     void updateProgressBarVisibility();
-
-    void updateToolBarShortcuts();
 
 Q_SIGNALS:
     /** Signal raised when a URI was entered or dragged to the GUI */
