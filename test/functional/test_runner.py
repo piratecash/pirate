@@ -164,6 +164,7 @@ BASE_SCRIPTS= [
     'rpc_mnauth.py',
     'rpc_verifyislock.py',
     'p2p_fingerprint.py',
+    'rpc_platform_filter.py',
     'feature_uacomment.py',
     'p2p_unrequested_blocks.py',
     'feature_logging.py',
