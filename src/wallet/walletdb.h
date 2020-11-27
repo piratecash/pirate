@@ -38,6 +38,7 @@ static const bool DEFAULT_FLUSHWALLET = true;
 class CAccount;
 class CAccountingEntry;
 struct CBlockLocator;
+class CGovernanceObject;
 class CKeyPool;
 class CMasterKey;
 class CScript;
@@ -167,6 +168,9 @@ public:
 
     bool ReadPrivateSendSalt(uint256& salt);
     bool WritePrivateSendSalt(const uint256& salt);
+
+    /** Write a CGovernanceObject to the database */
+    bool WriteGovernanceObject(const CGovernanceObject& obj);
 
     /// Write destination data key,value tuple to database
     bool WriteDestData(const std::string &address, const std::string &key, const std::string &value);
