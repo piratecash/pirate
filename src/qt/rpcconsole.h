@@ -101,7 +101,8 @@ public Q_SLOTS:
 
     /** Wallet repair options */
     void walletSalvage();
-    void walletRescan();
+    void walletRescan1();
+    void walletRescan2();
     void walletZaptxes1();
     void walletZaptxes2();
     void walletUpgrade();
