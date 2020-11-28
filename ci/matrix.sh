@@ -55,19 +55,13 @@ elif [ "$BUILD_TARGET" = "win64" ]; then
   export DIRECT_WINE_EXEC_TESTS=true
 elif [ "$BUILD_TARGET" = "linux32" ]; then
   export HOST=i686-pc-linux-gnu
-  export BITCOIN_CONFIG="--enable-zmq --enable-glibc-back-compat --enable-reduce-exports --enable-stacktraces LDFLAGS=-static-libstdc++"
+  export BITCOIN_CONFIG="--enable-zmq --enable-glibc-back-compat --enable-reduce-exports --enable-crash-hooks LDFLAGS=-static-libstdc++"
   export USE_SHELL="/bin/cosanta"
   export PYZMQ=true
 elif [ "$BUILD_TARGET" = "linux64" ]; then
   export HOST=x86_64-unknown-linux-gnu
   export DEP_OPTS="NO_UPNP=1 DEBUG=1"
-  export BITCOIN_CONFIG="--enable-zmq --enable-glibc-back-compat --enable-reduce-exports --enable-stacktraces"
-  export CPPFLAGS="-DDEBUG_LOCKORDER -DENABLE_COSANTA_DEBUG"
-  export PYZMQ=true
-elif [ "$BUILD_TARGET" = "linux64_cxx17" ]; then
-  export HOST=x86_64-unknown-linux-gnu
-  export DEP_OPTS="NO_UPNP=1 DEBUG=1"
-  export BITCOIN_CONFIG="--enable-zmq --enable-glibc-back-compat --enable-reduce-exports --enable-crash-hooks --enable-c++17 --enable-suppress-external-warnings --enable-werror --with-sanitizers=undefined"
+  export BITCOIN_CONFIG="--enable-zmq --enable-glibc-back-compat --enable-reduce-exports --enable-crash-hooks"
   export CPPFLAGS="-DDEBUG_LOCKORDER -DENABLE_DASH_DEBUG -DARENA_DEBUG"
   export PYZMQ=true
   export RUN_INTEGRATIONTESTS=false
