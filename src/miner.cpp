@@ -204,9 +204,9 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(
                         ? nMedianTimePast
                         : pblock->GetBlockTime();
         if (fDIP0003Active_context) {
-            for (auto& p : chainparams.GetConsensus().llmqs) {
+            for (const Consensus::LLMQType& type : llmq::CLLMQUtils::GetEnabledQuorumTypes(pindexPrev)) {
                 CTransactionRef qcTx;
-                if (llmq::quorumBlockProcessor->GetMinableCommitmentTx(p.first, nHeight, qcTx)) {
+                if (llmq::quorumBlockProcessor->GetMinableCommitmentTx(type, nHeight, qcTx)) {
                     pblock->vtx.emplace_back(qcTx);
                     pblocktemplate->vTxFees.emplace_back(0);
                     pblocktemplate->vTxSigOps.emplace_back(0);
