@@ -31,7 +31,6 @@ enum SporkId : int32_t {
     SPORK_19_CHAINLOCKS_ENABLED                            = 10018,
     SPORK_20_INSTANTSEND_LLMQ_BASED                        = 10019,
     SPORK_21_QUORUM_ALL_CONNECTED                          = 10020,
-    SPORK_22_PS_MORE_PARTICIPANTS                          = 10021,
     SPORK_23_QUORUM_POSE                                   = 10022,
     SPORK_31_FIRST_POS_BLOCK                               = 60001,
     SPORK_32_FIRST_POS_V2_BLOCK                            = 60002,

@@ -543,9 +543,7 @@ public:
         nLLMQConnectionRetryTimeout = 60;
 
         nPoolMinParticipants = 3;
-        nPoolNewMinParticipants = 3;
-        nPoolMaxParticipants = 5;
-        nPoolNewMaxParticipants = 20;
+        nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 60*60; // fulfilled requests expire in 1 hour
 
         vSporkAddresses = {"CPU5ip4oDKkmcSfbZkmeXnMq5aTQUSRtwz"};
@@ -738,10 +736,8 @@ public:
         fAllowMultiplePorts = true;
         nLLMQConnectionRetryTimeout = 60;
 
-        nPoolMinParticipants = 3;
-        nPoolNewMinParticipants = 2;
-        nPoolMaxParticipants = 5;
-        nPoolNewMaxParticipants = 20;
+        nPoolMinParticipants = 2;
+        nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 5*60; // fulfilled requests expire in 5 minutes
 
         vSporkAddresses = {"certvWMfGR8ahresKNppg8LZf84kmXUiZy"};
@@ -933,10 +929,8 @@ public:
         fAllowMultiplePorts = true;
         nLLMQConnectionRetryTimeout = 60;
 
-        nPoolMinParticipants = 3;
-        nPoolNewMinParticipants = 2;
-        nPoolMaxParticipants = 5;
-        nPoolNewMaxParticipants = 20;
+        nPoolMinParticipants = 2;
+        nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 5*60; // fulfilled requests expire in 5 minutes
 
         vSporkAddresses = {"oRg7XeNysTv1djHe21x4DNe2kuGCpkwxvC"};
@@ -1075,9 +1069,7 @@ public:
 
         nFulfilledRequestExpireTime = 5*60; // fulfilled requests expire in 5 minutes
         nPoolMinParticipants = 2;
-        nPoolNewMinParticipants = 2;
-        nPoolMaxParticipants = 5;
-        nPoolNewMaxParticipants = 20;
+        nPoolMaxParticipants = 20;
 
         vSporkAddresses = {"santaeu6dAf3tren1oTEhgRfuTc8f88nZk"};
         nMinSporkKeys = 1;
