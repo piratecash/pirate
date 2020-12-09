@@ -1304,3 +1304,8 @@ void CGovernanceManager::RemoveInvalidVotes()
     // store current MN list for the next run so that we can determine which keys changed
     lastMNListForVotingKeys = curMNList;
 }
+
+bool AreSuperblocksEnabled()
+{
+    return sporkManager.IsSporkActive(SPORK_9_SUPERBLOCKS_ENABLED);
+}

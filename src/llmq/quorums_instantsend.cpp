@@ -1157,7 +1157,7 @@ void CInstantSendManager::UpdatedBlockTip(const CBlockIndex* pindexNew)
 {
     bool fDIP0008Active = pindexNew->pprev && pindexNew->pprev->nHeight >= Params().GetConsensus().DIP0008Height;
 
-    if (sporkManager.IsSporkActive(SPORK_19_CHAINLOCKS_ENABLED) && fDIP0008Active) {
+    if (AreChainLocksEnabled() && fDIP0008Active) {
         // Nothing to do here. We should keep all islocks and let chainlocks handle them.
         return;
     }
@@ -1537,6 +1537,11 @@ void CInstantSendManager::WorkThreadMain()
 bool IsInstantSendEnabled()
 {
     return sporkManager.IsSporkActive(SPORK_2_INSTANTSEND_ENABLED);
+}
+
+bool RejectConflictingBlocks()
+{
+    return sporkManager.IsSporkActive(SPORK_3_INSTANTSEND_BLOCK_FILTERING);
 }
 
 } // namespace llmq

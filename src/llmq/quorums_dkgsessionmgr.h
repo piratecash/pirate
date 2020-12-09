@@ -75,6 +75,8 @@ private:
     void CleanupCache();
 };
 
+bool IsQuorumDKGEnabled();
+
 extern CDKGSessionManager* quorumDKGSessionManager;
 
 } // namespace llmq
