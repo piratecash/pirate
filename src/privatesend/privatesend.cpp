@@ -65,7 +65,7 @@ bool CPrivateSendQueue::CheckSignature(const CBLSPublicKey& blsPubKey) const
 
     CBLSSignature sig;
     sig.SetBuf(vchSig);
-    if (!sig.IsValid() || !sig.VerifyInsecure(blsPubKey, hash)) {
+    if (!sig.VerifyInsecure(blsPubKey, hash)) {
         LogPrint(BCLog::PRIVATESEND, "CPrivateSendQueue::CheckSignature -- VerifyInsecure() failed\n");
         return false;
     }
@@ -115,7 +115,7 @@ bool CPrivateSendBroadcastTx::CheckSignature(const CBLSPublicKey& blsPubKey) con
 
     CBLSSignature sig;
     sig.SetBuf(vchSig);
-    if (!sig.IsValid() || !sig.VerifyInsecure(blsPubKey, hash)) {
+    if (!sig.VerifyInsecure(blsPubKey, hash)) {
         LogPrint(BCLog::PRIVATESEND, "CPrivateSendBroadcastTx::CheckSignature -- VerifyInsecure() failed\n");
         return false;
     }
