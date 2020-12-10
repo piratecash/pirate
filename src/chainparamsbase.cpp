@@ -25,57 +25,6 @@ void SetupChainParamsBaseOptions()
     gArgs.AddArg("-testnet", "Use the test chain", false, OptionsCategory::CHAINPARAMS);
 }
 
-/**
- * Main network
- */
-class CBaseMainParams : public CBaseChainParams
-{
-public:
-    CBaseMainParams()
-    {
-        nRPCPort = 9606;
-    }
-};
-
-/**
- * Testnet (v3)
- */
-class CBaseTestNetParams : public CBaseChainParams
-{
-public:
-    CBaseTestNetParams()
-    {
-        nRPCPort = 9696;
-        strDataDir = "testnet3";
-    }
-};
-
-/**
- * Devnet
- */
-class CBaseDevNetParams : public CBaseChainParams
-{
-public:
-    CBaseDevNetParams(const std::string &dataDir)
-    {
-        nRPCPort = 9666;
-        strDataDir = dataDir;
-    }
-};
-
-/*
- * Regression test
- */
-class CBaseRegTestParams : public CBaseChainParams
-{
-public:
-    CBaseRegTestParams()
-    {
-        nRPCPort = 9966;
-        strDataDir = "regtest";
-    }
-};
-
 static std::unique_ptr<CBaseChainParams> globalChainBaseParams;
 
 const CBaseChainParams& BaseParams()
@@ -87,13 +36,13 @@ const CBaseChainParams& BaseParams()
 std::unique_ptr<CBaseChainParams> CreateBaseChainParams(const std::string& chain)
 {
     if (chain == CBaseChainParams::MAIN)
-        return std::unique_ptr<CBaseChainParams>(new CBaseMainParams());
+        return MakeUnique<CBaseChainParams>("", 9606);
     else if (chain == CBaseChainParams::TESTNET)
-        return std::unique_ptr<CBaseChainParams>(new CBaseTestNetParams());
-    else if (chain == CBaseChainParams::DEVNET) {
-        return std::unique_ptr<CBaseChainParams>(new CBaseDevNetParams(gArgs.GetDevNetName()));
-    } else if (chain == CBaseChainParams::REGTEST)
-        return std::unique_ptr<CBaseChainParams>(new CBaseRegTestParams());
+        return MakeUnique<CBaseChainParams>("testnet3", 9696);
+    else if (chain == CBaseChainParams::DEVNET)
+        return MakeUnique<CBaseChainParams>(gArgs.GetDevNetName(), 9666);
+    else if (chain == CBaseChainParams::REGTEST)
+        return MakeUnique<CBaseChainParams>("regtest", 9966);
     else
         throw std::runtime_error(strprintf("%s: Unknown chain %s.", __func__, chain));
 }
