@@ -149,7 +149,7 @@ class LLMQChainLocksTest(CosantaTestFramework):
         }
 
         rawtx = node.createrawtransaction(inputs, outputs)
-        rawtx = node.signrawtransaction(rawtx)
+        rawtx = node.signrawtransactionwithwallet(rawtx)
         rawtxid = node.sendrawtransaction(rawtx["hex"])
 
         return [txid, rawtxid]
