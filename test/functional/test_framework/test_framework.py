@@ -537,6 +537,9 @@ class CosantaTestFramework(BitcoinTestFramework):
             for i in range(0, num_nodes):
                 self.extra_args[i].append("-dip3params=30:50")
 
+        # make sure to activate dip8 after prepare_masternodes has finished its job already
+        self.set_dash_dip8_activation(200)
+
         # LLMQ default test params (no need to pass -llmqtestparams)
         self.llmq_size = 3
         self.llmq_threshold = 2
@@ -699,6 +702,11 @@ class CosantaTestFramework(BitcoinTestFramework):
         self.nodes[0].generate(1)
         # sync nodes
         self.sync_all()
+        # Enable InstantSend (including block filtering) and ChainLocks by default
+        self.nodes[0].spork("SPORK_2_INSTANTSEND_ENABLED", 0)
+        self.nodes[0].spork("SPORK_3_INSTANTSEND_BLOCK_FILTERING", 0)
+        self.nodes[0].spork("SPORK_19_CHAINLOCKS_ENABLED", 0)
+        self.wait_for_sporks_same()
         self.bump_mocktime(1)
         set_node_times(self.nodes, self.mocktime)
 
