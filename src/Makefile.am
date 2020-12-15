@@ -212,6 +212,7 @@ BITCOIN_CORE_H = \
   netbase.h \
   netfulfilledman.h \
   netmessagemaker.h \
+  node/coinstats.h \
   noui.h \
   policy/feerate.h \
   policy/fees.h \
@@ -238,6 +239,7 @@ BITCOIN_CORE_H = \
   spork.h \
   stacktraces.h \
   streams.h \
+  statsd_client.h \
   support/allocators/mt_pooled_secure.h \
   support/allocators/pooled_secure.h \
   support/allocators/secure.h \
@@ -340,6 +342,7 @@ libcosanta_server_a_SOURCES = \
   net.cpp \
   netfulfilledman.cpp \
   net_processing.cpp \
+  node/coinstats.cpp \
   noui.cpp \
   policy/fees.cpp \
   policy/policy.cpp \
@@ -362,6 +365,7 @@ libcosanta_server_a_SOURCES = \
   script/sigcache.cpp \
   script/ismine.cpp \
   spork.cpp \
+  statsd_client.cpp \
   timedata.cpp \
   torcontrol.cpp \
   txdb.cpp \
