@@ -252,7 +252,7 @@ UniValue gobject_list_prepared(const JSONRPCRequest& request)
         return NullUniValue;
 
     if (request.fHelp || (request.params.size() > 2)) {
-        gobject_prepare_help(pwallet);
+        gobject_list_prepared_help(pwallet);
     }
 
     EnsureWalletIsUnlocked(pwallet);
