@@ -232,10 +232,10 @@ BITCOIN_CORE_H = \
   rpc/util.h \
   saltedhasher.h \
   scheduler.h \
+  script/ismine.h \
   script/sigcache.h \
   script/sign.h \
   script/standard.h \
-  script/ismine.h \
   spork.h \
   stacktraces.h \
   streams.h \
@@ -362,7 +362,6 @@ libcosanta_server_a_SOURCES = \
   rpc/server.cpp \
   rpc/privatesend.cpp \
   script/sigcache.cpp \
-  script/ismine.cpp \
   spork.cpp \
   statsd_client.cpp \
   timedata.cpp \
@@ -557,6 +556,7 @@ libcosanta_common_a_SOURCES = \
   protocol.cpp \
   saltedhasher.cpp \
   scheduler.cpp \
+  script/ismine.cpp \
   script/sign.cpp \
   script/standard.cpp \
   warnings.cpp \
@@ -623,10 +623,10 @@ endif
 
 cosantad_LDADD = \
   $(LIBBITCOIN_SERVER) \
+  $(LIBBITCOIN_WALLET) \
   $(LIBBITCOIN_COMMON) \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_UTIL) \
-  $(LIBBITCOIN_WALLET) \
   $(LIBBITCOIN_ZMQ) \
   $(LIBBITCOIN_CONSENSUS) \
   $(LIBBITCOIN_CRYPTO) \
