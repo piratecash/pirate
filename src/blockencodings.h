@@ -91,11 +91,11 @@ public:
             while (txn.size() < txn_size) {
                 txn.resize(std::min((uint64_t)(1000 + txn.size()), txn_size));
                 for (; i < txn.size(); i++)
-                    READWRITE(REF(TransactionCompressor(txn[i])));
+                    READWRITE(TransactionCompressor(txn[i]));
             }
         } else {
             for (size_t i = 0; i < txn.size(); i++)
-                READWRITE(REF(TransactionCompressor(txn[i])));
+                READWRITE(TransactionCompressor(txn[i]));
         }
     }
 };
@@ -116,7 +116,7 @@ struct PrefilledTransaction {
         if (idx > std::numeric_limits<uint16_t>::max())
             throw std::ios_base::failure("index overflowed 16-bits");
         index = idx;
-        READWRITE(REF(TransactionCompressor(tx)));
+        READWRITE(TransactionCompressor(tx));
     }
 };
 
