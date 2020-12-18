@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # use testnet settings,  if you need mainnet,  use ~/.cosantacore/cosantad.pid file instead
 export LC_ALL=C
 
