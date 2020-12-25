@@ -120,6 +120,7 @@ BITCOIN_CORE_H = \
   addrman.h \
   base58.h \
   batchedlogger.h \
+  bech32.h \
   bip39.h \
   bip39_english.h \
   blockencodings.h \
@@ -532,6 +533,7 @@ libcosanta_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 libcosanta_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libcosanta_common_a_SOURCES = \
   base58.cpp \
+  bech32.cpp \
   bip39.cpp \
   chainparams.cpp \
   coins.cpp \
