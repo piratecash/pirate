@@ -52,10 +52,7 @@ class LLMQ_IS_CL_Conflicts(CosantaTestFramework):
         #disable_mocktime()
 
     def run_test(self):
-
-        while self.nodes[0].getblockchaininfo()["bip9_softforks"]["dip0008"]["status"] != "active":
-            self.nodes[0].generate(10)
-        self.sync_blocks(self.nodes, timeout=60*5)
+        self.activate_dip8()
 
         self.test_node = TestNode()
         self.test_node.add_connection(NodeConn('127.0.0.1', p2p_port(0), self.nodes[0], self.test_node))
