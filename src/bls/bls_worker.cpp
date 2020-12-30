@@ -64,7 +64,7 @@ void CBLSWorker::Start()
     int workerCount = std::thread::hardware_concurrency() / 2;
     workerCount = std::max(std::min(1, workerCount), 4);
     workerPool.resize(workerCount);
-    RenameThreadPool(workerPool, "cosanta-bls-worker");
+    RenameThreadPool(workerPool, "cosa-bls-work");
 }
 
 void CBLSWorker::Stop()
