@@ -96,9 +96,6 @@ static CMutableTransaction CreateProRegTx(SimpleUTXOMap& utxos, int port, const 
     ownerKeyRet.MakeNewKey(true);
     operatorKeyRet.MakeNewKey();
 
-    CAmount change;
-    auto inputs = SelectUTXOs(utxos, 1000 * COIN, change);
-
     CProRegTx proTx;
     proTx.collateralOutpoint.n = 0;
     proTx.addr = LookupNumeric("1.1.1.1", port);
@@ -120,9 +117,6 @@ static CMutableTransaction CreateProRegTx(SimpleUTXOMap& utxos, int port, const 
 
 static CMutableTransaction CreateProUpServTx(SimpleUTXOMap& utxos, const uint256& proTxHash, const CBLSSecretKey& operatorKey, int port, const CScript& scriptOperatorPayout, const CKey& coinbaseKey)
 {
-    CAmount change;
-    auto inputs = SelectUTXOs(utxos, 1 * COIN, change);
-
     CProUpServTx proTx;
     proTx.proTxHash = proTxHash;
     proTx.addr = LookupNumeric("1.1.1.1", port);
@@ -142,9 +136,6 @@ static CMutableTransaction CreateProUpServTx(SimpleUTXOMap& utxos, const uint256
 
 static CMutableTransaction CreateProUpRegTx(SimpleUTXOMap& utxos, const uint256& proTxHash, const CKey& mnKey, const CBLSPublicKey& pubKeyOperator, const CKeyID& keyIDVoting, const CScript& scriptPayout, const CKey& coinbaseKey)
 {
-    CAmount change;
-    auto inputs = SelectUTXOs(utxos, 1 * COIN, change);
-
     CProUpRegTx proTx;
     proTx.proTxHash = proTxHash;
     proTx.pubKeyOperator = pubKeyOperator;
@@ -165,9 +156,6 @@ static CMutableTransaction CreateProUpRegTx(SimpleUTXOMap& utxos, const uint256&
 
 static CMutableTransaction CreateProUpRevTx(SimpleUTXOMap& utxos, const uint256& proTxHash, const CBLSSecretKey& operatorKey, const CKey& coinbaseKey)
 {
-    CAmount change;
-    auto inputs = SelectUTXOs(utxos, 1 * COIN, change);
-
     CProUpRevTx proTx;
     proTx.proTxHash = proTxHash;
 

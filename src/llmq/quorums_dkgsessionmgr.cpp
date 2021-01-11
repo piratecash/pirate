@@ -49,8 +49,6 @@ void CDKGSessionManager::StopThreads()
 
 void CDKGSessionManager::UpdatedBlockTip(const CBlockIndex* pindexNew, bool fInitialDownload)
 {
-    const auto& consensus = Params().GetConsensus();
-
     CleanupCache();
 
     if (fInitialDownload)
@@ -65,7 +63,7 @@ void CDKGSessionManager::UpdatedBlockTip(const CBlockIndex* pindexNew, bool fIni
     }
 }
 
-void CDKGSessionManager::ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStream& vRecv, CConnman& connman)
+void CDKGSessionManager::ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStream& vRecv)
 {
     if (!sporkManager.IsSporkActive(SPORK_17_QUORUM_DKG_ENABLED))
         return;
@@ -97,7 +95,7 @@ void CDKGSessionManager::ProcessMessage(CNode* pfrom, const std::string& strComm
         return;
     }
 
-    dkgSessionHandlers.at(llmqType).ProcessMessage(pfrom, strCommand, vRecv, connman);
+    dkgSessionHandlers.at(llmqType).ProcessMessage(pfrom, strCommand, vRecv);
 }
 
 bool CDKGSessionManager::AlreadyHave(const CInv& inv) const

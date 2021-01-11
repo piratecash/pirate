@@ -526,11 +526,6 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
     if (IsInitialBlockDownload())
         throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Cosanta Core is downloading blocks...");
 
-    // Get expected MN/superblock payees. The call to GetBlockTxOuts might fail on regtest/devnet or when
-    // testnet is reset. This is fine and we ignore failure (blocks will be accepted)
-    std::vector<CTxOut> voutMasternodePayments;
-    mnpayments.GetBlockTxOuts(chainActive.Height() + 1, 0, voutMasternodePayments);
-
     // next bock is a superblock and we need governance info to correctly construct it
     if (sporkManager.IsSporkActive(SPORK_9_SUPERBLOCKS_ENABLED)
         && !masternodeSync.IsSynced()

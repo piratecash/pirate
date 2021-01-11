@@ -88,7 +88,7 @@ CChainLockSig CChainLocksHandler::GetBestChainLock()
     return bestChainLock;
 }
 
-void CChainLocksHandler::ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStream& vRecv, CConnman& connman)
+void CChainLocksHandler::ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStream& vRecv)
 {
     if (!sporkManager.IsSporkActive(SPORK_19_CHAINLOCKS_ENABLED)) {
         return;
