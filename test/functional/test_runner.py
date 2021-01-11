@@ -159,6 +159,7 @@ BASE_SCRIPTS= [
     'feature_shutdown.py',
     'rpc_privatesend.py',
     'rpc_masternode.py',
+    'rpc_verifyislock.py',
     'p2p_fingerprint.py',
     'feature_uacomment.py',
     'p2p_unrequested_blocks.py',
