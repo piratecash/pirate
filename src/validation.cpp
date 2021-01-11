@@ -5265,7 +5265,7 @@ bool IsPoSV2EnforcedHeight(int nBlockHeight) {
 }
 
 bool IsPowActiveHeight(int nBlockHeight) {
-    uint32_t powHeight = sporkManager.GetSporkValue(SPORK_23_LAST_POW_BLOCK);
+    uint32_t powHeight = sporkManager.GetSporkValue(SPORK_33_LAST_POW_BLOCK);
     if (powHeight != nlastPoWBlock){
         nlastPoWBlock = powHeight; // Temporary workaround and it will be in chainparams
     }
