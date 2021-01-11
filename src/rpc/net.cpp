@@ -439,7 +439,8 @@ UniValue getnetworkinfo(const JSONRPCRequest& request)
             "\nResult:\n"
             "{\n"
             "  \"version\": xxxxx,                      (numeric) the server version\n"
-            "  \"subversion\": \"/Cosanta Core:x.x.x/\",     (string) the server subversion string\n"
+            "  \"buildversion\": \"x.x.x.x-xxx\",         (string) the server build version including RC info or commit as relevant\n"
+            "  \"subversion\": \"/Cosanta Core:x.x.x.x/\",   (string) the server subversion string\n"
             "  \"protocolversion\": xxxxx,              (numeric) the protocol version\n"
             "  \"localservices\": \"xxxxxxxxxxxxxxxx\", (string) the services we offer to the network\n"
             "  \"localrelay\": true|false,              (bool) true if transaction relay is requested from peers\n"
@@ -477,6 +478,7 @@ UniValue getnetworkinfo(const JSONRPCRequest& request)
     LOCK(cs_main);
     UniValue obj(UniValue::VOBJ);
     obj.pushKV("version",       CLIENT_VERSION);
+    obj.pushKV("buildversion",  FormatFullVersion());
     obj.pushKV("subversion",    strSubVersion);
     obj.pushKV("protocolversion",PROTOCOL_VERSION);
     if(g_connman)
