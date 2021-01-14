@@ -3336,7 +3336,7 @@ bool CWallet::SelectTxDSInsByDenomination(int nDenom, CAmount nValueMax, std::ve
     AvailableCoins(vCoins, true, &coin_control);
     LogPrint(BCLog::COINJOIN, "CWallet::%s -- vCoins.size(): %d\n", __func__, vCoins.size());
 
-    std::random_shuffle(vCoins.rbegin(), vCoins.rend(), GetRandInt);
+    Shuffle(vCoins.rbegin(), vCoins.rend(), FastRandomContext());
 
     for (const auto& out : vCoins) {
         uint256 txHash = out.tx->GetHash();

@@ -1017,9 +1017,8 @@ CDeterministicMNCPtr CCoinJoinClientManager::GetRandomNotUsedMasternode()
         vpMasternodesShuffled.emplace_back(dmn);
     });
 
-    FastRandomContext insecure_rand;
     // shuffle pointers
-    std::random_shuffle(vpMasternodesShuffled.begin(), vpMasternodesShuffled.end(), insecure_rand);
+    Shuffle(vpMasternodesShuffled.begin(), vpMasternodesShuffled.end(), FastRandomContext());
 
     std::set<COutPoint> excludeSet(vecMasternodesUsed.begin(), vecMasternodesUsed.end());
 

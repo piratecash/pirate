@@ -415,7 +415,7 @@ void CCoinJoinServer::ChargeFees(CConnman& connman)
     if ((int)vecOffendersCollaterals.size() >= vecSessionCollaterals.size()) return;
 
     //charge one of the offenders randomly
-    std::random_shuffle(vecOffendersCollaterals.begin(), vecOffendersCollaterals.end());
+    Shuffle(vecOffendersCollaterals.begin(), vecOffendersCollaterals.end(), FastRandomContext());
 
     if (nState == POOL_STATE_ACCEPTING_ENTRIES || nState == POOL_STATE_SIGNING) {
         LogPrint(BCLog::COINJOIN, "CCoinJoinServer::ChargeFees -- found uncooperative node (didn't %s transaction), charging fees: %s", /* Continued */
