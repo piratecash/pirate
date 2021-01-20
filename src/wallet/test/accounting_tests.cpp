@@ -4,6 +4,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <wallet/wallet.h>
+#include <validation.h> // for cs_main because of AddToWallet
 
 #include <wallet/test/wallet_test_fixture.h>
 
@@ -34,7 +35,7 @@ BOOST_AUTO_TEST_CASE(acc_orderupgrade)
     CAccountingEntry ae;
     std::map<CAmount, CAccountingEntry> results;
 
-    LOCK(m_wallet.cs_wallet);
+    LOCK2(cs_main, m_wallet.cs_wallet);
 
     ae.strAccount = "";
     ae.nCreditDebit = 1;
