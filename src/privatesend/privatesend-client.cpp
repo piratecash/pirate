@@ -914,14 +914,14 @@ bool CPrivateSendClientSession::DoAutomaticDenominating(CConnman& connman, bool 
         //check our collateral and create new if needed
         std::string strReason;
         if (txMyCollateral == CMutableTransaction()) {
-            if (!mixingWallet.CreateCollateralTransaction(txMyCollateral, strReason)) {
+            if (!CreateCollateralTransaction(txMyCollateral, strReason)) {
                 LogPrint(BCLog::PRIVATESEND, "CPrivateSendClientSession::DoAutomaticDenominating -- create collateral error:%s\n", strReason);
                 return false;
             }
         } else {
             if (!CPrivateSend::IsCollateralValid(txMyCollateral)) {
                 LogPrint(BCLog::PRIVATESEND, "CPrivateSendClientSession::DoAutomaticDenominating -- invalid collateral, recreating...\n");
-                if (!mixingWallet.CreateCollateralTransaction(txMyCollateral, strReason)) {
+                if (!CreateCollateralTransaction(txMyCollateral, strReason)) {
                     LogPrint(BCLog::PRIVATESEND, "CPrivateSendClientSession::DoAutomaticDenominating -- create collateral error: %s\n", strReason);
                     return false;
                 }
@@ -1065,10 +1065,10 @@ bool CPrivateSendClientSession::JoinExistingQueue(CAmount nBalanceNeedsAnonymize
 
         LogPrint(BCLog::PRIVATESEND, "CPrivateSendClientSession::JoinExistingQueue -- trying queue: %s\n", dsq.ToString());
 
-        std::vector<std::pair<CTxDSIn, CTxOut> > vecPSInOutPairsTmp;
+        std::vector<CTxDSIn> vecTxDSInTmp;
 
         // Try to match their denominations if possible, select exact number of denominations
-        if (!mixingWallet.SelectPSInOutPairsByDenominations(dsq.nDenom, nBalanceNeedsAnonymized, vecPSInOutPairsTmp)) {
+        if (!mixingWallet.SelectTxDSInsByDenomination(dsq.nDenom, nBalanceNeedsAnonymized, vecTxDSInTmp)) {
             LogPrint(BCLog::PRIVATESEND, "CPrivateSendClientSession::JoinExistingQueue -- Couldn't match denomination %d (%s)\n", dsq.nDenom, CPrivateSend::DenominationToString(dsq.nDenom));
             continue;
         }
@@ -1242,9 +1242,10 @@ bool CPrivateSendClientSession::SubmitDenominate(CConnman& connman)
     LOCK(mixingWallet.cs_wallet);
 
     std::string strError;
-    std::vector<std::pair<CTxDSIn, CTxOut> > vecPSInOutPairs, vecPSInOutPairsTmp;
+    std::vector<CTxDSIn> vecTxDSIn;
+    std::vector<std::pair<CTxDSIn, CTxOut> > vecPSInOutPairsTmp;
 
-    if (!SelectDenominate(strError, vecPSInOutPairs)) {
+    if (!SelectDenominate(strError, vecTxDSIn)) {
         LogPrint(BCLog::PRIVATESEND, "CPrivateSendClientSession::SubmitDenominate -- SelectDenominate failed, error: %s\n", strError);
         return false;
     }
@@ -1252,7 +1253,7 @@ bool CPrivateSendClientSession::SubmitDenominate(CConnman& connman)
     std::vector<std::pair<int, size_t> > vecInputsByRounds;
 
     for (int i = 0; i < CPrivateSendClientOptions::GetRounds() + CPrivateSendClientOptions::GetRandomRounds(); i++) {
-        if (PrepareDenominate(i, i, strError, vecPSInOutPairs, vecPSInOutPairsTmp, true)) {
+        if (PrepareDenominate(i, i, strError, vecTxDSIn, vecPSInOutPairsTmp, true)) {
             LogPrint(BCLog::PRIVATESEND, "CPrivateSendClientSession::SubmitDenominate -- Running PrivateSend denominate for %d rounds, success\n", i);
             vecInputsByRounds.emplace_back(i, vecPSInOutPairsTmp.size());
         } else {
@@ -1271,13 +1272,13 @@ bool CPrivateSendClientSession::SubmitDenominate(CConnman& connman)
     }
 
     int nRounds = vecInputsByRounds.begin()->first;
-    if (PrepareDenominate(nRounds, nRounds, strError, vecPSInOutPairs, vecPSInOutPairsTmp)) {
+    if (PrepareDenominate(nRounds, nRounds, strError, vecTxDSIn, vecPSInOutPairsTmp)) {
         LogPrint(BCLog::PRIVATESEND, "CPrivateSendClientSession::SubmitDenominate -- Running PrivateSend denominate for %d rounds, success\n", nRounds);
         return SendDenominate(vecPSInOutPairsTmp, connman);
     }
 
     // We failed? That's strange but let's just make final attempt and try to mix everything
-    if (PrepareDenominate(0, CPrivateSendClientOptions::GetRounds() - 1, strError, vecPSInOutPairs, vecPSInOutPairsTmp)) {
+    if (PrepareDenominate(0, CPrivateSendClientOptions::GetRounds() - 1, strError, vecTxDSIn, vecPSInOutPairsTmp)) {
         LogPrint(BCLog::PRIVATESEND, "CPrivateSendClientSession::SubmitDenominate -- Running PrivateSend denominate for all rounds, success\n");
         return SendDenominate(vecPSInOutPairsTmp, connman);
     }
@@ -1288,7 +1289,7 @@ bool CPrivateSendClientSession::SubmitDenominate(CConnman& connman)
     return false;
 }
 
-bool CPrivateSendClientSession::SelectDenominate(std::string& strErrorRet, std::vector<std::pair<CTxDSIn, CTxOut> >& vecPSInOutPairsRet)
+bool CPrivateSendClientSession::SelectDenominate(std::string& strErrorRet, std::vector<CTxDSIn>& vecTxDSInRet)
 {
     if (!CPrivateSendClientOptions::IsEnabled()) return false;
 
@@ -1302,9 +1303,9 @@ bool CPrivateSendClientSession::SelectDenominate(std::string& strErrorRet, std::
         return false;
     }
 
-    vecPSInOutPairsRet.clear();
+    vecTxDSInRet.clear();
 
-    bool fSelected = mixingWallet.SelectPSInOutPairsByDenominations(nSessionDenom, CPrivateSend::GetMaxPoolAmount(), vecPSInOutPairsRet);
+    bool fSelected = mixingWallet.SelectTxDSInsByDenomination(nSessionDenom, CPrivateSend::GetMaxPoolAmount(), vecTxDSInRet);
     if (!fSelected) {
         strErrorRet = "Can't select current denominated inputs";
         return false;
@@ -1313,7 +1314,7 @@ bool CPrivateSendClientSession::SelectDenominate(std::string& strErrorRet, std::
     return true;
 }
 
-bool CPrivateSendClientSession::PrepareDenominate(int nMinRounds, int nMaxRounds, std::string& strErrorRet, const std::vector<std::pair<CTxDSIn, CTxOut> >& vecPSInOutPairsIn, std::vector<std::pair<CTxDSIn, CTxOut> >& vecPSInOutPairsRet, bool fDryRun)
+bool CPrivateSendClientSession::PrepareDenominate(int nMinRounds, int nMaxRounds, std::string& strErrorRet, const std::vector<CTxDSIn>& vecTxDSIn, std::vector<std::pair<CTxDSIn, CTxOut> >& vecPSInOutPairsRet, bool fDryRun)
 {
     AssertLockHeld(cs_main);
     AssertLockHeld(mixingWallet.cs_wallet);
@@ -1325,15 +1326,14 @@ bool CPrivateSendClientSession::PrepareDenominate(int nMinRounds, int nMaxRounds
     CAmount nDenomAmount = CPrivateSend::DenominationToAmount(nSessionDenom);
 
     // NOTE: No need to randomize order of inputs because they were
-    // initially shuffled in CWallet::SelectPSInOutPairsByDenominations already.
+    // initially shuffled in CWallet::SelectTxDSInsByDenomination already.
     int nSteps{0};
     vecPSInOutPairsRet.clear();
 
     // Try to add up to PRIVATESEND_ENTRY_MAX_SIZE of every needed denomination
-    for (const auto& pair : vecPSInOutPairsIn) {
+    for (const auto& entry : vecTxDSIn) {
         if (nSteps >= PRIVATESEND_ENTRY_MAX_SIZE) break;
-        if (pair.second.nRounds < nMinRounds || pair.second.nRounds > nMaxRounds) continue;
-        if (pair.second.nValue != nDenomAmount) continue;
+        if (entry.nRounds < nMinRounds || entry.nRounds > nMaxRounds) continue;
 
         CScript scriptDenom;
         if (fDryRun) {
@@ -1354,7 +1354,7 @@ bool CPrivateSendClientSession::PrepareDenominate(int nMinRounds, int nMaxRounds
             }
             scriptDenom = keyHolderStorage.AddKey(pwallet);
         }
-        vecPSInOutPairsRet.emplace_back(pair.first, CTxOut(nDenomAmount, scriptDenom));
+        vecPSInOutPairsRet.emplace_back(entry, CTxOut(nDenomAmount, scriptDenom));
         // step is complete
         ++nSteps;
     }
@@ -1508,6 +1508,55 @@ bool CPrivateSendClientSession::MakeCollateralAmounts(const CompactTallyItem& ta
     privateSendClientManagers.at(mixingWallet.GetName())->UpdatedSuccessBlock();
 
     LogPrint(BCLog::PRIVATESEND, "CPrivateSendClientSession::%s -- txid: %s\n", __func__, strResult);
+
+    return true;
+}
+
+bool CPrivateSendClientSession::CreateCollateralTransaction(CMutableTransaction& txCollateral, std::string& strReason)
+{
+    LOCK2(cs_main, mixingWallet.cs_wallet);
+
+    std::vector<COutput> vCoins;
+    CCoinControl coin_control;
+    coin_control.nCoinType = CoinType::ONLY_PRIVATESEND_COLLATERAL;
+
+    mixingWallet.AvailableCoins(vCoins, true, &coin_control);
+
+    if (vCoins.empty()) {
+        strReason = "PrivateSend requires a collateral transaction and could not locate an acceptable input!";
+        return false;
+    }
+
+    const auto& output = vCoins.at(GetRandInt(vCoins.size()));
+    const CTxOut txout = output.tx->tx->vout[output.i];
+
+    txCollateral.vin.clear();
+    txCollateral.vin.emplace_back(output.tx->GetHash(), output.i);
+    txCollateral.vout.clear();
+
+    // pay collateral charge in fees
+    // NOTE: no need for protobump patch here,
+    // CPrivateSend::IsCollateralAmount in GetCollateralTxDSIn should already take care of this
+    if (txout.nValue >= CPrivateSend::GetCollateralAmount() * 2) {
+        // make our change address
+        CScript scriptChange;
+        CPubKey vchPubKey;
+        CReserveKey reservekey(&mixingWallet);
+        bool success = reservekey.GetReservedKey(vchPubKey, true);
+        assert(success); // should never fail, as we just unlocked
+        scriptChange = GetScriptForDestination(vchPubKey.GetID());
+        reservekey.KeepKey();
+        // return change
+        txCollateral.vout.push_back(CTxOut(txout.nValue - CPrivateSend::GetCollateralAmount(), scriptChange));
+    } else { // txout.nValue < CPrivateSend::GetCollateralAmount() * 2
+        // create dummy data output only and pay everything as a fee
+        txCollateral.vout.push_back(CTxOut(0, CScript() << OP_RETURN));
+    }
+
+    if (!SignSignature(mixingWallet, txout.scriptPubKey, txCollateral, 0, txout.nValue, SIGHASH_ALL)) {
+        strReason = "Unable to sign collateral transaction!";
+        return false;
+    }
 
     return true;
 }
