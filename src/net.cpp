@@ -803,6 +803,7 @@ void CNode::copyStats(CNodeStats &stats)
     {
         LOCK(cs_mnauth);
         X(verifiedProRegTxHash);
+        X(verifiedPubKeyHash);
     }
     X(m_masternode_connection);
 }
