@@ -112,7 +112,7 @@ void CDSNotificationInterface::NotifyMasternodeListChanged(bool undo, const CDet
     governance.UpdateCachesAndClean();
 }
 
-void CDSNotificationInterface::NotifyChainLock(const CBlockIndex* pindex, const llmq::CChainLockSig& clsig)
+void CDSNotificationInterface::NotifyChainLock(const CBlockIndex* pindex, const std::shared_ptr<const llmq::CChainLockSig>& clsig)
 {
     llmq::quorumInstantSendManager->NotifyChainLock(pindex);
     CCoinJoin::NotifyChainLock(pindex);
