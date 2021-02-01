@@ -268,6 +268,7 @@ BITCOIN_CORE_H = \
   util/fees.h \
   util/system.h \
   util/asmap.h \
+  util/getuniquepath.h \
   util/macros.h \
   util/memory.h \
   util/moneystr.h \
@@ -620,6 +621,7 @@ libcosanta_util_a_SOURCES = \
   util/bytevectorhash.cpp \
   util/error.cpp \
   util/fees.cpp \
+  util/getuniquepath.cpp \
   util/system.cpp \
   util/asmap.cpp \
   util/moneystr.cpp \
