@@ -26,6 +26,7 @@ from .util import (
     wait_until,
     p2p_port,
     get_chain_folder,
+    Options
 )
 
 BITCOIND_PROC_WAIT_TIMEOUT = 60
@@ -68,6 +69,7 @@ class TestNode():
         else:
             # Wait for up to 60 seconds for the RPC server to respond
             self.rpc_timeout = 60
+        self.rpc_timeout *= Options.timeout_scale
         self.binary = bitcoind
         self.coverage_dir = coverage_dir
         self.mocktime = mocktime
