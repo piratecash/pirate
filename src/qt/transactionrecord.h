@@ -53,8 +53,6 @@ public:
     bool lockedByChainLocks;
     /// Sorting key based on status
     std::string sortKey;
-    /// Label
-    QString label;
 
     /** @name Generated (mined) transactions
        @{*/
@@ -130,7 +128,7 @@ public:
     /** Decompose CWallet transaction to model transaction records.
      */
     static bool showTransaction();
-    static QList<TransactionRecord> decomposeTransaction(const interfaces::WalletTx& wtx);
+    static QList<TransactionRecord> decomposeTransaction(interfaces::Wallet& wallet, const interfaces::WalletTx& wtx);
 
     /** @name Immutable transaction attributes
       @{*/
@@ -153,6 +151,9 @@ public:
     /** Whether the transaction was sent/received with a watch-only address */
     bool involvesWatchAddress;
 
+    /// Label
+    QString label;
+
     /** Return the unique identifier for this transaction (part) */
     QString getTxHash() const;
 
@@ -166,6 +167,10 @@ public:
     /** Return whether a status update is needed.
      */
     bool statusUpdateNeeded(int numBlocks, int chainLockHeight) const;
+
+    /** Update label from address book.
+     */
+    void updateLabel(interfaces::Wallet& wallet);
 };
 
 #endif // BITCOIN_QT_TRANSACTIONRECORD_H
