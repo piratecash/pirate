@@ -1172,6 +1172,10 @@ void CInstantSendManager::UpdatedBlockTip(const CBlockIndex* pindexNew)
 
 void CInstantSendManager::HandleFullyConfirmedBlock(const CBlockIndex* pindex)
 {
+    if (!IsInstantSendEnabled()) {
+        return;
+    }
+
     LOCK(cs);
 
     auto& consensusParams = Params().GetConsensus();
@@ -1536,12 +1540,12 @@ void CInstantSendManager::WorkThreadMain()
 
 bool IsInstantSendEnabled()
 {
-    return sporkManager.IsSporkActive(SPORK_2_INSTANTSEND_ENABLED);
+    return !fReindex && !fImporting && sporkManager.IsSporkActive(SPORK_2_INSTANTSEND_ENABLED);
 }
 
 bool RejectConflictingBlocks()
 {
-    return sporkManager.IsSporkActive(SPORK_3_INSTANTSEND_BLOCK_FILTERING);
+    return !fReindex && !fImporting && sporkManager.IsSporkActive(SPORK_3_INSTANTSEND_BLOCK_FILTERING);
 }
 
 } // namespace llmq

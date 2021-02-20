@@ -2410,8 +2410,8 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
                                  REJECT_INVALID, "conflict-tx-lock");
             }
         }
-    } else {
-        LogPrintf("ConnectBlock(COSANTA): spork is off, skipping transaction locking checks\n");
+    } else if (!fReindex && !fImporting) {
+        LogPrintf("ConnectBlock(Cosanta): spork is off, skipping transaction locking checks\n");
     }
 
     int64_t nTime5_1 = GetTimeMicros(); nTimeISFilter += nTime5_1 - nTime4;
