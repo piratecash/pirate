@@ -747,7 +747,7 @@ public:
  */
 class CDevNetParams : public CChainParams {
 public:
-    CDevNetParams() {
+    CDevNetParams(bool fHelpOnly = false) {
         strNetworkID = "devnet";
         consensus.nSubsidyHalvingInterval = 210240;
         consensus.nMasternodePaymentsStartBlock = 4010; // not true, but it's ok as long as it's less then nMasternodePaymentsIncreaseBlock
@@ -855,8 +855,10 @@ public:
         assert(consensus.hashGenesisBlock == expectedGenesisHash);
         assert(genesis.hashMerkleRoot == expectedGenesisMerkleRoot);
 
-        devnetGenesis = FindDevNetGenesisBlock(consensus, genesis, 1 * COIN);
-        consensus.hashDevnetGenesisBlock = devnetGenesis.GetHash();
+        if (!fHelpOnly) {
+            devnetGenesis = FindDevNetGenesisBlock(genesis, 1 * COIN);
+            consensus.hashDevnetGenesisBlock = devnetGenesis.GetHash();
+        }
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -1078,14 +1080,14 @@ const CChainParams &Params() {
     return *globalChainParams;
 }
 
-std::unique_ptr<CChainParams> CreateChainParams(const std::string& chain)
+std::unique_ptr<CChainParams> CreateChainParams(const std::string& chain, bool fHelpOnly)
 {
     if (chain == CBaseChainParams::MAIN)
         return std::unique_ptr<CChainParams>(new CMainParams());
     else if (chain == CBaseChainParams::TESTNET)
         return std::unique_ptr<CChainParams>(new CTestNetParams());
     else if (chain == CBaseChainParams::DEVNET) {
-        return std::unique_ptr<CChainParams>(new CDevNetParams());
+        return std::unique_ptr<CChainParams>(new CDevNetParams(fHelpOnly));
     } else if (chain == CBaseChainParams::REGTEST)
         return std::unique_ptr<CChainParams>(new CRegTestParams());
     throw std::runtime_error(strprintf("%s: Unknown chain %s.", __func__, chain));
