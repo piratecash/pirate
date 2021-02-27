@@ -54,7 +54,7 @@ bool CCoinJoinQueue::Sign()
     if (!sig.IsValid()) {
         return false;
     }
-    sig.GetBuf(vchSig);
+    vchSig = sig.ToByteVector();
 
     return true;
 }
@@ -100,7 +100,7 @@ bool CCoinJoinBroadcastTx::Sign()
     if (!sig.IsValid()) {
         return false;
     }
-    sig.GetBuf(vchSig);
+    vchSig = sig.ToByteVector();
 
     return true;
 }
