@@ -89,7 +89,7 @@ public:
 class CDKGComplaint
 {
 public:
-    Consensus::LLMQType llmqType;
+    Consensus::LLMQType llmqType{Consensus::LLMQ_NONE};
     uint256 quorumHash;
     uint256 proTxHash;
     std::vector<bool> badMembers;
@@ -158,7 +158,7 @@ public:
 class CDKGPrematureCommitment
 {
 public:
-    Consensus::LLMQType llmqType;
+    Consensus::LLMQType llmqType{Consensus::LLMQ_NONE};
     uint256 quorumHash;
     uint256 proTxHash;
     std::vector<bool> validMembers;
@@ -250,7 +250,7 @@ private:
     CBLSWorkerCache cache;
     CDKGSessionManager& dkgManager;
 
-    const CBlockIndex* pindexQuorum;
+    const CBlockIndex* pindexQuorum{nullptr};
 
 private:
     std::vector<std::unique_ptr<CDKGMember>> members;
