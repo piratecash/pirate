@@ -181,7 +181,7 @@ void CChainLocksHandler::ProcessNewChainLock(NodeId from, const llmq::CChainLock
 
 void CChainLocksHandler::AcceptedBlockHeader(const CBlockIndex* pindexNew)
 {
-    LOCK2(cs_main, cs);
+    LOCK(cs);
 
     if (pindexNew->GetBlockHash() == bestChainLock.blockHash) {
         LogPrintf("CChainLocksHandler::%s -- block header %s came in late, updating and enforcing\n", __func__, pindexNew->GetBlockHash().ToString());
