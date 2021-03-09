@@ -509,6 +509,7 @@ bool CInstantSendManager::TrySignInputLocks(const CTransaction& tx, bool fRetroa
         }
     }
 
+    return true;
 }
 
 bool CInstantSendManager::CheckCanLock(const CTransaction& tx, bool printDebug, const Consensus::Params& params) const
