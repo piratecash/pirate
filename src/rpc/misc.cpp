@@ -292,7 +292,7 @@ UniValue validateaddress(const JSONRPCRequest& request)
     if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
             "validateaddress \"address\"\n"
-            "\nReturn information about the given cosanta address.\n"
+            "\nReturn information about the given Cosanta address.\n"
             "DEPRECATION WARNING: Parts of this command have been deprecated and moved to getaddressinfo. Clients must\n"
             "transition to using getaddressinfo to access this information before upgrading to v0.18. The following deprecated\n"
             "fields have moved to getaddressinfo and will only be shown here with -deprecatedrpc=validateaddress: ismine, iswatchonly,\n"
@@ -1226,7 +1226,7 @@ static UniValue getinfo_deprecated(const JSONRPCRequest& request)
         "\nThis call was removed in version 0.16.0. Use the appropriate fields from:\n"
         "- getblockchaininfo: blocks, difficulty, chain\n"
         "- getnetworkinfo: version, protocolversion, timeoffset, connections, proxy, relayfee, warnings\n"
-        "- getwalletinfo: balance, privatesend_balance, keypoololdest, keypoolsize, paytxfee, unlocked_until, walletversion\n"
+        "- getwalletinfo: balance, coinjoin_balance, keypoololdest, keypoolsize, paytxfee, unlocked_until, walletversion\n"
         "\ncosanta-cli has the option -getinfo to collect and format these in the old format."
     );
 }

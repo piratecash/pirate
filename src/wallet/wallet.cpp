@@ -33,9 +33,9 @@
 #include <wallet/fees.h>
 #include <wallet/walletutil.h>
 
+#include <coinjoin/coinjoin-client.h>
 #include <governance/governance.h>
 #include <keepass.h>
-#include <privatesend/privatesend-client.h>
 #include <spork.h>
 
 #include <evo/providertx.h>
@@ -57,7 +57,7 @@ bool AddWallet(CWallet* wallet)
     assert(wallet);
     std::vector<CWallet*>::const_iterator i = std::find(vpwallets.begin(), vpwallets.end(), wallet);
     if (i != vpwallets.end()) return false;
-    privateSendClientManagers.emplace(std::make_pair(wallet->GetName(), std::make_shared<CPrivateSendClientManager>(*wallet)));
+    coinJoinClientManagers.emplace(std::make_pair(wallet->GetName(), std::make_shared<CCoinJoinClientManager>(*wallet)));
     vpwallets.push_back(wallet);
     return true;
 }
@@ -69,8 +69,8 @@ bool RemoveWallet(CWallet* wallet)
     std::vector<CWallet*>::iterator i = std::find(vpwallets.begin(), vpwallets.end(), wallet);
     if (i == vpwallets.end()) return false;
     vpwallets.erase(i);
-    auto it = privateSendClientManagers.find(wallet->GetName());
-    privateSendClientManagers.erase(it);
+    auto it = coinJoinClientManagers.find(wallet->GetName());
+    coinJoinClientManagers.erase(it);
     return true;
 }
 
@@ -160,7 +160,7 @@ public:
 
 int COutput::Priority() const
 {
-    for (const auto& d : CPrivateSend::GetStandardDenominations()) {
+    for (const auto& d : CCoinJoin::GetStandardDenominations()) {
         // large denoms have lower value
         if(tx->tx->vout[i].nValue == d) return (float)COIN / d * 10000;
     }
@@ -1572,12 +1572,12 @@ CAmount CWallet::GetDebit(const CTxIn &txin, const isminefilter& filter) const
     return 0;
 }
 
-// Recursively determine the rounds of a given input (How deep is the PrivateSend chain for a given input)
-int CWallet::GetRealOutpointPrivateSendRounds(const COutPoint& outpoint, int nRounds) const
+// Recursively determine the rounds of a given input (How deep is the CoinJoin chain for a given input)
+int CWallet::GetRealOutpointCoinJoinRounds(const COutPoint& outpoint, int nRounds) const
 {
     LOCK(cs_wallet);
 
-    const int nRoundsMax = MAX_PRIVATESEND_ROUNDS + CPrivateSendClientOptions::GetRandomRounds();
+    const int nRoundsMax = MAX_COINJOIN_ROUNDS + CCoinJoinClientOptions::GetRandomRounds();
 
     if (nRounds >= nRoundsMax) {
         // there can only be nRoundsMax rounds max
@@ -1597,7 +1597,7 @@ int CWallet::GetRealOutpointPrivateSendRounds(const COutPoint& outpoint, int nRo
     if (wtx == nullptr || wtx->tx == nullptr) {
         // no such tx in this wallet
         *nRoundsRef = -1;
-        LogPrint(BCLog::PRIVATESEND, "%s FAILED    %-70s %3d\n", __func__, outpoint.ToStringShort(), -1);
+        LogPrint(BCLog::COINJOIN, "%s FAILED    %-70s %3d\n", __func__, outpoint.ToStringShort(), -1);
         return *nRoundsRef;
     }
 
@@ -1605,30 +1605,30 @@ int CWallet::GetRealOutpointPrivateSendRounds(const COutPoint& outpoint, int nRo
     if (outpoint.n >= wtx->tx->vout.size()) {
         // should never actually hit this
         *nRoundsRef = -4;
-        LogPrint(BCLog::PRIVATESEND, "%s FAILED    %-70s %3d\n", __func__, outpoint.ToStringShort(), -4);
+        LogPrint(BCLog::COINJOIN, "%s FAILED    %-70s %3d\n", __func__, outpoint.ToStringShort(), -4);
         return *nRoundsRef;
     }
 
     auto txOutRef = &wtx->tx->vout[outpoint.n];
 
-    if (CPrivateSend::IsCollateralAmount(txOutRef->nValue)) {
+    if (CCoinJoin::IsCollateralAmount(txOutRef->nValue)) {
         *nRoundsRef = -3;
-        LogPrint(BCLog::PRIVATESEND, "%s UPDATED   %-70s %3d\n", __func__, outpoint.ToStringShort(), *nRoundsRef);
+        LogPrint(BCLog::COINJOIN, "%s UPDATED   %-70s %3d\n", __func__, outpoint.ToStringShort(), *nRoundsRef);
         return *nRoundsRef;
     }
 
     // make sure the final output is non-denominate
-    if (!CPrivateSend::IsDenominatedAmount(txOutRef->nValue)) { //NOT DENOM
+    if (!CCoinJoin::IsDenominatedAmount(txOutRef->nValue)) { //NOT DENOM
         *nRoundsRef = -2;
-        LogPrint(BCLog::PRIVATESEND, "%s UPDATED   %-70s %3d\n", __func__, outpoint.ToStringShort(), *nRoundsRef);
+        LogPrint(BCLog::COINJOIN, "%s UPDATED   %-70s %3d\n", __func__, outpoint.ToStringShort(), *nRoundsRef);
         return *nRoundsRef;
     }
 
     for (const auto& out : wtx->tx->vout) {
-        if (!CPrivateSend::IsDenominatedAmount(out.nValue)) {
+        if (!CCoinJoin::IsDenominatedAmount(out.nValue)) {
             // this one is denominated but there is another non-denominated output found in the same tx
             *nRoundsRef = 0;
-            LogPrint(BCLog::PRIVATESEND, "%s UPDATED   %-70s %3d\n", __func__, outpoint.ToStringShort(), *nRoundsRef);
+            LogPrint(BCLog::COINJOIN, "%s UPDATED   %-70s %3d\n", __func__, outpoint.ToStringShort(), *nRoundsRef);
             return *nRoundsRef;
         }
     }
@@ -1638,7 +1638,7 @@ int CWallet::GetRealOutpointPrivateSendRounds(const COutPoint& outpoint, int nRo
     // only denoms here so let's look up
     for (const auto& txinNext : wtx->tx->vin) {
         if (IsMine(txinNext)) {
-            int n = GetRealOutpointPrivateSendRounds(txinNext.prevout, nRounds + 1);
+            int n = GetRealOutpointCoinJoinRounds(txinNext.prevout, nRounds + 1);
             // denom found, find the shortest chain or initially assign nShortest with the first found value
             if(n >= 0 && (n < nShortest || nShortest == -10)) {
                 nShortest = n;
@@ -1649,16 +1649,16 @@ int CWallet::GetRealOutpointPrivateSendRounds(const COutPoint& outpoint, int nRo
     *nRoundsRef = fDenomFound
             ? (nShortest >= nRoundsMax - 1 ? nRoundsMax : nShortest + 1) // good, we a +1 to the shortest one but only nRoundsMax rounds max allowed
             : 0;            // too bad, we are the fist one in that chain
-    LogPrint(BCLog::PRIVATESEND, "%s UPDATED   %-70s %3d\n", __func__, outpoint.ToStringShort(), *nRoundsRef);
+    LogPrint(BCLog::COINJOIN, "%s UPDATED   %-70s %3d\n", __func__, outpoint.ToStringShort(), *nRoundsRef);
     return *nRoundsRef;
 }
 
 // respect current settings
-int CWallet::GetCappedOutpointPrivateSendRounds(const COutPoint& outpoint) const
+int CWallet::GetCappedOutpointCoinJoinRounds(const COutPoint& outpoint) const
 {
     LOCK(cs_wallet);
-    int realPrivateSendRounds = GetRealOutpointPrivateSendRounds(outpoint);
-    return realPrivateSendRounds > CPrivateSendClientOptions::GetRounds() ? CPrivateSendClientOptions::GetRounds() : realPrivateSendRounds;
+    int realCoinJoinRounds = GetRealOutpointCoinJoinRounds(outpoint);
+    return realCoinJoinRounds > CCoinJoinClientOptions::GetRounds() ? CCoinJoinClientOptions::GetRounds() : realCoinJoinRounds;
 }
 
 bool CWallet::IsDenominated(const COutPoint& outpoint) const
@@ -1674,22 +1674,22 @@ bool CWallet::IsDenominated(const COutPoint& outpoint) const
         return false;
     }
 
-    return CPrivateSend::IsDenominatedAmount(it->second.tx->vout[outpoint.n].nValue);
+    return CCoinJoin::IsDenominatedAmount(it->second.tx->vout[outpoint.n].nValue);
 }
 
 bool CWallet::IsFullyMixed(const COutPoint& outpoint) const
 {
-    int nRounds = GetRealOutpointPrivateSendRounds(outpoint);
+    int nRounds = GetRealOutpointCoinJoinRounds(outpoint);
     // Mix again if we don't have N rounds yet
-    if (nRounds < CPrivateSendClientOptions::GetRounds()) return false;
+    if (nRounds < CCoinJoinClientOptions::GetRounds()) return false;
 
     // Try to mix a "random" number of rounds more than minimum.
     // If we have already mixed N + MaxOffset rounds, don't mix again.
     // Otherwise, we should mix again 50% of the time, this results in an exponential decay
     // N rounds 50% N+1 25% N+2 12.5%... until we reach N + GetRandomRounds() rounds where we stop.
-    if (nRounds < CPrivateSendClientOptions::GetRounds() + CPrivateSendClientOptions::GetRandomRounds()) {
+    if (nRounds < CCoinJoinClientOptions::GetRounds() + CCoinJoinClientOptions::GetRandomRounds()) {
         CDataStream ss(SER_GETHASH, PROTOCOL_VERSION);
-        ss << outpoint << nPrivateSendSalt;
+        ss << outpoint << nCoinJoinSalt;
         uint256 nHash;
         CSHA256().Write((const unsigned char*)ss.data(), ss.size()).Finalize(nHash.begin());
         if (nHash.GetCheapHash() % 2 == 0) {
@@ -2419,7 +2419,7 @@ CAmount CWalletTx::GetAnonymizedCredit(const CCoinControl* coinControl) const
             continue;
         }
 
-        if (pwallet->IsSpent(hashTx, i) || !CPrivateSend::IsDenominatedAmount(txout.nValue)) continue;
+        if (pwallet->IsSpent(hashTx, i) || !CCoinJoin::IsDenominatedAmount(txout.nValue)) continue;
 
         if (pwallet->IsFullyMixed(outpoint)) {
             nCredit += pwallet->GetCredit(txout, ISMINE_SPENDABLE);
@@ -2464,7 +2464,7 @@ CAmount CWalletTx::GetDenominatedCredit(bool unconfirmed, bool fUseCache) const
     {
         const CTxOut &txout = tx->vout[i];
 
-        if (pwallet->IsSpent(hashTx, i) || !CPrivateSend::IsDenominatedAmount(txout.nValue)) continue;
+        if (pwallet->IsSpent(hashTx, i) || !CCoinJoin::IsDenominatedAmount(txout.nValue)) continue;
 
         nCredit += pwallet->GetCredit(txout, ISMINE_SPENDABLE);
         if (!MoneyRange(nCredit))
@@ -2633,17 +2633,17 @@ CAmount CWallet::GetBalance() const
 
 CAmount CWallet::GetAnonymizableBalance(bool fSkipDenominated, bool fSkipUnconfirmed) const
 {
-    if (!CPrivateSendClientOptions::IsEnabled()) return 0;
+    if (!CCoinJoinClientOptions::IsEnabled()) return 0;
 
     std::vector<CompactTallyItem> vecTally;
     if(!SelectCoinsGroupedByAddresses(vecTally, fSkipDenominated, true, fSkipUnconfirmed)) return 0;
 
     CAmount nTotal = 0;
 
-    const CAmount nSmallestDenom = CPrivateSend::GetSmallestDenomination();
-    const CAmount nMixingCollateral = CPrivateSend::GetCollateralAmount();
+    const CAmount nSmallestDenom = CCoinJoin::GetSmallestDenomination();
+    const CAmount nMixingCollateral = CCoinJoin::GetCollateralAmount();
     for (const auto& item : vecTally) {
-        bool fIsDenominated = CPrivateSend::IsDenominatedAmount(item.nAmount);
+        bool fIsDenominated = CCoinJoin::IsDenominatedAmount(item.nAmount);
         if(fSkipDenominated && fIsDenominated) continue;
         // assume that the fee to create denoms should be mixing collateral at max
         if(item.nAmount >= nSmallestDenom + (fIsDenominated ? 0 : nMixingCollateral))
@@ -2655,7 +2655,7 @@ CAmount CWallet::GetAnonymizableBalance(bool fSkipDenominated, bool fSkipUnconfi
 
 CAmount CWallet::GetAnonymizedBalance(const CCoinControl* coinControl) const
 {
-    if (!CPrivateSendClientOptions::IsEnabled()) return 0;
+    if (!CCoinJoinClientOptions::IsEnabled()) return 0;
 
     CAmount nTotal = 0;
 
@@ -2672,7 +2672,7 @@ CAmount CWallet::GetAnonymizedBalance(const CCoinControl* coinControl) const
 // that's ok as long as we use it for informational purposes only
 float CWallet::GetAverageAnonymizedRounds() const
 {
-    if (!CPrivateSendClientOptions::IsEnabled()) return 0;
+    if (!CCoinJoinClientOptions::IsEnabled()) return 0;
 
     int nTotal = 0;
     int nCount = 0;
@@ -2681,7 +2681,7 @@ float CWallet::GetAverageAnonymizedRounds() const
     for (const auto& outpoint : setWalletUTXO) {
         if(!IsDenominated(outpoint)) continue;
 
-        nTotal += GetCappedOutpointPrivateSendRounds(outpoint);
+        nTotal += GetCappedOutpointCoinJoinRounds(outpoint);
         nCount++;
     }
 
@@ -2694,7 +2694,7 @@ float CWallet::GetAverageAnonymizedRounds() const
 // that's ok as long as we use it for informational purposes only
 CAmount CWallet::GetNormalizedAnonymizedBalance() const
 {
-    if (!CPrivateSendClientOptions::IsEnabled()) return 0;
+    if (!CCoinJoinClientOptions::IsEnabled()) return 0;
 
     CAmount nTotal = 0;
 
@@ -2704,11 +2704,11 @@ CAmount CWallet::GetNormalizedAnonymizedBalance() const
         if (it == mapWallet.end()) continue;
 
         CAmount nValue = it->second.tx->vout[outpoint.n].nValue;
-        if (!CPrivateSend::IsDenominatedAmount(nValue)) continue;
+        if (!CCoinJoin::IsDenominatedAmount(nValue)) continue;
         if (it->second.GetDepthInMainChain() < 0) continue;
 
-        int nRounds = GetCappedOutpointPrivateSendRounds(outpoint);
-        nTotal += nValue * nRounds / CPrivateSendClientOptions::GetRounds();
+        int nRounds = GetCappedOutpointCoinJoinRounds(outpoint);
+        nTotal += nValue * nRounds / CCoinJoinClientOptions::GetRounds();
     }
 
     return nTotal;
@@ -2716,7 +2716,7 @@ CAmount CWallet::GetNormalizedAnonymizedBalance() const
 
 CAmount CWallet::GetDenominatedBalance(bool unconfirmed) const
 {
-    if (!CPrivateSendClientOptions::IsEnabled()) return 0;
+    if (!CCoinJoinClientOptions::IsEnabled()) return 0;
 
     CAmount nTotal = 0;
 
@@ -2889,18 +2889,18 @@ void CWallet::AvailableCoins(std::vector<COutput> &vCoins, bool fOnlySafe, const
         for (unsigned int i = 0; i < pcoin->tx->vout.size(); i++) {
             bool found = false;
             if (nCoinType == CoinType::ONLY_FULLY_MIXED) {
-                if (!CPrivateSend::IsDenominatedAmount(pcoin->tx->vout[i].nValue)) continue;
+                if (!CCoinJoin::IsDenominatedAmount(pcoin->tx->vout[i].nValue)) continue;
                 found = IsFullyMixed(COutPoint(wtxid, i));
             } else if(nCoinType == CoinType::ONLY_READY_TO_MIX) {
-                if (!CPrivateSend::IsDenominatedAmount(pcoin->tx->vout[i].nValue)) continue;
+                if (!CCoinJoin::IsDenominatedAmount(pcoin->tx->vout[i].nValue)) continue;
                 found = !IsFullyMixed(COutPoint(wtxid, i));
             } else if(nCoinType == CoinType::ONLY_NONDENOMINATED) {
-                if (CPrivateSend::IsCollateralAmount(pcoin->tx->vout[i].nValue)) continue; // do not use collateral amounts
-                found = !CPrivateSend::IsDenominatedAmount(pcoin->tx->vout[i].nValue);
+                if (CCoinJoin::IsCollateralAmount(pcoin->tx->vout[i].nValue)) continue; // do not use collateral amounts
+                found = !CCoinJoin::IsDenominatedAmount(pcoin->tx->vout[i].nValue);
             } else if(nCoinType == CoinType::ONLY_MASTERNODE_COLLATERAL) {
                 found = pcoin->tx->vout[i].nValue == 10000*COIN;
-            } else if(nCoinType == CoinType::ONLY_PRIVATESEND_COLLATERAL) {
-                found = CPrivateSend::IsCollateralAmount(pcoin->tx->vout[i].nValue);
+            } else if(nCoinType == CoinType::ONLY_COINJOIN_COLLATERAL) {
+                found = CCoinJoin::IsCollateralAmount(pcoin->tx->vout[i].nValue);
             } else {
                 found = true;
             }
@@ -3009,18 +3009,20 @@ const CTxOut& CWallet::FindNonChangeParentOutput(const CTransaction& tx, int out
     return ptx->vout[n];
 }
 
-void CWallet::InitPrivateSendSalt()
+void CWallet::InitCoinJoinSalt()
 {
     // Avoid fetching it multiple times
-    assert(nPrivateSendSalt.IsNull());
+    assert(nCoinJoinSalt.IsNull());
 
     WalletBatch batch(*database);
-    batch.ReadPrivateSendSalt(nPrivateSendSalt);
+    if (!batch.ReadCoinJoinSalt(nCoinJoinSalt) && batch.ReadCoinJoinSalt(nCoinJoinSalt, true)) {
+        batch.WriteCoinJoinSalt(nCoinJoinSalt);
+    }
 
-    while (nPrivateSendSalt.IsNull()) {
+    while (nCoinJoinSalt.IsNull()) {
         // We never generated/saved it
-        nPrivateSendSalt = GetRandHash();
-        batch.WritePrivateSendSalt(nPrivateSendSalt);
+        nCoinJoinSalt = GetRandHash();
+        batch.WriteCoinJoinSalt(nCoinJoinSalt);
     }
 }
 
@@ -3261,15 +3263,15 @@ bool CWallet::SelectTxDSInsByDenomination(int nDenom, CAmount nValueMax, std::ve
 
     vecTxDSInRet.clear();
 
-    if (!CPrivateSend::IsValidDenomination(nDenom)) {
+    if (!CCoinJoin::IsValidDenomination(nDenom)) {
         return false;
     }
-    CAmount nDenomAmount = CPrivateSend::DenominationToAmount(nDenom);
+    CAmount nDenomAmount = CCoinJoin::DenominationToAmount(nDenom);
 
     CCoinControl coin_control;
     coin_control.nCoinType = CoinType::ONLY_READY_TO_MIX;
     AvailableCoins(vCoins, true, &coin_control);
-    LogPrint(BCLog::PRIVATESEND, "CWallet::%s -- vCoins.size(): %d\n", __func__, vCoins.size());
+    LogPrint(BCLog::COINJOIN, "CWallet::%s -- vCoins.size(): %d\n", __func__, vCoins.size());
 
     std::random_shuffle(vCoins.rbegin(), vCoins.rend(), GetRandInt);
 
@@ -3282,16 +3284,16 @@ bool CWallet::SelectTxDSInsByDenomination(int nDenom, CAmount nValueMax, std::ve
 
         CTxIn txin = CTxIn(txHash, out.i);
         CScript scriptPubKey = out.tx->tx->vout[out.i].scriptPubKey;
-        int nRounds = GetRealOutpointPrivateSendRounds(txin.prevout);
+        int nRounds = GetRealOutpointCoinJoinRounds(txin.prevout);
 
         nValueTotal += nValue;
         vecTxDSInRet.emplace_back(CTxDSIn(txin, scriptPubKey, nRounds));
         setRecentTxIds.emplace(txHash);
-        LogPrint(BCLog::PRIVATESEND, "CWallet::%s -- hash: %s, nValue: %d.%08d\n",
+        LogPrint(BCLog::COINJOIN, "CWallet::%s -- hash: %s, nValue: %d.%08d\n",
                         __func__, txHash.ToString(), nValue / COIN, nValue % COIN);
     }
 
-    LogPrint(BCLog::PRIVATESEND, "CWallet::%s -- setRecentTxIds.size(): %d\n", __func__, setRecentTxIds.size());
+    LogPrint(BCLog::COINJOIN, "CWallet::%s -- setRecentTxIds.size(): %d\n", __func__, setRecentTxIds.size());
 
     return nValueTotal > 0;
 }
@@ -3317,7 +3319,7 @@ bool CWallet::SelectCoinsGroupedByAddresses(std::vector<CompactTallyItem>& vecTa
         }
     }
 
-    CAmount nSmallestDenom = CPrivateSend::GetSmallestDenomination();
+    CAmount nSmallestDenom = CCoinJoin::GetSmallestDenomination();
 
     // Tally
     std::map<CTxDestination, CompactTallyItem> mapTally;
@@ -3346,11 +3348,11 @@ bool CWallet::SelectCoinsGroupedByAddresses(std::vector<CompactTallyItem>& vecTa
 
             if(IsSpent(outpoint.hash, i) || IsLockedCoin(outpoint.hash, i)) continue;
 
-            if(fSkipDenominated && CPrivateSend::IsDenominatedAmount(wtx.tx->vout[i].nValue)) continue;
+            if(fSkipDenominated && CCoinJoin::IsDenominatedAmount(wtx.tx->vout[i].nValue)) continue;
 
             if(fAnonymizable) {
                 // ignore collaterals
-                if(CPrivateSend::IsCollateralAmount(wtx.tx->vout[i].nValue)) continue;
+                if(CCoinJoin::IsCollateralAmount(wtx.tx->vout[i].nValue)) continue;
                 if(fMasternodeMode && wtx.tx->vout[i].nValue == 1000*COIN) continue;
                 // ignore outputs that are 10 times smaller then the smallest denomination
                 // otherwise they will just lead to higher fee / lower priority
@@ -3505,7 +3507,7 @@ bool CWallet::SelectDenominatedAmounts(CAmount nValueMax, std::set<CAmount>& set
         }
     }
 
-    return nValueTotal >= CPrivateSend::GetSmallestDenomination();
+    return nValueTotal >= CCoinJoin::GetSmallestDenomination();
 }
 
 bool CWallet::GetMasternodeOutpointAndKeys(COutPoint& outpointRet, CPubKey& pubKeyRet, CKey& keyRet, const std::string& strTxHash, const std::string& strOutputIndex)
@@ -3592,7 +3594,7 @@ bool CWallet::HasCollateralInputs(bool fOnlyConfirmed) const
 
     std::vector<COutput> vCoins;
     CCoinControl coin_control;
-    coin_control.nCoinType = CoinType::ONLY_PRIVATESEND_COLLATERAL;
+    coin_control.nCoinType = CoinType::ONLY_COINJOIN_COLLATERAL;
     AvailableCoins(vCoins, fOnlyConfirmed, &coin_control);
 
     return !vCoins.empty();
@@ -3790,10 +3792,10 @@ bool CWallet::CreateTransaction(const std::vector<CRecipient>& vecSend, CTransac
                     std::set<CInputCoin> setCoinsTmp;
                     if (!SelectCoins(vAvailableCoins, nValueToSelect, setCoinsTmp, nValueIn, coin_control, coin_selection_params, bnb_used)) {
                         if (coin_control.nCoinType == CoinType::ONLY_NONDENOMINATED) {
-                            strFailReason = _("Unable to locate enough PrivateSend non-denominated funds for this transaction.");
+                            strFailReason = _("Unable to locate enough CoinJoin non-denominated funds for this transaction.");
                         } else if (coin_control.nCoinType == CoinType::ONLY_FULLY_MIXED) {
-                            strFailReason = _("Unable to locate enough PrivateSend denominated funds for this transaction.");
-                            strFailReason += " " + _("PrivateSend uses exact denominated amounts to send funds, you might simply need to mix some more coins.");
+                            strFailReason = _("Unable to locate enough CoinJoin denominated funds for this transaction.");
+                            strFailReason += " " + _("CoinJoin uses exact denominated amounts to send funds, you might simply need to mix some more coins.");
                         } else if (nValueIn < nValueToSelect) {
                             strFailReason = _("Insufficient funds.");
                         }
@@ -4404,7 +4406,7 @@ DBErrors CWallet::LoadWallet(bool& fFirstRunRet)
         }
     }
 
-    InitPrivateSendSalt();
+    InitCoinJoinSalt();
 
     if (nLoadWalletRet != DBErrors::LOAD_OK)
         return nLoadWalletRet;
@@ -4559,7 +4561,7 @@ bool CWallet::NewKeyPool()
             batch.ErasePool(nIndex);
         }
         setExternalKeyPool.clear();
-        privateSendClientManagers.at(GetName())->StopMixing();
+        coinJoinClientManagers.at(GetName())->StopMixing();
         nKeysLeftSinceAutoBackup = 0;
 
         m_pool_key_to_index.clear();

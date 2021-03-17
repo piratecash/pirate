@@ -60,13 +60,13 @@ public:
         DatabaseCache,          // int
         SpendZeroConfChange,    // bool
         ShowMasternodesTab,     // bool
-        PrivateSendEnabled,     // bool
-        ShowAdvancedPSUI,       // bool
-        ShowPrivateSendPopups,  // bool
+        CoinJoinEnabled,     // bool
+        ShowAdvancedCJUI,       // bool
+        ShowCoinJoinPopups,  // bool
         LowKeysWarning,         // bool
-        PrivateSendRounds,      // int
-        PrivateSendAmount,      // int
-        PrivateSendMultiSession,// bool
+        CoinJoinRounds,      // int
+        CoinJoinAmount,      // int
+        CoinJoinMultiSession,// bool
         Listen,                 // bool
         OptionIDRowCount,
     };
@@ -88,9 +88,9 @@ public:
     QString getThirdPartyTxUrls() const { return strThirdPartyTxUrls; }
     bool getProxySettings(QNetworkProxy& proxy) const;
     bool getCoinControlFeatures() const { return fCoinControlFeatures; }
-    bool getShowAdvancedPSUI() { return fShowAdvancedPSUI; }
+    bool getShowAdvancedCJUI() { return fShowAdvancedCJUI; }
     const QString& getOverriddenByCommandLine() { return strOverriddenByCommandLine; }
-    void emitPrivateSendEnabledChanged();
+    void emitCoinJoinEnabledChanged();
 
     /* Restart flag helper */
     void setRestartRequired(bool fRequired);
@@ -109,7 +109,7 @@ private:
     int nDisplayUnit;
     QString strThirdPartyTxUrls;
     bool fCoinControlFeatures;
-    bool fShowAdvancedPSUI;
+    bool fShowAdvancedCJUI;
     /* settings that were overridden by command-line */
     QString strOverriddenByCommandLine;
 
@@ -120,10 +120,10 @@ private:
     void checkAndMigrate();
 Q_SIGNALS:
     void displayUnitChanged(int unit);
-    void privateSendEnabledChanged();
-    void privateSendRoundsChanged();
-    void privateSentAmountChanged();
-    void advancedPSUIChanged(bool);
+    void coinJoinEnabledChanged();
+    void coinJoinRoundsChanged();
+    void coinJoinAmountChanged();
+    void AdvancedCJUIChanged(bool);
     void coinControlFeaturesChanged(bool);
     void hideTrayIconChanged(bool);
 };

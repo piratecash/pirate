@@ -5,11 +5,11 @@
 
 #include <masternode/masternode-utils.h>
 
+#ifdef ENABLE_WALLET
+#include <coinjoin/coinjoin-client.h>
+#endif
 #include <init.h>
 #include <masternode/masternode-sync.h>
-#ifdef ENABLE_WALLET
-#include <privatesend/privatesend-client.h>
-#endif
 #include <validation.h>
 
 struct CompareScoreMN
@@ -25,7 +25,7 @@ void CMasternodeUtils::ProcessMasternodeConnections(CConnman& connman)
 {
     std::vector<CDeterministicMNCPtr> vecDmns; // will be empty when no wallet
 #ifdef ENABLE_WALLET
-    for (const auto& pair : privateSendClientManagers) {
+    for (const auto& pair : coinJoinClientManagers) {
         pair.second->GetMixingMasternodesInfo(vecDmns);
     }
 #endif // ENABLE_WALLET

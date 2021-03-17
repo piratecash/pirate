@@ -30,7 +30,7 @@
 
 #include <masternode/masternode-meta.h>
 #include <masternode/masternode-sync.h>
-#include <privatesend/privatesend.h>
+#include <coinjoin/coinjoin.h>
 #include <evo/deterministicmns.h>
 
 #include <statsd_client.h>
@@ -3350,7 +3350,7 @@ void CConnman::RelayTransaction(const CTransaction& tx)
 {
     uint256 hash = tx.GetHash();
     int nInv = MSG_TX;
-    if (CPrivateSend::GetDSTX(hash)) {
+    if (CCoinJoin::GetDSTX(hash)) {
         nInv = MSG_DSTX;
     }
     CInv inv(nInv, hash);

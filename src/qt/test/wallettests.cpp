@@ -1,10 +1,10 @@
 #include <qt/test/wallettests.h>
 
+#include <coinjoin/coinjoin-client.h>
 #include <interfaces/node.h>
 #include <qt/bitcoinamountfield.h>
 #include <qt/callback.h>
 #include <qt/optionsmodel.h>
-#include <privatesend/privatesend-client.h>
 #include <qt/qvalidatedlineedit.h>
 #include <qt/sendcoinsdialog.h>
 #include <qt/sendcoinsentry.h>

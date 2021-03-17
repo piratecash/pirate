@@ -48,6 +48,7 @@
 #include <validationinterface.h>
 
 #include <masternode/activemasternode.h>
+#include <coinjoin/coinjoin-server.h>
 #include <dsnotificationinterface.h>
 #include <flat-database.h>
 #include <governance/governance.h>
@@ -57,7 +58,6 @@
 #include <masternode/masternode-utils.h>
 #include <messagesigner.h>
 #include <netfulfilledman.h>
-#include <privatesend/privatesend-server.h>
 #include <spork.h>
 #include <warnings.h>
 #include <walletinitinterface.h>
@@ -115,9 +115,9 @@ public:
     void Stop() const override {}
     void Close() const override {}
 
-    // Dash Specific WalletInitInterface InitPrivateSendSettings
+    // Dash Specific WalletInitInterface InitCoinJoinSettings
     void AutoLockMasternodeCollaterals() const override {}
-    void InitPrivateSendSettings() const override {}
+    void InitCoinJoinSettings() const override {}
     void InitKeePass() const override {}
     bool InitAutoBackup() const override {return true;}
 };
@@ -2230,10 +2230,10 @@ bool AppInitMain()
         activeMasternodeInfo.blsPubKeyOperator = std::make_unique<CBLSPublicKey>();
     }
 
-    // ********************************************************* Step 10b: setup PrivateSend
+    // ********************************************************* Step 10b: setup CoinJoin
 
-    g_wallet_init_interface.InitPrivateSendSettings();
-    CPrivateSend::InitStandardDenominations();
+    g_wallet_init_interface.InitCoinJoinSettings();
+    CCoinJoin::InitStandardDenominations();
 
     // ********************************************************* Step 10b: Load cache data
 
@@ -2304,7 +2304,7 @@ bool AppInitMain()
     }
 
     if (fMasternodeMode) {
-        scheduler.scheduleEvery(std::bind(&CPrivateSendServer::DoMaintenance, std::ref(privateSendServer), std::ref(*g_connman)), 1 * 1000);
+        scheduler.scheduleEvery(std::bind(&CCoinJoinServer::DoMaintenance, std::ref(coinJoinServer), std::ref(*g_connman)), 1 * 1000);
     }
 
     if (gArgs.GetBoolArg("-statsenabled", DEFAULT_STATSD_ENABLE)) {
