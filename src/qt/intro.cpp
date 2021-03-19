@@ -208,7 +208,7 @@ bool Intro::pickDataDirectory(interfaces::Node& node)
         /* Let the user choose one */
         Intro intro;
         GUIUtil::disableMacFocusRect(&intro);
-        GUIUtil::loadStyleSheet(&intro);
+        GUIUtil::loadStyleSheet(node, &intro);
         intro.setDataDirectory(dataDirDefaultCurrent);
         intro.setWindowIcon(QIcon(":icons/bitcoin"));
 
