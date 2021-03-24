@@ -1124,6 +1124,7 @@ bool CSigSharesManager::SendMessages()
     std::unordered_map<NodeId, std::vector<CSigSesAnn>> sigSessionAnnouncements;
 
     auto addSigSesAnnIfNeeded = [&](NodeId nodeId, const uint256& signHash) {
+        AssertLockHeld(cs);
         auto& nodeState = nodeStates[nodeId];
         auto session = nodeState.GetSessionBySignHash(signHash);
         assert(session);
@@ -1410,8 +1411,11 @@ void CSigSharesManager::Cleanup()
 
     // Find node states for peers that disappeared from CConnman
     std::unordered_set<NodeId> nodeStatesToDelete;
-    for (auto& p : nodeStates) {
-        nodeStatesToDelete.emplace(p.first);
+    {
+        LOCK(cs);
+        for (const auto& p : nodeStates) {
+            nodeStatesToDelete.emplace(p.first);
+        }
     }
     g_connman->ForEachNode([&](CNode* pnode) {
         nodeStatesToDelete.erase(pnode->GetId());
@@ -1419,10 +1423,13 @@ void CSigSharesManager::Cleanup()
 
     // Now delete these node states
     LOCK(cs);
-    for (auto nodeId : nodeStatesToDelete) {
-        auto& nodeState = nodeStates[nodeId];
+    for (const auto& nodeId : nodeStatesToDelete) {
+        auto it = nodeStates.find(nodeId);
+        if (it == nodeStates.end()) {
+            continue;
+        }
         // remove global requested state to force a re-request from another node
-        nodeState.requestedSigShares.ForEach([&](const SigShareKey& k, bool) {
+        it->second.requestedSigShares.ForEach([&](const SigShareKey& k, bool) {
             sigSharesRequested.Erase(k);
         });
         nodeStates.erase(nodeId);
@@ -1433,6 +1440,8 @@ void CSigSharesManager::Cleanup()
 
 void CSigSharesManager::RemoveSigSharesForSession(const uint256& signHash)
 {
+    AssertLockHeld(cs);
+
     for (auto& p : nodeStates) {
         auto& ns = p.second;
         ns.RemoveSession(signHash);
