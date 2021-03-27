@@ -6,6 +6,7 @@
 #include <validation.h>
 #ifdef ENABLE_WALLET
 #include <coinjoin/coinjoin-client.h>
+#include <coinjoin/coinjoin-client-options.h>
 #include <wallet/rpcwallet.h>
 #endif // ENABLE_WALLET
 #include <coinjoin/coinjoin-server.h>

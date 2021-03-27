@@ -138,6 +138,7 @@ BITCOIN_CORE_H = \
   clientversion.h \
   coinjoin/coinjoin.h \
   coinjoin/coinjoin-client.h \
+  coinjoin/coinjoin-client-options.h \
   coinjoin/coinjoin-server.h \
   coinjoin/coinjoin-util.h \
   coins.h \
@@ -395,6 +396,7 @@ libcosanta_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 libcosanta_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libcosanta_wallet_a_SOURCES = \
   coinjoin/coinjoin-client.cpp \
+  coinjoin/coinjoin-client-options.cpp \
   coinjoin/coinjoin-util.cpp \
   interfaces/wallet.cpp \
   pos_kernel.cpp \
