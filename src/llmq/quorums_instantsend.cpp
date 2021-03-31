@@ -15,10 +15,6 @@
 #include <spork.h>
 #include <validation.h>
 
-#ifdef ENABLE_WALLET
-#include <wallet/wallet.h>
-#endif
-
 #include <cxxtimer.hpp>
 
 #include <boost/algorithm/string/replace.hpp>
