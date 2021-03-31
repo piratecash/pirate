@@ -54,7 +54,6 @@ EXPECTED_CIRCULAR_DEPENDENCIES=(
     "evo/deterministicmns -> llmq/quorums_utils -> evo/deterministicmns"
     "evo/deterministicmns -> validation -> evo/deterministicmns"
     "evo/mnauth -> net_processing -> evo/mnauth"
-    "evo/providertx -> validation -> evo/providertx"
     "evo/specialtx -> llmq/quorums_blockprocessor -> evo/specialtx"
     "evo/specialtx -> llmq/quorums_commitment -> evo/specialtx"
     "evo/specialtx -> validation -> evo/specialtx"
@@ -102,7 +101,6 @@ EXPECTED_CIRCULAR_DEPENDENCIES=(
     "core_io -> evo/cbtx -> evo/deterministicmns -> core_io"
     "core_io -> evo/cbtx -> evo/simplifiedmns -> core_io"
     "dsnotificationinterface -> governance/governance -> init -> dsnotificationinterface"
-    "evo/cbtx -> evo/deterministicmns -> validation -> evo/cbtx"
     "evo/deterministicmns -> validationinterface -> governance/governance-vote -> evo/deterministicmns"
     "evo/deterministicmns -> llmq/quorums_utils -> masternode/masternode-meta -> evo/deterministicmns"
     "evo/simplifiedmns -> llmq/quorums_blockprocessor -> net_processing -> evo/simplifiedmns"
@@ -132,8 +130,6 @@ EXPECTED_CIRCULAR_DEPENDENCIES=(
     "evo/providertx -> evo/specialtx -> llmq/quorums_blockprocessor -> net_processing -> txmempool -> evo/providertx"
     "governance/governance -> init -> llmq/quorums_init -> llmq/quorums_instantsend -> wallet/wallet -> governance/governance"
 
-    "init -> llmq/quorums_init -> llmq/quorums -> init"
-    "llmq/quorums -> validationinterface -> llmq/quorums_chainlocks -> llmq/quorums"
     "llmq/quorums -> llmq/quorums_dkgsessionmgr -> llmq/quorums_dkgsessionhandler -> llmq/quorums"
     "evo/deterministicmns -> evo/simplifiedmns -> llmq/quorums_blockprocessor -> net -> evo/deterministicmns"
 )
