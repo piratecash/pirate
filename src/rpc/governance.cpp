@@ -138,7 +138,8 @@ void gobject_prepare_help(CWallet* const pwallet)
 
 UniValue gobject_prepare(const JSONRPCRequest& request)
 {
-    CWallet* const pwallet = GetWalletForJSONRPCRequest(request);
+    std::shared_ptr<CWallet> const wallet = GetWalletForJSONRPCRequest(request);
+    CWallet* const pwallet = wallet.get();
     if (request.fHelp || (request.params.size() != 5 && request.params.size() != 6 && request.params.size() != 8))
         gobject_prepare_help(pwallet);
 
@@ -245,7 +246,8 @@ void gobject_list_prepared_help(CWallet* const pwallet)
 
 UniValue gobject_list_prepared(const JSONRPCRequest& request)
 {
-    CWallet* const pwallet = GetWalletForJSONRPCRequest(request);
+    std::shared_ptr<CWallet> const wallet = GetWalletForJSONRPCRequest(request);
+    CWallet* const pwallet = wallet.get();
     if (request.fHelp || (request.params.size() > 2)) {
         gobject_prepare_help(pwallet);
     }
@@ -571,7 +573,8 @@ void gobject_vote_many_help(CWallet* const pwallet)
 
 UniValue gobject_vote_many(const JSONRPCRequest& request)
 {
-    CWallet* const pwallet = GetWalletForJSONRPCRequest(request);
+    std::shared_ptr<CWallet> const wallet = GetWalletForJSONRPCRequest(request);
+    CWallet* const pwallet = wallet.get();
     if (request.fHelp || request.params.size() != 4)
         gobject_vote_many_help(pwallet);
 
@@ -625,7 +628,8 @@ void gobject_vote_alias_help(CWallet* const pwallet)
 
 UniValue gobject_vote_alias(const JSONRPCRequest& request)
 {
-    CWallet* const pwallet = GetWalletForJSONRPCRequest(request);
+    std::shared_ptr<CWallet> const wallet = GetWalletForJSONRPCRequest(request);
+    CWallet* const pwallet = wallet.get();
     if (request.fHelp || request.params.size() != 5)
         gobject_vote_alias_help(pwallet);
 

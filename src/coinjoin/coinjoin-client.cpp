@@ -1347,12 +1347,12 @@ bool CCoinJoinClientSession::PrepareDenominate(int nMinRounds, int nMaxRounds, s
                 ++nSteps;
                 continue;
             }
-            CWallet* pwallet = GetWallet(mixingWallet.GetName());
+            const auto pwallet = GetWallet(mixingWallet.GetName());
             if (!pwallet) {
                 strErrorRet ="Couldn't get wallet pointer";
                 return false;
             }
-            scriptDenom = keyHolderStorage.AddKey(pwallet);
+            scriptDenom = keyHolderStorage.AddKey(pwallet.get());
         }
         vecPSInOutPairsRet.emplace_back(entry, CTxOut(nDenomAmount, scriptDenom));
         // step is complete
@@ -1436,7 +1436,7 @@ bool CCoinJoinClientSession::MakeCollateralAmounts(const CompactTallyItem& tally
         return false;
     }
 
-    CWallet* pwallet = GetWallet(mixingWallet.GetName());
+    const auto pwallet = GetWallet(mixingWallet.GetName());
 
     if (!pwallet) {
         LogPrint(BCLog::COINJOIN, "CCoinJoinClientSession::%s -- Couldn't get wallet pointer\n", __func__);
@@ -1609,7 +1609,7 @@ bool CCoinJoinClientSession::CreateDenominated(CAmount nBalanceToDenominate, con
         return false;
     }
 
-    CWallet* pwallet = GetWallet(mixingWallet.GetName());
+    const auto pwallet = GetWallet(mixingWallet.GetName());
 
     if (!pwallet) {
         LogPrint(BCLog::COINJOIN, "CCoinJoinClientSession::%s -- Couldn't get wallet pointer\n", __func__);
