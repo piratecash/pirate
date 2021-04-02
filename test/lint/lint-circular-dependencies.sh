@@ -105,7 +105,6 @@ EXPECTED_CIRCULAR_DEPENDENCIES=(
     "evo/cbtx -> evo/deterministicmns -> validation -> evo/cbtx"
     "evo/deterministicmns -> validationinterface -> governance/governance-vote -> evo/deterministicmns"
     "evo/deterministicmns -> llmq/quorums_utils -> masternode/masternode-meta -> evo/deterministicmns"
-    "evo/deterministicmns -> llmq/quorums_utils -> net -> evo/deterministicmns"
     "evo/simplifiedmns -> llmq/quorums_blockprocessor -> net_processing -> evo/simplifiedmns"
     "governance/governance-classes -> init -> masternode/masternode-payments -> governance/governance-classes"
     "httprpc -> httpserver -> init -> httprpc"
@@ -136,6 +135,7 @@ EXPECTED_CIRCULAR_DEPENDENCIES=(
     "init -> llmq/quorums_init -> llmq/quorums -> init"
     "llmq/quorums -> validationinterface -> llmq/quorums_chainlocks -> llmq/quorums"
     "llmq/quorums -> llmq/quorums_dkgsessionmgr -> llmq/quorums_dkgsessionhandler -> llmq/quorums"
+    "evo/deterministicmns -> evo/simplifiedmns -> llmq/quorums_blockprocessor -> net -> evo/deterministicmns"
 )
 
 EXIT_CODE=0
