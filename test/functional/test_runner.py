@@ -56,7 +56,7 @@ TEST_EXIT_SKIPPED = 77
 # 20 minutes represented in seconds
 TRAVIS_TIMEOUT_DURATION = 20 * 60
 
-BASE_SCRIPTS= [
+BASE_SCRIPTS = [
     # Scripts that are run by the travis build process.
     # Longest test should go first, to favor running tests in parallel
     'feature_dip3_deterministicmns.py', # NOTE: needs dash_hash to pass
@@ -150,6 +150,7 @@ BASE_SCRIPTS= [
     'rpc_zmq.py',
     'rpc_signmessage.py',
     'feature_nulldummy.py',
+    'mempool_accept.py',
     'wallet_import_rescan.py',
     'rpc_bind.py --ipv4',
     'rpc_bind.py --ipv6',
