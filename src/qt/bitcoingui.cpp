@@ -130,6 +130,8 @@ BitcoinGUI::BitcoinGUI(interfaces::Node& node, const NetworkStyle* networkStyle,
     timerConnecting(0),
     timerSpinner(0)
 {
+    GUIUtil::loadTheme(true);
+
     QSettings settings;
     if (!restoreGeometry(settings.value("MainWindowGeometry").toByteArray())) {
         // Restore failed (perhaps missing setting), center the window
@@ -287,6 +289,17 @@ BitcoinGUI::BitcoinGUI(interfaces::Node& node, const NetworkStyle* networkStyle,
     connect(timerStakingIcon, SIGNAL(timeout()), this, SLOT(setStakingStatus()));
     timerStakingIcon->start(10000);
     setStakingStatus();
+
+    bool fDebugCustomStyleSheets = gArgs.GetBoolArg("-debug-ui", false) && GUIUtil::isStyleSheetDirectoryCustom();
+    if (fDebugCustomStyleSheets) {
+        timerCustomCss = new QTimer(this);
+        QObject::connect(timerCustomCss, &QTimer::timeout, [=]() {
+            if (!m_node.shutdownRequested()) {
+                GUIUtil::loadStyleSheet();
+            }
+        });
+        timerCustomCss->start(200);
+    }
 }
 
 BitcoinGUI::~BitcoinGUI()

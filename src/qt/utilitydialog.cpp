@@ -195,8 +195,6 @@ ShutdownWindow::ShutdownWindow(interfaces::Node& node, QWidget *parent, Qt::Wind
 {
     setObjectName("ShutdownWindow");
 
-    GUIUtil::loadStyleSheet(node, this);
-
     QVBoxLayout *layout = new QVBoxLayout();
     layout->addWidget(new QLabel(
         tr("%1 is shutting down...").arg(tr(PACKAGE_NAME)) + "<br /><br />" +

@@ -542,7 +542,7 @@ RPCConsole::RPCConsole(interfaces::Node& node, QWidget* parent, Qt::WindowFlags 
 
     showPage(TAB_INFO);
 
-    clear();
+    reloadThemedWidgets();
 }
 
 RPCConsole::~RPCConsole()
@@ -724,7 +724,6 @@ void RPCConsole::setClientModel(ClientModel *model)
         autoCompleter = new QCompleter(wordList, this);
         autoCompleter->popup()->setItemDelegate(new QStyledItemDelegate(this));
         autoCompleter->popup()->setObjectName("rpcAutoCompleter");
-        GUIUtil::loadStyleSheet(node, autoCompleter->popup());
         autoCompleter->setModelSorting(QCompleter::CaseSensitivelySortedModel);
         ui->lineEdit->setCompleter(autoCompleter);
         autoCompleter->popup()->installEventFilter(this);
@@ -1283,6 +1282,14 @@ void RPCConsole::setButtonIcons()
     GUIUtil::setIcon(ui->fontSmallerButton, "fontsmaller", GUIUtil::ThemedColor::BLUE, consoleButtonsSize);
 }
 
+void RPCConsole::reloadThemedWidgets()
+{
+    clear();
+    ui->promptLabel->setHidden(GUIUtil::dashThemeActive());
+    // Adjust button icon colors on theme changes
+    setButtonIcons();
+}
+
 void RPCConsole::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
@@ -1315,10 +1322,7 @@ void RPCConsole::hideEvent(QHideEvent *event)
 void RPCConsole::changeEvent(QEvent* e)
 {
     if (e->type() == QEvent::StyleChange) {
-        clear();
-        ui->promptLabel->setHidden(GUIUtil::dashThemeActive());
-        // Adjust button icon colors on theme changes
-        setButtonIcons();
+        reloadThemedWidgets();
     }
 
     QWidget::changeEvent(e);
