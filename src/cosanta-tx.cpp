@@ -93,7 +93,7 @@ static int AppInitRawTx(int argc, char* argv[])
     if (argc<2 || gArgs.IsArgSet("-?") || gArgs.IsArgSet("-h") || gArgs.IsArgSet("-help"))
     {
         // First part of help message is specific to this utility
-        std::string strUsage = strprintf("%s bitcoin-tx utility version", PACKAGE_NAME) + " " + FormatFullVersion() + "\n\n" +
+        std::string strUsage = strprintf("%s dash-tx utility version", PACKAGE_NAME) + " " + FormatFullVersion() + "\n\n" +
             "Usage:\n"
               "  cosanta-tx [options] <hex-tx> [commands]  Update hex-encoded cosanta transaction\n" +
               "  cosanta-tx [options] -create [commands]   Create hex-encoded cosanta transaction\n" +
