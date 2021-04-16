@@ -6,14 +6,6 @@
 #ifndef BITCOIN_MASTERNODE_MASTERNODE_PAYMENTS_H
 #define BITCOIN_MASTERNODE_MASTERNODE_PAYMENTS_H
 
-#include <util/system.h>
-#include <core_io.h>
-#include <key.h>
-#include <net_processing.h>
-#include <util/strencodings.h>
-
-#include <evo/deterministicmns.h>
-
 class CMasternodePayments;
 
 /// TODO: all 4 functions do not belong here really, they should be refactored/moved somewhere (main.cpp ?)

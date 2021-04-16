@@ -11,6 +11,7 @@
 #include <governance/governance-classes.h>
 #include <governance/governance-validators.h>
 #include <index/txindex.h>
+#include <evo/deterministicmns.h>
 #include <txmempool.h>
 #include <masternode/activemasternode.h>
 #include <masternode/masternode-sync.h>

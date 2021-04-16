@@ -6,7 +6,6 @@
 #include <governance/governance-classes.h>
 
 #include <core_io.h>
-#include <init.h>
 #include <governance/governance.h>
 #include <key_io.h>
 #include <primitives/transaction.h>

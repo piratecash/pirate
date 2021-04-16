@@ -11,6 +11,8 @@
 #include <qt/guiutil.h>
 #include <qt/peertablemodel.h>
 
+#include <evo/deterministicmns.h>
+
 #include <chain.h>
 #include <chainparams.h>
 #include <checkpoints.h>
@@ -74,17 +76,17 @@ int ClientModel::getNumConnections(unsigned int flags) const
 void ClientModel::setMasternodeList(const CDeterministicMNList& mnList)
 {
     LOCK(cs_mnlinst);
-    if (mnListCached.GetBlockHash() == mnList.GetBlockHash()) {
+    if (mnListCached->GetBlockHash() == mnList.GetBlockHash()) {
         return;
     }
-    mnListCached = mnList;
+    mnListCached = std::make_shared<CDeterministicMNList>(mnList);
     Q_EMIT masternodeListChanged();
 }
 
 CDeterministicMNList ClientModel::getMasternodeList() const
 {
     LOCK(cs_mnlinst);
-    return mnListCached;
+    return *mnListCached;
 }
 
 void ClientModel::refreshMasternodeList()

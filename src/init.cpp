@@ -63,7 +63,6 @@
 #include <flat-database.h>
 #include <governance/governance.h>
 #include <masternode/masternode-meta.h>
-#include <masternode/masternode-payments.h>
 #include <masternode/masternode-sync.h>
 #include <masternode/masternode-utils.h>
 #include <messagesigner.h>
@@ -73,6 +72,7 @@
 #include <walletinitinterface.h>
 
 #include <evo/deterministicmns.h>
+#include <llmq/quorums.h>
 #include <llmq/quorums_init.h>
 #include <llmq/quorums_blockprocessor.h>
 #include <llmq/quorums_signing.h>

@@ -9,6 +9,7 @@
 #include <masternode/activemasternode.h>
 #include <masternode/masternode-payments.h>
 #include <masternode/masternode-sync.h>
+#include <evo/deterministicmns.h>
 #include <netfulfilledman.h>
 #include <netmessagemaker.h>
 #include <validation.h>

@@ -39,6 +39,7 @@
 #include <coinjoin/coinjoin-client.h>
 #include <coinjoin/coinjoin-client-options.h>
 #include <governance/governance.h>
+#include <evo/deterministicmns.h>
 #include <keepass.h>
 #include <spork.h>
 

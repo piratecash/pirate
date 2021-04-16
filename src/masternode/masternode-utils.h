@@ -6,8 +6,6 @@
 #ifndef BITCOIN_MASTERNODE_MASTERNODE_UTILS_H
 #define BITCOIN_MASTERNODE_MASTERNODE_UTILS_H
 
-#include <evo/deterministicmns.h>
-
 class CConnman;
 
 class CMasternodeUtils

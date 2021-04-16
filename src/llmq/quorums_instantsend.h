@@ -12,6 +12,7 @@
 #include <unordered_lru_cache.h>
 #include <primitives/transaction.h>
 #include <chain.h>
+#include <threadinterrupt.h>
 
 #include <unordered_map>
 #include <unordered_set>

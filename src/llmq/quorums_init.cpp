@@ -15,6 +15,7 @@
 #include <llmq/quorums_signing.h>
 #include <llmq/quorums_signing_shares.h>
 #include <llmq/quorums_utils.h>
+#include <consensus/validation.h>
 
 #include <dbwrapper.h>
 

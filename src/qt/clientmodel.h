@@ -7,7 +7,6 @@
 #ifndef BITCOIN_QT_CLIENTMODEL_H
 #define BITCOIN_QT_CLIENTMODEL_H
 
-#include <evo/deterministicmns.h>
 #include <interfaces/node.h>
 #include <sync.h>
 
@@ -40,6 +39,9 @@ enum NumConnections {
     CONNECTIONS_OUT  = (1U << 1),
     CONNECTIONS_ALL  = (CONNECTIONS_IN | CONNECTIONS_OUT),
 };
+
+class CDeterministicMNList;
+typedef std::shared_ptr<CDeterministicMNList> CDeterministicMNListPtr;
 
 /** Model for Cosanta network client. */
 class ClientModel : public QObject
@@ -106,7 +108,7 @@ private:
     // caches it internally for recent blocks but it's not enough to get consistent
     // representation of the list in UI during initial sync/reindex, so we cache it here too.
     mutable CCriticalSection cs_mnlinst; // protects mnListCached
-    CDeterministicMNList mnListCached;
+    CDeterministicMNListPtr mnListCached;
 
     void subscribeToCoreSignals();
     void unsubscribeFromCoreSignals();
