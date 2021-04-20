@@ -62,7 +62,6 @@ EXPECTED_CIRCULAR_DEPENDENCIES=(
     "governance/governance -> net_processing -> governance/governance"
     "governance/governance-object -> governance/governance-validators -> governance/governance-object"
     "governance/governance-object -> governance/governance-vote -> governance/governance-object"
-    "governance/governance-object -> validationinterface -> governance/governance-object"
     "init -> masternode/masternode-sync -> init"
     "init -> masternode/masternode-utils -> init"
     "init -> net_processing -> init"
@@ -105,9 +104,7 @@ EXPECTED_CIRCULAR_DEPENDENCIES=(
     "httprpc -> httpserver -> init -> httprpc"
     "httpserver -> init -> httpserver"
     "init -> llmq/quorums_init -> llmq/quorums_signing_shares -> init"
-    "llmq/quorums_chainlocks -> net_processing -> validationinterface -> llmq/quorums_chainlocks"
     "llmq/quorums_dkgsession -> llmq/quorums_dkgsessionmgr -> llmq/quorums_dkgsessionhandler -> llmq/quorums_dkgsession"
-    "llmq/quorums_instantsend -> net_processing -> validationinterface -> llmq/quorums_instantsend"
     "logging -> util -> random -> logging"
     "logging -> util -> sync -> logging"
     "logging -> util -> stacktraces -> logging"
@@ -118,10 +115,8 @@ EXPECTED_CIRCULAR_DEPENDENCIES=(
     "bloom -> evo/cbtx -> evo/simplifiedmns -> merkleblock -> bloom"
     "bloom -> evo/cbtx -> llmq/quorums_blockprocessor -> net -> bloom"
     "evo/deterministicmns -> evo/simplifiedmns -> llmq/quorums_blockprocessor -> llmq/quorums_debug -> evo/deterministicmns"
-    "evo/deterministicmns -> validationinterface -> governance/governance-vote -> masternode/masternode-sync -> evo/deterministicmns"
     "evo/deterministicmns -> evo/simplifiedmns -> llmq/quorums_blockprocessor -> net_processing -> evo/deterministicmns"
     "evo/specialtx -> llmq/quorums_blockprocessor -> net_processing -> txmempool -> evo/specialtx"
-    "governance/governance-vote -> masternode/masternode-sync -> validation -> validationinterface -> governance/governance-vote"
     "evo/providertx -> evo/specialtx -> llmq/quorums_blockprocessor -> net_processing -> txmempool -> evo/providertx"
 
     "llmq/quorums -> llmq/quorums_dkgsessionmgr -> llmq/quorums_dkgsessionhandler -> llmq/quorums"
@@ -130,6 +125,7 @@ EXPECTED_CIRCULAR_DEPENDENCIES=(
     "index/txindex -> init -> llmq/quorums_init -> llmq/quorums_instantsend -> index/txindex"
     "index/txindex -> init -> net_processing -> index/txindex"
     "index/txindex -> init -> rpc/blockchain -> index/txindex"
+    "evo/deterministicmns -> evo/simplifiedmns -> llmq/quorums_blockprocessor -> net -> masternode/masternode-sync -> evo/deterministicmns"
 )
 
 EXIT_CODE=0
