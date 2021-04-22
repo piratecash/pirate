@@ -61,7 +61,6 @@ EXPECTED_CIRCULAR_DEPENDENCIES=(
     "governance/governance -> masternode/masternode-sync -> governance/governance"
     "governance/governance -> net_processing -> governance/governance"
     "governance/governance-object -> governance/governance-validators -> governance/governance-object"
-    "governance/governance-object -> governance/governance-vote -> governance/governance-object"
     "init -> masternode/masternode-sync -> init"
     "init -> masternode/masternode-utils -> init"
     "init -> net_processing -> init"
@@ -120,12 +119,16 @@ EXPECTED_CIRCULAR_DEPENDENCIES=(
     "evo/providertx -> evo/specialtx -> llmq/quorums_blockprocessor -> net_processing -> txmempool -> evo/providertx"
 
     "llmq/quorums -> llmq/quorums_dkgsessionmgr -> llmq/quorums_dkgsessionhandler -> llmq/quorums"
-    "evo/deterministicmns -> evo/simplifiedmns -> llmq/quorums_blockprocessor -> net -> evo/deterministicmns"
     "index/txindex -> init -> index/txindex"
     "index/txindex -> init -> llmq/quorums_init -> llmq/quorums_instantsend -> index/txindex"
     "index/txindex -> init -> net_processing -> index/txindex"
     "index/txindex -> init -> rpc/blockchain -> index/txindex"
     "evo/deterministicmns -> evo/simplifiedmns -> llmq/quorums_blockprocessor -> net -> masternode/masternode-sync -> evo/deterministicmns"
+    "governance/governance -> net_processing -> masternode/masternode-payments -> governance/governance"
+    "core_io -> evo/cbtx -> llmq/quorums_blockprocessor -> net_processing -> masternode/masternode-payments -> governance/governance-classes -> governance/governance-object -> core_io"
+    "evo/deterministicmns -> evo/simplifiedmns -> llmq/quorums_blockprocessor -> net_processing -> masternode/masternode-payments -> governance/governance-classes -> governance/governance-object -> evo/deterministicmns"
+    "evo/deterministicmns -> evo/simplifiedmns -> llmq/quorums_blockprocessor -> net -> evo/deterministicmns"
+    "evo/deterministicmns -> evo/simplifiedmns -> llmq/quorums_blockprocessor -> net_processing -> masternode/masternode-payments -> governance/governance-classes -> governance/governance-object -> governance/governance-vote -> evo/deterministicmns"
 )
 
 EXIT_CODE=0

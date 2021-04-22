@@ -10,6 +10,7 @@
 #include <atomic>
 
 class CMasternodeSync;
+class CDataStream;
 
 static const int MASTERNODE_SYNC_BLOCKCHAIN      = 1;
 static const int MASTERNODE_SYNC_GOVERNANCE      = 4;
