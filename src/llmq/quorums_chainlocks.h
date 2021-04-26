@@ -23,6 +23,8 @@ class CScheduler;
 namespace llmq
 {
 
+extern const std::string CLSIG_REQUESTID_PREFIX;
+
 class CChainLockSig
 {
 public:
