@@ -44,7 +44,7 @@ private:
         BLSVerificationVectorPtr vvec;
         CBLSSecretKey skContribution;
     };
-    std::map<ContributionsCacheKey, ContributionsCacheEntry> contributionsCache;
+    std::map<ContributionsCacheKey, ContributionsCacheEntry> contributionsCache GUARDED_BY(contributionsCacheCs);
 
 public:
     CDKGSessionManager(CDBWrapper& _llmqDb, CBLSWorker& _blsWorker);
