@@ -70,8 +70,6 @@ NetworkStyle::NetworkStyle(const QString &_appName, const int iconColorHueShift,
 {
     // Allow for separate UI settings for testnets
     QApplication::setApplicationName(appName);
-    // Make sure settings migrated properly
-    GUIUtil::migrateQtSettings();
     // load pixmap
     QPixmap appIconPixmap(":/icons/cosanta");
 
