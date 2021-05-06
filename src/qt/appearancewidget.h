@@ -53,7 +53,7 @@ private:
     QFont::Weight prevWeightNormal;
     QFont::Weight prevWeightBold;
 
-    void updateWeightSlider();
+    void updateWeightSlider(bool fForce = false);
 };
 
 #endif // DASH_QT_APPEARANCE_WIDGET_H
