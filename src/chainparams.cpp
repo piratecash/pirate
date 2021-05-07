@@ -453,14 +453,14 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nThresholdMin = 2420; // 60% of 4032
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nFalloffCoeff = 5; // this corresponds to 10 periods
 
-        // Deployment of v17 Hard Fork
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].bit = 6;
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nStartTime = 1625097600; // July 1st, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nTimeout = 1656633600; // July 1st, 2022
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nWindowSize = 4032;
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nThresholdStart = 3226; // 80% of 4032
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nThresholdMin = 2420; // 60% of 4032
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nFalloffCoeff = 5; // this corresponds to 10 periods
+        // Deployment of DIP0020, DIP0021 and LLMQ_100_67 quorums
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].bit = 6;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nStartTime = 1625097600; // July 1st, 2021
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nTimeout = 1656633600; // July 1st, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nWindowSize = 4032;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nThresholdStart = 3226; // 80% of 4032
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nThresholdMin = 2420; // 60% of 4032
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nFalloffCoeff = 5; // this corresponds to 10 periods
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x00000000000000000000000000000000000000000000000000006120b78e779e");
@@ -652,14 +652,14 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nThresholdMin = 60; // 60% of 100
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nFalloffCoeff = 5; // this corresponds to 10 periods
 
-        // Deployment of v17 Hard Fork
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].bit = 6;
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nStartTime = 1606780800; // December 1st, 2020
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nTimeout = 1638316800; // December 1st, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nWindowSize = 100;
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nThresholdStart = 80; // 80% of 100
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nThresholdMin = 60; // 60% of 100
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nFalloffCoeff = 5; // this corresponds to 10 periods
+        // Deployment of DIP0020, DIP0021 and LLMQ_100_67 quorums
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].bit = 6;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nStartTime = 1606780800; // December 1st, 2020
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nTimeout = 1638316800; // December 1st, 2021
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nWindowSize = 100;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nThresholdStart = 80; // 80% of 100
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nThresholdMin = 60; // 60% of 100
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nFalloffCoeff = 5; // this corresponds to 10 periods
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x00000000000000000000000000000000000000000000000000000013f294c61a");
@@ -844,14 +844,14 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nThresholdMin = 60; // 60% of 100
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nFalloffCoeff = 5; // this corresponds to 10 periods
 
-        // Deployment of v17 Hard Fork
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].bit = 6;
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nStartTime = 1604188800; // November 1st, 2020
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nTimeout = 1635724800; // November 1st, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nWindowSize = 100;
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nThresholdStart = 80; // 80% of 100
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nThresholdMin = 60; // 60% of 100
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nFalloffCoeff = 5; // this corresponds to 10 periods
+        // Deployment of DIP0020, DIP0021 and LLMQ_100_67 quorums
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].bit = 6;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nStartTime = 1604188800; // November 1st, 2020
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nTimeout = 1635724800; // November 1st, 2021
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nWindowSize = 100;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nThresholdStart = 80; // 80% of 100
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nThresholdMin = 60; // 60% of 100
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nFalloffCoeff = 5; // this corresponds to 10 periods
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x000000000000000000000000000000000000000000000000000000000000000");
@@ -1012,13 +1012,13 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nThresholdStart = 400; // 80%
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nThresholdMin = 300; // 60%
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nFalloffCoeff = 5;
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].bit = 6;
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nStartTime = 0;
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nTimeout = 999999999999ULL;
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nWindowSize = 100;
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nThresholdStart = 80;
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nThresholdMin = 60;
-        consensus.vDeployments[Consensus::DEPLOYMENT_V17].nFalloffCoeff = 5;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].bit = 6;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nStartTime = 0;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nTimeout = 999999999999ULL;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nWindowSize = 100;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nThresholdStart = 80;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nThresholdMin = 60;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nFalloffCoeff = 5;
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x00");
