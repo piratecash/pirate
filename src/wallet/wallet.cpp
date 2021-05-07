@@ -1799,6 +1799,8 @@ void CWallet::GenerateNewHDChain(const SecureString& secureMnemonic, const Secur
         throw std::runtime_error(std::string(__func__) + ": SetMnemonic failed");
     }
 
+    // add default account
+    newHdChain.AddAccount();
     newHdChain.Debug(__func__);
 
     if (!SetHDChainSingle(newHdChain, false)) {
@@ -1828,6 +1830,8 @@ bool CWallet::GenerateNewHDChainEncrypted(const SecureString& secureMnemonic, co
         throw std::runtime_error(std::string(__func__) + ": SetMnemonic failed");
     }
 
+    // add default account
+    hdChainTmp.AddAccount();
     hdChainTmp.Debug(__func__);
 
     for (const MasterKeyMap::value_type& pMasterKey : mapMasterKeys) {
@@ -5465,6 +5469,8 @@ std::shared_ptr<CWallet> CWallet::CreateWalletFromFile(const WalletLocation& loc
                 if (!walletInstance->SetHDChainSingle(newHdChain, false)) {
                     throw std::runtime_error(std::string(__func__) + ": SetHDChainSingle failed");
                 }
+                // add default account
+                newHdChain.AddAccount();
                 newHdChain.Debug(__func__);
             } else {
                 if (gArgs.IsArgSet("-hdseed") && !IsHex(strSeed)) {
