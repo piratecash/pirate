@@ -261,6 +261,7 @@ BITCOIN_CORE_H = \
   undo.h \
   unordered_lru_cache.h \
   util.h \
+  utilasmap.h \
   utilmemory.h \
   utilmoneystr.h \
   utiltime.h \
@@ -598,6 +599,7 @@ libcosanta_util_a_SOURCES = \
   sync.cpp \
   threadinterrupt.cpp \
   util.cpp \
+  utilasmap.cpp \
   utilmoneystr.cpp \
   utilstrencodings.cpp \
   utiltime.cpp \
