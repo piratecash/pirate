@@ -655,7 +655,7 @@ static UniValue getblocktemplate(const JSONRPCRequest& request)
     }
 
     UniValue aux(UniValue::VOBJ);
-    aux.pushKV("flags", HexStr(COINBASE_FLAGS.begin(), COINBASE_FLAGS.end()));
+    aux.pushKV("flags", HexStr(COINBASE_FLAGS));
 
     arith_uint256 hashTarget = arith_uint256().SetCompact(pblock->nBits);
 
