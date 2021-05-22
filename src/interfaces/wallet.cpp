@@ -224,7 +224,10 @@ public:
     {
         return m_wallet.DelAddressBook(dest);
     }
-    bool getAddress(const CTxDestination& dest, std::string* name, isminetype* is_mine) override
+    bool getAddress(const CTxDestination& dest,
+        std::string* name,
+        isminetype* is_mine,
+        std::string* purpose) override
     {
         LOCK(m_wallet.cs_wallet);
         auto it = m_wallet.mapAddressBook.find(dest);
@@ -236,6 +239,9 @@ public:
         }
         if (is_mine) {
             *is_mine = IsMine(m_wallet, dest);
+        }
+        if (purpose) {
+            *purpose = it->second.purpose;
         }
         return true;
     }
