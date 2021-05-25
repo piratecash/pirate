@@ -264,6 +264,7 @@ BITCOIN_CORE_H = \
   utilasmap.h \
   utilmemory.h \
   utilmoneystr.h \
+  utilstring.h \
   utiltime.h \
   validation.h \
   validationinterface.h \
@@ -603,6 +604,7 @@ libcosanta_util_a_SOURCES = \
   utilmoneystr.cpp \
   utilstrencodings.cpp \
   utiltime.cpp \
+  utilstring.cpp \
   $(BITCOIN_CORE_H)
 
 if GLIBC_BACK_COMPAT
