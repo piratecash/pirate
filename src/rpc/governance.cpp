@@ -11,6 +11,7 @@
 #include <governance/governance-classes.h>
 #include <governance/governance-validators.h>
 #include <init.h>
+#include <index/txindex.h>
 #include <txmempool.h>
 #include <validation.h>
 #include <masternode/masternode-sync.h>
@@ -185,6 +186,10 @@ static UniValue gobject_prepare(const JSONRPCRequest& request)
 
     if (govobj.GetObjectType() == GOVERNANCE_OBJECT_TRIGGER) {
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Trigger objects need not be prepared (however only masternodes can create them)");
+    }
+
+    if (g_txindex) {
+        g_txindex->BlockUntilSyncedToCurrentChain();
     }
 
     LOCK2(cs_main, mempool.cs);
@@ -363,6 +368,10 @@ static UniValue gobject_submit(const JSONRPCRequest& request)
     std::string strError = "";
     bool fMissingConfirmations;
     {
+        if (g_txindex) {
+            g_txindex->BlockUntilSyncedToCurrentChain();
+        }
+
         LOCK(cs_main);
         if (!govobj.IsValidLocally(strError, fMissingConfirmations, true) && !fMissingConfirmations) {
             LogPrintf("gobject(submit) -- Object submission rejected because object is not valid - hash = %s, strError = %s\n", strHash, strError);
@@ -678,6 +687,10 @@ static UniValue ListObjects(const std::string& strCachedSignal, const std::strin
 
     // GET MATCHING GOVERNANCE OBJECTS
 
+    if (g_txindex) {
+        g_txindex->BlockUntilSyncedToCurrentChain();
+    }
+
     LOCK2(cs_main, governance.cs);
 
     std::vector<const CGovernanceObject*> objs = governance.GetAllNewerThan(nStartTime);
@@ -810,6 +823,10 @@ static UniValue gobject_get(const JSONRPCRequest& request)
 
     // COLLECT VARIABLES FROM OUR USER
     uint256 hash = ParseHashV(request.params[1], "GovObj hash");
+
+    if (g_txindex) {
+        g_txindex->BlockUntilSyncedToCurrentChain();
+    }
 
     LOCK2(cs_main, governance.cs);
 

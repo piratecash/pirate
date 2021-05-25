@@ -18,6 +18,8 @@
 
 #include <governance/governance-classes.h>
 
+#include <index/txindex.h>
+#include <masternode/activemasternode.h>
 #include <masternode/masternode-payments.h>
 #include <masternode/masternode-sync.h>
 
@@ -397,6 +399,10 @@ static UniValue masternode_payments(const JSONRPCRequest& request)
     }
 
     CBlockIndex* pindex{nullptr};
+
+    if (g_txindex) {
+        g_txindex->BlockUntilSyncedToCurrentChain();
+    }
 
     if (request.params[1].isNull()) {
         LOCK(cs_main);

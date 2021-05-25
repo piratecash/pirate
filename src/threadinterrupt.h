@@ -21,6 +21,7 @@
 class CThreadInterrupt
 {
 public:
+    CThreadInterrupt();
     explicit operator bool() const;
     void operator()();
     void reset();
