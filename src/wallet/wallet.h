@@ -246,15 +246,10 @@ public:
         tx = std::move(arg);
     }
 
-    ADD_SERIALIZE_METHODS;
-
-    template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action) {
+    SERIALIZE_METHODS(CMerkleTx, obj)
+    {
         std::vector<uint256> vMerkleBranch; // For compatibility with older versions.
-        READWRITE(tx);
-        READWRITE(hashBlock);
-        READWRITE(vMerkleBranch);
-        READWRITE(nIndex);
+        READWRITE(obj.tx, obj.hashBlock, vMerkleBranch, obj.nIndex);
     }
 
     void SetMerkleBranch(const CBlockIndex* pIndex, int posInBlock);
@@ -594,17 +589,12 @@ public:
 
     explicit CWalletKey(int64_t nExpires=0);
 
-    ADD_SERIALIZE_METHODS;
-
-    template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action) {
+    SERIALIZE_METHODS(CWalletKey, obj)
+    {
         int nVersion = s.GetVersion();
         if (!(s.GetType() & SER_GETHASH))
             READWRITE(nVersion);
-        READWRITE(vchPrivKey);
-        READWRITE(nTimeCreated);
-        READWRITE(nTimeExpires);
-        READWRITE(LIMITED_STRING(strComment, 65536));
+        READWRITE(obj.vchPrivKey, obj.nTimeCreated, obj.nTimeExpires, LIMITED_STRING(obj.strComment, 65536));
     }
 };
 
@@ -1356,14 +1346,12 @@ public:
         vchPubKey = CPubKey();
     }
 
-    ADD_SERIALIZE_METHODS;
-
-    template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action) {
+    SERIALIZE_METHODS(CAccount, obj)
+    {
         int nVersion = s.GetVersion();
         if (!(s.GetType() & SER_GETHASH))
             READWRITE(nVersion);
-        READWRITE(vchPubKey);
+        READWRITE(obj.vchPubKey);
     }
 };
 
