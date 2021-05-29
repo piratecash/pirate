@@ -5,9 +5,12 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <netbase.h>
-#include <test/test_cosanta.h>
-#include <net_permissions.h>
+#include <protocol.h>
+#include <serialize.h>
+#include <streams.h>
+#include <test/test_cosant.h>
 #include <util/strencodings.h>
+#include <version.h>
 
 #include <string>
 
