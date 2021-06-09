@@ -34,7 +34,7 @@ static int FileWriteStr(const std::string &str, FILE *fp)
 
 bool BCLog::Logger::StartLogging()
 {
-    LockGuard scoped_lock(m_cs);
+    StdLockGuard scoped_lock(m_cs);
 
     assert(m_buffering);
     assert(m_fileout == nullptr);
@@ -276,7 +276,7 @@ std::string BCLog::Logger::LogThreadNameStr(const std::string &str)
 
 void BCLog::Logger::LogPrintStr(const std::string& str)
 {
-    LockGuard scoped_lock(m_cs);
+    StdLockGuard scoped_lock(m_cs);
     std::string strThreadLogged = LogThreadNameStr(str);
     std::string strTimestamped = LogTimestampStr(strThreadLogged);
 
