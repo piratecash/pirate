@@ -66,7 +66,7 @@ private Q_SLOTS:
     void updateDisplayUnit();
 
 protected:
-    void changeEvent(QEvent* e);
+    void changeEvent(QEvent* e) override;
 
 private:
     SendCoinsRecipient recipient;
