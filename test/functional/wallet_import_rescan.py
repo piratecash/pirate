@@ -26,7 +26,6 @@ from test_framework.util import (assert_raises_rpc_error, connect_nodes, assert_
 import collections
 import enum
 import itertools
-import sys
 
 Call = enum.Enum("Call", "single multiaddress multiscript")
 Data = enum.Enum("Data", "address pub priv")
@@ -132,7 +131,7 @@ class ImportRescanTest(BitcoinTestFramework):
                 # txindex is enabled by default in Cosanta and needs to be disabled for import-rescan.py
                 extra_args[i] += ["-prune=1", "-txindex=0", "-reindex"]
 
-        self.add_nodes(self.num_nodes, extra_args=extra_args, stderr=sys.stdout)
+        self.add_nodes(self.num_nodes, extra_args=extra_args)
         self.start_nodes()
         for i in range(1, self.num_nodes):
             connect_nodes(self.nodes[i], 0)
