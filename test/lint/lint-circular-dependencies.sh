@@ -36,7 +36,6 @@ EXPECTED_CIRCULAR_DEPENDENCIES=(
     "evo/deterministicmns -> llmq/utils -> evo/deterministicmns"
     "evo/mnauth -> net_processing -> evo/mnauth"
     "governance/classes -> governance/governance -> governance/classes"
-    "governance/classes -> governance/governance -> net_processing -> masternode/payments -> governance/classes"
     "governance/governance -> governance/object -> governance/governance"
     "governance/governance -> masternode/sync -> governance/governance"
     "governance/governance -> net_processing -> governance/governance"

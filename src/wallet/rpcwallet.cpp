@@ -1,6 +1,6 @@
 // Copyright (c) 2010 Satoshi Nakamoto
-// Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2020 The Dash Core developers
+// Copyright (c) 2009-2018 The Bitcoin Core developers
+// Copyright (c) 2014-2021 The Dash Core developers
 // Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -34,8 +34,6 @@
 #include <wallet/walletdb.h>
 #include <wallet/walletutil.h>
 #include <key_io.h>
-
-#include <init.h>  // For StartShutdown
 
 #include <coinjoin/client.h>
 #include <coinjoin/options.h>

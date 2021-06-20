@@ -33,7 +33,6 @@
 #include <validation.h>
 #include <miner.h>
 #include <chainparams.h>
-#include <init.h>
 #include <interfaces/handler.h>
 #include <interfaces/node.h>
 #include <qt/governancelist.h>

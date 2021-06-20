@@ -249,6 +249,7 @@ BITCOIN_CORE_H = \
   script/sigcache.h \
   script/sign.h \
   script/standard.h \
+  shutdown.h \
   spork.h \
   stacktraces.h \
   streams.h \
@@ -397,6 +398,7 @@ libcosanta_server_a_SOURCES = \
   rpc/coinjoin.cpp \
   rpc/util.cpp \
   script/sigcache.cpp \
+  shutdown.cpp \
   spork.cpp \
   statsd_client.cpp \
   timedata.cpp \

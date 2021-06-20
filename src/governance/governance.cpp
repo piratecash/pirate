@@ -8,7 +8,6 @@
 #include <bloom.h>
 #include <chain.h>
 #include <consensus/validation.h>
-#include <init.h>
 #include <governance/classes.h>
 #include <governance/validators.h>
 #include <masternode/meta.h>
@@ -17,6 +16,7 @@
 #include <netfulfilledman.h>
 #include <netmessagemaker.h>
 #include <protocol.h>
+#include <shutdown.h>
 #include <spork.h>
 
 #include <evo/deterministicmns.h>

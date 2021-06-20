@@ -4,7 +4,7 @@
 
 #include <index/disktxpos.h>
 #include <index/txindex.h>
-#include <init.h>
+#include <shutdown.h>
 #include <ui_interface.h>
 #include <util/system.h>
 #include <validation.h>

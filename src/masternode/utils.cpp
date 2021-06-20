@@ -9,9 +9,9 @@
 #ifdef ENABLE_WALLET
 #include <coinjoin/client.h>
 #endif
-#include <init.h>
 #include <masternode/sync.h>
 #include <net.h>
+#include <shutdown.h>
 #include <validation.h>
 
 
