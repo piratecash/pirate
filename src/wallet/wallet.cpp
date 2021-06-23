@@ -5921,8 +5921,6 @@ void CMerkleTx::SetMerkleBranch(const CBlockIndex* pindex, int posInBlock)
 
 int CMerkleTx::GetDepthInMainChain() const
 {
-    int nResult;
-
     if (hashUnset())
         return 0;
 
