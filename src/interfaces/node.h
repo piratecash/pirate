@@ -147,6 +147,9 @@ public:
     //! Stop node.
     virtual void appShutdown() = 0;
 
+    //! Prepare shutdown.
+    virtual void appPrepareShutdown() = 0;
+
     //! Start shutdown.
     virtual void startShutdown() = 0;
 
