@@ -21,6 +21,7 @@
 #include <fs.h>
 #include <logging.h>
 #include <sync.h>
+#include <utilthreadnames.h>
 #include <tinyformat.h>
 #include <utiltime.h>
 #include <utilmemory.h>
@@ -324,9 +325,6 @@ std::string HelpMessageOpt(const std::string& option, const std::string& message
  */
 int GetNumCores();
 
-void RenameThread(const char* name);
-std::string GetThreadName();
-
 namespace ctpl {
     class thread_pool;
 }
@@ -337,8 +335,7 @@ void RenameThreadPool(ctpl::thread_pool& tp, const char* baseName);
  */
 template <typename Callable> void TraceThread(const std::string name,  Callable func)
 {
-    std::string s = "cosa-" + name;
-    RenameThread(s.c_str());
+    util::ThreadRename(name.c_str());
     try
     {
         LogPrintf("%s thread start\n", name);

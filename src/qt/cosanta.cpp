@@ -261,6 +261,7 @@ void BitcoinCore::initialize()
     try
     {
         qDebug() << __func__ << ": Running initialization in thread";
+        util::ThreadRename("qt-init");
         bool rv = m_node.appInitMain();
         Q_EMIT initializeResult(rv);
     } catch (...) {
@@ -581,6 +582,7 @@ int main(int argc, char *argv[])
     RegisterPrettySignalHandlers();
 
     SetupEnvironment();
+    util::ThreadRename("main");
 
     std::unique_ptr<interfaces::Node> node = interfaces::MakeNode();
 

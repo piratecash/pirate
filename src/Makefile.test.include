@@ -102,6 +102,7 @@ BITCOIN_TESTS =\
   test/test_cosanta.h \
   test/test_cosanta_main.cpp \
   test/sync_tests.cpp \
+  test/util_threadnames_tests.cpp \
   test/timedata_tests.cpp \
   test/torcontrol_tests.cpp \
   test/transaction_tests.cpp \
