@@ -30,7 +30,10 @@
 #include <script/sign.h>
 #include <timedata.h>
 #include <txmempool.h>
+#include <util/error.h>
+#include <util/fees.h>
 #include <util/moneystr.h>
+#include <util/validation.h>
 #include <wallet/fees.h>
 
 #include <coinjoin/coinjoin-client.h>

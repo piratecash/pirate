@@ -264,6 +264,8 @@ BITCOIN_CORE_H = \
   undo.h \
   unordered_lru_cache.h \
   util/bytevectorhash.h \
+  util/error.h \
+  util/fees.h \
   util/system.h \
   util/asmap.h \
   util/memory.h \
@@ -272,6 +274,8 @@ BITCOIN_CORE_H = \
   util/time.h \
   util/threadnames.h \
   util/vector.h \
+  util/url.h \
+  util/validation.h \
   validation.h \
   validationinterface.h \
   versionbits.h \
@@ -613,6 +617,8 @@ libcosanta_util_a_SOURCES = \
   sync.cpp \
   threadinterrupt.cpp \
   util/bytevectorhash.cpp \
+  util/error.cpp \
+  util/fees.cpp \
   util/system.cpp \
   util/asmap.cpp \
   util/moneystr.cpp \
@@ -620,6 +626,8 @@ libcosanta_util_a_SOURCES = \
   util/time.cpp \
   util/string.cpp \
   util/threadnames.cpp \
+  util/url.cpp \
+  util/validation.cpp \
   $(BITCOIN_CORE_H)
 
 if GLIBC_BACK_COMPAT
