@@ -98,10 +98,7 @@ CGovernanceObject::CGovernanceObject(const CGovernanceObject& other) :
 {
 }
 
-bool CGovernanceObject::ProcessVote(CNode* pfrom,
-    const CGovernanceVote& vote,
-    CGovernanceException& exception,
-    CConnman& connman)
+bool CGovernanceObject::ProcessVote(const CGovernanceVote& vote, CGovernanceException& exception)
 {
     LOCK(cs);
 
@@ -330,7 +327,7 @@ bool CGovernanceObject::CheckSignature(const CBLSPublicKey& pubKey) const
 
    Returns an empty object on error.
  */
-UniValue CGovernanceObject::GetJSONObject()
+UniValue CGovernanceObject::GetJSONObject() const
 {
     UniValue obj(UniValue::VOBJ);
     if (vchData.empty()) {
@@ -396,7 +393,7 @@ void CGovernanceObject::LoadData()
 *
 */
 
-void CGovernanceObject::GetData(UniValue& objResult)
+void CGovernanceObject::GetData(UniValue& objResult) const
 {
     UniValue o(UniValue::VOBJ);
     std::string s = GetDataAsPlainString();
@@ -587,13 +584,13 @@ bool CGovernanceObject::IsCollateralValid(std::string& strError, bool& fMissingC
     AssertLockHeld(cs_main);
     int nConfirmationsIn = 0;
     if (nBlockHash != uint256()) {
-        CBlockIndex* pindex = LookupBlockIndex(nBlockHash);
+        const CBlockIndex* pindex = LookupBlockIndex(nBlockHash);
         if (pindex && chainActive.Contains(pindex)) {
             nConfirmationsIn += chainActive.Height() - pindex->nHeight + 1;
         }
     }
 
-    if ((nConfirmationsIn < GOVERNANCE_FEE_CONFIRMATIONS)) {
+    if (nConfirmationsIn < GOVERNANCE_FEE_CONFIRMATIONS) {
         strError = strprintf("Collateral requires at least %d confirmations to be relayed throughout the network (it has only %d)", GOVERNANCE_FEE_CONFIRMATIONS, nConfirmationsIn);
         if (nConfirmationsIn >= GOVERNANCE_MIN_RELAY_FEE_CONFIRMATIONS) {
             fMissingConfirmations = true;
@@ -666,7 +663,7 @@ bool CGovernanceObject::GetCurrentMNVotes(const COutPoint& mnCollateralOutpoint,
     return true;
 }
 
-void CGovernanceObject::Relay(CConnman& connman)
+void CGovernanceObject::Relay(CConnman& connman) const
 {
     // Do not relay until fully synced
     if (!masternodeSync.IsSynced()) {
