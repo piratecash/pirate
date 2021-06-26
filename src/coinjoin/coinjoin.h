@@ -327,7 +327,7 @@ public:
 
     void SetConfirmedHeight(int nConfirmedHeightIn) { nConfirmedHeight = nConfirmedHeightIn; }
     bool IsExpired(const CBlockIndex* pindex) const;
-    bool IsValidStructure();
+    bool IsValidStructure() const;
 };
 
 // base class
@@ -443,7 +443,7 @@ public:
     static void UpdateDSTXConfirmedHeight(const CTransactionRef& tx, int nHeight);
     static void TransactionAddedToMempool(const CTransactionRef& tx);
     static void BlockConnected(const std::shared_ptr<const CBlock>& pblock, const CBlockIndex* pindex, const std::vector<CTransactionRef>& vtxConflicted);
-    static void BlockDisconnected(const std::shared_ptr<const CBlock>& pblock, const CBlockIndex* pindexDisconnected);
+    static void BlockDisconnected(const std::shared_ptr<const CBlock>& pblock, const CBlockIndex*);
 
 };
 

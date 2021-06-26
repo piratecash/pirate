@@ -53,7 +53,7 @@ static double GetSimulatedErrorRate(const std::string& type)
     return 0;
 }
 
-bool CDKGSession::ShouldSimulateError(const std::string& type)
+bool CDKGSession::ShouldSimulateError(const std::string& type) const
 {
     if (params.type != Consensus::LLMQType::LLMQ_TEST) {
         return false;
@@ -109,7 +109,7 @@ bool CDKGSession::Init(const CBlockIndex* _pindexQuorum, const std::vector<CDete
 
     if (!_myProTxHash.IsNull()) {
         for (size_t i = 0; i < members.size(); i++) {
-            auto& m = members[i];
+            const auto& m = members[i];
             if (m->dmn->proTxHash == _myProTxHash) {
                 myIdx = i;
                 myProTxHash = _myProTxHash;
@@ -184,7 +184,7 @@ void CDKGSession::SendContributions(CDKGPendingMessages& pendingMessages)
     qc.contributions->InitEncrypt(members.size());
 
     for (size_t i = 0; i < members.size(); i++) {
-        auto& m = members[i];
+        const auto& m = members[i];
         CBLSSecretKey skContrib = skContributions[i];
 
         if (i != myIdx && ShouldSimulateError("contribution-lie")) {
@@ -242,7 +242,7 @@ bool CDKGSession::PreVerifyMessage(const CDKGContribution& qc, bool& retBan) con
         return false;
     }
 
-    if (!blsWorker.VerifyVerificationVector(*qc.vvec)) {
+    if (!CBLSWorker::VerifyVerificationVector(*qc.vvec)) {
         logger.Batch("invalid verification vector");
         retBan = true;
         return false;
@@ -380,7 +380,7 @@ void CDKGSession::VerifyPendingContributions()
     BLSSecretKeyVector skContributions;
 
     for (const auto& idx : pend) {
-        auto& m = members[idx];
+        const auto& m = members[idx];
         if (m->bad || m->weComplain) {
             continue;
         }
@@ -400,7 +400,7 @@ void CDKGSession::VerifyPendingContributions()
 
     for (size_t i = 0; i < memberIndexes.size(); i++) {
         if (!result[i]) {
-            auto& m = members[memberIndexes[i]];
+            const auto& m = members[memberIndexes[i]];
             logger.Batch("invalid contribution from %s. will complain later", m->dmn->proTxHash.ToString());
             m->weComplain = true;
             quorumDKGDebugManager->UpdateLocalMemberStatus(params.type, m->idx, [&](CDKGDebugMemberStatus& status) {
@@ -457,7 +457,7 @@ void CDKGSession::VerifyAndComplain(CDKGPendingMessages& pendingMessages)
     SendComplaint(pendingMessages);
 }
 
-void CDKGSession::VerifyConnectionAndMinProtoVersions()
+void CDKGSession::VerifyConnectionAndMinProtoVersions() const
 {
     if (!CLLMQUtils::IsQuorumPoseEnabled(params.type)) {
         return;
@@ -510,7 +510,7 @@ void CDKGSession::SendComplaint(CDKGPendingMessages& pendingMessages)
     int badCount = 0;
     int complaintCount = 0;
     for (size_t i = 0; i < members.size(); i++) {
-        auto& m = members[i];
+        const auto& m = members[i];
         if (m->bad || m->badConnection) {
             qc.badMembers[i] = true;
             badCount++;
@@ -622,7 +622,7 @@ void CDKGSession::ReceiveMessage(const CDKGComplaint& qc, bool& retBan)
 
     int receivedCount = 0;
     for (size_t i = 0; i < members.size(); i++) {
-        auto& m = members[i];
+        const auto& m = members[i];
         if (qc.badMembers[i]) {
             logger.Batch("%s voted for %s to be bad", member->dmn->proTxHash.ToString(), m->dmn->proTxHash.ToString());
             m->badMemberVotes.emplace(qc.proTxHash);
@@ -703,7 +703,7 @@ void CDKGSession::SendJustification(CDKGPendingMessages& pendingMessages, const 
     qj.contributions.reserve(forMembers.size());
 
     for (size_t i = 0; i < members.size(); i++) {
-        auto& m = members[i];
+        const auto& m = members[i];
         if (!forMembers.count(m->dmn->proTxHash)) {
             continue;
         }
@@ -842,7 +842,7 @@ void CDKGSession::ReceiveMessage(const CDKGJustification& qj, bool& retBan)
     }
 
     for (const auto& p : qj.contributions) {
-        auto& member2 = members[p.first];
+        const auto& member2 = members[p.first];
 
         if (!member->complaintsFromOthers.count(member2->dmn->proTxHash)) {
             logger.Batch("got justification from %s for %s even though he didn't complain",
@@ -858,7 +858,7 @@ void CDKGSession::ReceiveMessage(const CDKGJustification& qj, bool& retBan)
 
     std::list<std::future<bool>> futures;
     for (const auto& p : qj.contributions) {
-        auto& member2 = members[p.first];
+        const auto& member2 = members[p.first];
         auto& skContribution = p.second;
 
         // watch out to not bail out before these async calls finish (they rely on valid references)
@@ -866,7 +866,7 @@ void CDKGSession::ReceiveMessage(const CDKGJustification& qj, bool& retBan)
     }
     auto resultIt = futures.begin();
     for (const auto& p : qj.contributions) {
-        auto& member2 = members[p.first];
+        const auto& member2 = members[p.first];
         auto& skContribution = p.second;
 
         bool result = (resultIt++)->get();
@@ -958,7 +958,7 @@ void CDKGSession::SendCommitment(CDKGPendingMessages& pendingMessages)
     qc.proTxHash = myProTxHash;
 
     for (size_t i = 0; i < members.size(); i++) {
-        auto& m = members[i];
+        const auto& m = members[i];
         if (!m->bad) {
             qc.validMembers[i] = true;
         }

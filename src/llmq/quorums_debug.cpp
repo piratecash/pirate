@@ -20,7 +20,7 @@ UniValue CDKGDebugSessionStatus::ToJson(int detailLevel) const
 {
     UniValue ret(UniValue::VOBJ);
 
-    if (!Params().GetConsensus().llmqs.count((Consensus::LLMQType)llmqType) || quorumHash.IsNull()) {
+    if (!Params().GetConsensus().llmqs.count(llmqType) || quorumHash.IsNull()) {
         return ret;
     }
 
@@ -32,7 +32,7 @@ UniValue CDKGDebugSessionStatus::ToJson(int detailLevel) const
             pindex = LookupBlockIndex(quorumHash);
         }
         if (pindex != nullptr) {
-            dmnMembers = CLLMQUtils::GetAllQuorumMembers((Consensus::LLMQType) llmqType, pindex);
+            dmnMembers = CLLMQUtils::GetAllQuorumMembers( llmqType, pindex);
         }
     }
 
@@ -76,7 +76,7 @@ UniValue CDKGDebugSessionStatus::ToJson(int detailLevel) const
             }
         }
     };
-    auto push = [&](ArrOrCount& v, const std::string& name) {
+    auto push = [&](const ArrOrCount& v, const std::string& name) {
         if (detailLevel == 0) {
             ret.pushKV(name, v.count);
         } else {
@@ -122,10 +122,10 @@ UniValue CDKGDebugStatus::ToJson(int detailLevel) const
 
     UniValue sessionsJson(UniValue::VOBJ);
     for (const auto& p : sessions) {
-        if (!Params().GetConsensus().llmqs.count((Consensus::LLMQType)p.first)) {
+        if (!Params().GetConsensus().llmqs.count(p.first)) {
             continue;
         }
-        const auto& params = Params().GetConsensus().llmqs.at((Consensus::LLMQType)p.first);
+        const auto& params = Params().GetConsensus().llmqs.at(p.first);
         sessionsJson.pushKV(params.name, p.second.ToJson(detailLevel));
     }
 
