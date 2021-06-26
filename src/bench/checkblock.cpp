@@ -16,7 +16,7 @@
 // a block off the wire, but before we can relay the block on to peers using
 // compact block relay.
 
-static void DeserializeBlockTest(benchmark::State& state)
+static void DeserializeBlockTest(benchmark::Bench& bench)
 {
     CDataStream stream((const char*)raw_bench::block813851,
             (const char*)&raw_bench::block813851[sizeof(raw_bench::block813851)],
@@ -24,15 +24,15 @@ static void DeserializeBlockTest(benchmark::State& state)
     char a = '\0';
     stream.write(&a, 1); // Prevent compaction
 
-    while (state.KeepRunning()) {
+    bench.unit("block").run([&] {
         CBlock block;
         stream >> block;
         bool rewound = stream.Rewind(sizeof(raw_bench::block813851));
         assert(rewound);
-    }
+    });
 }
 
-static void DeserializeAndCheckBlockTest(benchmark::State& state)
+static void DeserializeAndCheckBlockTest(benchmark::Bench& bench)
 {
     CDataStream stream((const char*)raw_bench::block813851,
             (const char*)&raw_bench::block813851[sizeof(raw_bench::block813851)],
@@ -42,7 +42,7 @@ static void DeserializeAndCheckBlockTest(benchmark::State& state)
 
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
 
-    while (state.KeepRunning()) {
+    bench.unit("block").run([&] {
         CBlock block; // Note that CBlock caches its checked state, so we need to recreate it here
         stream >> block;
         bool rewound = stream.Rewind(sizeof(raw_bench::block813851));
@@ -51,8 +51,8 @@ static void DeserializeAndCheckBlockTest(benchmark::State& state)
         CValidationState validationState;
         bool checked = CheckBlock(block, validationState, chainParams->GetConsensus(), block.GetBlockTime());
         assert(checked);
-    }
+    });
 }
 
-BENCHMARK(DeserializeBlockTest, 130);
-BENCHMARK(DeserializeAndCheckBlockTest, 160);
+BENCHMARK(DeserializeBlockTest);
+BENCHMARK(DeserializeAndCheckBlockTest);
