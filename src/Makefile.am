@@ -263,6 +263,7 @@ BITCOIN_CORE_H = \
   ui_interface.h \
   undo.h \
   unordered_lru_cache.h \
+  util/bytevectorhash.h \
   util/system.h \
   util/asmap.h \
   util/memory.h \
@@ -460,7 +461,9 @@ crypto_libcosanta_crypto_base_a_SOURCES = \
   crypto/shabal.c \
   crypto/whirlpool.c \
   crypto/sph_sha2big.c \
-  crypto/streebog.c
+  crypto/streebog.c \
+  crypto/siphash.cpp \
+  crypto/siphash.h
 
 if USE_ASM
 crypto_libcosanta_crypto_base_a_SOURCES += crypto/sha256_sse4.cpp
@@ -608,6 +611,7 @@ libcosanta_util_a_SOURCES = \
   support/cleanse.cpp \
   sync.cpp \
   threadinterrupt.cpp \
+  util/bytevectorhash.cpp \
   util/system.cpp \
   util/asmap.cpp \
   util/moneystr.cpp \
