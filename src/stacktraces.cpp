@@ -9,7 +9,7 @@
 #include <random.h>
 #include <streams.h>
 #include <threadsafety.h>
-#include <utilstrencodings.h>
+#include <util/strencodings.h>
 
 #include <cosanta-config.h>
 

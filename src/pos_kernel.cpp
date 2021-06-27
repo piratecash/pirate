@@ -14,7 +14,7 @@
 #include "script/interpreter.h"
 #include "policy/policy.h"
 #include "timedata.h"
-#include "util.h"
+#include "util/system.h"
 #include "consensus/validation.h"
 
 using namespace std;

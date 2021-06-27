@@ -6,10 +6,10 @@
 
 #include <chainparams.h>
 #include <torcontrol.h>
-#include <utilstrencodings.h>
+#include <util/strencodings.h>
 #include <netbase.h>
 #include <net.h>
-#include <util.h>
+#include <util/system.h>
 #include <crypto/hmac_sha256.h>
 
 #include <vector>

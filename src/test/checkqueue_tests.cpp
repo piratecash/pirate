@@ -3,9 +3,9 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <sync.h>
-#include <util.h>
-#include <utiltime.h>
 #include <validation.h>
+#include <util/system.h>
+#include <util/time.h>
 
 #include <test/test_cosanta.h>
 #include <checkqueue.h>

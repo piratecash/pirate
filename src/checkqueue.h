@@ -7,6 +7,7 @@
 #define BITCOIN_CHECKQUEUE_H
 
 #include <sync.h>
+#include <util/threadnames.h>
 
 #include <algorithm>
 #include <vector>

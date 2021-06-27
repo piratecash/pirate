@@ -17,7 +17,7 @@
 #include <validation.h>
 #include <script/script.h>
 #include <timedata.h>
-#include <util.h>
+#include <util/system.h>
 
 #include <stdint.h>
 #include <string>

@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef BITCOIN_UTILSTRING_H
-#define BITCOIN_UTILSTRING_H
+#ifndef BITCOIN_UTIL_STRING_H
+#define BITCOIN_UTIL_STRING_H
 
 #include <attributes.h>
 
@@ -75,4 +75,4 @@ template <typename T1, size_t PREFIX_LEN>
            std::equal(std::begin(prefix), std::end(prefix), std::begin(obj));
 }
 
-#endif // BITCOIN_UTILSTRING_H
+#endif // BITCOIN_UTIL_STRING_H

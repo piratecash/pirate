@@ -6,7 +6,7 @@
 
 #include <keystore.h>
 
-#include <util.h>
+#include <util/system.h>
 
 bool CBasicKeyStore::GetPubKey(const CKeyID &address, CPubKey &vchPubKeyOut) const
 {

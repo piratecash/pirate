@@ -11,7 +11,7 @@
 
 #include <interfaces/node.h>
 #include <sync.h>
-#include <utiltime.h>
+#include <util/time.h>
 
 #include <QDebug>
 #include <QList>

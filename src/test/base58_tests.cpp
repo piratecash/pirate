@@ -6,7 +6,7 @@
 
 #include <base58.h>
 #include <test/test_cosanta.h>
-#include <utilstrencodings.h>
+#include <util/strencodings.h>
 
 #include <univalue.h>
 
