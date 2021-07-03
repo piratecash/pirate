@@ -10,7 +10,7 @@ import configparser
 import copy
 from enum import Enum
 import logging
-import optparse
+import argparse
 import os
 import pdb
 import shutil
@@ -127,35 +127,35 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
     def main(self):
         """Main function. This should not be overridden by the subclass test scripts."""
 
-        parser = optparse.OptionParser(usage="%prog [options]")
-        parser.add_option("--nocleanup", dest="nocleanup", default=False, action="store_true",
-                          help="Leave cosantads and test.* datadir on exit or error")
-        parser.add_option("--noshutdown", dest="noshutdown", default=False, action="store_true",
-                          help="Don't stop dashds after the test execution")
-        parser.add_option("--cachedir", dest="cachedir", default=os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + "/../../cache"),
-                          help="Directory for caching pregenerated datadirs (default: %default)")
-        parser.add_option("--tmpdir", dest="tmpdir", help="Root directory for datadirs")
-        parser.add_option("-l", "--loglevel", dest="loglevel", default="INFO",
-                          help="log events at this level and higher to the console. Can be set to DEBUG, INFO, WARNING, ERROR or CRITICAL. Passing --loglevel DEBUG will output all logs to console. Note that logs at all levels are always written to the test_framework.log file in the temporary test directory.")
-        parser.add_option("--tracerpc", dest="trace_rpc", default=False, action="store_true",
-                          help="Print out all RPC calls as they are made")
-        parser.add_option("--portseed", dest="port_seed", default=os.getpid(), type='int',
-                          help="The seed to use for assigning port numbers (default: current process id)")
-        parser.add_option("--coveragedir", dest="coveragedir",
-                          help="Write tested RPC commands into this directory")
-        parser.add_option("--configfile", dest="configfile",
-                          default=os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + "/../../config.ini"),
-                          help="Location of the test framework config file (default: %default)")
-        parser.add_option("--pdbonfailure", dest="pdbonfailure", default=False, action="store_true",
-                          help="Attach a python debugger if test fails")
-        parser.add_option("--usecli", dest="usecli", default=False, action="store_true",
-                          help="use dash-cli instead of RPC for all commands")
-        parser.add_option("--dashd-arg", dest="dashd_extra_args", default=[], type='string', action='append',
-                          help="Pass extra args to all dashd instances")
-        parser.add_option("--timeoutscale", dest="timeout_scale", default=1, type='int' ,
-                          help="Scale the test timeouts by multiplying them with the here provided value (defaul: 1)")
+        parser = argparse.ArgumentParser(usage="%(prog)s [options]")
+        parser.add_argument("--nocleanup", dest="nocleanup", default=False, action="store_true",
+                            help="Leave cosantads and test.* datadir on exit or error")
+        parser.add_argument("--noshutdown", dest="noshutdown", default=False, action="store_true",
+                            help="Don't stop cosantads after the test execution")
+        parser.add_argument("--cachedir", dest="cachedir", default=os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + "/../../cache"),
+                            help="Directory for caching pregenerated datadirs (default: %(default)s)")
+        parser.add_argument("--tmpdir", dest="tmpdir", help="Root directory for datadirs")
+        parser.add_argument("-l", "--loglevel", dest="loglevel", default="INFO",
+                            help="log events at this level and higher to the console. Can be set to DEBUG, INFO, WARNING, ERROR or CRITICAL. Passing --loglevel DEBUG will output all logs to console. Note that logs at all levels are always written to the test_framework.log file in the temporary test directory.")
+        parser.add_argument("--tracerpc", dest="trace_rpc", default=False, action="store_true",
+                            help="Print out all RPC calls as they are made")
+        parser.add_argument("--portseed", dest="port_seed", default=os.getpid(), type=int,
+                            help="The seed to use for assigning port numbers (default: current process id)")
+        parser.add_argument("--coveragedir", dest="coveragedir",
+                            help="Write tested RPC commands into this directory")
+        parser.add_argument("--configfile", dest="configfile",
+                            default=os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + "/../../config.ini"),
+                            help="Location of the test framework config file (default: %(default)s)")
+        parser.add_argument("--pdbonfailure", dest="pdbonfailure", default=False, action="store_true",
+                            help="Attach a python debugger if test fails")
+        parser.add_argument("--usecli", dest="usecli", default=False, action="store_true",
+                            help="use cosanta-cli instead of RPC for all commands")
+        parser.add_argument("--cosantad-arg", dest="cosantad_extra_args", default=[], action="append",
+                            help="Pass extra args to all cosantad instances")
+        parser.add_argument("--timeoutscale", dest="timeout_scale", default=1, type=int,
+                            help="Scale the test timeouts by multiplying them with the here provided value (default: %(default)s)")
         self.add_options(parser)
-        (self.options, self.args) = parser.parse_args()
+        self.options = parser.parse_args()
 
         if self.options.timeout_scale < 1:
             raise RuntimeError("--timeoutscale can't be less than 1")
@@ -572,9 +572,9 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
             raise SkipTest("python3-zmq module not available.")
 
     def skip_if_no_bitcoind_zmq(self):
-        """Skip the running test if dashd has not been compiled with zmq support."""
+        """Skip the running test if cosantad has not been compiled with zmq support."""
         if not self.is_zmq_compiled():
-            raise SkipTest("dashd has not been built with zmq enabled.")
+            raise SkipTest("cosantad has not been built with zmq enabled.")
 
     def skip_if_no_wallet(self):
         """Skip the running test if wallet has not been compiled."""
@@ -582,12 +582,12 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
             raise SkipTest("wallet has not been compiled.")
 
     def skip_if_no_cli(self):
-        """Skip the running test if dash-cli has not been compiled."""
+        """Skip the running test if cosanta-cli has not been compiled."""
         if not self.is_cli_compiled():
-            raise SkipTest("dash-cli has not been compiled.")
+            raise SkipTest("cosanta-cli has not been compiled.")
 
     def is_cli_compiled(self):
-        """Checks whether dash-cli was compiled."""
+        """Checks whether cosanta-cli was compiled."""
         config = configparser.ConfigParser()
         config.read_file(open(self.options.configfile))
 

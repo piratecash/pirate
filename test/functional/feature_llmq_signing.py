@@ -23,8 +23,8 @@ class LLMQSigningTest(CosantaTestFramework):
         self.set_cosanta_llmq_test_params(5, 3)
 
     def add_options(self, parser):
-        parser.add_option("--spork21", dest="spork21", default=False, action="store_true",
-                          help="Test with spork21 enabled")
+        parser.add_argument("--spork21", dest="spork21", default=False, action="store_true",
+                            help="Test with spork21 enabled")
 
     def run_test(self):
 
