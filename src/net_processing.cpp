@@ -1144,7 +1144,6 @@ void Misbehaving(NodeId pnode, int howmuch, const std::string& message) EXCLUSIV
     }
 }
 
-// Requires cs_main.
 bool IsBanned(NodeId pnode)
 {
     CNodeState *state = State(pnode);
