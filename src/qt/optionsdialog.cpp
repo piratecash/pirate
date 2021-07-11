@@ -59,7 +59,7 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
     ui->threadsScriptVerif->setMaximum(MAX_SCRIPTCHECK_THREADS);
 
     /* Wallet */
-    ui->coinJoinEnabled->setText(tr("Enable %1 features").arg("CoinJoin"));
+    ui->coinJoinEnabled->setText(tr("Enable %1 features").arg(QString::fromStdString(gCoinJoinName)));
 
     /* Network elements init */
 #ifndef USE_UPNP
@@ -91,6 +91,7 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
         ui->stackedWidgetOptions->removeWidget(ui->pageCoinJoin);
         ui->btnCoinJoin->hide();
     } else {
+        ui->btnCoinJoin->setText(QString::fromStdString(gCoinJoinName));
         pageButtons->addButton(ui->btnWallet, pageButtons->buttons().size());
         pageButtons->addButton(ui->btnCoinJoin, pageButtons->buttons().size());
     }
