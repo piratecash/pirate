@@ -9,7 +9,7 @@
 
 #include <support/allocators/secure.h>
 #include <chainparamsbase.h>
-#include <ctpl.h>
+#include <ctpl_stl.h>
 #include <random.h>
 #include <serialize.h>
 #include <stacktraces.h>

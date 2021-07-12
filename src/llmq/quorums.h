@@ -19,7 +19,7 @@
 #include <bls/bls.h>
 #include <bls/bls_worker.h>
 
-#include <ctpl.h>
+#include <ctpl_stl.h>
 
 class CNode;
 

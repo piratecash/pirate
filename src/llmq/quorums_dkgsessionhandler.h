@@ -9,8 +9,9 @@
 #include <llmq/quorums_dkgsession.h>
 
 #include <validation.h>
+#include <ctpl_stl.h>
+#include <net.h>
 
-#include <ctpl.h>
 
 namespace llmq
 {
