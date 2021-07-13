@@ -626,7 +626,7 @@ void static CosantaMiner(std::shared_ptr<CWallet> pwallet)
 
     try {
         while (!masternodeSync.IsSynced())
-            MilliSleep(1000);
+            UninterruptibleSleep(std::chrono::milliseconds{1000});
         static const int nInnerLoopCount = 0x10000;
 
         unsigned int nExtraNonce = 0;

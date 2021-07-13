@@ -11,6 +11,8 @@
 #include <string>
 #include <chrono>
 
+void UninterruptibleSleep(const std::chrono::microseconds& n);
+
 /**
  * DEPRECATED
  * Use either GetSystemTimeInSeconds (not mockable) or GetTime<T> (mockable)
@@ -28,8 +30,6 @@ int64_t GetSystemTimeInSeconds(); // Like GetTime(), but not mockable
 void SetMockTime(int64_t nMockTimeIn);
 /** For testing */
 int64_t GetMockTime();
-
-void MilliSleep(int64_t n);
 
 /** Return system time (or mocked time, if set) */
 template <typename T>
