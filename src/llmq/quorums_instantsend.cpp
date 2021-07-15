@@ -831,7 +831,7 @@ bool CInstantSendManager::ProcessPendingInstantSendLocks()
     }
 
     auto llmqType = Params().GetConsensus().llmqTypeInstantSend;
-    auto dkgInterval = Params().GetConsensus().llmqs.at(llmqType).dkgInterval;
+    auto dkgInterval = GetLLMQParams(llmqType).dkgInterval;
 
     // First check against the current active set and don't ban
     auto badISLocks = ProcessPendingInstantSendLocks(0, pend, false);

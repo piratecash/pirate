@@ -125,8 +125,7 @@ UniValue CDKGDebugStatus::ToJson(int detailLevel) const
         if (!Params().GetConsensus().llmqs.count(p.first)) {
             continue;
         }
-        const auto& params = Params().GetConsensus().llmqs.at(p.first);
-        sessionsJson.pushKV(params.name, p.second.ToJson(detailLevel));
+        sessionsJson.pushKV(GetLLMQParams(p.first).name, p.second.ToJson(detailLevel));
     }
 
     ret.pushKV("session", sessionsJson);
@@ -162,7 +161,6 @@ void CDKGDebugManager::InitLocalSessionStatus(Consensus::LLMQType llmqType, cons
         it = localStatus.sessions.emplace(llmqType, CDKGDebugSessionStatus()).first;
     }
 
-    auto& params = Params().GetConsensus().llmqs.at(llmqType);
     auto& session = it->second;
     session.llmqType = llmqType;
     session.quorumHash = quorumHash;
@@ -170,7 +168,7 @@ void CDKGDebugManager::InitLocalSessionStatus(Consensus::LLMQType llmqType, cons
     session.phase = 0;
     session.statusBitset = 0;
     session.members.clear();
-    session.members.resize((size_t)params.size);
+    session.members.resize((size_t)GetLLMQParams(llmqType).size);
 }
 
 void CDKGDebugManager::UpdateLocalSessionStatus(Consensus::LLMQType llmqType, std::function<bool(CDKGDebugSessionStatus& status)>&& func)
