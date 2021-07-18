@@ -142,8 +142,6 @@ static constexpr unsigned int MAX_NEW_HEADER_BURST = 50;
 /** Maximum number of unconnecting headers announcements before DoS score */
 static const int MAX_UNCONNECTING_HEADERS = 10;
 
-static const bool DEFAULT_PEERBLOOMFILTERS = true;
-
 /** Default for -stopatheight */
 static const int DEFAULT_STOPATHEIGHT = 0;
 
