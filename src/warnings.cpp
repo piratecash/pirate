@@ -43,7 +43,7 @@ std::string GetWarnings(const std::string& strFor)
 {
     std::string strStatusBar;
     std::string strGUI;
-    const std::string uiAlertSeperator = "<hr />";
+    const std::string uiAlertSeparator = "<hr />";
 
     LOCK(cs_warnings);
 
@@ -56,18 +56,18 @@ std::string GetWarnings(const std::string& strFor)
     if (strMiscWarning != "")
     {
         strStatusBar = strMiscWarning;
-        strGUI += (strGUI.empty() ? "" : uiAlertSeperator) + strMiscWarning;
+        strGUI += (strGUI.empty() ? "" : uiAlertSeparator) + strMiscWarning;
     }
 
     if (fLargeWorkForkFound)
     {
         strStatusBar = "Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.";
-        strGUI += (strGUI.empty() ? "" : uiAlertSeperator) + _("Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.");
+        strGUI += (strGUI.empty() ? "" : uiAlertSeparator) + _("Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.");
     }
     else if (fLargeWorkInvalidChainFound)
     {
         strStatusBar = "Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.";
-        strGUI += (strGUI.empty() ? "" : uiAlertSeperator) + _("Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.");
+        strGUI += (strGUI.empty() ? "" : uiAlertSeparator) + _("Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.");
     }
 
     if (strFor == "gui")

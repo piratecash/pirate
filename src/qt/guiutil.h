@@ -84,7 +84,7 @@ namespace GUIUtil
         TS_ERROR,
         /* Failed operation text style */
         TS_SUCCESS,
-        /* Comand text style */
+        /* Command text style */
         TS_COMMAND,
         /* General text styles */
         TS_PRIMARY,
