@@ -51,7 +51,7 @@ bool CCoinJoinQueue::Sign()
 
 
     uint256 hash = GetSignatureHash();
-    CBLSSignature sig = activeMasternodeInfo.blsKeyOperator->Sign(hash);
+    CBLSSignature sig = WITH_LOCK(activeMasternodeInfoCs, return activeMasternodeInfo.blsKeyOperator->Sign(hash));
     if (!sig.IsValid()) {
         return false;
     }
@@ -97,7 +97,7 @@ bool CCoinJoinBroadcastTx::Sign()
 
     uint256 hash = GetSignatureHash();
 
-    CBLSSignature sig = activeMasternodeInfo.blsKeyOperator->Sign(hash);
+    CBLSSignature sig = WITH_LOCK(activeMasternodeInfoCs, return activeMasternodeInfo.blsKeyOperator->Sign(hash));
     if (!sig.IsValid()) {
         return false;
     }
