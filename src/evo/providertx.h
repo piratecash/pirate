@@ -7,7 +7,6 @@
 #define BITCOIN_EVO_PROVIDERTX_H
 
 #include <bls/bls.h>
-#include <consensus/validation.h>
 #include <primitives/transaction.h>
 
 #include <key_io.h>
@@ -17,13 +16,13 @@
 
 class CBlockIndex;
 class CCoinsViewCache;
+class CValidationState;
 
 class CProRegTx
 {
 public:
     static const uint16_t CURRENT_VERSION = 1;
 
-public:
     uint16_t nVersion{CURRENT_VERSION};                    // message version
     uint16_t nType{0};                                     // only 0 supported for now
     uint16_t nMode{0};                                     // only 0 supported for now
@@ -37,7 +36,6 @@ public:
     uint256 inputsHash; // replay protection
     std::vector<unsigned char> vchSig;
 
-public:
     SERIALIZE_METHODS(CProRegTx, obj)
     {
         READWRITE(
@@ -91,7 +89,6 @@ class CProUpServTx
 public:
     static const uint16_t CURRENT_VERSION = 1;
 
-public:
     uint16_t nVersion{CURRENT_VERSION}; // message version
     uint256 proTxHash;
     CService addr;
@@ -99,7 +96,6 @@ public:
     uint256 inputsHash; // replay protection
     CBLSSignature sig;
 
-public:
     SERIALIZE_METHODS(CProUpServTx, obj)
     {
         READWRITE(obj.nVersion, obj.proTxHash, obj.addr, obj.scriptOperatorPayout, obj.inputsHash);
@@ -108,7 +104,6 @@ public:
         }
     }
 
-public:
     std::string ToString() const;
 
     void ToJson(UniValue& obj) const
@@ -131,7 +126,6 @@ class CProUpRegTx
 public:
     static const uint16_t CURRENT_VERSION = 1;
 
-public:
     uint16_t nVersion{CURRENT_VERSION}; // message version
     uint256 proTxHash;
     uint16_t nMode{0}; // only 0 supported for now
@@ -141,7 +135,6 @@ public:
     uint256 inputsHash; // replay protection
     std::vector<unsigned char> vchSig;
 
-public:
     SERIALIZE_METHODS(CProUpRegTx, obj)
     {
         READWRITE(
@@ -158,7 +151,6 @@ public:
         }
     }
 
-public:
     std::string ToString() const;
 
     void ToJson(UniValue& obj) const
@@ -191,14 +183,12 @@ public:
         REASON_LAST = REASON_CHANGE_OF_KEYS
     };
 
-public:
     uint16_t nVersion{CURRENT_VERSION}; // message version
     uint256 proTxHash;
     uint16_t nReason{REASON_NOT_SPECIFIED};
     uint256 inputsHash; // replay protection
     CBLSSignature sig;
 
-public:
     SERIALIZE_METHODS(CProUpRevTx, obj)
     {
         READWRITE(obj.nVersion, obj.proTxHash, obj.nReason, obj.inputsHash);
@@ -207,7 +197,6 @@ public:
         }
     }
 
-public:
     std::string ToString() const;
 
     void ToJson(UniValue& obj) const

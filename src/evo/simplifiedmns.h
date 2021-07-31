@@ -6,6 +6,8 @@
 #ifndef BITCOIN_EVO_SIMPLIFIEDMNS_H
 #define BITCOIN_EVO_SIMPLIFIEDMNS_H
 
+#include <bls/bls.h>
+
 #include <merkleblock.h>
 #include <pubkey.h>
 
@@ -28,7 +30,6 @@ public:
     CKeyID keyIDVoting;
     bool isValid;
 
-public:
     CSimplifiedMNListEntry() = default;
     explicit CSimplifiedMNListEntry(const CDeterministicMN& dmn);
 
@@ -47,7 +48,6 @@ public:
         return !(rhs == *this);
     }
 
-public:
     SERIALIZE_METHODS(CSimplifiedMNListEntry, obj)
     {
         READWRITE(
@@ -60,7 +60,6 @@ public:
                 );
     }
 
-public:
     uint256 CalcHash() const;
 
     std::string ToString() const;
@@ -72,7 +71,6 @@ class CSimplifiedMNList
 public:
     std::vector<std::unique_ptr<CSimplifiedMNListEntry>> mnList;
 
-public:
     CSimplifiedMNList() = default;
     explicit CSimplifiedMNList(const std::vector<CSimplifiedMNListEntry>& smlEntries);
     explicit CSimplifiedMNList(const CDeterministicMNList& dmnList);
@@ -88,7 +86,6 @@ public:
     uint256 baseBlockHash;
     uint256 blockHash;
 
-public:
     SERIALIZE_METHODS(CGetSimplifiedMNListDiff, obj)
     {
         READWRITE(obj.baseBlockHash, obj.blockHash);
@@ -109,7 +106,6 @@ public:
     std::vector<std::pair<uint8_t, uint256>> deletedQuorums; // p<LLMQType, quorumHash>
     std::vector<llmq::CFinalCommitment> newQuorums;
 
-public:
     SERIALIZE_METHODS(CSimplifiedMNListDiff, obj)
     {
         READWRITE(obj.baseBlockHash, obj.blockHash, obj.cbTxMerkleTree, obj.cbTx, obj.deletedMNs, obj.mnList);
@@ -119,7 +115,6 @@ public:
         }
     }
 
-public:
     CSimplifiedMNListDiff();
     ~CSimplifiedMNListDiff();
 

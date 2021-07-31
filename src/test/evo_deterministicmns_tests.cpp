@@ -5,6 +5,7 @@
 
 #include <test/test_cosanta.h>
 
+#include <consensus/validation.h>
 #include <script/interpreter.h>
 #include <script/standard.h>
 #include <script/sign.h>
