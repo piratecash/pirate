@@ -18,7 +18,8 @@ from test_framework.util import *
 class AbandonConflictTest(BitcoinTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
-        self.extra_args = [["-minrelaytxfee=0.00001"], []]
+        # TODO: remove -txindex. Currently required for getrawtransaction call.
+        self.extra_args = [["-minrelaytxfee=0.00001", "-txindex"], []]
 
     def run_test(self):
         self.nodes[1].generate(100)
