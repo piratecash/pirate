@@ -323,7 +323,7 @@ std::string CCoinJoinClientSession::GetStatus(bool fWaitForBlock) const
             strSuffix = ".";
         else if (nStatusMessageProgress % 70 <= 50)
             strSuffix = "..";
-        else if (nStatusMessageProgress % 70 <= 70)
+        else
             strSuffix = "...";
         return strprintf(_("Submitted to masternode, waiting in queue %s"), strSuffix);
     case POOL_STATE_ACCEPTING_ENTRIES:
@@ -335,7 +335,7 @@ std::string CCoinJoinClientSession::GetStatus(bool fWaitForBlock) const
             strSuffix = ".";
         else if (nStatusMessageProgress % 70 <= 60)
             strSuffix = "..";
-        else if (nStatusMessageProgress % 70 <= 70)
+        else
             strSuffix = "...";
         return strprintf(_("Found enough users, signing ( waiting %s )"), strSuffix);
     case POOL_STATE_ERROR:

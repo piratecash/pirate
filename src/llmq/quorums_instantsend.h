@@ -110,7 +110,7 @@ private:
     // TXs which are neither IS locked nor ChainLocked. We use this to determine for which TXs we need to retry IS locking
     // of child TXs
     struct NonLockedTxInfo {
-        const CBlockIndex* pindexMined{nullptr};
+        const CBlockIndex* pindexMined;
         CTransactionRef tx;
         std::unordered_set<uint256, StaticSaltedHasher> children;
     };
@@ -163,7 +163,7 @@ public:
     bool IsLocked(const uint256& txHash) const;
     CInstantSendLockPtr GetConflictingLock(const CTransaction& tx) const;
 
-    virtual void HandleNewRecoveredSig(const CRecoveredSig& recoveredSig);
+    void HandleNewRecoveredSig(const CRecoveredSig& recoveredSig) override;
 
     void ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStream& vRecv);
 
