@@ -7,6 +7,7 @@
 #include <qt/walletmodel.h>
 
 #include <qt/bitcoingui.h>
+#include <qt/masternodelist.h>
 #include <qt/walletview.h>
 
 #include <cassert>
@@ -29,6 +30,9 @@ WalletFrame::WalletFrame(BitcoinGUI* _gui) :
     QLabel *noWallet = new QLabel(tr("No wallet has been loaded."));
     noWallet->setAlignment(Qt::AlignCenter);
     walletStack->addWidget(noWallet);
+
+    masternodeListPage = new MasternodeList();
+    walletStack->addWidget(masternodeListPage);
 }
 
 WalletFrame::~WalletFrame()
@@ -38,6 +42,8 @@ WalletFrame::~WalletFrame()
 void WalletFrame::setClientModel(ClientModel *_clientModel)
 {
     this->clientModel = _clientModel;
+
+    masternodeListPage->setClientModel(_clientModel);
 
     for (auto i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i) {
         i.value()->setClientModel(_clientModel);
@@ -147,6 +153,12 @@ void WalletFrame::gotoHistoryPage()
 void WalletFrame::gotoMasternodePage()
 {
     QMap<WalletModel*, WalletView*>::const_iterator i;
+
+    if (mapWalletViews.empty()) {
+        walletStack->setCurrentWidget(masternodeListPage);
+        return;
+    }
+
     for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
         i.value()->gotoMasternodePage();
 }
