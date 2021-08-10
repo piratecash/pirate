@@ -13,6 +13,7 @@
 #include <scheduler.h>
 #include <spork.h>
 #include <txmempool.h>
+#include <ui_interface.h>
 #include <util/validation.h>
 
 namespace llmq
@@ -572,6 +573,7 @@ void CChainLocksHandler::EnforceBestChainLock()
     }
 
     GetMainSignals().NotifyChainLock(currentBestChainLockBlockIndex, clsig);
+    uiInterface.NotifyChainLock(clsig->blockHash.ToString(), clsig->nHeight);
 }
 
 void CChainLocksHandler::HandleNewRecoveredSig(const llmq::CRecoveredSig& recoveredSig)
