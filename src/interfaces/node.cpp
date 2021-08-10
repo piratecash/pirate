@@ -35,20 +35,21 @@
 #if defined(HAVE_CONFIG_H)
 #include <config/cosanta-config.h>
 #endif
-#ifdef ENABLE_WALLET
+
+#include <coinjoin/coinjoin.h>
 #include <coinjoin/coinjoin-client-options.h>
-#include <wallet/fees.h>
-#include <wallet/wallet.h>
-#define CHECK_WALLET(x) x
-#else
-#define CHECK_WALLET(x) throw std::logic_error("Wallet function called in non-wallet build.")
-#endif
 
 #include <atomic>
 #include <boost/thread/thread.hpp>
 #include <univalue.h>
 
+class CWallet;
+std::vector<std::shared_ptr<CWallet>> GetWallets();
+
 namespace interfaces {
+
+class Wallet;
+
 namespace {
 
 class EVOImpl : public EVO
@@ -89,7 +90,6 @@ public:
     }
 };
 
-#ifdef ENABLE_WALLET
 class CoinJoinOptionsImpl : public CoinJoin::Options
 {
 public:
@@ -150,16 +150,13 @@ public:
         return CCoinJoin::GetStandardDenominations();
     }
 };
-#endif
 
 class NodeImpl : public Node
 {
     EVOImpl m_evo;
     LLMQImpl m_llmq;
     MasternodeSyncImpl m_masternodeSync;
-#ifdef ENABLE_WALLET
     CoinJoinOptionsImpl m_coinjoin;
-#endif
 
     bool parseParameters(int argc, const char* const argv[], std::string& error) override
     {
@@ -348,22 +345,16 @@ class NodeImpl : public Node
     }
     std::vector<std::unique_ptr<Wallet>> getWallets() override
     {
-#ifdef ENABLE_WALLET
         std::vector<std::unique_ptr<Wallet>> wallets;
         for (const std::shared_ptr<CWallet>& wallet : GetWallets()) {
             wallets.emplace_back(MakeWallet(wallet));
         }
         return wallets;
-#else
-        throw std::logic_error("Node::getWallets() called in non-wallet build.");
-#endif
     }
     EVO& evo() override { return m_evo; }
     LLMQ& llmq() override { return m_llmq; }
     Masternode::Sync& masternodeSync() override { return m_masternodeSync; }
-#ifdef ENABLE_WALLET
     CoinJoin::Options& coinJoinOptions() override { return m_coinjoin; }
-#endif
 
     std::unique_ptr<Handler> handleInitMessage(InitMessageFn fn) override
     {
@@ -383,8 +374,7 @@ class NodeImpl : public Node
     }
     std::unique_ptr<Handler> handleLoadWallet(LoadWalletFn fn) override
     {
-        CHECK_WALLET(
-            return MakeHandler(::uiInterface.LoadWallet_connect([fn](std::shared_ptr<CWallet> wallet) { fn(MakeWallet(wallet)); })));
+        return MakeHandler(::uiInterface.LoadWallet_connect([fn](std::shared_ptr<CWallet> wallet) { fn(MakeWallet(wallet)); }));
     }
     std::unique_ptr<Handler> handleNotifyNumConnectionsChanged(NotifyNumConnectionsChangedFn fn) override
     {
