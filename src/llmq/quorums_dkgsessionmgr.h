@@ -22,7 +22,7 @@ class CDKGSessionManager
     static const int64_t MAX_CONTRIBUTION_CACHE_TIME = 60 * 1000;
 
 private:
-    CDBWrapper& llmqDb;
+    std::unique_ptr<CDBWrapper> db{nullptr};
     CBLSWorker& blsWorker;
 
     std::map<Consensus::LLMQType, CDKGSessionHandler> dkgSessionHandlers;
@@ -47,7 +47,7 @@ private:
     std::map<ContributionsCacheKey, ContributionsCacheEntry> contributionsCache GUARDED_BY(contributionsCacheCs);
 
 public:
-    CDKGSessionManager(CDBWrapper& _llmqDb, CBLSWorker& _blsWorker);
+    CDKGSessionManager(CBLSWorker& _blsWorker, bool unitTests, bool fWipe);
     ~CDKGSessionManager();
 
     void StartThreads();
@@ -72,6 +72,7 @@ public:
     bool GetEncryptedContributions(Consensus::LLMQType llmqType, const CBlockIndex* pindexQuorum, const std::vector<bool>& validMembers, const uint256& proTxHash, std::vector<CBLSIESEncryptedObject<CBLSSecretKey>>& vecRet) const;
 
 private:
+    void MigrateDKG();
     void CleanupCache();
 };
 
