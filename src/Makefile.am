@@ -177,6 +177,7 @@ BITCOIN_CORE_H = \
   httprpc.h \
   httpserver.h \
   index/base.h \
+  index/blockfilterindex.h \
   index/txindex.h \
   indirectmap.h \
   init.h \
@@ -335,6 +336,7 @@ libcosanta_server_a_SOURCES = \
   httprpc.cpp \
   httpserver.cpp \
   index/base.cpp \
+  index/blockfilterindex.cpp \
   index/txindex.cpp \
   init.cpp \
   dbwrapper.cpp \
