@@ -47,6 +47,8 @@
 #include <univalue.h>
 
 class CWallet;
+fs::path GetWalletDir();
+std::vector<fs::path> ListWalletDir();
 std::vector<std::shared_ptr<CWallet>> GetWallets();
 
 namespace interfaces {
@@ -363,6 +365,18 @@ class NodeImpl : public Node
     {
         LOCK(::cs_main);
         return ::pcoinsTip->GetCoin(output, coin);
+    }
+    std::string getWalletDir() override
+    {
+        return GetWalletDir().string();
+    }
+    std::vector<std::string> listWalletDir() override
+    {
+        std::vector<std::string> paths;
+        for (auto& path : ListWalletDir()) {
+            paths.push_back(path.string());
+        }
+        return paths;
     }
     std::vector<std::unique_ptr<Wallet>> getWallets() override
     {
