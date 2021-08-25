@@ -50,6 +50,6 @@ You can monitor the download process by looking at the debug.log file:
 Other commands:
 -------
 
-    ./src/cosantad -daemon # Starts the dash daemon.
+    ./src/cosantad -daemon # Starts the cosanta daemon.
     ./src/cosanta-cli --help # Outputs a list of command-line options.
     ./src/cosanta-cli help # Outputs a list of RPC commands when the daemon is running.
