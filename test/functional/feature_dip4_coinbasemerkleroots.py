@@ -66,11 +66,11 @@ class LLMQCoinbaseCommitmentsTest(CosantaTestFramework):
         expectedDeleted = []
         expectedUpdated = [new_mn.proTxHash]
         mnList = self.test_getmnlistdiff(baseBlockHash, self.nodes[0].getbestblockhash(), mnList, expectedDeleted, expectedUpdated)
-        assert(mnList[new_mn.proTxHash].confirmedHash == 0)
+        assert mnList[new_mn.proTxHash].confirmedHash == 0
         # Now let the MN get enough confirmations and verify that the MNLISTDIFF now has confirmedHash != 0
         self.confirm_mns()
         mnList = self.test_getmnlistdiff(baseBlockHash, self.nodes[0].getbestblockhash(), mnList, expectedDeleted, expectedUpdated)
-        assert(mnList[new_mn.proTxHash].confirmedHash != 0)
+        assert mnList[new_mn.proTxHash].confirmedHash != 0
 
         # Spend the collateral of the previously added MN and test if it appears in "deletedMNs"
         expectedDeleted = [new_mn.proTxHash]
@@ -254,18 +254,18 @@ class LLMQCoinbaseCommitmentsTest(CosantaTestFramework):
         self.wait_for_sporks_same()
 
         cbtx = self.nodes[0].getblock(self.nodes[0].getbestblockhash(), 2)["tx"][0]
-        assert(cbtx["cbTx"]["version"] == 1)
+        assert cbtx["cbTx"]["version"] == 1
 
         self.activate_dip8()
 
         # Assert that merkleRootQuorums is present and 0 (we have no quorums yet)
         cbtx = self.nodes[0].getblock(self.nodes[0].getbestblockhash(), 2)["tx"][0]
         assert_equal(cbtx["cbTx"]["version"], 2)
-        assert("merkleRootQuorums" in cbtx["cbTx"])
+        assert "merkleRootQuorums" in cbtx["cbTx"]
         merkleRootQuorums = int(cbtx["cbTx"]["merkleRootQuorums"], 16)
 
         if with_initial_quorum:
-            assert(merkleRootQuorums != 0)
+            assert merkleRootQuorums != 0
         else:
             assert_equal(merkleRootQuorums, 0)
 
@@ -276,7 +276,7 @@ class LLMQCoinbaseCommitmentsTest(CosantaTestFramework):
         # Mine quorum and verify that merkleRootQuorums has changed
         quorum = self.mine_quorum()
         cbtx = self.nodes[0].getblock(self.nodes[0].getbestblockhash(), 2)["tx"][0]
-        assert(int(cbtx["cbTx"]["merkleRootQuorums"], 16) != merkleRootQuorums)
+        assert int(cbtx["cbTx"]["merkleRootQuorums"], 16) != merkleRootQuorums
 
         return quorum
 

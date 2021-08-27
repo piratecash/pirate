@@ -28,9 +28,6 @@ from .util import (
     get_chain_folder,
 )
 
-# For Python 3.4 compatibility
-JSONDecodeError = getattr(json, "JSONDecodeError", ValueError)
-
 BITCOIND_PROC_WAIT_TIMEOUT = 60
 
 
@@ -432,5 +429,5 @@ class TestNodeCLI():
             raise subprocess.CalledProcessError(returncode, self.binary, output=cli_stderr)
         try:
             return json.loads(cli_stdout, parse_float=decimal.Decimal)
-        except JSONDecodeError:
+        except json.JSONDecodeError:
             return cli_stdout.rstrip("\n")

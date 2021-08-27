@@ -11,7 +11,6 @@ from test_framework.test_framework import (
     BitcoinTestFramework, skip_if_no_bitcoind_zmq, skip_if_no_py3_zmq)
 from test_framework.messages import cosantahash
 from test_framework.util import (assert_equal,
-                                 bytes_to_hex_str,
                                  hash256,
                                  )
 
@@ -99,10 +98,10 @@ class ZMQTest (BitcoinTestFramework):
             assert_equal(hash256(hex), txid)
 
             # Should receive the generated block hash.
-            hash = bytes_to_hex_str(self.hashblock.receive())
+            hash = self.hashblock.receive().hex()
             assert_equal(genhashes[x], hash)
             # The block should only have the coinbase txid.
-            assert_equal([bytes_to_hex_str(txid)], self.nodes[1].getblock(hash)["tx"])
+            assert_equal([txid.hex()], self.nodes[1].getblock(hash)["tx"])
 
             # Should receive the generated raw block.
             block = self.rawblock.receive()
@@ -114,11 +113,11 @@ class ZMQTest (BitcoinTestFramework):
 
         # Should receive the broadcasted txid.
         txid = self.hashtx.receive()
-        assert_equal(payment_txid, bytes_to_hex_str(txid))
+        assert_equal(payment_txid, txid.hex())
 
         # Should receive the broadcasted raw transaction.
         hex = self.rawtx.receive()
-        assert_equal(payment_txid, bytes_to_hex_str(hash256(hex)))
+        assert_equal(payment_txid, hash256(hex).hex())
 
 if __name__ == '__main__':
     ZMQTest().main()
