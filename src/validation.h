@@ -158,7 +158,6 @@ struct StakeHasher
     size_t operator()(const COutPoint& op) const { return op.hash.GetCheapHash() + op.n; }
 };
 
-extern CScript COINBASE_FLAGS;
 extern CCriticalSection cs_main;
 extern CBlockPolicyEstimator feeEstimator;
 extern CTxMemPool mempool;
