@@ -94,7 +94,6 @@ const std::string gCoinJoinName = "CoinJoin";
 int nWalletBackups = 10;
 
 const char * const BITCOIN_CONF_FILENAME = "cosanta.conf";
-const char * const BITCOIN_PID_FILENAME = "cosantad.pid";
 
 ArgsManager gArgs;
 
@@ -949,22 +948,6 @@ std::string ArgsManager::GetDevNetName() const
     return "devnet" + (devNetName.empty() ? "" : "-" + devNetName);
 }
 
-#ifndef WIN32
-fs::path GetPidFile()
-{
-    return AbsPathForConfigVal(fs::path(gArgs.GetArg("-pid", BITCOIN_PID_FILENAME)));
-}
-
-void CreatePidFile(const fs::path &path, pid_t pid)
-{
-    FILE* file = fsbridge::fopen(path, "w");
-    if (file)
-    {
-        fprintf(file, "%d\n", pid);
-        fclose(file);
-    }
-}
-#endif
 
 bool RenameOver(fs::path src, fs::path dest)
 {
