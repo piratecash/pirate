@@ -8,6 +8,8 @@
 
 #include <cassert>
 
+const int CZMQAbstractNotifier::DEFAULT_ZMQ_SNDHWM;
+
 CZMQAbstractNotifier::~CZMQAbstractNotifier()
 {
     assert(!psocket);
