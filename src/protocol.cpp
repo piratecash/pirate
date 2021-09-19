@@ -43,7 +43,8 @@ const char *SENDCMPCT="sendcmpct";
 const char *CMPCTBLOCK="cmpctblock";
 const char *GETBLOCKTXN="getblocktxn";
 const char *BLOCKTXN="blocktxn";
-// Cosanta message types
+const char *GETCFCHECKPT="getcfcheckpt";
+const char *CFCHECKPT="cfcheckpt";
 const char *LEGACYTXLOCKREQUEST="ix";
 const char *SPORK="spork";
 const char *GETSPORKS="getsporks";
@@ -114,7 +115,9 @@ const static std::string allNetMessageTypes[] = {
     NetMsgType::CMPCTBLOCK,
     NetMsgType::GETBLOCKTXN,
     NetMsgType::BLOCKTXN,
-    // Cosanta message types
+    NetMsgType::GETCFCHECKPT,
+    NetMsgType::CFCHECKPT,
+    // Dash message types
     // NOTE: do NOT include non-implmented here, we want them to be "Unknown command" in ProcessMessage()
     NetMsgType::LEGACYTXLOCKREQUEST,
     NetMsgType::SPORK,
