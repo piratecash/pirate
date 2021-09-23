@@ -560,7 +560,9 @@ public:
             if (v.size() != s) {
                 v.resize(s);
             }
-            ::memmove(v.data(), &*b, s);
+            if (!v.empty()) {
+                ::memmove(v.data(), &*b, s);
+            }
         } else {
             v.assign(&*b, &*e);
         }
