@@ -60,11 +60,7 @@ static UniValue quorum_list(const JSONRPCRequest& request)
 
     UniValue ret(UniValue::VOBJ);
 
-    CBlockIndex* pindexTip;
-    {
-        LOCK(cs_main);
-        pindexTip = chainActive.Tip();
-    }
+    CBlockIndex* pindexTip = WITH_LOCK(cs_main, return chainActive.Tip());
 
     for (auto& type : llmq::CLLMQUtils::GetEnabledQuorumTypes(pindexTip)) {
         const auto& llmq_params = llmq::GetLLMQParams(type);
@@ -185,11 +181,7 @@ static UniValue quorum_dkgstatus(const JSONRPCRequest& request)
 
     auto ret = status.ToJson(detailLevel);
 
-    CBlockIndex* pindexTip;
-    {
-        LOCK(cs_main);
-        pindexTip = chainActive.Tip();
-    }
+    CBlockIndex* pindexTip = WITH_LOCK(cs_main, return chainActive.Tip());
     int tipHeight = pindexTip->nHeight;
 
     auto proTxHash = WITH_LOCK(activeMasternodeInfoCs, return activeMasternodeInfo.proTxHash);
@@ -199,11 +191,7 @@ static UniValue quorum_dkgstatus(const JSONRPCRequest& request)
         const auto& llmq_params = llmq::GetLLMQParams(type);
 
         if (fMasternodeMode) {
-            const CBlockIndex* pindexQuorum;
-            {
-                LOCK(cs_main);
-                pindexQuorum = chainActive[tipHeight - (tipHeight % llmq_params.dkgInterval)];
-            }
+            const CBlockIndex* pindexQuorum = WITH_LOCK(cs_main, return chainActive[tipHeight - (tipHeight % llmq_params.dkgInterval)]);
             auto allConnections = llmq::CLLMQUtils::GetQuorumConnections(llmq_params.type, pindexQuorum, proTxHash, false);
             auto outboundConnections = llmq::CLLMQUtils::GetQuorumConnections(llmq_params.type, pindexQuorum, proTxHash, true);
             std::map<uint256, CAddress> foundConnections;
@@ -272,11 +260,7 @@ static UniValue quorum_memberof(const JSONRPCRequest& request)
         }
     }
 
-    const CBlockIndex* pindexTip;
-    {
-        LOCK(cs_main);
-        pindexTip = chainActive.Tip();
-    }
+    const CBlockIndex* pindexTip = WITH_LOCK(cs_main, return chainActive.Tip());
 
     auto mnList = deterministicMNManager->GetListForBlock(pindexTip);
     auto dmn = mnList.GetMN(protxHash);
@@ -607,11 +591,7 @@ static UniValue quorum_getdata(const JSONRPCRequest& request)
         }
     }
 
-    const CBlockIndex* pQuorumIndex{nullptr};
-    {
-        LOCK(cs_main);
-        pQuorumIndex = LookupBlockIndex(quorumHash);
-    }
+    const CBlockIndex* pQuorumIndex = WITH_LOCK(cs_main, return LookupBlockIndex(quorumHash));
     return g_connman->ForNode(nodeId, [&](CNode* pNode) {
         return llmq::quorumManager->RequestQuorumData(pNode, llmqType, pQuorumIndex, nDataMask, proTxHash);
     });
@@ -701,8 +681,7 @@ static UniValue verifychainlock(const JSONRPCRequest& request)
 
     int nBlockHeight;
     if (request.params[2].isNull()) {
-        LOCK(cs_main);
-        const CBlockIndex* pIndex = LookupBlockIndex(nBlockHash);
+        const CBlockIndex* pIndex = WITH_LOCK(cs_main, return LookupBlockIndex(nBlockHash));
         if (pIndex == nullptr) {
             throw JSONRPCError(RPC_INTERNAL_ERROR, "blockHash not found");
         }

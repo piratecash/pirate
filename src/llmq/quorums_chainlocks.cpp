@@ -141,11 +141,7 @@ void CChainLocksHandler::ProcessNewChainLock(const NodeId from, const llmq::CCha
         return;
     }
 
-    CBlockIndex* pindex;
-    {
-        LOCK(cs_main);
-        pindex = LookupBlockIndex(clsig.blockHash);
-    }
+    CBlockIndex* pindex = WITH_LOCK(cs_main, return LookupBlockIndex(clsig.blockHash));
 
     {
         LOCK(cs);
