@@ -246,20 +246,19 @@ BOOST_FIXTURE_TEST_CASE(dip3_activation, TestChainDIP3BeforeActivationSetup)
     // We start one block before DIP3 activation, so mining a block with a DIP3 transaction should fail
     auto block = std::make_shared<CBlock>(CreateBlock(txns, coinbaseKey));
     ProcessNewBlock(Params(), block, true, nullptr);
-    BOOST_ASSERT(chainActive.Height() == nHeight);
+    BOOST_CHECK_EQUAL(chainActive.Height(), nHeight);
     BOOST_ASSERT(block->GetHash() != chainActive.Tip()->GetBlockHash());
     BOOST_ASSERT(!deterministicMNManager->GetListAtChainTip().HasMN(tx.GetHash()));
 
     // This block should activate DIP3
     CreateAndProcessBlock({}, coinbaseKey);
-    BOOST_ASSERT(chainActive.Height() == nHeight + 1);
-
+    BOOST_CHECK_EQUAL(chainActive.Height(), nHeight + 1);
     // Mining a block with a DIP3 transaction should succeed now
     block = std::make_shared<CBlock>(CreateBlock(txns, coinbaseKey));
-    ProcessNewBlock(Params(), block, true, nullptr);
+    BOOST_ASSERT(ProcessNewBlock(Params(), block, true, nullptr));
     deterministicMNManager->UpdatedBlockTip(chainActive.Tip());
-    BOOST_ASSERT(chainActive.Height() == nHeight + 2);
-    BOOST_ASSERT(block->GetHash() == chainActive.Tip()->GetBlockHash());
+    BOOST_CHECK_EQUAL(chainActive.Height(), nHeight + 2);
+    BOOST_CHECK_EQUAL(block->GetHash(), chainActive.Tip()->GetBlockHash());
     BOOST_ASSERT(deterministicMNManager->GetListAtChainTip().HasMN(tx.GetHash()));
 }
 
@@ -304,7 +303,7 @@ BOOST_FIXTURE_TEST_CASE(dip3_protx, TestChainDIP3Setup)
         CreateAndProcessBlock({tx}, coinbaseKey);
         deterministicMNManager->UpdatedBlockTip(chainActive.Tip());
 
-        BOOST_ASSERT(chainActive.Height() == nHeight + 1);
+        BOOST_CHECK_EQUAL(chainActive.Height(), nHeight + 1);
         BOOST_ASSERT(deterministicMNManager->GetListAtChainTip().HasMN(tx.GetHash()));
 
         nHeight++;
@@ -345,7 +344,7 @@ BOOST_FIXTURE_TEST_CASE(dip3_protx, TestChainDIP3Setup)
         }
         CreateAndProcessBlock(txns, coinbaseKey);
         deterministicMNManager->UpdatedBlockTip(chainActive.Tip());
-        BOOST_ASSERT(chainActive.Height() == nHeight + 1);
+        BOOST_CHECK_EQUAL(chainActive.Height(), nHeight + 1);
 
         for (size_t j = 0; j < 3; j++) {
             BOOST_ASSERT(deterministicMNManager->GetListAtChainTip().HasMN(txns[j].GetHash()));
@@ -358,7 +357,7 @@ BOOST_FIXTURE_TEST_CASE(dip3_protx, TestChainDIP3Setup)
     auto tx = CreateProUpServTx(utxos, dmnHashes[0], operatorKeys[dmnHashes[0]], 1000, CScript(), coinbaseKey);
     CreateAndProcessBlock({tx}, coinbaseKey);
     deterministicMNManager->UpdatedBlockTip(chainActive.Tip());
-    BOOST_ASSERT(chainActive.Height() == nHeight + 1);
+    BOOST_CHECK_EQUAL(chainActive.Height(), nHeight + 1);
     nHeight++;
 
     auto dmn = deterministicMNManager->GetListAtChainTip().GetMN(dmnHashes[0]);
@@ -368,7 +367,7 @@ BOOST_FIXTURE_TEST_CASE(dip3_protx, TestChainDIP3Setup)
     tx = CreateProUpRevTx(utxos, dmnHashes[0], operatorKeys[dmnHashes[0]], coinbaseKey);
     CreateAndProcessBlock({tx}, coinbaseKey);
     deterministicMNManager->UpdatedBlockTip(chainActive.Tip());
-    BOOST_ASSERT(chainActive.Height() == nHeight + 1);
+    BOOST_CHECK_EQUAL(chainActive.Height(), nHeight + 1);
     nHeight++;
 
     dmn = deterministicMNManager->GetListAtChainTip().GetMN(dmnHashes[0]);
@@ -405,13 +404,13 @@ BOOST_FIXTURE_TEST_CASE(dip3_protx, TestChainDIP3Setup)
     // now process the block
     CreateAndProcessBlock({tx}, coinbaseKey);
     deterministicMNManager->UpdatedBlockTip(chainActive.Tip());
-    BOOST_ASSERT(chainActive.Height() == nHeight + 1);
+    BOOST_CHECK_EQUAL(chainActive.Height(), nHeight + 1);
     nHeight++;
 
     tx = CreateProUpServTx(utxos, dmnHashes[0], newOperatorKey, 100, CScript(), coinbaseKey);
     CreateAndProcessBlock({tx}, coinbaseKey);
     deterministicMNManager->UpdatedBlockTip(chainActive.Tip());
-    BOOST_ASSERT(chainActive.Height() == nHeight + 1);
+    BOOST_CHECK_EQUAL(chainActive.Height(), nHeight + 1);
     nHeight++;
 
     dmn = deterministicMNManager->GetListAtChainTip().GetMN(dmnHashes[0]);
@@ -467,8 +466,8 @@ BOOST_FIXTURE_TEST_CASE(dip3_test_mempool_reorg, TestChainDIP3Setup)
     auto block = std::make_shared<CBlock>(CreateBlock({tx_collateral}, coinbaseKey));
     BOOST_ASSERT(ProcessNewBlock(Params(), block, true, nullptr));
     deterministicMNManager->UpdatedBlockTip(chainActive.Tip());
-    BOOST_ASSERT(chainActive.Height() == nHeight + 1);
-    BOOST_ASSERT(block->GetHash() == chainActive.Tip()->GetBlockHash());
+    BOOST_CHECK_EQUAL(chainActive.Height(), nHeight + 1);
+    BOOST_CHECK_EQUAL(block->GetHash(), chainActive.Tip()->GetBlockHash());
 
     CProRegTx payload;
     payload.addr = LookupNumeric("1.1.1.1", 1);
@@ -598,8 +597,8 @@ BOOST_FIXTURE_TEST_CASE(dip3_verify_db, TestChainDIP3Setup)
     auto block = std::make_shared<CBlock>(CreateBlock({tx_collateral}, coinbaseKey));
     BOOST_ASSERT(ProcessNewBlock(Params(), block, true, nullptr));
     deterministicMNManager->UpdatedBlockTip(chainActive.Tip());
-    BOOST_ASSERT(chainActive.Height() == nHeight + 1);
-    BOOST_ASSERT(block->GetHash() == chainActive.Tip()->GetBlockHash());
+    BOOST_CHECK_EQUAL(chainActive.Height(), nHeight + 1);
+    BOOST_CHECK_EQUAL(block->GetHash(), chainActive.Tip()->GetBlockHash());
 
     CProRegTx payload;
     payload.addr = LookupNumeric("1.1.1.1", 1);
@@ -629,8 +628,8 @@ BOOST_FIXTURE_TEST_CASE(dip3_verify_db, TestChainDIP3Setup)
     block = std::make_shared<CBlock>(CreateBlock({tx_reg}, coinbaseKey));
     BOOST_ASSERT(ProcessNewBlock(Params(), block, true, nullptr));
     deterministicMNManager->UpdatedBlockTip(chainActive.Tip());
-    BOOST_ASSERT(chainActive.Height() == nHeight + 2);
-    BOOST_ASSERT(block->GetHash() == chainActive.Tip()->GetBlockHash());
+    BOOST_CHECK_EQUAL(chainActive.Height(), nHeight + 2);
+    BOOST_CHECK_EQUAL(block->GetHash(), chainActive.Tip()->GetBlockHash());
     BOOST_ASSERT(deterministicMNManager->GetListAtChainTip().HasMN(tx_reg_hash));
 
     // Now spend the collateral while updating the same MN
@@ -641,8 +640,8 @@ BOOST_FIXTURE_TEST_CASE(dip3_verify_db, TestChainDIP3Setup)
     block = std::make_shared<CBlock>(CreateBlock({proUpRevTx}, coinbaseKey));
     BOOST_ASSERT(ProcessNewBlock(Params(), block, true, nullptr));
     deterministicMNManager->UpdatedBlockTip(chainActive.Tip());
-    BOOST_ASSERT(chainActive.Height() == nHeight + 3);
-    BOOST_ASSERT(block->GetHash() == chainActive.Tip()->GetBlockHash());
+    BOOST_CHECK_EQUAL(chainActive.Height(), nHeight + 3);
+    BOOST_CHECK_EQUAL(block->GetHash(), chainActive.Tip()->GetBlockHash());
     BOOST_ASSERT(!deterministicMNManager->GetListAtChainTip().HasMN(tx_reg_hash));
 
     // Verify db consistency

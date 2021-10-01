@@ -62,7 +62,7 @@ void CKeyHolderStorage::KeepAll()
     }
 
     if (!tmp.empty()) {
-        for (auto& key : tmp) {
+        for (const auto& key : tmp) {
             key->KeepKey();
         }
         LogPrint(BCLog::COINJOIN, "CKeyHolderStorage::%s -- %lld keys kept\n", __func__, tmp.size());
@@ -79,7 +79,7 @@ void CKeyHolderStorage::ReturnAll()
     }
 
     if (!tmp.empty()) {
-        for (auto& key : tmp) {
+        for (const auto& key : tmp) {
             key->ReturnKey();
         }
         LogPrint(BCLog::COINJOIN, "CKeyHolderStorage::%s -- %lld keys returned\n", __func__, tmp.size());
