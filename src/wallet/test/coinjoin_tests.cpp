@@ -5,7 +5,7 @@
 #include <test/test_cosanta.h>
 
 #include <amount.h>
-#include <coinjoin/coinjoin-util.h>
+#include <coinjoin/util.h>
 #include <coinjoin/coinjoin.h>
 #include <consensus/validation.h>
 #include <validation.h>

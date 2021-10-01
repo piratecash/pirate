@@ -9,6 +9,8 @@
 #include <zmq/zmqpublishnotifier.h>
 #include <validation.h>
 #include <util/system.h>
+#include <governance/object.h>
+#include <governance/vote.h>
 
 static std::multimap<std::string, CZMQAbstractPublishNotifier*> mapPublishNotifiers;
 

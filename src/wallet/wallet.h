@@ -25,7 +25,7 @@
 #include <wallet/walletutil.h>
 
 #include <coinjoin/coinjoin.h>
-#include <governance/governance-object.h>
+#include <governance/object.h>
 
 #include <algorithm>
 #include <atomic>

@@ -3,10 +3,10 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef BITCOIN_COINJOIN_COINJOIN_CLIENT_H
-#define BITCOIN_COINJOIN_COINJOIN_CLIENT_H
+#ifndef BITCOIN_COINJOIN_CLIENT_H
+#define BITCOIN_COINJOIN_CLIENT_H
 
-#include <coinjoin/coinjoin-util.h>
+#include <coinjoin/util.h>
 #include <coinjoin/coinjoin.h>
 
 class CDeterministicMN;
@@ -251,4 +251,4 @@ public:
 
 void DoCoinJoinMaintenance(CConnman& connman);
 
-#endif // BITCOIN_COINJOIN_COINJOIN_CLIENT_H
+#endif // BITCOIN_COINJOIN_CLIENT_H

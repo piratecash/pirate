@@ -10,7 +10,7 @@
 
 #include <chain.h>
 #include <consensus/validation.h>
-#include <masternode/masternode-sync.h>
+#include <masternode/sync.h>
 #include <net_processing.h>
 #include <scheduler.h>
 #include <spork.h>

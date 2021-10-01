@@ -2,8 +2,8 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef BITCOIN_COINJOIN_COINJOIN_CLIENT_OPTIONS_H
-#define BITCOIN_COINJOIN_COINJOIN_CLIENT_OPTIONS_H
+#ifndef BITCOIN_COINJOIN_OPTIONS_H
+#define BITCOIN_COINJOIN_OPTIONS_H
 
 #include <amount.h>
 #include <sync.h>
@@ -100,4 +100,4 @@ private:
     static void Init();
 };
 
-#endif // BITCOIN_COINJOIN_COINJOIN_CLIENT_OPTIONS_H
+#endif // BITCOIN_COINJOIN_OPTIONS_H

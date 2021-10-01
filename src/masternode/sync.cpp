@@ -6,7 +6,7 @@
 #include <governance/governance.h>
 #include <init.h>
 #include <validation.h>
-#include <masternode/masternode-sync.h>
+#include <masternode/sync.h>
 #include <netfulfilledman.h>
 #include <netmessagemaker.h>
 #include <ui_interface.h>

@@ -1,7 +1,7 @@
 #include <qt/test/wallettests.h>
 #include <qt/test/util.h>
 
-#include <coinjoin/coinjoin-client.h>
+#include <coinjoin/client.h>
 #include <interfaces/node.h>
 #include <qt/bitcoinamountfield.h>
 #include <qt/callback.h>

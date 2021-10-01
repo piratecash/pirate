@@ -7,7 +7,7 @@
 
 #include <init.h>
 #include <pos_kernel.h>
-#include <masternode/activemasternode.h>
+#include <masternode/node.h>
 
 #include <wallet/wallet.h>
 
@@ -36,8 +36,8 @@
 #include <util/validation.h>
 #include <wallet/fees.h>
 
-#include <coinjoin/coinjoin-client.h>
-#include <coinjoin/coinjoin-client-options.h>
+#include <coinjoin/client.h>
+#include <coinjoin/options.h>
 #include <governance/governance.h>
 #include <evo/deterministicmns.h>
 #include <keepass.h>

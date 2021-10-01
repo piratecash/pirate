@@ -11,7 +11,7 @@
 #include <consensus/validation.h>
 #include <key_io.h>
 #include <fs.h>
-#include <governance/governance-object.h>
+#include <governance/object.h>
 #include <protocol.h>
 #include <serialize.h>
 #include <sync.h>

@@ -16,7 +16,7 @@
 #include <validation.h>
 #include <versionbits.h>
 
-#include <masternode/masternode-meta.h>
+#include <masternode/meta.h>
 
 namespace llmq
 {
