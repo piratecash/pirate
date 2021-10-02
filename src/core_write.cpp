@@ -23,7 +23,7 @@
 #include <evo/cbtx.h>
 #include <evo/providertx.h>
 #include <evo/specialtx.h>
-#include <llmq/quorums_commitment.h>
+#include <llmq/commitment.h>
 
 UniValue ValueFromAmount(const CAmount& amount)
 {

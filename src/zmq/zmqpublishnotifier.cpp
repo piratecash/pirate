@@ -12,6 +12,10 @@
 #include <governance/object.h>
 #include <governance/vote.h>
 
+#include <llmq/chainlocks.h>
+#include <llmq/instantsend.h>
+#include <llmq/signing.h>
+
 static std::multimap<std::string, CZMQAbstractPublishNotifier*> mapPublishNotifiers;
 
 static const char *MSG_HASHBLOCK     = "hashblock";
