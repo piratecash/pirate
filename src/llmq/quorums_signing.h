@@ -19,7 +19,7 @@
 #include <sync.h>
 #include <random.h>
 
-typedef int64_t NodeId;
+using NodeId = int64_t;
 class CInv;
 class CNode;
 
@@ -27,7 +27,7 @@ namespace llmq
 {
 
 class CQuorum;
-typedef std::shared_ptr<const CQuorum> CQuorumCPtr;
+using CQuorumCPtr = std::shared_ptr<const CQuorum>;
 
 // Keep recovered signatures for a week. This is a "-maxrecsigsage" option default.
 static const int64_t DEFAULT_MAX_RECOVERED_SIGS_AGE = 60 * 60 * 24 * 7;
