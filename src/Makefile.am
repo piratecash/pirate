@@ -585,7 +585,6 @@ libpiratecash_common_a_SOURCES = \
   key.cpp \
   key_io.cpp \
   keystore.cpp \
-  llmq/params.cpp \
   netaddress.cpp \
   netbase.cpp \
   net_permissions.cpp \
