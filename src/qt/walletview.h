@@ -7,6 +7,7 @@
 #define BITCOIN_QT_WALLETVIEW_H
 
 #include <amount.h>
+#include <qt/governancelist.h>
 #include <qt/masternodelist.h>
 
 #include <QStackedWidget>
@@ -69,6 +70,7 @@ private:
     AddressBookPage *usedSendingAddressesPage;
     AddressBookPage *usedReceivingAddressesPage;
     MasternodeList *masternodeListPage;
+    GovernanceList* governanceListPage;
 
     TransactionView *transactionView;
 
@@ -76,6 +78,8 @@ private:
     QLabel *transactionSum;
 
 public Q_SLOTS:
+    /** Switch to governance page */
+    void gotoGovernancePage();
     /** Switch to overview (home) page */
     void gotoOverviewPage();
     /** Switch to history (transactions) page */

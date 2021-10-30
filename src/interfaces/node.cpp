@@ -10,6 +10,7 @@
 #include <chain.h>
 #include <chainparams.h>
 #include <evo/deterministicmns.h>
+#include <governance/governance.h>
 #include <governance/object.h>
 #include <init.h>
 #include <interfaces/handler.h>
@@ -59,6 +60,15 @@ public:
     CDeterministicMNList getListAtChainTip() override
     {
         return deterministicMNManager->GetListAtChainTip();
+    }
+};
+
+class GOVImpl : public GOV
+{
+public:
+    std::vector<const CGovernanceObject*> getAllNewerThan(int64_t nMoreThanTime) override
+    {
+        return governance.GetAllNewerThan(nMoreThanTime);
     }
 };
 
@@ -155,6 +165,7 @@ public:
 class NodeImpl : public Node
 {
     EVOImpl m_evo;
+    GOVImpl m_gov;
     LLMQImpl m_llmq;
     MasternodeSyncImpl m_masternodeSync;
     CoinJoinOptionsImpl m_coinjoin;
@@ -355,6 +366,7 @@ class NodeImpl : public Node
         return wallets;
     }
     EVO& evo() override { return m_evo; }
+    GOV& gov() override { return m_gov; }
     LLMQ& llmq() override { return m_llmq; }
     Masternode::Sync& masternodeSync() override { return m_masternodeSync; }
     CoinJoin::Options& coinJoinOptions() override { return m_coinjoin; }
