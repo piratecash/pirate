@@ -7,7 +7,6 @@
 #include <config/piratecash-config.h>
 #endif
 
-#include <chainparams.h>
 #include <interfaces/node.h>
 #include <qt/piratecash.h>
 #include <qt/test/apptests.h>
