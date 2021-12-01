@@ -143,10 +143,6 @@ protected:
     bool eventFilter(QObject *object, QEvent *event) override;
 
 private:
-    bool saveURIs;                      // true during startup
-    QLocalServer* uriServer;
-    OptionsModel *optionsModel;
-
 #ifdef ENABLE_BIP70
     static bool readPaymentRequestFromFile(const QString& filename, PaymentRequestPlus& request);
     bool processPaymentRequest(const PaymentRequestPlus& request, SendCoinsRecipient& recipient);
@@ -156,6 +152,10 @@ private:
     void initNetManager();
     QNetworkAccessManager* netManager;  // Used to fetch payment requests
 #endif
+
+    bool saveURIs;                      // true during startup
+    QLocalServer* uriServer;
+    OptionsModel *optionsModel;
 };
 
 #endif // BITCOIN_QT_PAYMENTSERVER_H
