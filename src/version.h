@@ -13,7 +13,7 @@
 static const int MIN_SPORK_PROTO_VERSION = 70223;
 static const int NO_HEADERS_NODE         = 60026;
 
-static const int PROTOCOL_VERSION = 70224;
+static const int PROTOCOL_VERSION = 70225;
 
 //! initial proto version, to be increased after version/verack negotiation
 static const int INIT_PROTO_VERSION = 209;
@@ -52,6 +52,9 @@ static const int LLMQ_DATA_MESSAGES_VERSION = 70219;
 
 //! introduction of instant send deterministic lock (ISDLOCK)
 static const int ISDLOCK_PROTO_VERSION = 70223;
+
+//! GOVSCRIPT was activated in this version
+static const int GOVSCRIPT_PROTO_VERSION = 70225;
 
 // Make sure that none of the values above collide with `ADDRV2_FORMAT`.
 
