@@ -60,13 +60,13 @@ std::string CActiveMasternodeManager::GetStatus() const
     }
 }
 
-void CActiveMasternodeManager::Init(const CBlockIndex* pindex)
+void CActiveMasternodeManager::Init()
 {
     LOCK(cs_main);
 
     if (!fMasternodeMode) return;
 
-    if (!deterministicMNManager->IsDIP3Enforced(pindex->nHeight)) return;
+    if (!deterministicMNManager->IsDIP3Enforced()) return;
 
     // Check that our local network configuration is correct
     if (!fListen) {
@@ -82,7 +82,7 @@ void CActiveMasternodeManager::Init(const CBlockIndex* pindex)
         return;
     }
 
-    CDeterministicMNList mnList = deterministicMNManager->GetListForBlock(pindex);
+    CDeterministicMNList mnList = deterministicMNManager->GetListAtChainTip();
 
     CDeterministicMNCPtr dmn = mnList.GetMNByOperatorKey(*activeMasternodeInfo.blsPubKeyOperator);
     if (!dmn) {
@@ -145,7 +145,7 @@ void CActiveMasternodeManager::UpdatedBlockTip(const CBlockIndex* pindexNew, con
             activeMasternodeInfo.proTxHash = uint256();
             activeMasternodeInfo.outpoint.SetNull();
             // MN might have reappeared in same block with a new ProTx
-            Init(pindexNew);
+            Init();
             return;
         }
 
@@ -157,7 +157,7 @@ void CActiveMasternodeManager::UpdatedBlockTip(const CBlockIndex* pindexNew, con
             activeMasternodeInfo.proTxHash = uint256();
             activeMasternodeInfo.outpoint.SetNull();
             // MN might have reappeared in same block with a new ProTx
-            Init(pindexNew);
+            Init();
             return;
         }
 
@@ -166,13 +166,13 @@ void CActiveMasternodeManager::UpdatedBlockTip(const CBlockIndex* pindexNew, con
             state = MASTERNODE_PROTX_IP_CHANGED;
             activeMasternodeInfo.proTxHash = uint256();
             activeMasternodeInfo.outpoint.SetNull();
-            Init(pindexNew);
+            Init();
             return;
         }
     } else {
         // MN might have (re)appeared with a new ProTx or we've found some peers
         // and figured out our local address
-        Init(pindexNew);
+        Init();
     }
 }
 

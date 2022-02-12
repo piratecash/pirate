@@ -2968,7 +2968,6 @@ bool ActivateBestChain(CValidationState &state, const CChainParams& chainparams,
         // Notifications/callbacks that can run without cs_main
 
         // Notify external listeners about the new tip.
-        GetMainSignals().SynchronousUpdatedBlockTip(pindexNewTip, pindexFork, fInitialDownload);
         GetMainSignals().UpdatedBlockTip(pindexNewTip, pindexFork, fInitialDownload);
 
         // Always notify the UI if a new block tip was connected
@@ -3084,7 +3083,6 @@ bool InvalidateBlock(CValidationState& state, const CChainParams& chainparams, C
     }
 
     InvalidChainFound(pindex);
-    GetMainSignals().SynchronousUpdatedBlockTip(chainActive.Tip(), nullptr, IsInitialBlockDownload());
     GetMainSignals().UpdatedBlockTip(chainActive.Tip(), nullptr, IsInitialBlockDownload());
     uiInterface.NotifyBlockTip(IsInitialBlockDownload(), pindex->pprev);
     return true;
