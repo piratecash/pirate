@@ -46,7 +46,6 @@
 #include <llmq/quorums_instantsend.h>
 #include <llmq/quorums_chainlocks.h>
 
-#include <algorithm>
 #include <assert.h>
 #include <future>
 
@@ -55,44 +54,7 @@
 
 #include <init.h>
 
-static std::vector<CWallet*> vpwallets;
-
-bool AddWallet(CWallet* wallet)
-{
-    assert(wallet);
-    std::vector<CWallet*>::const_iterator i = std::find(vpwallets.begin(), vpwallets.end(), wallet);
-    if (i != vpwallets.end()) return false;
-    vpwallets.push_back(wallet);
-    return true;
-}
-
-bool RemoveWallet(CWallet* wallet)
-{
-    assert(wallet);
-    std::vector<CWallet*>::iterator i = std::find(vpwallets.begin(), vpwallets.end(), wallet);
-    if (i == vpwallets.end()) return false;
-    vpwallets.erase(i);
-    return true;
-}
-
-bool HasWallets()
-{
-    return !vpwallets.empty();
-}
-
-std::vector<CWallet*> GetWallets()
-{
-    return vpwallets;
-}
-
-CWallet* GetWallet(const std::string& name)
-{
-    for (CWallet* wallet : vpwallets) {
-        if (wallet->GetName() == name) return wallet;
-    }
-    return nullptr;
-}
-
+std::vector<CWalletRef> vpwallets;
 /** Transaction fee set by the user */
 CFeeRate payTxFee(DEFAULT_TRANSACTION_FEE);
 unsigned int nTxConfirmTarget = DEFAULT_TX_CONFIRM_TARGET;
