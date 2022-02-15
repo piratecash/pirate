@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2017-2019 The Energi Core developers
 // Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -87,6 +88,7 @@ void EraseOrphansFor(NodeId peer);
 
 static size_t vExtraTxnForCompactIt GUARDED_BY(g_cs_orphans) = 0;
 static std::vector<std::pair<uint256, CTransactionRef>> vExtraTxnForCompact GUARDED_BY(g_cs_orphans);
+static std::deque<const CBlockIndex*> vToFetchCache GUARDED_BY(cs_main);
 
 static const uint64_t RANDOMIZER_ID_ADDRESS_RELAY = 0x3cac0035b5866b90ULL; // SHA256("main address relay")[0:8]
 
@@ -499,16 +501,73 @@ bool PeerHasHeader(CNodeState *state, const CBlockIndex *pindex)
 
 /** Update pindexLastCommonBlock and add not-in-flight missing successors to vBlocks, until it has
  *  at most count entries. */
-void FindNextBlocksToDownload(NodeId nodeid, unsigned int count, std::vector<const CBlockIndex*>& vBlocks, NodeId& nodeStaller, const Consensus::Params& consensusParams) {
+void FindNextBlocksToDownload(CNode* pnode, unsigned int count, std::vector<const CBlockIndex*>& vBlocks, NodeId& nodeStaller, const Consensus::Params& consensusParams) {
     if (count == 0)
         return;
 
+    auto nodeid = pnode->GetId();
     vBlocks.reserve(vBlocks.size() + count);
     CNodeState *state = State(nodeid);
     assert(state != nullptr);
 
     // Make sure pindexBestKnownBlock is up to date, we'll need it.
     ProcessBlockAvailability(nodeid);
+
+    // A special case to to do parallel initial download
+    if (((state->pindexBestKnownBlock == nullptr) || state->fSyncStarted) &&
+        IsInitialBlockDownload() &&
+        (pindexBestHeader != nullptr)
+    ) {
+        // Minimize the work done on walk till the oldest not fetched blocks.
+        auto max_height = std::min<int>(
+            pindexBestHeader->nHeight,
+            chainActive.Height() + MAX_HEADERS_RESULTS
+        );
+
+        if (vToFetchCache.size() < count) {
+            vToFetchCache.clear();
+            auto pIndexWalk = pindexBestHeader;
+
+            for (; pIndexWalk != nullptr; pIndexWalk = pIndexWalk->pprev) {
+                if (pIndexWalk->nHeight > max_height) {
+                    // optimize skip
+                    continue;
+                }
+
+                if (chainActive.Contains(pIndexWalk)) {
+                    break;
+                }
+
+                if (!pIndexWalk->IsValid(BLOCK_VALID_TREE)) {
+                    // This should never happen by fact
+                    break;
+                }
+
+                if (!(pIndexWalk->nStatus & BLOCK_HAVE_DATA) &&
+                    (mapBlocksInFlight.find(pIndexWalk->GetBlockHash()) == mapBlocksInFlight.end())
+                ) {
+                    vToFetchCache.push_front(pIndexWalk);
+                }
+            }
+        }
+
+        auto begin = vToFetchCache.begin();
+        auto curr = begin;
+
+        while ((curr != vToFetchCache.end()) && (vBlocks.size() < count)) {
+            // Opportunistic assumption of block availability
+            if ((*curr)->nHeight > pnode->nStartingHeight) {
+                break;
+            }
+
+            vBlocks.push_back(*curr);
+            ++curr;
+        }
+
+        vToFetchCache.erase(begin, curr);
+
+        return;
+    }
 
     if (state->pindexBestKnownBlock == nullptr || state->pindexBestKnownBlock->nChainWork < chainActive.Tip()->nChainWork || state->pindexBestKnownBlock->nChainWork < nMinimumChainWork) {
         // This peer has nothing interesting.
@@ -1661,8 +1720,8 @@ bool static ProcessHeadersMessage(CNode *pfrom, CConnman *connman, const std::ve
                     }
                     vGetData.push_back(CInv(MSG_BLOCK, pindex->GetBlockHash()));
                     MarkBlockAsInFlight(pfrom->GetId(), pindex->GetBlockHash(), pindex);
-                    LogPrint(BCLog::NET, "Requesting block %s from  peer=%d\n",
-                            pindex->GetBlockHash().ToString(), pfrom->GetId());
+                    LogPrint(BCLog::NET, "Requesting block %s (%d) from  peer=%d\n",
+                            pindex->GetBlockHash().ToString(), pindex->nHeight, pfrom->GetId());
                 }
                 if (vGetData.size() > 1) {
                     LogPrint(BCLog::NET, "Downloading blocks toward %s (%d) via headers direct fetch\n",
@@ -4033,7 +4092,7 @@ bool PeerLogicValidation::SendMessages(CNode* pto)
         if (!pto->fClient && (fFetch || !IsInitialBlockDownload()) && state.nBlocksInFlight < MAX_BLOCKS_IN_TRANSIT_PER_PEER) {
             std::vector<const CBlockIndex*> vToDownload;
             NodeId staller = -1;
-            FindNextBlocksToDownload(pto->GetId(), MAX_BLOCKS_IN_TRANSIT_PER_PEER - state.nBlocksInFlight, vToDownload, staller, consensusParams);
+            FindNextBlocksToDownload(pto, MAX_BLOCKS_IN_TRANSIT_PER_PEER - state.nBlocksInFlight, vToDownload, staller, consensusParams);
             for (const CBlockIndex *pindex : vToDownload) {
                 vGetData.push_back(CInv(MSG_BLOCK, pindex->GetBlockHash()));
                 MarkBlockAsInFlight(pto->GetId(), pindex->GetBlockHash(), pindex);
