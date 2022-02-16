@@ -4219,7 +4219,7 @@ bool CWallet::CreateCoinStake(const CBlockIndex *pindex_prev, CBlock &curr_block
                 curr_block,
                 *pindex_prev,
                 *pcoin_index,
-                *pWalletTxIn,
+                *pWalletTxIn->tx,
                 prevoutStake,
                 nHashDrift,
                 false,
