@@ -2796,96 +2796,91 @@ CAmount CWallet::GetAvailableBalance(const CCoinControl* coinControl) const
 
 void CWallet::AvailableCoins(std::vector<COutput> &vCoins, bool fOnlySafe, const CCoinControl *coinControl, const CAmount &nMinimumAmount, const CAmount &nMaximumAmount, const CAmount &nMinimumSumAmount, const uint64_t nMaximumCount, const int nMinDepth, const int nMaxDepth) const
 {
-    AssertLockHeld(cs_main);
-    AssertLockHeld(cs_wallet);
-
     vCoins.clear();
     CoinType nCoinType = coinControl ? coinControl->nCoinType : CoinType::ALL_COINS;
 
-    CAmount nTotal = 0;
+    {
+        LOCK2(cs_main, cs_wallet);
 
-    for (auto pcoin : GetSpendableTXs()) {
-        const uint256& wtxid = pcoin->GetHash();
+        CAmount nTotal = 0;
 
-        if (!CheckFinalTx(*pcoin->tx))
-            continue;
+        for (auto pcoin : GetSpendableTXs()) {
+            const uint256& wtxid = pcoin->GetHash();
 
-        if ((pcoin->IsCoinBase() || pcoin->IsCoinStake()) && pcoin->GetBlocksToMaturity() > 0)
-            continue;
-
-        int nDepth = pcoin->GetDepthInMainChain();
-
-        // We should not consider coins which aren't at least in our mempool
-        // It's possible for these to be conflicted via ancestors which we may never be able to detect
-        if (nDepth == 0 && !pcoin->InMempool())
-            continue;
-
-        bool safeTx = pcoin->IsTrusted();
-
-        if (fOnlySafe && !safeTx) {
-            continue;
-        }
-
-        if (nDepth < nMinDepth || nDepth > nMaxDepth)
-            continue;
-
-        for (unsigned int i = 0; i < pcoin->tx->vout.size(); i++) {
-            bool found = false;
-            if (nCoinType == CoinType::ONLY_FULLY_MIXED) {
-                if (!CPrivateSend::IsDenominatedAmount(pcoin->tx->vout[i].nValue)) continue;
-                int nRounds = GetCappedOutpointPrivateSendRounds(COutPoint(wtxid, i));
-                found = nRounds >= privateSendClient.nPrivateSendRounds;
-            } else if(nCoinType == CoinType::ONLY_READY_TO_MIX) {
-                if (!CPrivateSend::IsDenominatedAmount(pcoin->tx->vout[i].nValue)) continue;
-                int nRounds = GetCappedOutpointPrivateSendRounds(COutPoint(wtxid, i));
-                found = nRounds < privateSendClient.nPrivateSendRounds;
-            } else if(nCoinType == CoinType::ONLY_NONDENOMINATED) {
-                if (CPrivateSend::IsCollateralAmount(pcoin->tx->vout[i].nValue)) continue; // do not use collateral amounts
-                found = !CPrivateSend::IsDenominatedAmount(pcoin->tx->vout[i].nValue);
-            } else if(nCoinType == CoinType::ONLY_MASTERNODE_COLLATERAL) {
-                found = pcoin->tx->vout[i].nValue == 10000*COIN;
-            } else if(nCoinType == CoinType::ONLY_PRIVATESEND_COLLATERAL) {
-                found = CPrivateSend::IsCollateralAmount(pcoin->tx->vout[i].nValue);
-            } else {
-                found = true;
-            }
-            if(!found) continue;
-
-            if (pcoin->tx->vout[i].nValue < nMinimumAmount || pcoin->tx->vout[i].nValue > nMaximumAmount)
+            if (!CheckFinalTx(*pcoin->tx))
                 continue;
 
-            if (coinControl && coinControl->HasSelected() && !coinControl->fAllowOtherInputs && !coinControl->IsSelected(COutPoint(wtxid, i)))
+            if ((pcoin->IsCoinBase() || pcoin->IsCoinStake()) && pcoin->GetBlocksToMaturity() > 0)
                 continue;
 
-            if (IsLockedCoin(wtxid, i) && nCoinType != CoinType::ONLY_MASTERNODE_COLLATERAL)
+            int nDepth = pcoin->GetDepthInMainChain();
+
+            // We should not consider coins which aren't at least in our mempool
+            // It's possible for these to be conflicted via ancestors which we may never be able to detect
+            if (nDepth == 0 && !pcoin->InMempool())
                 continue;
 
-            if (IsSpent(wtxid, i))
-                continue;
+            bool safeTx = pcoin->IsTrusted();
 
-            isminetype mine = IsMine(pcoin->tx->vout[i]);
-
-            if (mine == ISMINE_NO) {
+            if (fOnlySafe && !safeTx) {
                 continue;
             }
 
-            bool fSpendableIn = ((mine & ISMINE_SPENDABLE) != ISMINE_NO) || (coinControl && coinControl->fAllowWatchOnly && (mine & ISMINE_WATCH_SOLVABLE) != ISMINE_NO);
-            bool fSolvableIn = (mine & (ISMINE_SPENDABLE | ISMINE_WATCH_SOLVABLE)) != ISMINE_NO;
+            if (nDepth < nMinDepth || nDepth > nMaxDepth)
+                continue;
 
-            vCoins.push_back(COutput(pcoin, i, nDepth, fSpendableIn, fSolvableIn, safeTx));
+            for (unsigned int i = 0; i < pcoin->tx->vout.size(); i++) {
+                bool found = false;
+                if(nCoinType == CoinType::ONLY_DENOMINATED) {
+                    found = CPrivateSend::IsDenominatedAmount(pcoin->tx->vout[i].nValue);
+                } else if(nCoinType == CoinType::ONLY_NONDENOMINATED) {
+                    if (CPrivateSend::IsCollateralAmount(pcoin->tx->vout[i].nValue)) continue; // do not use collateral amounts
+                    found = !CPrivateSend::IsDenominatedAmount(pcoin->tx->vout[i].nValue);
+                } else if(nCoinType == CoinType::ONLY_MASTERNODE_COLLATERAL) {
+                    found = pcoin->tx->vout[i].nValue == 10000*COIN;
+                } else if(nCoinType == CoinType::ONLY_PRIVATESEND_COLLATERAL) {
+                    found = CPrivateSend::IsCollateralAmount(pcoin->tx->vout[i].nValue);
+                } else {
+                    found = true;
+                }
+                if(!found) continue;
 
-            // Checks the sum amount of all UTXO's.
-            if (nMinimumSumAmount != MAX_MONEY) {
-                nTotal += pcoin->tx->vout[i].nValue;
+                if (pcoin->tx->vout[i].nValue < nMinimumAmount || pcoin->tx->vout[i].nValue > nMaximumAmount)
+                    continue;
 
-                if (nTotal >= nMinimumSumAmount) {
+                if (coinControl && coinControl->HasSelected() && !coinControl->fAllowOtherInputs && !coinControl->IsSelected(COutPoint(wtxid, i)))
+                    continue;
+
+                if (IsLockedCoin(wtxid, i) && nCoinType != CoinType::ONLY_MASTERNODE_COLLATERAL)
+                    continue;
+
+                if (IsSpent(wtxid, i))
+                    continue;
+
+                isminetype mine = IsMine(pcoin->tx->vout[i]);
+
+                if (mine == ISMINE_NO) {
+                    continue;
+                }
+
+                bool fSpendableIn = ((mine & ISMINE_SPENDABLE) != ISMINE_NO) || (coinControl && coinControl->fAllowWatchOnly && (mine & ISMINE_WATCH_SOLVABLE) != ISMINE_NO);
+                bool fSolvableIn = (mine & (ISMINE_SPENDABLE | ISMINE_WATCH_SOLVABLE)) != ISMINE_NO;
+
+                vCoins.push_back(COutput(pcoin, i, nDepth, fSpendableIn, fSolvableIn, safeTx));
+
+                // Checks the sum amount of all UTXO's.
+                if (nMinimumSumAmount != MAX_MONEY) {
+                    nTotal += pcoin->tx->vout[i].nValue;
+
+                    if (nTotal >= nMinimumSumAmount) {
+                        return;
+                    }
+                }
+
+                // Checks the maximum number of UTXO's.
+                if (nMaximumCount > 0 && vCoins.size() >= nMaximumCount) {
                     return;
                 }
-            }
-
-            // Checks the maximum number of UTXO's.
-            if (nMaximumCount > 0 && vCoins.size() >= nMaximumCount) {
-                return;
             }
         }
     }
@@ -2904,11 +2899,11 @@ std::map<CTxDestination, std::vector<COutput>> CWallet::ListCoins() const
     // avoid adding some extra complexity to the Qt code.
 
     std::map<CTxDestination, std::vector<COutput>> result;
-    std::vector<COutput> availableCoins;
 
-    LOCK2(cs_main, cs_wallet);
+    std::vector<COutput> availableCoins;
     AvailableCoins(availableCoins);
 
+    LOCK2(cs_main, cs_wallet);
     for (auto& coin : availableCoins) {
         CTxDestination address;
         if (coin.fSpendable &&
