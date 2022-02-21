@@ -18,6 +18,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #endif
+#include <thread>
 
 #include <boost/test/unit_test.hpp>
 
