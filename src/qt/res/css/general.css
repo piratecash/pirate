@@ -659,7 +659,7 @@ QToolBar > QToolButton:disabled {
 
 QToolBar QLabel#lblToolbarLogo {
     padding: 12px;
-    image: url(':/images/dash_logo_toolbar');
+    image: url(':/images/cosanta_logo_toolbar');
     height: 2.5em;
 }
 
@@ -1555,7 +1555,4 @@ TransactionView QComboBox {
 #transactionSumLabel,
 #transactionSum {
     font-size: 15px;
-}
-WalletFrame {
-border-image: url(':/images/wallet_bg') 0 0 0 0 stretch stretch;
 }

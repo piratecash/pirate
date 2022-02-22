@@ -505,6 +505,3 @@ TransactionView
 ******************************************************/
 
 /***** No dark.css specific coloring here yet *****/
-WalletFrame {
-border-image: url(':/images/wallet_bg') 0 0 0 0 stretch stretch;
-}

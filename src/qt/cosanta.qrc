@@ -109,7 +109,6 @@
         <file alias="radio_checked_pressed">res/images/radio_checked_pressed.png</file>
         <file alias="radio_normal_disabled">res/images/radio_normal_disabled.png</file>
         <file alias="radio_checked_disabled">res/images/radio_checked_disabled.png</file>
-	<file alias="wallet_bg">res/images/wallet_bg.png</file>
         <file alias="splash">res/images/splash.png</file>
     </qresource>
     <qresource prefix="/movies">

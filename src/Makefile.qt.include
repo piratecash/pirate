@@ -347,8 +347,7 @@ RES_IMAGES = \
   qt/res/images/radio_checked_pressed.png \
   qt/res/images/radio_normal_disabled.png \
   qt/res/images/radio_checked_disabled.png \
-  qt/res/images/splash.png \
-  qt/res/images/wallet_bg.png
+  qt/res/images/splash.png
 
 
 RES_CSS = \
