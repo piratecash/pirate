@@ -62,6 +62,7 @@
 #endif
 
 static std::deque<const CBlockIndex*> vToFetchCache GUARDED_BY(cs_main);
+
 /** Maximum number of in-flight objects from a peer */
 static constexpr int32_t MAX_PEER_OBJECT_IN_FLIGHT = 100;
 /** Maximum number of announced objects from a peer */
@@ -3698,7 +3699,7 @@ bool PeerLogicValidation::ProcessMessages(CNode* pfrom, std::atomic<bool>& inter
                 LogPrint(BCLog::NET, "Retrying postponed headers for peer %d", pfrom->GetId());
                 CDataStream vHeadersMsg(SER_NETWORK, PROTOCOL_VERSION);
                 vHeadersMsg << std::vector<CBlock>();
-                ProcessMessage(pfrom, NetMsgType::HEADERS, vHeadersMsg, GetAdjustedTime(), chainparams, connman, interruptMsgProc);
+                ProcessMessage(pfrom, NetMsgType::HEADERS, vHeadersMsg, GetAdjustedTime(), chainparams, connman, interruptMsgProc, m_enable_bip61);
             }
             fMoreWork = true;
         }
