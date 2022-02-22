@@ -61,6 +61,7 @@
 # error "Cosanta Core cannot be compiled without assertions."
 #endif
 
+static std::deque<const CBlockIndex*> vToFetchCache GUARDED_BY(cs_main);
 /** Maximum number of in-flight objects from a peer */
 static constexpr int32_t MAX_PEER_OBJECT_IN_FLIGHT = 100;
 /** Maximum number of announced objects from a peer */
@@ -105,7 +106,6 @@ void EraseOrphansFor(NodeId peer);
 
 static size_t vExtraTxnForCompactIt GUARDED_BY(g_cs_orphans) = 0;
 static std::vector<std::pair<uint256, CTransactionRef>> vExtraTxnForCompact GUARDED_BY(g_cs_orphans);
-static std::deque<const CBlockIndex*> vToFetchCache GUARDED_BY(cs_main);
 
 static const uint64_t RANDOMIZER_ID_ADDRESS_RELAY = 0x3cac0035b5866b90ULL; // SHA256("main address relay")[0:8]
 
