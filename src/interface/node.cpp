@@ -17,7 +17,7 @@
 #include <warnings.h>
 
 #if defined(HAVE_CONFIG_H)
-#include <config/dash-config.h>
+#include <config/cosanta-config.h>
 #endif
 #ifdef ENABLE_WALLET
 #define CHECK_WALLET(x) x
