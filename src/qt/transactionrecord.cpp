@@ -74,7 +74,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const interface
                     // Generated
                     sub.type = TransactionRecord::Generated;
                 }
-                if (wtx.IsCoinStake())
+                if (wtx.is_coinstake)
                 {
                     // Generated
                     continue;
