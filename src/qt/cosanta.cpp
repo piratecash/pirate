@@ -253,30 +253,6 @@ void BitcoinCore::handleRunawayException(const std::exception_ptr e)
     Q_EMIT runawayException(QString::fromStdString(m_node.getWarnings("gui")));
 }
 
-bool BitcoinCore::baseInitialize()
-{
-    if (!AppInitBasicSetup())
-    {
-        return false;
-    }
-    if (!AppInitParameterInteraction())
-    {
-        return false;
-    }
-    if (!AppInitSanityChecks())
-    {
-        return false;
-    }
-    if (!AppInitLockDataDirectory())
-    {
-        return false;
-    }
-    if (!GUIUtil::loadFonts()) {
-        return false;
-    }
-    return true;
-}
-
 void BitcoinCore::initialize()
 {
     try
