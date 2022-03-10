@@ -534,10 +534,10 @@ void BitcoinGUI::createActions()
     showBackupsAction = new QAction(tr("Show Automatic &Backups"), this);
     showBackupsAction->setStatusTip(tr("Show automatically created wallet backups"));
     // POW Actions
-    powStartAction = new QAction(QIcon(":/icons/pow_active"), tr("Start PoW mining"), this);
+    powStartAction = new QAction(tr("Start PoW mining"), this);
     powStartAction->setStatusTip(tr("Start mining Cosanta"));
     powStartAction->setVisible(true);
-    powStopAction = new QAction(QIcon(":/icons/pow_inactive"), tr("Stop PoW mining"), this);
+    powStopAction = new QAction(tr("Stop PoW mining"), this);
     powStopAction->setStatusTip(tr("Stop mining Cosanta"));
     powStopAction->setVisible(false);
     // initially disable the debug window menu items
