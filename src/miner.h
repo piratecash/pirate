@@ -170,7 +170,7 @@ public:
     BlockAssembler(const CChainParams& params, const Options& options);
 
     /** Construct a new block template with coinbase to scriptPubKeyIn */
-    std::unique_ptr<CBlockTemplate> CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, int64_t block_time=0, bool isPos = false);
+    std::unique_ptr<CBlockTemplate> CreateNewBlock(const CScript& scriptPubKeyIn, std::shared_ptr<CWallet> pwallet, int64_t block_time=0, bool isPos = false);
 
 private:
     // utility functions
@@ -209,8 +209,8 @@ private:
 /** Modify the extranonce in a block */
 void IncrementExtraNonce(CBlock* pblock, const CBlockIndex* pindexPrev, unsigned int& nExtraNonce);
 int64_t UpdateTime(CBlockHeader* pblock, const Consensus::Params& consensusParams, const CBlockIndex* pindexPrev);
-void GenerateCosanta(bool fGenerate, CWallet* pwallet);
-void PoSMiner(CWallet* pwallet, CThreadInterrupt &interrupt);
+void GenerateCosanta(bool fGenerate, std::shared_ptr<CWallet> pwallet);
+void PoSMiner(std::shared_ptr<CWallet> pwallet, CThreadInterrupt &interrupt);
 bool IsStakingActive();
 void SetThreadPriority(int nPriority);
 

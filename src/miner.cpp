@@ -137,7 +137,7 @@ void BlockAssembler::resetBlock()
 }
 
 std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(
-        const CScript& scriptPubKeyIn, CWallet* pwallet, int64_t block_time, bool isPos)
+        const CScript& scriptPubKeyIn, std::shared_ptr<CWallet> pwallet, int64_t block_time, bool isPos)
 {
     int64_t nTimeStart = GetTimeMicros();
 
@@ -599,7 +599,7 @@ void IncrementExtraNonce(CBlock* pblock, const CBlockIndex* pindexPrev, unsigned
     pblock->hashMerkleRoot = BlockMerkleRoot(*pblock);
 }
 
-void static CosantaMiner(CWallet *pwallet)
+void static CosantaMiner(std::shared_ptr<CWallet> pwallet)
 {
     //SetThreadPriority(THREAD_PRIORITY_LOWEST);
     LogPrintf("PoW Miner started\n");
@@ -686,7 +686,7 @@ void static CosantaMiner(CWallet *pwallet)
     pow_cpu = 0;
 }
 
-void GenerateCosanta(bool fGenerate, CWallet* pwallet)
+void GenerateCosanta(bool fGenerate, std::shared_ptr<CWallet> pwallet)
 {
     static boost::thread_group* minerThreads = NULL;
     isPoW = true;
@@ -714,7 +714,7 @@ void GenerateCosanta(bool fGenerate, CWallet* pwallet)
         minerThreads->create_thread(boost::bind(&CosantaMiner, pwallet));
 }
 
-void PoSMiner(CWallet* pwallet, CThreadInterrupt &interrupt)
+void PoSMiner(std::shared_ptr<CWallet> pwallet, CThreadInterrupt &interrupt)
 {
     LogPrintf("PoSMiner started\n");
     RenameThread("cosanta-miner");
