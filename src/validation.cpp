@@ -7,6 +7,7 @@
 
 #include <pos_kernel.h>
 #include <validation.h>
+#include <spork.h>
 
 #include <arith_uint256.h>
 #include <chain.h>
