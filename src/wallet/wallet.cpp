@@ -4245,7 +4245,7 @@ bool CWallet::CreateCoinStake(const CBlockIndex *pindex_prev, CBlock &curr_block
 
             if (fAutocombine != AUTOCOMBINE_DISABLE) {
                 CKeyID scriptPubKeyID = curr_block.posPubKey.GetID();
-                std::vector<COutPoint> ac_candidates;
+                std::vector<CInputCoin> ac_candidates;
                 // find candidates
                 {
                     std::vector<CompactTallyItem> vecTallyRet;
@@ -4255,7 +4255,7 @@ bool CWallet::CreateCoinStake(const CBlockIndex *pindex_prev, CBlock &curr_block
                         CTxDestination reqdest{scriptPubKeyID};
                         for (auto titer = vecTallyRet.begin(); titer != vecTallyRet.end(); ++titer) {
                             if (titer->txdest == reqdest) {
-                                 ac_candidates.swap(titer->vecOutPoints);
+                                 ac_candidates.swap(titer->vecInputCoins);
                                  break;
                             }
                         }
@@ -4263,7 +4263,7 @@ bool CWallet::CreateCoinStake(const CBlockIndex *pindex_prev, CBlock &curr_block
                         for (auto titer = vecTallyRet.begin(); titer != vecTallyRet.end(); ++titer) {
                             ac_candidates.insert(
                                         ac_candidates.end(),
-                                        titer->vecOutPoints.begin(), titer->vecOutPoints.end());
+                                        titer->vecInputCoins.begin(), titer->vecInputCoins.end());
                         }
                     }
                 }
@@ -4281,15 +4281,15 @@ bool CWallet::CreateCoinStake(const CBlockIndex *pindex_prev, CBlock &curr_block
                      const CTxOut *ac_in = nullptr;
                      CAmount ac_amt = 0;
                      for (; ac_iter != ac_candidates.end(); ++ac_iter) {
-                        if (*ac_iter == prevoutStake) {
+                        if (ac_iter->outpoint == prevoutStake) {
                                 continue;
                             }
-                        const CWalletTx* wtx = GetWalletTx(ac_iter->hash);
+                        const CWalletTx* wtx = GetWalletTx(ac_iter->outpoint.hash);
                         if (wtx == nullptr){
                             continue;
                         }
 
-                        ac_in = &(wtx->tx->vout[ac_iter->n]);
+                        ac_in = &(wtx->tx->vout[ac_iter->outpoint.n]);
                         ac_amt = ac_in->nValue;
 
                         int64_t nTimeInput = (int64_t)wtx->GetTxTime() + (int64_t)min_age;
@@ -4312,11 +4312,11 @@ bool CWallet::CreateCoinStake(const CBlockIndex *pindex_prev, CBlock &curr_block
                     }
 
                      inputs_included++;
-                     stakeTx.vin.emplace_back(*ac_iter);
+                     stakeTx.vin.emplace_back(ac_iter->outpoint);
                      vin_scripts.emplace_back(ac_in->scriptPubKey);
                      reward += ac_amt;
                      LogPrint(BCLog::STAKING, "%s : auto-combining tx=%s n=%u amount=%llu total=%llu\n", __func__,
-                              ac_iter->hash.ToString().c_str(), ac_iter->n, ac_amt, reward);
+                              ac_iter->outpoint.hash.ToString().c_str(), ac_iter->outpoint.n, ac_amt, reward);
                      ++ac_iter;
                 }
             }
