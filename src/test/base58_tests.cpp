@@ -5,7 +5,7 @@
 #include <test/data/base58_encode_decode.json.h>
 
 #include <base58.h>
-#include <test/test_cosnata.h>
+#include <test/test_cosanta.h>
 #include <utilstrencodings.h>
 
 #include <univalue.h>
