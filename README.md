@@ -1,4 +1,4 @@
-Cosanta Core staging tree 0.16
+Cosanta Core staging tree 0.17
 ===========================
 
 https://www.cosanta.net/
