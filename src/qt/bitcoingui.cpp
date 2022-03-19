@@ -65,9 +65,6 @@
 #include <QUrlQuery>
 #include <QVBoxLayout>
 
-#include "miner.h"
-#include "wallet/wallet.h"
-
 const std::string BitcoinGUI::DEFAULT_UIPLATFORM =
 #if defined(Q_OS_MAC)
         "macosx"
