@@ -393,7 +393,7 @@ public:
         consensus.BIP65Height = 2431; // 00000000000076d8fcea02ec0963de4abfd01e771fec0863f960c2c64fe6f357
         consensus.BIP66Height = 2075; // 00000000000b1fa2dfa312863570e13fae9ca7b5566cb27e55422620b469aefa
         consensus.DIP0001Height = 5500;
-        consensus.DIP0003Height = 12096;
+        consensus.DIP0003Height = 7000;
         consensus.DIP0003EnforcementHeight = 7300;
         consensus.DIP0003EnforcementHash = uint256(); //uint256S("000000000000002d1734087b4c5afc3133e4e1c3e1a89218f62bcd9bb3d17f81");
         consensus.DIP0008Height = 300; // 00000000000000112e41e4b3afda8b233b8cc07c532d2eac5de097b68358c43e
