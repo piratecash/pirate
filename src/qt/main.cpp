@@ -4,6 +4,8 @@
 
 #include <qt/piratecash.h>
 
+#include <util/translation.h>
+
 #include <QCoreApplication>
 
 #include <functional>
