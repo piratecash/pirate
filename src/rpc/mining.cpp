@@ -219,6 +219,7 @@ UniValue setgenerate(const JSONRPCRequest& request)
     GenerateCosanta(fGenerate, GetWallets()[0]);
 
     return NullUniValue;
+}
 
 UniValue generatetoaddress(const JSONRPCRequest& request)
 {
