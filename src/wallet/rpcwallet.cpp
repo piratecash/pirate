@@ -3488,7 +3488,7 @@ UniValue listunspent(const JSONRPCRequest& request)
             "\nArguments:\n"
             "1. minconf          (numeric, optional, default=1) The minimum confirmations to filter\n"
             "2. maxconf          (numeric, optional, default=9999999) The maximum confirmations to filter\n"
-            "3. \"addresses\"      (string) A json array of cosanta addressges to filter\n"
+            "3. \"addresses\"      (string) A json array of cosanta addresses to filter\n"
             "    [\n"
             "      \"address\"     (string) cosanta address\n"
             "      ,...\n"
