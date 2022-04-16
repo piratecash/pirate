@@ -1,4 +1,4 @@
-Cosanta Core staging tree 0.17
+Cosanta Core staging tree 18.0
 ===========================
 
 https://www.cosanta.net/
@@ -57,6 +57,8 @@ the Cosanta Core software, see https://www.cosanta.net/.
 | ...                   | ...                 | 60%         | 40%                |
 | 34603008 (0x2100000)  | ~0    COSA + fees   | 60%         | 40%                |
 
+For more information, as well as an immediately usable, binary version of
+the Cosanta Core software, see https://cosanta.net/en/download/.
 
 License
 -------
