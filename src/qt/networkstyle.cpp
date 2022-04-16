@@ -73,7 +73,7 @@ NetworkStyle::NetworkStyle(const QString &_appName, const int iconColorHueShift,
     // Make sure settings migrated properly
     GUIUtil::migrateQtSettings();
     // load pixmap
-    QPixmap appIconPixmap(":/icons/dash");
+    QPixmap appIconPixmap(":/icons/cosanta");
 
     if(iconColorHueShift != 0 && iconColorSaturationReduction != 0)
     {
