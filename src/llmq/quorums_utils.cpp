@@ -156,7 +156,7 @@ std::set<uint256> CLLMQUtils::GetQuorumRelayMembers(Consensus::LLMQType llmqType
     // TODO remove this after activation of SPORK_21_QUORUM_ALL_CONNECTED
 
     auto calcOutbound = [&](size_t i, const uint256 proTxHash) {
-        // Connect to nodes at indexes (i+2^k)%n, where
+        // Relay to nodes at indexes (i+2^k)%n, where
         //   k: 0..max(1, floor(log2(n-1))-1)
         //   n: size of the quorum/ring
         std::set<uint256> r;
@@ -181,8 +181,11 @@ std::set<uint256> CLLMQUtils::GetQuorumRelayMembers(Consensus::LLMQType llmqType
         if (dmn->proTxHash == forMember) {
             auto r = calcOutbound(i, dmn->proTxHash);
             result.insert(r.begin(), r.end());
-            // there can be no two members with the same proTxHash, so return early
-            break;
+        } else if (!onlyOutbound) {
+            auto r = calcOutbound(i, dmn->proTxHash);
+            if (r.count(forMember)) {
+                result.emplace(dmn->proTxHash);
+            }
         }
     }
 
