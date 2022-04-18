@@ -13,8 +13,6 @@
 
 #include <stdint.h>
 
-#include "compat/byteswap.h"
-
 #if defined(HAVE_ENDIAN_H)
 #include <endian.h>
 #elif defined(HAVE_SYS_ENDIAN_H)
