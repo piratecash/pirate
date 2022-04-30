@@ -3,7 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <utilthreadnames.h>
-#include <test/test_dash.h>
+#include <test/test_cosanta.h>
 
 #include <thread>
 #include <vector>
@@ -11,7 +11,7 @@
 #include <mutex>
 
 #if defined(HAVE_CONFIG_H)
-#include <config/dash-config.h>
+#include <config/cosanta-config.h>
 #endif
 
 #include <boost/test/unit_test.hpp>

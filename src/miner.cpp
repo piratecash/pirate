@@ -605,7 +605,7 @@ void static CosantaMiner(std::shared_ptr<CWallet> pwallet)
 {
     //SetThreadPriority(THREAD_PRIORITY_LOWEST);
     LogPrintf("PoW Miner started\n");
-    RenameThread("cosanta-pow");
+    util::ThreadRename("cosanta-pow");
     bool keepScript = true;
     pow_hps = 0;
     lastPOW_hps = 0;
@@ -719,7 +719,7 @@ void GenerateCosanta(bool fGenerate, std::shared_ptr<CWallet> pwallet)
 void PoSMiner(std::shared_ptr<CWallet> pwallet, CThreadInterrupt &interrupt)
 {
     LogPrintf("PoSMiner started\n");
-    RenameThread("cosanta-miner");
+    util::ThreadRename("cosanta-miner");
     SetThreadPriority(THREAD_PRIORITY_NORMAL);
 
     BlockAssembler ba{Params()};
