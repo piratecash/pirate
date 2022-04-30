@@ -42,8 +42,7 @@ class RESTTest (BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2
-        # TODO: remove -txindex. Currently required for getrawtransaction call.
-        self.extra_args = [["-rest", "-txindex"], []]
+        self.extra_args = [["-rest"], []]
 
     def test_rest_request(self, uri, http_method='GET', req_type=ReqType.JSON, body='', status=200, ret_type=RetType.JSON):
         rest_uri = '/rest' + uri
