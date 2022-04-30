@@ -4,13 +4,13 @@
 
 #include <key_io.h>
 #include <script/sign.h>
-#include <util/strencodings.h>
+#include <utilstrencodings.h>
 #include <wallet/rpcwallet.h>
 #include <wallet/wallet.h>
 #include <univalue.h>
 
 #include <boost/test/unit_test.hpp>
-#include <test/test_dash.h>
+#include <test/test_cosanta.h>
 #include <wallet/test/wallet_test_fixture.h>
 
 BOOST_FIXTURE_TEST_SUITE(psbt_wallet_tests, WalletTestingSetup)
