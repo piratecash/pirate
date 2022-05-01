@@ -55,8 +55,8 @@ std::shared_ptr<CBlock> Block(const uint256& prev_hash)
     CScript pubKey;
     pubKey << i++ << OP_TRUE;
 
-    auto ptemplate = BlockAssembler(Params()).CreateNewBlock(pubKey);
-    auto pblock = std::make_shared<CBlock>(ptemplate->block);
+    auto ptemplate = BlockAssembler(Params()).CreateNewBlock(pubKey, GetWallets()[0]);
+    auto pblock = std::make_shared<CBlock>(*ptemplate->block);
     pblock->hashPrevBlock = prev_hash;
     pblock->nTime = ++time;
 
@@ -126,7 +126,7 @@ BOOST_AUTO_TEST_CASE(processnewblock_signals_ordering)
 
     bool ignored;
     CValidationState state;
-    std::vector<CBlockHeader> headers;
+    std::deque<CBlockHeader> headers;
     std::transform(blocks.begin(), blocks.end(), std::back_inserter(headers), [](std::shared_ptr<const CBlock> b) { return b->GetBlockHeader(); });
 
     // Process all the headers so we understand the toplogy of the chain
