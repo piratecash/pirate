@@ -1176,49 +1176,49 @@ CAmount GetBlockSubsidy(int nPrevBits, int nPrevHeight, const Consensus::Params&
 
     if (nPrevHeight < 11111) {
         // Monopoly protection in Cosanta
-        nSubsidyBase = 1 * CENT;
+        nSubsidyBase = 1 * COIN / 100;
     } else if (nPrevHeight < 22222) {
         // CPU mining era
-        nSubsidyBase = 2 * CENT;
+        nSubsidyBase = 2 * COIN / 100;
     } else if (nPrevHeight < 33333) {
         // CPU mining era
-        nSubsidyBase = 3 * CENT;
+        nSubsidyBase = 3 * COIN / 100;
     } else if (nPrevHeight < 44444) {
         // CPU mining era
-        nSubsidyBase = 4 * CENT;
+        nSubsidyBase = 4 * COIN / 100;
     } else if (nPrevHeight < 55555) {
         // CPU mining era
-        nSubsidyBase = 5 * CENT;
+        nSubsidyBase = 5 * COIN / 100;
     } else if (nPrevHeight < 66666) {
         // CPU mining era
-        nSubsidyBase = 6 * CENT;
+        nSubsidyBase = 6 * COIN / 100;
     } else if (nPrevHeight < 77777) {
         // CPU mining era
-        nSubsidyBase = 7 * CENT;
+        nSubsidyBase = 7 * COIN / 100;
     } else if (nPrevHeight < 88888) {
         // CPU mining era
-        nSubsidyBase = 8 * CENT;
+        nSubsidyBase = 8 * COIN / 100;
     } else if (nPrevHeight < 99999) {
         // CPU mining era
-        nSubsidyBase = 9 * CENT;
+        nSubsidyBase = 9 * COIN / 100;
     } else if (nPrevHeight < 111111) {
         // CPU mining era
-        nSubsidyBase = 10 * CENT;
+        nSubsidyBase = 10 * COIN / 100;
     } else if (nPrevHeight < 222222) {
         // CPU mining era
-        nSubsidyBase = 20 * CENT;
+        nSubsidyBase = 20 * COIN / 100;
     } else if (nPrevHeight < 333333) {
         // CPU mining era
-        nSubsidyBase = 30 * CENT;
+        nSubsidyBase = 30 * COIN / 100;
     } else if (nPrevHeight < 444444) {
         // CPU mining era
-        nSubsidyBase = 40 * CENT;
+        nSubsidyBase = 40 * COIN / 100;
     } else if (nPrevHeight < 555555) {
         // CPU mining era
-        nSubsidyBase = 50 * CENT;
+        nSubsidyBase = 50 * COIN / 100;
     } else if (nPrevHeight < 666666) {
         // CPU mining era
-        nSubsidyBase = 60 * CENT;
+        nSubsidyBase = 60 * COIN / 100;
     } else if (nPrevHeight < 700000) {
         // CPU mining era
         nSubsidyBase = 1 * COIN;

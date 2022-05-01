@@ -1026,6 +1026,7 @@ static UniValue estimaterawfee(const JSONRPCRequest& request)
 UniValue reservebalance(const JSONRPCRequest& request)
 {
     auto &params = request.params;
+    CAmount CENT = 1000000;
 
     if (request.fHelp || params.size() > 2)
         throw std::runtime_error(
