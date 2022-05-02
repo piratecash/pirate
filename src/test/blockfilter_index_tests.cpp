@@ -72,8 +72,8 @@ static CBlock CreateBlock(const CBlockIndex* prev,
                           const CScript& scriptPubKey)
 {
     const CChainParams& chainparams = Params();
-    std::unique_ptr<CBlockTemplate> pblocktemplate = BlockAssembler(chainparams).CreateNewBlock(scriptPubKey);
-    CBlock& block = pblocktemplate->block;
+    std::unique_ptr<CBlockTemplate> pblocktemplate = BlockAssembler(chainparams).CreateNewBlock(scriptPubKey, GetWallets()[0]);
+    CBlock& block = *pblocktemplate->block;
     block.hashPrevBlock = prev->GetBlockHash();
     block.nTime = prev->nTime + 1;
 
@@ -99,7 +99,8 @@ static bool BuildChain(const CBlockIndex* pindex, const CScript& coinbase_script
     chain.resize(length);
     for (auto& block : chain) {
         block = std::make_shared<CBlock>(CreateBlock(pindex, no_txns, coinbase_script_pub_key));
-        CBlockHeader header = block->GetBlockHeader();
+        std::deque<CBlockHeader> header;
+        header.push_back(block->GetBlockHeader());
 
         CValidationState state;
         if (!ProcessNewBlockHeaders({header}, state, Params(), &pindex, nullptr)) {
