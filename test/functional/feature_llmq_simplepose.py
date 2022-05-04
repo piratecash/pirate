@@ -91,7 +91,7 @@ class LLMQSimplePoSeTest(CosantaTestFramework):
         for i in range(3):
             self.mine_quorum(expected_connections=expected_connections)
         for mn in self.mninfo:
-            assert(not self.check_punished(mn) and not self.check_punished(mn))
+            assert(not self.check_punished(mn) and not self.check_banned(mn))
 
     def test_banning(self, invalidate_proc, expected_connections):
         mninfos_online = self.mninfo.copy()
