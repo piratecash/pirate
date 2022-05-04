@@ -883,7 +883,9 @@ static UniValue submitheader(const JSONRPCRequest& request)
     }
 
     CValidationState state;
-    ProcessNewBlockHeaders({h}, state, Params(), /* ppindex */ nullptr, /* first_invalid */ nullptr);
+    std::deque<CBlockHeader> block_header;
+    block_header.push_back(h);
+    ProcessNewBlockHeaders({block_header}, state, Params(), /* ppindex */ nullptr, /* first_invalid */ nullptr);
     if (state.IsValid()) return NullUniValue;
     if (state.IsError()) {
         throw JSONRPCError(RPC_VERIFY_ERROR, FormatStateMessage(state));
