@@ -32,7 +32,7 @@
     "error_txt": "error: Invalid TX version requested",
     "description": "Tests the check for invalid nversion value"
   },
-  { "exec": "./dash-tx",
+  { "exec": "./cosanta-tx",
     "args": ["-", "delin=1"],
     "input": "tx394b54bb.hex",
     "output_cmp": "tt-delin1-out.hex",
@@ -119,7 +119,7 @@
     "error_txt": "error: invalid TX input txid",
     "description": "Tests the check for an invalid txid invalid hex"
   },
-  { "exec": "./dash-tx",
+  { "exec": "./cosanta-tx",
     "args":
     ["-create",
       "in=5897de6bd6:0"],
@@ -127,7 +127,7 @@
     "error_txt": "error: invalid TX input txid",
     "description": "Tests the check for an invalid txid valid hex but too short"
   },
-  { "exec": "./dash-tx",
+  { "exec": "./cosanta-tx",
     "args":
     ["-create",
       "in=5897de6bd6027a475eadd57019d4e6872c396d0716c4875a5f1a6fcfdf385c1f12:0"],
@@ -135,7 +135,7 @@
     "error_txt": "error: invalid TX input txid",
     "description": "Tests the check for an invalid txid valid hex but too long"
   },
-  { "exec": "./dash-tx",
+  { "exec": "./cosanta-tx",
     "args":
     ["-create",
      "in=5897de6bd6027a475eadd57019d4e6872c396d0716c4875a5f1a6fcfdf385c1f:0x"],
@@ -284,7 +284,7 @@
     "error_txt": "error: prevtxs internal object typecheck fail",
     "description": "Tests the check for invalid vout index in prevtxs for sign"
   },
-  { "exec": "./dash-tx",
+  { "exec": "./cosanta-tx",
     "args":
     ["-create",
       "in=4d49a71ec9da436f71ec4ee231d04f292a29cd316f598bb7068feccabdc59485:0",
@@ -296,7 +296,7 @@
     "error_txt": "error: txid must be hexadecimal string (not 'Zd49a71ec9da436f71ec4ee231d04f292a29cd316f598bb7068feccabdc59412')",
     "description": "Tests the check for invalid txid due to invalid hex"
   },
-  { "exec": "./dash-tx",
+  { "exec": "./cosanta-tx",
     "args":
     ["-create",
       "in=4d49a71ec9da436f71ec4ee231d04f292a29cd316f598bb7068feccabdc59485:0",
@@ -308,7 +308,7 @@
     "error_txt": "error: txid must be hexadecimal string (not '4d49a71ec9da436f71ec4ee231d04f292a29cd316f598bb7068feccabdc594')",
     "description": "Tests the check for invalid txid valid hex, but too short"
   },
-  { "exec": "./dash-tx",
+  { "exec": "./cosanta-tx",
     "args":
     ["-create",
       "in=4d49a71ec9da436f71ec4ee231d04f292a29cd316f598bb7068feccabdc59485:0",
@@ -320,7 +320,7 @@
     "error_txt": "error: txid must be hexadecimal string (not '4d49a71ec9da436f71ec4ee231d04f292a29cd316f598bb7068feccabdc5948512')",
     "description": "Tests the check for invalid txid valid hex, but too long"
   },
-  { "exec": "./dash-tx",
+  { "exec": "./cosanta-tx",
     "args":
     ["-create", "outpubkey=0:02a5613bd857b7048924264d1e70e08fb2a7e6527d32b7ab1bb993ac59964ff397", "nversion=1"],
     "output_cmp": "txcreateoutpubkey1.hex",
