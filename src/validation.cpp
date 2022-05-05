@@ -1121,7 +1121,7 @@ bool ReadBlockFromDisk(CBlock& block, const FlatFilePos& pos, const Consensus::P
 
     CValidationState state;
 
-    if (!CheckProof(state, block, consensusParams)) {
+    if (block.IsProofOfWork() && !CheckProof(state, block, consensusParams)) {
         return error("ReadBlockFromDisk: Errors in block proof at %s (%s)",
                      pos.ToString(), state.GetRejectReason().c_str());
     }
