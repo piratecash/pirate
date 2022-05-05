@@ -1722,14 +1722,16 @@ void BitcoinGUI::setPoWStatus()
         {
             text = tr("Your hashrate is %1 Mhps<br>with %2 threads").arg(pow / 1000 / 1000).arg(pow_cpu);
         }
+        GUIUtil::ThemedColor color = GUIUtil::ThemedColor::GREEN;
         labelPoWIcon->show();
-        labelPoWIcon->setPixmap(QIcon(":/icons/pow_active").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        labelPoWIcon->setPixmap(GUIUtil::getIcon("pow_active", color).pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelPoWIcon->setToolTip(tr("PoW is <b>enabled</b><br>%1.").arg(text));
         powStartAction->setVisible(false);
         powStopAction->setVisible(true);
     } else {
+        GUIUtil::ThemedColor color = GUIUtil::ThemedColor::ORANGE;
         labelPoWIcon->show();
-        labelPoWIcon->setPixmap(QIcon(":/icons/pow_inactive").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        labelPoWIcon->setPixmap(GUIUtil::getIcon("pow_inactive", color).pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelPoWIcon->setToolTip(tr("PoW is <b>disabled</b>"));
         powStartAction->setVisible(true);
         powStopAction->setVisible(false);
@@ -1739,16 +1741,17 @@ void BitcoinGUI::setPoWStatus()
 void BitcoinGUI::setStakingStatus()
 {
     if (IsStakingActive()) {
+        GUIUtil::ThemedColor color = GUIUtil::ThemedColor::GREEN;
         labelStakingIcon->show();
-        labelStakingIcon->setPixmap(QIcon(":/icons/staking_active").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        labelStakingIcon->setPixmap(GUIUtil::getIcon("staking_active", color).pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelStakingIcon->setToolTip(tr("Staking is <b>enabled</b>"));
     } else {
+        GUIUtil::ThemedColor color = GUIUtil::ThemedColor::ORANGE;
         labelStakingIcon->show();
-        labelStakingIcon->setPixmap(QIcon(":/icons/staking_inactive").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        labelStakingIcon->setPixmap(GUIUtil::getIcon("staking_inactive", color).pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
         labelStakingIcon->setToolTip(tr("Staking is <b>disabled</b>"));
     }
 }
-
 #ifdef ENABLE_WALLET
 bool BitcoinGUI::handlePaymentRequest(const SendCoinsRecipient& recipient)
 {
