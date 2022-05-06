@@ -3468,6 +3468,7 @@ bool CWallet::SelectStakeCoins(StakeCandidates& setCoins, CAmount nTargetAmount)
     AvailableCoins(vCoins, true);
     auto curr_time = GetTime();
     auto min_age = Params().MinStakeAge();
+    std::sort(vCoins.begin(), vCoins.end(),std::greater<COutput>());
 
     for (const COutput& out : vCoins) {
         CAmount out_value = out.tx->tx->vout[out.i].nValue;
@@ -3509,6 +3510,7 @@ bool CWallet::SelectStakeCoins(StakeCandidates& setCoins, CAmount nTargetAmount)
 
         //add to our stake set
         setCoins.emplace(out.tx->tx->vout[out.i].nValue, out.tx, out.i);
+        break;
     }
 
     return !setCoins.empty();

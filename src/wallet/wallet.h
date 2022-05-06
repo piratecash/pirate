@@ -587,6 +587,16 @@ public:
 
     std::string ToString() const;
 
+    bool operator > (const COutput& str) const
+    {
+        return (nDepth > str.nDepth);
+    }
+
+    bool operator < (const COutput& str) const
+    {
+        return (nDepth < str.nDepth);
+    }
+
     inline CInputCoin GetInputCoin() const
     {
         return CInputCoin(tx->tx, i, nInputBytes);
