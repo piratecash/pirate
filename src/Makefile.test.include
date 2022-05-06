@@ -296,7 +296,6 @@ test_fuzz_script_flags_LDADD = \
  $(LIBSECP256K1)
 test_fuzz_script_flags_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
 
->>>>>>> 0dde23949 (bitcoin#15399: Script validation flags)
 test_fuzz_service_deserialize_SOURCES = $(FUZZ_SUITE) test/fuzz/deserialize.cpp
 test_fuzz_service_deserialize_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) -DSERVICE_DESERIALIZE=1
 test_fuzz_service_deserialize_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
