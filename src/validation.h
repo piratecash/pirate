@@ -32,6 +32,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <deque>
 
 class CBlockIndex;
 class CBlockTreeDB;
