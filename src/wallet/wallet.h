@@ -906,7 +906,7 @@ public:
         nStakeSplitThreshold = gArgs.GetArg("-stakesplitthreshold", DEFAULT_STAKE_SPLIT_THRESHOLD);
         nStakeMaxSplit = gArgs.GetArg("-stakemaxsplit", DEFAULT_STAKE_MAX_SPLIT);
         fAutocombine = gArgs.GetArg("-stakeautocombine", DEFAULT_STAKE_AUTOCOMBINE);
-        nHashInterval = gArgs.GetArg("-poshashinterval", 10);
+        nHashInterval = gArgs.GetArg("-poshashinterval", 2);
         nStakeSetUpdateTime = 300; // 5 minutes
         setStakeCoins.clear();
         nLastStakeSetUpdate = 0;

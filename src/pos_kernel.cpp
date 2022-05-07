@@ -477,6 +477,7 @@ bool CheckStakeKernelHash(
 
             ss = CDataStream(SER_GETHASH, 0);
             ss << nStakeModifier;
+            return true;
         }
 
         //hash this iteration
