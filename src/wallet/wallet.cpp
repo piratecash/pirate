@@ -3510,7 +3510,6 @@ bool CWallet::SelectStakeCoins(StakeCandidates& setCoins, CAmount nTargetAmount)
 
         //add to our stake set
         setCoins.emplace(out.tx->tx->vout[out.i].nValue, out.tx, out.i);
-        break;
     }
 
     return !setCoins.empty();
