@@ -5,6 +5,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <netbase.h>
+#include <net_permissions.h>
 #include <protocol.h>
 #include <serialize.h>
 #include <streams.h>
