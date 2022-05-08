@@ -18,6 +18,8 @@
 #include <QUrl>
 #include <QtGui/QClipboard>
 
+#include <net_processing.h>
+
 ///
 /// Proposal wrapper
 ///
