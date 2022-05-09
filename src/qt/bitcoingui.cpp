@@ -155,7 +155,6 @@ BitcoinGUI::BitcoinGUI(interfaces::Node& node, const NetworkStyle* networkStyle,
     QHBoxLayout *frameBlocksLayout = new QHBoxLayout(frameBlocks);
     frameBlocksLayout->setContentsMargins(3,0,3,0);
     frameBlocksLayout->setSpacing(3);
-    labelPoWIcon = new QLabel();
     labelStakingIcon = new QLabel();
     unitDisplayControl = new UnitDisplayStatusBarControl();
     labelWalletEncryptionIcon = new QLabel();
@@ -172,8 +171,6 @@ BitcoinGUI::BitcoinGUI(interfaces::Node& node, const NetworkStyle* networkStyle,
         frameBlocksLayout->addWidget(labelWalletEncryptionIcon);
     }
     frameBlocksLayout->addWidget(labelProxyIcon);
-    frameBlocksLayout->addStretch();
-    frameBlocksLayout->addWidget(labelPoWIcon);
     frameBlocksLayout->addStretch();
     frameBlocksLayout->addWidget(labelStakingIcon);
     frameBlocksLayout->addStretch();
@@ -237,11 +234,6 @@ BitcoinGUI::BitcoinGUI(interfaces::Node& node, const NetworkStyle* networkStyle,
 #ifdef ENABLE_WALLET
     connect(incomingTransactionsTimer, &QTimer::timeout, this, &BitcoinGUI::showIncomingTransactions);
 #endif
-
-    QTimer* timerPoWIcon = new QTimer(labelPoWIcon);
-    connect(timerPoWIcon, SIGNAL(timeout()), this, SLOT(setPoWStatus()));
-    timerPoWIcon->start(10000);
-    setPoWStatus();
 
     QTimer* timerStakingIcon = new QTimer(labelStakingIcon);
     connect(timerStakingIcon, SIGNAL(timeout()), this, SLOT(setStakingStatus()));
@@ -435,13 +427,6 @@ void BitcoinGUI::createActions()
     openConfEditorAction->setMenuRole(QAction::NoRole);
     showBackupsAction = new QAction(tr("Show Automatic &Backups"), this);
     showBackupsAction->setStatusTip(tr("Show automatically created wallet backups"));
-    // POW Actions
-    powStartAction = new QAction(tr("Start PoW mining"), this);
-    powStartAction->setStatusTip(tr("Start mining Cosanta"));
-    powStartAction->setVisible(true);
-    powStopAction = new QAction(tr("Stop PoW mining"), this);
-    powStopAction->setStatusTip(tr("Stop mining Cosanta"));
-    powStopAction->setVisible(false);
     // initially disable the debug window menu items
     openInfoAction->setEnabled(false);
     openRPCConsoleAction->setEnabled(false);
@@ -479,10 +464,6 @@ void BitcoinGUI::createActions()
     connect(openGraphAction, &QAction::triggered, this, &BitcoinGUI::showGraph);
     connect(openPeersAction, &QAction::triggered, this, &BitcoinGUI::showPeers);
     connect(openRepairAction, &QAction::triggered, this, &BitcoinGUI::showRepair);
-
-    //POW
-    connect(powStartAction, SIGNAL(triggered()), this, SLOT(powStartClicked()));
-    connect(powStopAction, SIGNAL(triggered()), this, SLOT(powStopClicked()));
 
     // Open configs and backup folder from menu
     connect(openConfEditorAction, &QAction::triggered, this, &BitcoinGUI::showConfEditor);
@@ -611,9 +592,6 @@ void BitcoinGUI::createMenuBar()
     tools->addAction(openPeersAction);
     if(walletFrame) {
         tools->addAction(openRepairAction);
-        tools->addSeparator();
-        tools->addAction(powStartAction);
-        tools->addAction(powStopAction);
     }
     tools->addSeparator();
     tools->addAction(openConfEditorAction);
@@ -1710,56 +1688,6 @@ bool BitcoinGUI::eventFilter(QObject *object, QEvent *event)
     return QMainWindow::eventFilter(object, event);
 }
 
-void BitcoinGUI::powStartClicked()
-{
-    GenerateCosanta(true, GetWallets()[0]);
-    powStartAction->setVisible(false);
-    powStopAction->setVisible(true);
-}
-
-void BitcoinGUI::powStopClicked()
-{
-    GenerateCosanta(false, NULL);
-    powStartAction->setVisible(true);
-    powStopAction->setVisible(false);
-}
-
-
-void BitcoinGUI::setPoWStatus()
-{
-    int pow = pow_hps / 10;
-    lastPOW_hps = pow;
-    pow_hps = 0;
-
-    if (pow) {
-        QString text;
-
-        if (pow < 1000){
-            text = tr("Your hashrate is %1 hps<br>with %2 threads").arg(pow).arg(pow_cpu);
-        }
-        else if (pow < 1000 * 1000)
-        {
-            text = tr("Your hashrate is %1 Khps<br>with %2 threads").arg(pow / 1000).arg(pow_cpu);
-        }
-        else
-        {
-            text = tr("Your hashrate is %1 Mhps<br>with %2 threads").arg(pow / 1000 / 1000).arg(pow_cpu);
-        }
-        GUIUtil::ThemedColor color = GUIUtil::ThemedColor::GREEN;
-        labelPoWIcon->show();
-        labelPoWIcon->setPixmap(GUIUtil::getIcon("pow_active", color).pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
-        labelPoWIcon->setToolTip(tr("PoW is <b>enabled</b><br>%1.").arg(text));
-        powStartAction->setVisible(false);
-        powStopAction->setVisible(true);
-    } else {
-        GUIUtil::ThemedColor color = GUIUtil::ThemedColor::ORANGE;
-        labelPoWIcon->show();
-        labelPoWIcon->setPixmap(GUIUtil::getIcon("pow_inactive", color).pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
-        labelPoWIcon->setToolTip(tr("PoW is <b>disabled</b>"));
-        powStartAction->setVisible(true);
-        powStopAction->setVisible(false);
-    }
-}
 
 void BitcoinGUI::setStakingStatus()
 {

@@ -102,7 +102,6 @@ private:
     WalletFrame* walletFrame = nullptr;
 
     UnitDisplayStatusBarControl* unitDisplayControl = nullptr;
-    QLabel* labelPoWIcon = nullptr;
     QLabel* labelStakingIcon = nullptr;
     QLabel* labelWalletEncryptionIcon = nullptr;
     QLabel* labelWalletHDStatusIcon = nullptr;
@@ -149,8 +148,6 @@ private:
     QAction* showBackupsAction = nullptr;
     QAction* openAction = nullptr;
     QAction* showHelpMessageAction = nullptr;
-    QAction *powStartAction = nullptr;
-    QAction *powStopAction = nullptr;
     QAction* showCoinJoinHelpAction = nullptr;
     QAction* m_wallet_selector_action = nullptr;
 
@@ -251,10 +248,7 @@ public Q_SLOTS:
     */
     void message(const QString &title, const QString &message, unsigned int style, bool *ret = nullptr);
 
-    void setPoWStatus();
     void setStakingStatus();
-    void powStartClicked();
-    void powStopClicked();
 
 #ifdef ENABLE_WALLET
     bool setCurrentWallet(WalletModel* wallet_model);
