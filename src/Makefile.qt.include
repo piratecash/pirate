@@ -69,7 +69,7 @@ QT_MOC_CPP = \
   qt/moc_coincontroldialog.cpp \
   qt/moc_coincontroltreewidget.cpp \
   qt/moc_csvmodelwriter.cpp \
-  qt/moc_dash.cpp \
+  qt/moc_cosanta.cpp \
   qt/moc_editaddressdialog.cpp \
   qt/moc_governancelist.cpp \
   qt/moc_guiutil.cpp \
@@ -149,7 +149,7 @@ BITCOIN_QT_H = \
   qt/coincontroldialog.h \
   qt/coincontroltreewidget.h \
   qt/csvmodelwriter.h \
-  qt/dash.h \
+  qt/cosanta.h \
   qt/editaddressdialog.h \
   qt/governancelist.h \
   qt/guiconstants.h \
