@@ -63,11 +63,6 @@
 
 uint64_t nLastBlockTx = 0;
 uint64_t nLastBlockSize = 0;
-bool isLastPoW = false;
-bool isPoW = false;
-int64_t pow_hps = 0;
-int64_t lastPOW_hps = 0;
-int pow_cpu = 0;
 int64_t nLastCoinStakeSearchTime = 0;
 
 int64_t UpdateTime(CBlockHeader* pblock, const Consensus::Params& consensusParams, const CBlockIndex* pindexPrev)
@@ -602,120 +597,6 @@ void IncrementExtraNonce(CBlock* pblock, const CBlockIndex* pindexPrev, unsigned
     pblock->hashMerkleRoot = BlockMerkleRoot(*pblock);
 }
 
-void static CosantaMiner(std::shared_ptr<CWallet> pwallet)
-{
-    //SetThreadPriority(THREAD_PRIORITY_LOWEST);
-    LogPrintf("PoW Miner started\n");
-    util::ThreadRename("cosanta-pow");
-    bool keepScript = true;
-    pow_hps = 0;
-    lastPOW_hps = 0;
-
-    std::shared_ptr<CReserveScript> coinbaseScript = std::make_shared<CReserveScript>();
-    pwallet->GetScriptForMining(coinbaseScript);
-
-    // If the keypool is exhausted, no script is returned at all.  Catch this.
-    if (!coinbaseScript) {
-        //throw JSONRPCError(RPC_WALLET_KEYPOOL_RAN_OUT, "Error: Keypool ran out, please call keypoolrefill first");
-    }
-
-    //throw an error if no script was provided
-    if (coinbaseScript->reserveScript.empty()) {
-        //throw JSONRPCError(RPC_INTERNAL_ERROR, "No coinbase script available");
-    }
-
-    try {
-        while (!masternodeSync.IsSynced())
-            UninterruptibleSleep(std::chrono::milliseconds{1000});
-        static const int nInnerLoopCount = 0x10000;
-
-        unsigned int nExtraNonce = 0;
-
-        while (isPoW) {
-            if (!IsPowActiveHeight(chainActive.Height())){
-                isPoW = false;
-                break;
-            }
-            isLastPoW = true;
-            auto pblocktemplate = BlockAssembler(Params()).CreateNewBlock(coinbaseScript->reserveScript, GetWallets()[0]);
-            if (!pblocktemplate.get())
-            {
-                LogPrintf("Couldn't create new block");
-                break;
-            }
-            auto pblock = pblocktemplate->block;
-            CValidationState state;
-            if (pblock->IsProofOfWork()) {
-                {
-                    LOCK(cs_main);
-                    IncrementExtraNonce(pblock.get(), chainActive.Tip(), nExtraNonce);
-                }
-                while (isPoW && pblock->nNonce < nInnerLoopCount && !CheckProof(state, *pblock, Params().GetConsensus())) {
-                    ++pblock->nNonce;
-                    pow_hps++;
-                    state = CValidationState();
-                }
-                if (!isPoW) {
-                    break;
-                }
-                if (pblock->nNonce == nInnerLoopCount) {
-                    continue;
-                }
-            } else if (!CheckProof(state, *pblock, Params().GetConsensus())) {
-                if (!isPoW) {
-                    break;
-                }
-                state = CValidationState();
-                continue;
-            }
-            if (!ProcessNewBlock(Params(), pblock, true, NULL))
-                LogPrintf("ProcessNewBlock, block not accepted");
-
-            //mark script as important because it was used at least for one coinbase output if the script came from the wallet
-            if (keepScript)
-            {
-                coinbaseScript->KeepScript();
-            }
-        }
-        isLastPoW = false;
-    }
-    catch (boost::thread_interrupted)
-    {
-        LogPrintf("CosantaMiner terminated\n");
-        throw;
-    }
-    pow_hps = 0;
-    lastPOW_hps = 0;
-    pow_cpu = 0;
-}
-
-void GenerateCosanta(bool fGenerate, std::shared_ptr<CWallet> pwallet)
-{
-    static boost::thread_group* minerThreads = NULL;
-    isPoW = true;
-
-    int nThreads = (int)gArgs.GetArg("-genproclimit", -1);
-    if (nThreads < 0)
-        nThreads = boost::thread::hardware_concurrency();
-
-    if (minerThreads != NULL)
-    {
-        isPoW = false;
-        isLastPoW = false;
-        minerThreads->interrupt_all();
-        delete minerThreads;
-        minerThreads = NULL;
-    }
-
-    if (nThreads == 0 || !fGenerate)
-        return;
-
-   pow_cpu = nThreads;
-
-    minerThreads = new boost::thread_group();
-    for (int i = 0; i < nThreads; i++)
-        minerThreads->create_thread(boost::bind(&CosantaMiner, pwallet));
-}
 
 void PoSMiner(std::shared_ptr<CWallet> pwallet, CThreadInterrupt &interrupt)
 {

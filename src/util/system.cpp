@@ -626,9 +626,6 @@ std::string ArgsManager::GetHelpMessage()
             case OptionsCategory::POS:
                 usage += HelpMessageGroup("Staking options:");
                 break;
-            case OptionsCategory::POW:
-                usage += HelpMessageGroup("PoW mining:");
-                break;
             default:
                 break;
         }

@@ -200,7 +200,6 @@ private:
 /** Modify the extranonce in a block */
 void IncrementExtraNonce(CBlock* pblock, const CBlockIndex* pindexPrev, unsigned int& nExtraNonce);
 int64_t UpdateTime(CBlockHeader* pblock, const Consensus::Params& consensusParams, const CBlockIndex* pindexPrev);
-void GenerateCosanta(bool fGenerate, std::shared_ptr<CWallet> pwallet);
 void PoSMiner(std::shared_ptr<CWallet> pwallet, CThreadInterrupt &interrupt);
 bool IsStakingActive();
 void SetThreadPriority(int nPriority);

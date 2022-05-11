@@ -120,10 +120,6 @@ UniValue generateBlocks(std::shared_ptr<CReserveScript> coinbaseScript, int nGen
     static const int nInnerLoopCount = 0x10000;
     int nHeightEnd = 0;
     int nHeight = 0;
-    isLastPoW = true;
-    pow_hps = 0;
-    lastPOW_hps = 0;
-    pow_cpu = 1;
 
     {   // Don't keep cs_main locked
         LOCK(cs_main);
@@ -175,51 +171,7 @@ UniValue generateBlocks(std::shared_ptr<CReserveScript> coinbaseScript, int nGen
             coinbaseScript->KeepScript();
         }
     }
-    isLastPoW = false;
-    pow_hps = 0;
-    lastPOW_hps = 0;
     return blockHashes;
-}
-
-UniValue getgenerate(const JSONRPCRequest& request)
-{
-    if (request.fHelp || request.params.size() != 0)
-    {
-        throw std::runtime_error(
-                     "getgenerate\n"
-                     "Returns true or false.");
-    }
-    UniValue obj(UniValue::VOBJ);
-    obj.push_back(Pair("config",gArgs.GetBoolArg("-gen", false)));
-    obj.push_back(Pair("status",isLastPoW));
-    obj.push_back(Pair("hps",lastPOW_hps));
-    obj.push_back(Pair("threads",pow_cpu));
-    return obj;
-}
-
-UniValue setgenerate(const JSONRPCRequest& request)
-{
-    if (request.fHelp || request.params.size() < 1 || request.params.size() > 2)
-    {
-        throw std::runtime_error(
-                    "setgenerate <generate> [genproclimit]\n"
-                    "<generate> is true or false to turn generation on or off.\n"
-                    "Generation is limited to [genproclimit] processors, -1 is unlimited.");
-    }
-    bool fGenerate = request.params[0].get_bool();
-    if (request.params.size() > 1)
-    {
-        int nGenProcLimit = request.params[1].get_int();
-        gArgs.SoftSetArg("-genproclimit", itostr(nGenProcLimit));
-        if (nGenProcLimit == 0)
-        {
-            fGenerate = false;
-        }
-    }
-    gArgs.SoftSetArg("-gen", (fGenerate ? "1" : "0"));
-    GenerateCosanta(fGenerate, GetWallets()[0]);
-
-    return NullUniValue;
 }
 
 static UniValue generatetoaddress(const JSONRPCRequest& request)
@@ -1099,16 +1051,14 @@ UniValue reservebalance(const JSONRPCRequest& request)
     }
 
     UniValue result(UniValue::VOBJ);
-    result.push_back(Pair("reserve", (nReserveBalance > 0)));
-    result.push_back(Pair("amount", ValueFromAmount(nReserveBalance)));
+    result.pushKV("reserve",    (nReserveBalance > 0));
+    result.pushKV("amount",     ValueFromAmount(nReserveBalance));
     return result;
 }
 
 static const CRPCCommand commands[] =
 { //  category              name                      actor (function)         argNames
   //  --------------------- ------------------------  -----------------------  ----------
-    { "mining",             "getgenerate",            &getgenerate,            {} },
-    { "mining",             "setgenerate",            &setgenerate,            {"generate","genproclimit"} },
     { "mining",             "reservebalance",         &reservebalance,         {"reserve", "amount"} },
     { "mining",             "getnetworkhashps",       &getnetworkhashps,       {"nblocks","height"} },
     { "mining",             "getmininginfo",          &getmininginfo,          {} },

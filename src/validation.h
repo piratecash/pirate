@@ -197,12 +197,6 @@ extern int64_t nMaxTipAge;
 extern bool fLargeWorkForkFound;
 extern bool fLargeWorkInvalidChainFound;
 
-extern bool isLastPoW;
-extern bool isUsePoW;
-extern int64_t pow_hps;
-extern int64_t lastPOW_hps;
-extern int pow_cpu;
-
 extern int64_t nReserveBalance;
 
 extern std::atomic<bool> fDIP0001ActiveAtTip;

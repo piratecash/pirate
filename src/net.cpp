@@ -3125,11 +3125,6 @@ bool CConnman::Start(CScheduler& scheduler, const Options& connOptions)
         threadStakeMint = std::thread(&TraceThread<std::function<void()>>, "stakemint", std::function<void()>(std::bind(&CConnman::ThreadStakeMinter, this)));
     }
 
-    // Cosanta proof-of-work blocks in the background
-    if (gArgs.GetBoolArg("-gen", false)) {
-        GenerateCosanta(true, GetWallets()[0]);
-    }
-
     return true;
 }
 
@@ -3196,7 +3191,6 @@ void CConnman::Stop()
         threadSocketHandler.join();
     if (threadStakeMint.joinable())
         threadStakeMint.join();
-    GenerateCosanta(false, NULL);
 
     if (fAddressesInitialized)
     {

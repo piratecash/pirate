@@ -152,7 +152,6 @@ enum class OptionsCategory {
     COMMANDS,
     REGISTER_COMMANDS,
     POS,
-    POW,
 
     HIDDEN // Always the last option to avoid printing these in the help
 };

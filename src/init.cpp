@@ -725,8 +725,6 @@ void SetupServerArgs()
     gArgs.AddArg("-printcoinstake", "", false, OptionsCategory::HIDDEN);
     gArgs.AddArg("-poshashinterval", "", false, OptionsCategory::HIDDEN);
 #endif
-    gArgs.AddArg("-gen", strprintf("Generate coins (default: 0)"), false, OptionsCategory::POW);
-    gArgs.AddArg("-genproclimit", strprintf("processors, -1 is unlimited. (default: -1)"), false, OptionsCategory::POW);
 #if HAVE_DECL_DAEMON
     gArgs.AddArg("-daemon", "Run in the background as a daemon and accept commands", false, OptionsCategory::OPTIONS);
 #else
