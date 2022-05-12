@@ -615,6 +615,7 @@ void PoSMiner(std::shared_ptr<CWallet> pwallet, CThreadInterrupt &interrupt)
 
     while (!interrupt) {
         auto hash_interval = std::max(pwallet->nHashInterval, (unsigned int)1);
+        interrupt.sleep_for(std::chrono::seconds(hash_interval));
 
         if ((GetTime() - nMintableLastCheck > 60))
         {
@@ -661,7 +662,6 @@ void PoSMiner(std::shared_ptr<CWallet> pwallet, CThreadInterrupt &interrupt)
         {
             if ((GetTime() - hash_interval) < nLastCoinStakeSearchTime)
             {
-                interrupt.sleep_for(std::chrono::seconds(hash_interval));
                 continue;
             }
         } else {
