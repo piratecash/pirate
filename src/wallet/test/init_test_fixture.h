@@ -5,7 +5,7 @@
 #ifndef BITCOIN_WALLET_TEST_INIT_TEST_FIXTURE_H
 #define BITCOIN_WALLET_TEST_INIT_TEST_FIXTURE_H
 
-#include <test/test_bitcoin.h>
+#include <test/test_cosanta.h>
 
 
 struct InitWalletDirTestingSetup: public BasicTestingSetup {
