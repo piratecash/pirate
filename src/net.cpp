@@ -2599,7 +2599,7 @@ void CConnman::ThreadOpenMasternodeConnections()
 
                     int64_t lastAttempt = mmetaman.GetMetaInfo(dmn->proTxHash)->GetLastOutboundAttempt();
                     // back off trying connecting to an address if we already tried recently
-                    if (nANow - lastAttempt < 60) {
+                    if (nANow - lastAttempt < chainParams.LLMQConnectionRetryTimeout()) {
                         continue;
                     }
                     pending.emplace_back(dmn);
