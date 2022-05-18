@@ -10,8 +10,6 @@
 #endif
 #include <miner.h>
 #include <wallet/wallet.h>
-#include <miner.h>
-#include <wallet/wallet.h>
 
 #include <net.h>
 #include <netmessagemaker.h>

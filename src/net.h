@@ -23,9 +23,9 @@
 #include <saltedhasher.h>
 #include <streams.h>
 #include <sync.h>
+#include <threadinterrupt.h>
 #include <uint256.h>
 #include <util/system.h>
-#include <threadinterrupt.h>
 #include <consensus/params.h>
 
 #include <atomic>
