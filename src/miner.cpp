@@ -642,7 +642,7 @@ void PoSMiner(std::shared_ptr<CWallet> pwallet, CThreadInterrupt &interrupt)
 
         if (pwallet->IsLocked(true) ||
             !fMintableCoins ||
-            (nReserveBalance >= pwallet->GetBalance()) ||
+            (nReserveBalance >= pwallet->GetBalance().m_mine_trusted) ||
             !masternodeSync.IsSynced() ||
             (g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0)
         ) {
@@ -652,7 +652,7 @@ void PoSMiner(std::shared_ptr<CWallet> pwallet, CThreadInterrupt &interrupt)
                                   __func__,
                                   int(pwallet->IsLocked(true)),
                                   int(!fMintableCoins),
-                                  int(nReserveBalance >= pwallet->GetBalance()),
+                                  int(nReserveBalance >= pwallet->GetBalance().m_mine_trusted),
                                   int(!masternodeSync.IsSynced()),
                                   int(g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL)));
             continue;

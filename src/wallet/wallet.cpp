@@ -3419,7 +3419,7 @@ bool CWallet::SelectStakeCoins(StakeCandidates& setCoins, CAmount nTargetAmount)
 
 bool CWallet::MintableCoins()
 {
-    CAmount nBalance = GetBalance();
+    CAmount nBalance = GetBalance().m_mine_trusted;
     if (gArgs.IsArgSet("-reservebalance") && !ParseMoney(gArgs.GetArg("-reservebalance", ""), nReserveBalance))
         return error("MintableCoins() : invalid reserve balance amount");
     if (nBalance <= nReserveBalance)
@@ -4013,7 +4013,7 @@ bool CWallet::CreateTransaction(const std::vector<CRecipient>& vecSend, CTransac
 bool CWallet::CreateCoinStake(const CBlockIndex *pindex_prev, CBlock &curr_block, CMutableTransaction& coinbaseTx)
 {
     // Choose coins to use
-    CAmount nBalance = GetBalance();
+    CAmount nBalance = GetBalance().m_mine_trusted;
 
     if (gArgs.IsArgSet("-reservebalance") && !ParseMoney(gArgs.GetArg("-reservebalance", ""), nReserveBalance))
         return error("CreateCoinStake : invalid reserve balance amount");
