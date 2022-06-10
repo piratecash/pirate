@@ -95,10 +95,6 @@ QT_TRANSLATE_NOOP("piratecash-core", ""
 QT_TRANSLATE_NOOP("piratecash-core", ""
 "This is the transaction fee you may pay when fee estimates are not available."),
 QT_TRANSLATE_NOOP("piratecash-core", ""
-"This product includes software developed by the OpenSSL Project for use in "
-"the OpenSSL Toolkit %s and cryptographic software written by Eric Young and "
-"UPnP software written by Thomas Bernard."),
-QT_TRANSLATE_NOOP("piratecash-core", ""
 "Total length of network version string (%i) exceeds maximum length (%i). "
 "Reduce the number or size of uacomments."),
 QT_TRANSLATE_NOOP("piratecash-core", ""
@@ -313,7 +309,6 @@ QT_TRANSLATE_NOOP("piratecash-core", "You can not start a masternode with wallet
 QT_TRANSLATE_NOOP("piratecash-core", "You need to rebuild the database using -reindex to change -addressindex"),
 QT_TRANSLATE_NOOP("piratecash-core", "You need to rebuild the database using -reindex to change -spentindex"),
 QT_TRANSLATE_NOOP("piratecash-core", "Your entries added successfully."),
-QT_TRANSLATE_NOOP("piratecash-core", "Zapping all transactions from wallet..."),
 QT_TRANSLATE_NOOP("piratecash-core", "no mixing available."),
 QT_TRANSLATE_NOOP("piratecash-core", "see debug.log for details."),
 };
