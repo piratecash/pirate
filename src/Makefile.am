@@ -1,6 +1,5 @@
 # Copyright (c) 2013-2016 The Bitcoin Core developers
 # Copyright (c) 2014-2018 The Dash Core developers
-# Copyright (c) 2020-2022 The Cosanta Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -723,8 +722,8 @@ libpiratecash_cli_a_SOURCES = \
 nodist_libpiratecash_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
-# piratecashd binary #
-piratecashd_SOURCES = dashd.cpp
+# dashd binary #
+piratecashd_SOURCES = bitcoind.cpp
 piratecashd_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 piratecashd_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 piratecashd_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
@@ -751,7 +750,7 @@ piratecashd_LDADD = \
 priatecashd_LDADD += $(BACKTRACE_LIB) $(BOOST_LIBS) $(BDB_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(BLS_LIBS) $(GMP_LIBS)
 
 # piratecash-cli binary #
-piratecash_cli_SOURCES = dash-cli.cpp
+piratecash_cli_SOURCES = bitcoin-cli.cpp
 piratecash_cli_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
 piratecash_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 piratecash_cli_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
@@ -769,7 +768,7 @@ priatecash_cli_LDADD += $(BACKTRACE_LIB) $(BOOST_LIBS) $(CRYPTO_LIBS) $(EVENT_LI
 #
 
 # piratecash-tx binary #
-piratecash_tx_SOURCES = dash-tx.cpp
+piratecash_tx_SOURCES = bitcoin-tx.cpp
 piratecash_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 piratecash_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 piratecash_tx_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
@@ -790,7 +789,7 @@ piratecash_tx_LDADD += $(BACKTRACE_LIB) $(BOOST_LIBS) $(CRYPTO_LIBS) $(BLS_LIBS)
 #
 
 # piratecash-wallet binary #
-piratecash_wallet_SOURCES = dash-wallet.cpp
+piratecash_wallet_SOURCES = bitcoin-wallet.cpp
 piratecash_wallet_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 piratecash_wallet_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 piratecash_wallet_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)

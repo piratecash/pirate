@@ -61,6 +61,7 @@ QT_MOC_CPP = \
   qt/moc_askpassphrasedialog.cpp \
   qt/moc_createwalletdialog.cpp \
   qt/moc_bantablemodel.cpp \
+  qt/moc_bitcoin.cpp \
   qt/moc_bitcoinaddressvalidator.cpp \
   qt/moc_bitcoinamountfield.cpp \
   qt/moc_bitcoingui.cpp \
@@ -69,7 +70,6 @@ QT_MOC_CPP = \
   qt/moc_coincontroldialog.cpp \
   qt/moc_coincontroltreewidget.cpp \
   qt/moc_csvmodelwriter.cpp \
-  qt/moc_dash.cpp \
   qt/moc_editaddressdialog.cpp \
   qt/moc_governancelist.cpp \
   qt/moc_guiutil.cpp \
@@ -120,7 +120,7 @@ QT_MOC = \
   qt/overviewpage.moc \
   qt/rpcconsole.moc
 
-QT_QRC_CPP = qt/qrc_piratecash.cpp
+QT_QRC_CPP = qt/qrc_bitcoin.cpp
 QT_QRC = qt/piratecash.qrc
 QT_QRC_LOCALE_CPP = qt/qrc_piratecash_locale.cpp
 QT_QRC_LOCALE = qt/piratecash_locale.qrc
@@ -131,6 +131,7 @@ BITCOIN_QT_H = \
   qt/appearancewidget.h \
   qt/askpassphrasedialog.h \
   qt/bantablemodel.h \
+  qt/bitcoin.h \
   qt/bitcoinaddressvalidator.h \
   qt/bitcoinamountfield.h \
   qt/bitcoingui.h \
@@ -140,7 +141,6 @@ BITCOIN_QT_H = \
   qt/coincontroltreewidget.h \
   qt/createwalletdialog.h \
   qt/csvmodelwriter.h \
-  qt/dash.h \
   qt/editaddressdialog.h \
   qt/governancelist.h \
   qt/guiconstants.h \
@@ -222,7 +222,7 @@ RES_ICONS = \
 BITCOIN_QT_BASE_CPP = \
   qt/appearancewidget.cpp \
   qt/bantablemodel.cpp \
-  qt/dash.cpp \
+  qt/bitcoin.cpp \
   qt/bitcoinaddressvalidator.cpp \
   qt/bitcoinamountfield.cpp \
   qt/bitcoingui.cpp \
@@ -426,7 +426,7 @@ $(srcdir)/qt/dashstrings.cpp: $(libpiratecash_server_a_SOURCES) $(libpiratecash_
 	@test -n $(XGETTEXT) || echo "xgettext is required for updating translations"
 	$(AM_V_GEN) cd $(srcdir); XGETTEXT=$(XGETTEXT) COPYRIGHT_HOLDERS="$(COPYRIGHT_HOLDERS)" $(PYTHON) ../share/qt/extract_strings_qt.py $(libpiratecash_server_a_SOURCES) $(libpiratecash_wallet_a_SOURCES) $(libpiratecash_common_a_SOURCES) $(libpiratecash_zmq_a_SOURCES) $(libpiratecash_consensus_a_SOURCES) $(libpiratecash_util_a_SOURCES)
 
-translate: $(srcdir)/qt/dashstrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(BITCOIN_QT_BASE_CPP) qt/dash.cpp $(BITCOIN_QT_WINDOWS_CPP) $(BITCOIN_QT_WALLET_CPP) $(BITCOIN_QT_H) $(BITCOIN_MM)
+translate: $(srcdir)/qt/dashstrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(BITCOIN_QT_BASE_CPP) qt/bitcoin.cpp $(BITCOIN_QT_WINDOWS_CPP) $(BITCOIN_QT_WALLET_CPP) $(BITCOIN_QT_H) $(BITCOIN_MM)
 	@test -n $(LUPDATE) || echo "lupdate is required for updating translations"
 	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(LUPDATE) $^ -I$(srcdir) -locations relative -no-obsolete -ts $(srcdir)/qt/locale/piratecash_en.ts
 	@test -n $(LCONVERT) || echo "lconvert is required for updating translations"
@@ -435,12 +435,12 @@ translate: $(srcdir)/qt/dashstrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(BITCOIN_
 $(QT_QRC_LOCALE_CPP): $(QT_QRC_LOCALE) $(QT_QM)
 	@test -f $(RCC)
 	@cp -f $< $(@D)/temp_$(<F)
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name cosanta_locale --format-version 1 $(@D)/temp_$(<F) > $@
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name piratecash_locale --format-version 1 $(@D)/temp_$(<F) > $@
 	@rm $(@D)/temp_$(<F)
 
 $(QT_QRC_CPP): $(QT_QRC) $(QT_FORMS_H) $(RES_ICONS) $(RES_IMAGES) $(RES_CSS) $(RES_FONTS) $(RES_MOVIES)
 	@test -f $(RCC)
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name cosanta --format-version 1 $< > $@
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name piratecash --format-version 1 $< > $@
 
 CLEAN_QT = $(nodist_qt_libpiratecashqt_a_SOURCES) $(QT_QM) $(QT_FORMS_H) qt/*.gcda qt/*.gcno qt/temp_piratecash_locale.qrc qt/res/css/colors/*
 

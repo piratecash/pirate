@@ -7,7 +7,7 @@
 #include <config/piratecash-config.h>
 #endif
 
-#include <qt/dash.h>
+#include <qt/bitcoin.h>
 #include <qt/bitcoingui.h>
 
 #include <chainparams.h>
