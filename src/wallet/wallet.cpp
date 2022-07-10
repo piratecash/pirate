@@ -3326,6 +3326,7 @@ bool CWallet::SelectCoinsGroupedByAddresses(std::vector<CompactTallyItem>& vecTa
 
 bool CWallet::SelectStakeCoins(StakeCandidates& setCoins, CAmount nTargetAmount) const
 {
+    LOCK2(cs_main, cs_wallet);
     std::vector<COutput> vCoins;
     AvailableCoins(*chain().lock(), vCoins, true);
     auto curr_time = GetTime();
@@ -3379,6 +3380,7 @@ bool CWallet::SelectStakeCoins(StakeCandidates& setCoins, CAmount nTargetAmount)
 
 bool CWallet::MintableCoins()
 {
+    LOCK2(cs_main, cs_wallet);
     CAmount nBalance = GetBalance().m_mine_trusted;
     if (gArgs.IsArgSet("-reservebalance") && !ParseMoney(gArgs.GetArg("-reservebalance", ""), nReserveBalance))
         return error("MintableCoins() : invalid reserve balance amount");
