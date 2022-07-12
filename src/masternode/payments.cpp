@@ -249,7 +249,7 @@ bool CMasternodePayments::GetMasternodeTxOuts(int nBlockHeight, CAmount blockRew
     voutMasternodePaymentsRet.clear();
 
     if(!GetBlockTxOuts(nBlockHeight, blockReward, voutMasternodePaymentsRet)) {
-        LogPrintf("CMasternodePayments::%s -- no payee (deterministic masternode list empty)\n", __func__);
+        LogPrint(BCLog::STAKING, "CMasternodePayments::%s -- no payee (deterministic masternode list empty)\n", __func__);
         return false;
     }
 
@@ -257,7 +257,7 @@ bool CMasternodePayments::GetMasternodeTxOuts(int nBlockHeight, CAmount blockRew
         CTxDestination dest;
         ExtractDestination(txout.scriptPubKey, dest);
 
-        LogPrintf("CMasternodePayments::%s -- Masternode payment %lld to %s\n", __func__, txout.nValue, EncodeDestination(dest));
+        LogPrint(BCLog::STAKING, "CMasternodePayments::%s -- Masternode payment %lld to %s\n", __func__, txout.nValue, EncodeDestination(dest));
     }
 
     return true;
