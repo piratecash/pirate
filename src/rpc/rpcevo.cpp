@@ -30,6 +30,7 @@
 #include <bls/bls.h>
 
 #include <masternode/meta.h>
+#include <masternode/node.h>
 
 #ifdef ENABLE_WALLET
 extern UniValue signrawtransaction(const JSONRPCRequest& request);
@@ -428,7 +429,7 @@ static UniValue protx_register(const JSONRPCRequest& request)
 
     size_t paramIdx = 1;
 
-    CAmount collateralAmount = 1000 * COIN;
+    CAmount collateralAmount = MASTERNODE_COLLATERAL_AMOUNT;
 
     CMutableTransaction tx;
     tx.nVersion = 3;
