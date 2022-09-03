@@ -35,21 +35,18 @@ std::string CBlock::ToString() const
 {
     std::stringstream s;
     if (IsProofOfStake()) {
-        /*
-         s << strprintf("CBlock(hash=%s, ver=0x%08x, hashPrevBlock=%s, hashMerkleRoot=%s, nTime=%u, nBits=%08x, nHeight=%u, hashMix=%s, nNonce=%u, posStakeHash=%s, posStakeN=%u, posPubKey=%u, posBlockSig=%u vtx=%u)\n",
+         s << strprintf("CBlock(hash=%s, ver=0x%08x, hashPrevBlock=%s, hashMerkleRoot=%s, nTime=%u, nBits=%08x, nNonce=%u, posStakeHash=%s, posStakeN=%u, posPubKey=%u, posBlockSig=%u vtx=%u)\n",
                         GetHash().ToString(),
                         nVersion,
                         hashPrevBlock.ToString(),
                         hashMerkleRoot.ToString(),
-                        nTime, nBits, nHeight,
-                        hashMix.ToString(),
+                        nTime, nBits,
                         nNonce,
                         posStakeHash.ToString(),
                         posStakeN,
                         posPubKey.size(),
                         posBlockSig.size(),
                         vtx.size());
-        */
     }else{
         s << strprintf("CBlock(hash=%s, ver=0x%08x, hashPrevBlock=%s, hashMerkleRoot=%s, nTime=%u, nBits=%08x, nNonce=%u, vtx=%u)\n",
             GetHash().ToString(),
