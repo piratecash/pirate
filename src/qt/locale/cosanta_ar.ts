@@ -207,7 +207,7 @@
         <translation>هذه العملية تحتاج كلمة مرور محفظتك لفتحها</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>افتح المحفظة لدمج فقط</translation>
     </message>
     <message>

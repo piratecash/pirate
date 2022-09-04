@@ -207,7 +207,7 @@
         <translation>Esta operación requiere su contraseña para desbloquear la billetera.</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>Desbloquear la billetera solo para mezcla</translation>
     </message>
     <message>

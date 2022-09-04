@@ -207,7 +207,7 @@
         <translation>這個動作需要你的錢包密碼來解鎖錢包。</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>解鎖錢包用來作混合處理</translation>
     </message>
     <message>

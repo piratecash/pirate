@@ -207,7 +207,7 @@
         <translation>Для выполнения операции разблокирования требуется пароль вашего кошелька.</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>Разблокировать кошелёк только для перемешивания</translation>
     </message>
     <message>

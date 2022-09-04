@@ -163,7 +163,7 @@
         <translation>Această acţiune necesită introducerea parolei de acces pentru deblocarea portofelului.</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>Deblochează portofelul numai pentru mixing</translation>
     </message>
     <message>

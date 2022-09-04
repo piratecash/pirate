@@ -207,7 +207,7 @@
         <translation>การดำเนินการนี้ต้องการรหัสวลีของคุณเพื่อปลดล็อคกระเป๋าสตางค์ของคุณ</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>ปลดล็อคกระเป๋าสตางค์สำหรับการผสมเท่านั้น</translation>
     </message>
     <message>

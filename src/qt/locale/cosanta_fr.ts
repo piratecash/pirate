@@ -207,7 +207,7 @@
         <translation>Cette opération nécessite votre phrase de passe pour déverrouiller le portefeuille.</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>Déverrouiller le portefeuille uniquement pour le mélange</translation>
     </message>
     <message>

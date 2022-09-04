@@ -207,7 +207,7 @@
         <translation>Táto operácia potrebuje heslo k vašej peňaženke, aby ju mohla dešifrovať.</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>Peňaženku odomknúť iba na miešanie</translation>
     </message>
     <message>

@@ -207,7 +207,7 @@
         <translation>Ta operacja wymaga hasła do odblokowania portfela.</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>Odblokuj portfel tylko dla miksowania monet</translation>
     </message>
     <message>

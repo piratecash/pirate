@@ -262,8 +262,8 @@
     </message>
     <message>
         <location line="-3"/>
-        <source>Unlock wallet for mixing only</source>
-        <translation>Unlock wallet for mixing only</translation>
+        <source>Unlock wallet for mixing and staking only</source>
+        <translation>Unlock wallet for mixing and staking only</translation>
     </message>
     <message>
         <location line="+8"/>

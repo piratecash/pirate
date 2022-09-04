@@ -207,7 +207,7 @@
         <translation>Bu eylem cüzdan kilidini açmak için cüzdan parolanızı gerektirir.</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>Cüzdanın kilidini sadece karışım için aç</translation>
     </message>
     <message>

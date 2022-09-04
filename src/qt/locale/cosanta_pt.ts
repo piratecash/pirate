@@ -207,7 +207,7 @@
         <translation>Esta operação precisa da sua senha para desbloquear a carteira.</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>Desbloquear carteira apenas para misturar</translation>
     </message>
     <message>

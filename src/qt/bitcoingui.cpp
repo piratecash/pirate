@@ -403,6 +403,8 @@ void BitcoinGUI::createActions()
     unlockWalletAction = new QAction(tr("&Unlock Wallet..."), this);
     unlockWalletAction->setToolTip(tr("Unlock wallet"));
     lockWalletAction = new QAction(tr("&Lock Wallet"), this);
+    startStakingAction = new QAction(tr("Start Staking..."), this);
+    startStakingAction->setToolTip(tr("Unlock wallet for mixing and staking only"));
     signMessageAction = new QAction(tr("Sign &message..."), this);
     signMessageAction->setStatusTip(tr("Sign messages with your Cosanta addresses to prove you own them"));
     verifyMessageAction = new QAction(tr("&Verify message..."), this);
@@ -481,6 +483,7 @@ void BitcoinGUI::createActions()
         connect(changePassphraseAction, &QAction::triggered, walletFrame, &WalletFrame::changePassphrase);
         connect(unlockWalletAction, &QAction::triggered, walletFrame, &WalletFrame::unlockWallet);
         connect(lockWalletAction, &QAction::triggered, walletFrame, &WalletFrame::lockWallet);
+        connect(startStakingAction, SIGNAL(triggered()), walletFrame, SLOT(unlockWalletForMixingOnly()));
         connect(signMessageAction, &QAction::triggered, this, static_cast<void (BitcoinGUI::*)()>(&BitcoinGUI::showNormalIfMinimized));
         connect(signMessageAction, &QAction::triggered, [this]{ gotoSignMessageTab(); });
         connect(verifyMessageAction, &QAction::triggered, this, static_cast<void (BitcoinGUI::*)()>(&BitcoinGUI::showNormalIfMinimized));
@@ -526,6 +529,7 @@ void BitcoinGUI::createMenuBar()
         settings->addAction(changePassphraseAction);
         settings->addAction(unlockWalletAction);
         settings->addAction(lockWalletAction);
+        settings->addAction(startStakingAction);
         settings->addSeparator();
     }
     settings->addAction(optionsAction);
@@ -1746,6 +1750,7 @@ void BitcoinGUI::setEncryptionStatus(int status)
         unlockWalletAction->setVisible(false);
         lockWalletAction->setVisible(false);
         encryptWalletAction->setEnabled(true);
+        startStakingAction->setVisible(false);
         break;
     case WalletModel::Unlocked:
         labelWalletEncryptionIcon->show();
@@ -1755,15 +1760,17 @@ void BitcoinGUI::setEncryptionStatus(int status)
         unlockWalletAction->setVisible(false);
         lockWalletAction->setVisible(true);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
+        startStakingAction->setVisible(false);
         break;
     case WalletModel::UnlockedForMixingOnly:
         labelWalletEncryptionIcon->show();
         labelWalletEncryptionIcon->setPixmap(GUIUtil::getIcon("lock_open", GUIUtil::ThemedColor::ORANGE).pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
-        labelWalletEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b> for mixing only"));
+        labelWalletEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b> for mixing only and staking only"));
         changePassphraseAction->setEnabled(true);
         unlockWalletAction->setVisible(true);
         lockWalletAction->setVisible(true);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
+        startStakingAction->setVisible(false);
         break;
     case WalletModel::Locked:
         labelWalletEncryptionIcon->show();
@@ -1773,6 +1780,7 @@ void BitcoinGUI::setEncryptionStatus(int status)
         unlockWalletAction->setVisible(true);
         lockWalletAction->setVisible(false);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
+        startStakingAction->setVisible(true);
         break;
     }
 }

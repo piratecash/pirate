@@ -207,7 +207,7 @@
         <translation>Quest'operazione necessita della passphrase per sbloccare il portafoglio.</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>Sblocca il portafoglio solo per il mixing</translation>
     </message>
     <message>

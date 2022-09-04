@@ -207,7 +207,7 @@
         <translation>Deze actie vereist uw portemonneewachtwoord om de wallet te openen.</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>Ontgrendel portemonnee alleen om te mixen</translation>
     </message>
     <message>

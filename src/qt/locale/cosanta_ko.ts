@@ -207,7 +207,7 @@
         <translation>이 작업을 실행하려면 사용자 지갑의 암호문이 필요합니다.</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>믹싱만을 위해 지갑 잠금 해제</translation>
     </message>
     <message>

@@ -160,7 +160,7 @@
         <translation>Тази операция изисква Вашата парола за отключване на портфейла.</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>Отключете портфейла само за миксиране</translation>
     </message>
     <message>

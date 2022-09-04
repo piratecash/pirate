@@ -1930,7 +1930,7 @@ static UniValue walletpassphrase(const JSONRPCRequest& request)
             "\nExamples:\n"
             "\nUnlock the wallet for 60 seconds\n"
             + HelpExampleCli("walletpassphrase", "\"my pass phrase\" 60") +
-            "\nUnlock the wallet for 60 seconds but allow CoinJoin only\n"
+            "\nUnlock the wallet for 60 seconds but allow CoinJoin and staking only\n"
             + HelpExampleCli("walletpassphrase", "\"my pass phrase\" 60 true") +
             "\nLock the wallet again (before 60 seconds)\n"
             + HelpExampleCli("walletlock", "") +

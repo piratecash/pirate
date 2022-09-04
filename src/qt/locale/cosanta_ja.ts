@@ -163,7 +163,7 @@
         <translation>この操作にはウォレットをアンロックするためのパスフレーズが必要です。</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>ミキシングのためだけにウォレットをアンロック</translation>
     </message>
     <message>

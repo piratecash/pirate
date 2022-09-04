@@ -207,7 +207,7 @@
         <translation>Tätä toimintoa varten sinun täytyy antaa lompakon salasana sen lukituksen avaamiseksi.</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>Avaa lompakon lukitus vain sekoitusta varten</translation>
     </message>
     <message>

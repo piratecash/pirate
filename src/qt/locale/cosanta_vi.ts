@@ -203,7 +203,7 @@
         <translation>Công việc này cần mật khẩu ví của bạn để mở khoá ví.</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>Mở ví chỉ để trộn</translation>
     </message>
     <message>

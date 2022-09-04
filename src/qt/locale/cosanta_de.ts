@@ -207,7 +207,7 @@
         <translation>Dieser Vorgang benötigt ihre Passphrase, um die Wallet zu entsperren.</translation>
     </message>
     <message>
-        <source>Unlock wallet for mixing only</source>
+        <source>Unlock wallet for mixing and staking only</source>
         <translation>Wallet für den Mischvorgang entsperren</translation>
     </message>
     <message>
