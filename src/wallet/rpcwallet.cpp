@@ -48,6 +48,8 @@
 
 #include <functional>
 
+#include <masternode/sync.h>
+
 static const std::string WALLET_ENDPOINT_BASE = "/wallet/";
 
 bool GetWalletNameFromJSONRPCRequest(const JSONRPCRequest& request, std::string& wallet_name)
@@ -2556,6 +2558,58 @@ static UniValue getwalletinfo(const JSONRPCRequest& request)
     return obj;
 }
 
+static UniValue getstakingstatus(const JSONRPCRequest& request)
+{
+    if (request.fHelp || request.params.size() != 0)
+        throw std::runtime_error(
+                    "getstakingstatus\n"
+                    "\nReturns an object containing various staking information.\n"
+
+                    "\nResult:\n"
+                    "{\n"
+                    "  \"staking_status\": true|false,             (boolean) whether the wallet is staking or not\n"
+                    "  \"staking_enabled\": true|false,            (boolean) whether staking is enabled/disabled in cosanta.conf\n"
+                    "  \"haveconnections\": true|false,            (boolean) whether network connections are present\n"
+                    "  \"mnsync\": true|false,                     (boolean) whether the required masternode/spork data is synced\n"
+                    "  \"walletunlocked\": true|false,             (boolean) whether the wallet is unlocked\n"
+                    "  \"above_reserve_balance\": true|false,      (boolean) Above then reservd balance\n"
+                    "  \"stakesplitthreshold\": d                  (numeric) value of the current threshold for stake split\n"
+                    "  \"stakemaxsplit\": d                        (numeric) Sets the number of max inputs & outputs of a stake\n"
+                    "  \"stakeautocombine\": d                     (numeric) autocombine feature: 0 - disable, 1 - same account, 2 - any account\n"
+                    "}\n"
+
+                    "\nExamples:\n" +
+                    HelpExampleCli("getstakingstatus", "") + HelpExampleRpc("getstakingstatus", ""));
+
+    std::shared_ptr<CWallet> const wallet = GetWalletForJSONRPCRequest(request);
+    CWallet* const pwallet = wallet.get();
+    if (!EnsureWalletIsAvailable(pwallet, request.fHelp)) {
+        return NullUniValue;
+    }
+
+    pwallet->BlockUntilSyncedToCurrentChain();
+
+    auto locked_chain = pwallet->chain().lock();
+    LOCK(pwallet->cs_wallet);
+
+    bool fMintableCoins = pwallet->MintableCoins();
+    bool fLessReserveBalance = nReserveBalance >= pwallet->GetBalance().m_mine_trusted;
+    bool fStatus = !(pwallet->IsLocked(true) || !fMintableCoins || fLessReserveBalance || !masternodeSync.IsSynced() || g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0);
+
+    UniValue obj(UniValue::VOBJ);
+    obj.pushKV("staking_status", fStatus);
+    obj.pushKV("staking_enabled", gArgs.GetBoolArg("-staking", true));
+    obj.pushKV("haveconnections", (g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) > 0));
+    obj.pushKV("mnsync", masternodeSync.IsSynced());
+    obj.pushKV("walletunlocked", !pwallet->IsLocked(true));
+    obj.pushKV("mintable_coins", fMintableCoins);
+    obj.pushKV("above_reserve_balance", !fLessReserveBalance);
+    obj.pushKV("stakesplitthreshold", gArgs.GetArg("-stakesplitthreshold", DEFAULT_STAKE_SPLIT_THRESHOLD));
+    obj.pushKV("stakemaxsplit", gArgs.GetArg("-stakemaxsplit", DEFAULT_STAKE_MAX_SPLIT));
+    obj.pushKV("stakeautocombine", gArgs.GetArg("-stakeautocombine", DEFAULT_STAKE_AUTOCOMBINE));
+    return obj;
+}
+
 static UniValue listwalletdir(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0) {
@@ -4167,6 +4221,7 @@ static const CRPCCommand commands[] =
     { "wallet",             "gettransaction",                   &gettransaction,                {"txid","include_watchonly"} },
     { "wallet",             "getunconfirmedbalance",            &getunconfirmedbalance,         {} },
     { "wallet",             "getwalletinfo",                    &getwalletinfo,                 {} },
+    { "wallet",             "getstakingstatus",                 &getstakingstatus,              {} },
     { "wallet",             "importaddress",                    &importaddress,                 {"address","label","rescan","p2sh"} },
     { "wallet",             "importelectrumwallet",             &importelectrumwallet,          {"filename", "index"} },
     { "wallet",             "importmulti",                      &importmulti,                   {"requests","options"} },
