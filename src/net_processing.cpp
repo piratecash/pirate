@@ -65,7 +65,7 @@
 #include <statsd_client.h>
 
 #if defined(NDEBUG)
-# error "Cosanta Core cannot be compiled without assertions."
+# error "PirateCash Core cannot be compiled without assertions."
 #endif
 
 static std::deque<const CBlockIndex*> vToFetchCache GUARDED_BY(cs_main);
@@ -1460,7 +1460,7 @@ bool static AlreadyHave(const CInv& inv) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
         return LookupBlockIndex(inv.hash) != nullptr;
 
     /*
-        Cosanta Related Inventory Messages
+        PirateCash Related Inventory Messages
 
         --
 
@@ -1923,7 +1923,7 @@ bool static ProcessHeadersMessage(CNode *pfrom, CConnman *connman, std::deque<CB
         // - Once a headers message is received that is valid and does connect,
         //   nUnconnectingHeaders gets reset back to 0.
 
-	// FIXED: syncing of PoS blocks - Cosanta
+	// FIXED: syncing of PoS blocks - PirateCash
         //if (!LookupBlockIndex(headers[0].hashPrevBlock) && nCount < MAX_BLOCKS_TO_ANNOUNCE) {
         if ((pindexPrev == nullptr) &&
                 (headers.size() <= MAX_BLOCKS_TO_ANNOUNCE)

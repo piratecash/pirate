@@ -15,7 +15,7 @@
 #include <interfaces/chain.h>
 #include <key_io.h>
 #include <rpc/server.h>
-#include <test/test_cosanta.h>
+#include <test/test_piratecash.h>
 #include <validation.h>
 #include <wallet/coincontrol.h>
 #include <wallet/test/wallet_test_fixture.h>

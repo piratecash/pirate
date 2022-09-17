@@ -23,8 +23,8 @@
 
 #include "versionbits.h"
 
-//#define COSANTA_MINE_NEW_GENESIS_BLOCK
-#ifdef COSANTA_MINE_NEW_GENESIS_BLOCK
+//#define PIRATECASH_MINE_NEW_GENESIS_BLOCK
+#ifdef PIRATECASH_MINE_NEW_GENESIS_BLOCK
 
 #include <validation.h>
 
@@ -71,7 +71,7 @@ struct GenesisMiner
     }
 
 };
-#endif // COSANTA_MINE_NEW_GENESIS_BLOCK
+#endif // PIRATECASH_MINE_NEW_GENESIS_BLOCK
 
 
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
@@ -340,8 +340,8 @@ public:
         consensus.DIP0008Height = 300; // 00000000000000112e41e4b3afda8b233b8cc07c532d2eac5de097b68358c43e
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
         consensus.posLimit = uint256S("000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 24
-        consensus.nPowTargetTimespan = 24 * 60 * 60; // Cosanta: 1 day
-        consensus.nPowTargetSpacing = 2.5 * 60; // Cosanta: 2.5 minutes
+        consensus.nPowTargetTimespan = 24 * 60 * 60; // PirateCash: 1 day
+        consensus.nPowTargetSpacing = 2.5 * 60; // PirateCash: 2.5 minutes
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nPowKGWHeight = 30;
@@ -429,12 +429,12 @@ public:
         uint256 expectedGenesisHash = uint256S("0x00000216af2a362c1833a0a608408bcdc69d23b276e47d7510a776e3b0bb1fce");
         uint256 expectedGenesisMerkleRoot = uint256S("0xe16337d6f2cd561e3b9b2c470ec2adc11cf94ba2cda40bddfd2f23deff2499fb");
 
-        #ifdef COSANTA_MINE_NEW_GENESIS_BLOCK
+        #ifdef PIRATECASH_MINE_NEW_GENESIS_BLOCK
         if (consensus.hashGenesisBlock != expectedGenesisHash)
         {
             GenesisMiner mine(genesis, strNetworkID);
         }
-        #endif // COSANTA_MINE_NEW_GENESIS_BLOCK
+        #endif // PIRATECASH_MINE_NEW_GENESIS_BLOCK
 
         assert(consensus.hashGenesisBlock == expectedGenesisHash);
         assert(genesis.hashMerkleRoot == expectedGenesisMerkleRoot);
@@ -446,15 +446,15 @@ public:
         vSeeds.emplace_back("m1.cosanta.net");
         vSeeds.emplace_back("m2.cosanta.net");
 
-        // Cosanta addresses start with 'C'
+        // PirateCash addresses start with 'C'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,28);
-        // Cosanta script addresses start with '7'
+        // PirateCash script addresses start with '7'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,13);
-        // Cosanta private keys start with '7' or 'X'
+        // PirateCash private keys start with '7' or 'X'
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,204);
-        // Cosanta BIP32 pubkeys start with 'xpub' (Bitcoin defaults)
+        // PirateCash BIP32 pubkeys start with 'xpub' (Bitcoin defaults)
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x88, 0xB2, 0x1E};
-        // Cosanta BIP32 prvkeys start with 'xprv' (Bitcoin defaults)
+        // PirateCash BIP32 prvkeys start with 'xprv' (Bitcoin defaults)
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
 
         // Type BIP44 coin type is '5'
@@ -545,8 +545,8 @@ public:
         consensus.DIP0008Height = 300; // 000000000e9329d964d80e7dab2e704b43b6bd2b91fea1e9315d38932e55fb55
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
         consensus.posLimit = uint256S("0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 4
-        consensus.nPowTargetTimespan = 24 * 60 * 60; // Cosanta: 1 day
-        consensus.nPowTargetSpacing = 2.5 * 60; // Cosanta: 2.5 minutes
+        consensus.nPowTargetTimespan = 24 * 60 * 60; // PirateCash: 1 day
+        consensus.nPowTargetSpacing = 2.5 * 60; // PirateCash: 2.5 minutes
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = false;
         consensus.nPowKGWHeight = 30; // nPowKGWHeight >= nPowDGWHeight means "no KGW"
@@ -629,12 +629,12 @@ public:
         uint256 expectedGenesisHash = uint256S("0x000004ba6ec1309022987a66c17fe66b550396bd9710463335ad59de8bfe2c02");
         uint256 expectedGenesisMerkleRoot = uint256S("e16337d6f2cd561e3b9b2c470ec2adc11cf94ba2cda40bddfd2f23deff2499fb");
 
-        #ifdef COSANTA_MINE_NEW_GENESIS_BLOCK
+        #ifdef PIRATECASH_MINE_NEW_GENESIS_BLOCK
         if (consensus.hashGenesisBlock != expectedGenesisHash)
         {
             GenesisMiner mine(genesis, strNetworkID);
         }
-        #endif // COSANTA_MINE_NEW_GENESIS_BLOCK
+        #endif // PIRATECASH_MINE_NEW_GENESIS_BLOCK
 
         assert(consensus.hashGenesisBlock == expectedGenesisHash);
         assert(genesis.hashMerkleRoot == expectedGenesisMerkleRoot);
@@ -647,18 +647,18 @@ public:
         vSeeds.emplace_back("m1.cosanta.net");
         vSeeds.emplace_back("m2.cosanta.net");
 
-        // Testnet Cosanta addresses start with 'c'
+        // Testnet PirateCash addresses start with 'c'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,88);
-        // Testnet Cosanta script addresses start with '8' or '9'
+        // Testnet PirateCash script addresses start with '8' or '9'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,19);
-        // Testnet Cosanta keys start with '9' or 'c' (Bitcoin defaults)
+        // Testnet PirateCash keys start with '9' or 'c' (Bitcoin defaults)
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
-        // Testnet Cosanta BIP32 pubkeys start with 'tpub' (Bitcoin defaults)
+        // Testnet PirateCash BIP32 pubkeys start with 'tpub' (Bitcoin defaults)
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
-        // Testnet Cosanta BIP32 prvkeys start with 'tprv' (Bitcoin defaults)
+        // Testnet PirateCash BIP32 prvkeys start with 'tprv' (Bitcoin defaults)
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
-        // Testnet Cosanta BIP44 coin type is '1' (All coin's testnet default)
+        // Testnet PirateCash BIP44 coin type is '1' (All coin's testnet default)
         nExtCoinType = 1;
 
         // long living quorum params
@@ -740,8 +740,8 @@ public:
         consensus.DIP0008Height = 2; // DIP0008 activated immediately on devnet
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 1
         consensus.posLimit = uint256S("0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 4
-        consensus.nPowTargetTimespan = 24 * 60 * 60; // Cosanta: 1 day
-        consensus.nPowTargetSpacing = 1 * 60; // Cosanta: 1 minute
+        consensus.nPowTargetTimespan = 24 * 60 * 60; // PirateCash: 1 day
+        consensus.nPowTargetSpacing = 1 * 60; // PirateCash: 1 minute
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = false;
         consensus.nPowKGWHeight = 30; // nPowKGWHeight >= nPowDGWHeight means "no KGW"
@@ -825,12 +825,12 @@ public:
         uint256 expectedGenesisHash = uint256S("0x5cc74fcae11b83a1f00ca81106deaae119486ded33918571a639e7b6eac83150");
         uint256 expectedGenesisMerkleRoot = uint256S("0xe16337d6f2cd561e3b9b2c470ec2adc11cf94ba2cda40bddfd2f23deff2499fb");
 
-        #ifdef COSANTA_MINE_NEW_GENESIS_BLOCK
+        #ifdef PIRATECASH_MINE_NEW_GENESIS_BLOCK
         if (consensus.hashGenesisBlock != expectedGenesisHash)
         {
             GenesisMiner mine(genesis, strNetworkID);
         }
-        #endif // COSANTA_MINE_NEW_GENESIS_BLOCK
+        #endif // PIRATECASH_MINE_NEW_GENESIS_BLOCK
 
         assert(consensus.hashGenesisBlock == expectedGenesisHash);
         assert(genesis.hashMerkleRoot == expectedGenesisMerkleRoot);
@@ -842,18 +842,18 @@ public:
         vSeeds.clear();
         //vSeeds.push_back(CDNSSeedData("cosanta.org",  "devnet-seed.cosanta.org"));
 
-        // Testnet Cosanta addresses start with 'o'
+        // Testnet PirateCash addresses start with 'o'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,115);
-        // Testnet Cosanta script addresses start with '8' or '9'
+        // Testnet PirateCash script addresses start with '8' or '9'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,19);
         // Testnet private keys start with '9' or 'c' (Bitcoin defaults)
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
-        // Testnet Cosanta BIP32 pubkeys start with 'tpub' (Bitcoin defaults)
+        // Testnet PirateCash BIP32 pubkeys start with 'tpub' (Bitcoin defaults)
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
-        // Testnet Cosanta BIP32 prvkeys start with 'tprv' (Bitcoin defaults)
+        // Testnet PirateCash BIP32 prvkeys start with 'tprv' (Bitcoin defaults)
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
-        // Testnet Cosanta BIP44 coin type is '1' (All coin's testnet default)
+        // Testnet PirateCash BIP44 coin type is '1' (All coin's testnet default)
         nExtCoinType = 1;
 
         // long living quorum params
@@ -977,8 +977,8 @@ public:
         consensus.DIP0008Height = 432;
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 1
         consensus.posLimit = uint256S("0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 4
-        consensus.nPowTargetTimespan = 24 * 60 * 60; // Cosanta: 1 day
-        consensus.nPowTargetSpacing = 1 * 60; // Cosanta: 1 minute
+        consensus.nPowTargetTimespan = 24 * 60 * 60; // PirateCash: 1 day
+        consensus.nPowTargetSpacing = 1 * 60; // PirateCash: 1 minute
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = true;
         consensus.nPowKGWHeight = 30; // same as mainnet
@@ -1044,12 +1044,12 @@ public:
         uint256 expectedGenesisHash = uint256S("0x5cc74fcae11b83a1f00ca81106deaae119486ded33918571a639e7b6eac83150");
         uint256 expectedGenesisMerkleRoot = uint256S("e16337d6f2cd561e3b9b2c470ec2adc11cf94ba2cda40bddfd2f23deff2499fb");
 
-        #ifdef COSANTA_MINE_NEW_GENESIS_BLOCK
+        #ifdef PIRATECASH_MINE_NEW_GENESIS_BLOCK
         if (consensus.hashGenesisBlock != expectedGenesisHash)
         {
             GenesisMiner mine(genesis, strNetworkID);
         }
-        #endif // COSANTA_MINE_NEW_GENESIS_BLOCK
+        #endif // PIRATECASH_MINE_NEW_GENESIS_BLOCK
 
         assert(consensus.hashGenesisBlock == expectedGenesisHash);
         assert(genesis.hashMerkleRoot == expectedGenesisMerkleRoot);
@@ -1089,18 +1089,18 @@ public:
             0
         };
 
-        // Regtest Cosanta addresses start with 's'
+        // Regtest PirateCash addresses start with 's'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,125);
-        // Regtest Cosanta script addresses start with '8' or '9'
+        // Regtest PirateCash script addresses start with '8' or '9'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,19);
-        // Regtest Cosanta keys start with '9' or 'c' (Bitcoin defaults)
+        // Regtest PirateCash keys start with '9' or 'c' (Bitcoin defaults)
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
         // Regtest Cosana BIP32 pubkeys start with 'tpub' (Bitcoin defaults)
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         // Regtest Cosana BIP32 prvkeys start with 'tprv' (Bitcoin defaults)
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
-        // Regtest Cosanta BIP44 coin type is '1' (All coin's testnet default)
+        // Regtest PirateCash BIP44 coin type is '1' (All coin's testnet default)
         nExtCoinType = 1;
 
         // long living quorum params

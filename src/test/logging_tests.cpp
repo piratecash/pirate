@@ -4,7 +4,7 @@
 
 #include <logging.h>
 #include <logging/timer.h>
-#include <test/test_cosanta.h>
+#include <test/test_piratecash.h>
 
 #include <chrono>
 

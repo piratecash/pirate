@@ -6,7 +6,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/cosanta-config.h>
+#include <config/piratecash-config.h>
 #endif
 #include <miner.h>
 #include <wallet/wallet.h>
@@ -628,7 +628,7 @@ void CNode::copyStats(CNodeStats &stats, const std::vector<bool> &m_asmap)
         nPingUsecWait = GetTimeMicros() - nPingUsecStart;
     }
 
-    // Raw ping time is in microseconds, but show it to user as whole seconds (Cosanta users should be well used to small numbers with many decimal places by now :)
+    // Raw ping time is in microseconds, but show it to user as whole seconds (PirateCash users should be well used to small numbers with many decimal places by now :)
     stats.m_ping_usec = nPingUsecTime;
     stats.m_min_ping_usec  = nMinPingUsecTime;
     stats.m_ping_wait_usec = nPingUsecWait;

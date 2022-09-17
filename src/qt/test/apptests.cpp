@@ -7,7 +7,7 @@
 #include <chainparams.h>
 #include <init.h>
 #include <key.h>
-#include <qt/cosanta.h>
+#include <qt/piratecash.h>
 #include <qt/bitcoingui.h>
 #include <qt/networkstyle.h>
 #include <qt/rpcconsole.h>
@@ -15,7 +15,7 @@
 #include <validation.h>
 
 #if defined(HAVE_CONFIG_H)
-#include <config/cosanta-config.h>
+#include <config/piratecash-config.h>
 #endif
 #ifdef ENABLE_WALLET
 #include <wallet/db.h>

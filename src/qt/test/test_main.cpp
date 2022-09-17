@@ -5,18 +5,18 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/cosanta-config.h>
+#include <config/piratecash-config.h>
 #endif
 
 #include <chainparams.h>
 #include <interfaces/node.h>
-#include <qt/cosanta.h>
+#include <qt/piratecash.h>
 #include <qt/test/apptests.h>
 #include <qt/test/rpcnestedtests.h>
 #include <qt/test/uritests.h>
 #include <qt/test/compattests.h>
 #include <qt/test/trafficgraphdatatests.h>
-#include <test/test_cosanta.h>
+#include <test/test_piratecash.h>
 
 #ifdef ENABLE_WALLET
 #include <qt/test/addressbooktests.h>
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
     // Don't remove this, it's needed to access
     // QApplication:: and QCoreApplication:: in the tests
     BitcoinApplication app(*node, argc, argv);
-    app.setApplicationName("Cosanta-Qt-test");
+    app.setApplicationName("PirateCash-Qt-test");
 
     SSL_library_init();
 

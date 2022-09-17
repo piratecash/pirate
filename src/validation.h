@@ -9,7 +9,7 @@
 #define BITCOIN_VALIDATION_H
 
 #if defined(HAVE_CONFIG_H)
-#include <config/cosanta-config.h>
+#include <config/piratecash-config.h>
 #endif
 
 #include <amount.h>
@@ -103,7 +103,7 @@ static const bool DEFAULT_PERSIST_MEMPOOL = true;
 /** Default for -syncmempool */
 static const bool DEFAULT_SYNC_MEMPOOL = true;
 
-/** Due to high computation requirements for Cosanta PoW & PoS we need to limit message loop blocking */
+/** Due to high computation requirements for PirateCash PoW & PoS we need to limit message loop blocking */
 static constexpr unsigned int MAX_NEW_HEADER_BURST = 50;
 
 /** Default for -stopatheight */

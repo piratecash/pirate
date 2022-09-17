@@ -4,32 +4,32 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-bin_PROGRAMS += qt/cosanta-qt
-EXTRA_LIBRARIES += qt/libcosantaqt.a
+bin_PROGRAMS += qt/piratecash-qt
+EXTRA_LIBRARIES += qt/libpiratecashqt.a
 
-# cosanta qt core #
+# piratecash qt core #
 QT_TS = \
-  qt/locale/cosanta_ar.ts \
-  qt/locale/cosanta_bg.ts \
-  qt/locale/cosanta_de.ts \
-  qt/locale/cosanta_en.ts \
-  qt/locale/cosanta_es.ts \
-  qt/locale/cosanta_fi.ts \
-  qt/locale/cosanta_fr.ts \
-  qt/locale/cosanta_it.ts \
-  qt/locale/cosanta_ja.ts \
-  qt/locale/cosanta_ko.ts \
-  qt/locale/cosanta_nl.ts \
-  qt/locale/cosanta_pl.ts \
-  qt/locale/cosanta_pt.ts \
-  qt/locale/cosanta_ro.ts \
-  qt/locale/cosanta_ru.ts \
-  qt/locale/cosanta_sk.ts \
-  qt/locale/cosanta_th.ts \
-  qt/locale/cosanta_tr.ts \
-  qt/locale/cosanta_vi.ts \
-  qt/locale/cosanta_zh_CN.ts \
-  qt/locale/cosanta_zh_TW.ts
+  qt/locale/piratecash_ar.ts \
+  qt/locale/piratecash_bg.ts \
+  qt/locale/piratecash_de.ts \
+  qt/locale/piratecash_en.ts \
+  qt/locale/piratecash_es.ts \
+  qt/locale/piratecash_fi.ts \
+  qt/locale/piratecash_fr.ts \
+  qt/locale/piratecash_it.ts \
+  qt/locale/piratecash_ja.ts \
+  qt/locale/piratecash_ko.ts \
+  qt/locale/piratecash_nl.ts \
+  qt/locale/piratecash_pl.ts \
+  qt/locale/piratecash_pt.ts \
+  qt/locale/piratecash_ro.ts \
+  qt/locale/piratecash_ru.ts \
+  qt/locale/piratecash_sk.ts \
+  qt/locale/piratecash_th.ts \
+  qt/locale/piratecash_tr.ts \
+  qt/locale/piratecash_vi.ts \
+  qt/locale/piratecash_zh_CN.ts \
+  qt/locale/piratecash_zh_TW.ts
 
 QT_FORMS_UI = \
   qt/forms/addressbookpage.ui \
@@ -69,7 +69,7 @@ QT_MOC_CPP = \
   qt/moc_coincontroldialog.cpp \
   qt/moc_coincontroltreewidget.cpp \
   qt/moc_csvmodelwriter.cpp \
-  qt/moc_cosanta.cpp \
+  qt/moc_piratecash.cpp \
   qt/moc_editaddressdialog.cpp \
   qt/moc_governancelist.cpp \
   qt/moc_guiutil.cpp \
@@ -120,10 +120,10 @@ QT_MOC = \
   qt/overviewpage.moc \
   qt/rpcconsole.moc
 
-QT_QRC_CPP = qt/qrc_cosanta.cpp
-QT_QRC = qt/cosanta.qrc
-QT_QRC_LOCALE_CPP = qt/qrc_cosanta_locale.cpp
-QT_QRC_LOCALE = qt/cosanta_locale.qrc
+QT_QRC_CPP = qt/qrc_piratecash.cpp
+QT_QRC = qt/piratecash.qrc
+QT_QRC_LOCALE_CPP = qt/qrc_piratecash_locale.cpp
+QT_QRC_LOCALE = qt/piratecash_locale.qrc
 
 if ENABLE_BIP70
 PROTOBUF_CC = qt/paymentrequest.pb.cc
@@ -150,7 +150,7 @@ BITCOIN_QT_H = \
   qt/coincontroldialog.h \
   qt/coincontroltreewidget.h \
   qt/csvmodelwriter.h \
-  qt/cosanta.h \
+  qt/piratecash.h \
   qt/editaddressdialog.h \
   qt/governancelist.h \
   qt/guiconstants.h \
@@ -198,9 +198,9 @@ BITCOIN_QT_H = \
   qt/winshutdownmonitor.h
 
 RES_ICONS = \
-  qt/res/icons/cosanta.ico \
-  qt/res/icons/cosanta_testnet.ico \
-  qt/res/icons/cosanta.png \
+  qt/res/icons/piratecash.ico \
+  qt/res/icons/piratecash_testnet.ico \
+  qt/res/icons/piratecash.png \
   qt/res/icons/warning.png \
   qt/res/icons/address-book.png \
   qt/res/icons/transaction0.png \
@@ -232,7 +232,7 @@ RES_ICONS = \
 BITCOIN_QT_BASE_CPP = \
   qt/appearancewidget.cpp \
   qt/bantablemodel.cpp \
-  qt/cosanta.cpp \
+  qt/piratecash.cpp \
   qt/bitcoinaddressvalidator.cpp \
   qt/bitcoinamountfield.cpp \
   qt/bitcoingui.cpp \
@@ -337,8 +337,8 @@ RES_IMAGES = \
   qt/res/images/checkbox_partly_checked_light.png \
   qt/res/images/checkbox_partly_checked_hover_light.png \
   qt/res/images/checkbox_partly_checked_disabled_light.png \
-  qt/res/images/cosanta_logo_toolbar.png \
-  qt/res/images/cosanta_logo_toolbar_blue.png \
+  qt/res/images/piratecash_logo_toolbar.png \
+  qt/res/images/piratecash_logo_toolbar_blue.png \
   qt/res/images/radio_normal_dark.png \
   qt/res/images/radio_normal_hover_dark.png \
   qt/res/images/radio_checked_dark.png \
@@ -382,21 +382,21 @@ RES_FONTS = \
 
 RES_MOVIES = $(wildcard $(srcdir)/qt/res/movies/spinner-*.png)
 
-BITCOIN_RC = qt/res/cosanta-qt-res.rc
+BITCOIN_RC = qt/res/piratecash-qt-res.rc
 
 BITCOIN_QT_INCLUDES = -DQT_NO_KEYWORDS
 
-qt_libcosantaqt_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BITCOIN_QT_INCLUDES) \
+qt_libpiratecashqt_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BITCOIN_QT_INCLUDES) \
   $(QT_INCLUDES) $(QT_DBUS_INCLUDES) $(PROTOBUF_CFLAGS) $(QR_CFLAGS)
-qt_libcosantaqt_a_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
+qt_libpiratecashqt_a_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
 
-qt_libcosantaqt_a_SOURCES = $(BITCOIN_QT_CPP) $(BITCOIN_QT_H) $(QT_FORMS_UI) \
+qt_libpiratecashqt_a_SOURCES = $(BITCOIN_QT_CPP) $(BITCOIN_QT_H) $(QT_FORMS_UI) \
   $(QT_QRC) $(QT_QRC_LOCALE) $(QT_TS) $(PROTOBUF_PROTO) $(RES_ICONS) $(RES_IMAGES) $(RES_CSS) $(RES_FONTS) $(RES_MOVIES)
 if TARGET_DARWIN
-  qt_libcosantaqt_a_SOURCES += $(BITCOIN_MM)
+  qt_libpiratecashqt_a_SOURCES += $(BITCOIN_MM)
 endif
 
-nodist_qt_libcosantaqt_a_SOURCES = $(QT_MOC_CPP) $(QT_MOC) $(PROTOBUF_CC) \
+nodist_qt_libpiratecashqt_a_SOURCES = $(QT_MOC_CPP) $(QT_MOC) $(PROTOBUF_CC) \
   $(PROTOBUF_H) $(QT_QRC_CPP) $(QT_QRC_LOCALE_CPP)
 
 # forms/foo.h -> forms/ui_foo.h
@@ -405,72 +405,72 @@ QT_FORMS_H=$(join $(dir $(QT_FORMS_UI)),$(addprefix ui_, $(notdir $(QT_FORMS_UI:
 # Most files will depend on the forms and moc files as includes. Generate them
 # before anything else.
 $(QT_MOC): $(QT_FORMS_H)
-$(qt_libcosantaqt_a_OBJECTS) $(qt_cosanta_qt_OBJECTS) : | $(QT_MOC)
+$(qt_libpiratecashqt_a_OBJECTS) $(qt_piratecash_qt_OBJECTS) : | $(QT_MOC)
 
 #Generating these with a half-written protobuf header leads to wacky results.
 #This makes sure it's done.
 $(QT_MOC): $(PROTOBUF_H)
 $(QT_MOC_CPP): $(PROTOBUF_H)
 
-# cosanta-qt binary #
-qt_cosanta_qt_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BITCOIN_QT_INCLUDES) \
+# piratecash-qt binary #
+qt_piratecash_qt_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BITCOIN_QT_INCLUDES) \
   $(QT_INCLUDES) $(PROTOBUF_CFLAGS) $(QR_CFLAGS)
-qt_cosanta_qt_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
+qt_piratecash_qt_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
 
-qt_cosanta_qt_SOURCES = qt/main.cpp
+qt_piratecash_qt_SOURCES = qt/main.cpp
 if TARGET_WINDOWS
-  qt_cosanta_qt_SOURCES += $(BITCOIN_RC)
+  qt_piratecash_qt_SOURCES += $(BITCOIN_RC)
 endif
-qt_cosanta_qt_LDADD = qt/libcosantaqt.a $(LIBBITCOIN_SERVER)
+qt_piratecash_qt_LDADD = qt/libpiratecashqt.a $(LIBBITCOIN_SERVER)
 if ENABLE_WALLET
-qt_cosanta_qt_LDADD += $(LIBBITCOIN_UTIL) $(LIBBITCOIN_WALLET)
+qt_piratecash_qt_LDADD += $(LIBBITCOIN_UTIL) $(LIBBITCOIN_WALLET)
 endif
 if ENABLE_ZMQ
-qt_cosanta_qt_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
+qt_piratecash_qt_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
 endif
-qt_cosanta_qt_LDADD += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CONSENSUS) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) $(LIBLEVELDB) $(LIBLEVELDB_SSE42) $(LIBMEMENV) \
+qt_piratecash_qt_LDADD += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CONSENSUS) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) $(LIBLEVELDB) $(LIBLEVELDB_SSE42) $(LIBMEMENV) \
   $(BACKTRACE_LIB) $(BOOST_LIBS) $(QT_LIBS) $(QT_DBUS_LIBS) $(QR_LIBS) $(PROTOBUF_LIBS) $(BDB_LIBS) $(MINIUPNPC_LIBS) $(LIBSECP256K1) \
   $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(BLS_LIBS) $(GMP_LIBS)
 if ENABLE_BIP70
-qt_cosanta_qt_LDADD += $(SSL_LIBS)
+qt_piratecash_qt_LDADD += $(SSL_LIBS)
 endif
-qt_cosanta_qt_LDADD += $(CRYPTO_LIBS)
-qt_cosanta_qt_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
-qt_cosanta_qt_LIBTOOLFLAGS = $(AM_LIBTOOLFLAGS) --tag CXX
+qt_piratecash_qt_LDADD += $(CRYPTO_LIBS)
+qt_piratecash_qt_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+qt_piratecash_qt_LIBTOOLFLAGS = $(AM_LIBTOOLFLAGS) --tag CXX
 
 #locale/foo.ts -> locale/foo.qm
 QT_QM=$(QT_TS:.ts=.qm)
 
 SECONDARY: $(QT_QM)
 
-$(srcdir)/qt/cosantastrings.cpp: $(libcosanta_server_a_SOURCES) $(libcosanta_wallet_a_SOURCES) $(libcosanta_common_a_SOURCES) $(libcosanta_zmq_a_SOURCES) $(libcosanta_consensus_a_SOURCES) $(libcosanta_util_a_SOURCES)
+$(srcdir)/qt/piratecashstrings.cpp: $(libpiratecash_server_a_SOURCES) $(libpiratecash_wallet_a_SOURCES) $(libpiratecash_common_a_SOURCES) $(libpiratecash_zmq_a_SOURCES) $(libpiratecash_consensus_a_SOURCES) $(libpiratecash_util_a_SOURCES)
 	@test -n $(XGETTEXT) || echo "xgettext is required for updating translations"
 	$(AM_V_GEN) cd $(srcdir); XGETTEXT=$(XGETTEXT) PACKAGE_NAME="$(PACKAGE_NAME)" COPYRIGHT_HOLDERS="$(COPYRIGHT_HOLDERS)" COPYRIGHT_HOLDERS_SUBSTITUTION="$(COPYRIGHT_HOLDERS_SUBSTITUTION)" $(PYTHON) ../share/qt/extract_strings_qt.py $^
 
-translate: $(srcdir)/qt/cosantastrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(BITCOIN_QT_BASE_CPP) qt/cosanta.cpp $(BITCOIN_QT_WINDOWS_CPP) $(BITCOIN_QT_WALLET_CPP) $(BITCOIN_QT_H) $(BITCOIN_MM)
+translate: $(srcdir)/qt/piratecashstrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(BITCOIN_QT_BASE_CPP) qt/piratecash.cpp $(BITCOIN_QT_WINDOWS_CPP) $(BITCOIN_QT_WALLET_CPP) $(BITCOIN_QT_H) $(BITCOIN_MM)
 	@test -n $(LUPDATE) || echo "lupdate is required for updating translations"
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(LUPDATE) $^ -locations relative -no-obsolete -ts $(srcdir)/qt/locale/cosanta_en.ts
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(LUPDATE) $^ -locations relative -no-obsolete -ts $(srcdir)/qt/locale/piratecash_en.ts
 
 $(QT_QRC_LOCALE_CPP): $(QT_QRC_LOCALE) $(QT_QM)
 	@test -f $(RCC)
 	@cp -f $< $(@D)/temp_$(<F)
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) $(RCCFLAGS) -name cosanta_locale $(@D)/temp_$(<F) | \
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) $(RCCFLAGS) -name piratecash_locale $(@D)/temp_$(<F) | \
 	  $(SED) -e '/^\*\*.*Created:/d' -e '/^\*\*.*by:/d' > $@
 	@rm $(@D)/temp_$(<F)
 
 $(QT_QRC_CPP): $(QT_QRC) $(QT_FORMS_H) $(RES_ICONS) $(RES_IMAGES) $(RES_CSS) $(RES_FONTS) $(RES_MOVIES) $(PROTOBUF_H)
 	@test -f $(RCC)
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) $(RCCFLAGS) -name cosanta $< | \
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) $(RCCFLAGS) -name piratecash $< | \
 	  $(SED) -e '/^\*\*.*Created:/d' -e '/^\*\*.*by:/d' > $@
 
-CLEAN_QT = $(nodist_qt_libcosantaqt_a_SOURCES) $(QT_QM) $(QT_FORMS_H) qt/*.gcda qt/*.gcno qt/temp_cosanta_locale.qrc qt/res/css/colors/*
+CLEAN_QT = $(nodist_qt_libpiratecashqt_a_SOURCES) $(QT_QM) $(QT_FORMS_H) qt/*.gcda qt/*.gcno qt/temp_piratecash_locale.qrc qt/res/css/colors/*
 
 CLEANFILES += $(CLEAN_QT)
 
-cosanta_qt_clean: FORCE
-	rm -f $(CLEAN_QT) $(qt_libcosantaqt_a_OBJECTS) $(qt_cosanta_qt_OBJECTS) qt/cosanta-qt$(EXEEXT) $(LIBBITCOINQT)
+piratecash_qt_clean: FORCE
+	rm -f $(CLEAN_QT) $(qt_libpiratecashqt_a_OBJECTS) $(qt_piratecash_qt_OBJECTS) qt/piratecash-qt$(EXEEXT) $(LIBBITCOINQT)
 
-cosanta_qt : qt/cosanta-qt$(EXEEXT)
+piratecash_qt : qt/piratecash-qt$(EXEEXT)
 
 ui_%.h: %.ui
 	@test -f $(UIC)

@@ -13,7 +13,7 @@
 #define BITCOIN_UTIL_SYSTEM_H
 
 #if defined(HAVE_CONFIG_H)
-#include <config/cosanta-config.h>
+#include <config/piratecash-config.h>
 #endif
 
 #include <attributes.h>
@@ -41,14 +41,14 @@
 
 // Uncomment the following line to enable debugging messages
 // or enable on a per file basis prior to inclusion of util.h
-//#define ENABLE_COSANTA_DEBUG
-#ifdef ENABLE_COSANTA_DEBUG
+//#define ENABLE_PIRATECASH_DEBUG
+#ifdef ENABLE_PIRATECASH_DEBUG
 #define DBG( x ) x
 #else
 #define DBG( x )
 #endif
 
-//Cosanta only features
+//PirateCash only features
 
 extern bool fMasternodeMode;
 extern bool fDisableGovernance;

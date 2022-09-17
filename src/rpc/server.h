@@ -137,7 +137,7 @@ public:
 };
 
 /**
- * Cosanta RPC command dispatcher.
+ * PirateCash RPC command dispatcher.
  */
 class CRPCTable
 {

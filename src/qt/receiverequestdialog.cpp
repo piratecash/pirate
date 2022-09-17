@@ -18,7 +18,7 @@
 #include <QPixmap>
 
 #if defined(HAVE_CONFIG_H)
-#include <config/cosanta-config.h> /* for USE_QRCODE */
+#include <config/piratecash-config.h> /* for USE_QRCODE */
 #endif
 
 #ifdef USE_QRCODE

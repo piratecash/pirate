@@ -942,7 +942,7 @@ public:
     bool MintableCoins();
     bool SelectStakeCoins(StakeCandidates& setCoins, CAmount nTargetAmount) const;
 
-    /// Get 1000COSANTA output and keys which can be used for the Masternode
+    /// Get 1000PIRATECASH output and keys which can be used for the Masternode
     bool GetMasternodeOutpointAndKeys(COutPoint& outpointRet, CPubKey& pubKeyRet, CKey& keyRet, const std::string& strTxHash = "", const std::string& strOutputIndex = "");
     /// Extract txin information and keys from output
     bool GetOutpointAndKeysFromOutput(const COutput& out, COutPoint& outpointRet, CPubKey& pubKeyRet, CKey& keyRet);

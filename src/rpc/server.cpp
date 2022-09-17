@@ -304,14 +304,14 @@ UniValue stop(const JSONRPCRequest& jsonRequest)
     if (jsonRequest.fHelp || jsonRequest.params.size() > 1)
         throw std::runtime_error(
             "stop\n"
-            "\nStop Cosanta Core server.");
+            "\nStop PirateCash Core server.");
     // Event loop will exit after current HTTP requests have been handled, so
     // this reply will get back to the client.
     StartShutdown();
     if (jsonRequest.params[0].isNum()) {
         UninterruptibleSleep(std::chrono::milliseconds{jsonRequest.params[0].get_int()});
     }
-    return "Cosanta Core server stopping";
+    return "PirateCash Core server stopping";
 }
 
 static UniValue uptime(const JSONRPCRequest& jsonRequest)

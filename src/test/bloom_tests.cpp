@@ -15,7 +15,7 @@
 #include <uint256.h>
 #include <util/system.h>
 #include <util/strencodings.h>
-#include <test/test_cosanta.h>
+#include <test/test_piratecash.h>
 
 #include <vector>
 

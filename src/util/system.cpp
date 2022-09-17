@@ -81,7 +81,7 @@
 // Application startup time (used for uptime calculation)
 const int64_t nStartupTime = GetTime();
 
-//Cosanta only features
+//PirateCash only features
 bool fMasternodeMode = false;
 bool fDisableGovernance = false;
 const std::string gCoinJoinName = "CoinJoin";
@@ -740,13 +740,13 @@ void PrintExceptionContinue(const std::exception_ptr pex, const char* pszExcepti
 
 fs::path GetDefaultDataDir()
 {
-    // Windows < Vista: C:\Documents and Settings\Username\Application Data\CosantaCore
-    // Windows >= Vista: C:\Users\Username\AppData\Roaming\CosantaCore
-    // Mac: ~/Library/Application Support/CosantaCore
-    // Unix: ~/.cosanta
+    // Windows < Vista: C:\Documents and Settings\Username\Application Data\PirateCore
+    // Windows >= Vista: C:\Users\Username\AppData\Roaming\PirateCore
+    // Mac: ~/Library/Application Support/PirateCore
+    // Unix: ~/.piratecore
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "CosantaCore";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "PirateCore";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -756,10 +756,10 @@ fs::path GetDefaultDataDir()
         pathRet = fs::path(pszHome);
 #ifdef MAC_OSX
     // Mac
-    return pathRet / "Library/Application Support/CosantaCore";
+    return pathRet / "Library/Application Support/PirateCore";
 #else
     // Unix
-    return pathRet / ".cosanta";
+    return pathRet / ".piratecore";
 #endif
 #endif
 }

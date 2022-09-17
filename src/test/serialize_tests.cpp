@@ -5,7 +5,7 @@
 #include <serialize.h>
 #include <streams.h>
 #include <hash.h>
-#include <test/test_cosanta.h>
+#include <test/test_piratecash.h>
 
 #include <stdint.h>
 

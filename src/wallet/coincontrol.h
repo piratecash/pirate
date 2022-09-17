@@ -89,7 +89,7 @@ public:
         vOutpoints.assign(setSelected.begin(), setSelected.end());
     }
 
-    // Cosanta-specific helpers
+    // PirateCash-specific helpers
 
     void UseCoinJoin(bool fUseCoinJoin)
     {

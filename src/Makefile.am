@@ -48,36 +48,36 @@ BITCOIN_INCLUDES += $(UNIVALUE_CFLAGS)
 
 BLS_LIBS=-lbls-dash -lrelic_s
 
-LIBBITCOIN_SERVER=libcosanta_server.a
-LIBBITCOIN_COMMON=libcosanta_common.a
-LIBBITCOIN_CONSENSUS=libcosanta_consensus.a
-LIBBITCOIN_CLI=libcosanta_cli.a
-LIBBITCOIN_UTIL=libcosanta_util.a
-LIBBITCOIN_CRYPTO_BASE=crypto/libcosanta_crypto_base.a
-LIBBITCOINQT=qt/libcosantaqt.a
+LIBBITCOIN_SERVER=libpiratecash_server.a
+LIBBITCOIN_COMMON=libpiratecash_common.a
+LIBBITCOIN_CONSENSUS=libpiratecash_consensus.a
+LIBBITCOIN_CLI=libpiratecash_cli.a
+LIBBITCOIN_UTIL=libpiratecash_util.a
+LIBBITCOIN_CRYPTO_BASE=crypto/libpiratecash_crypto_base.a
+LIBBITCOINQT=qt/libpiratecashqt.a
 LIBSECP256K1=secp256k1/libsecp256k1.la
 
 if ENABLE_ZMQ
-LIBBITCOIN_ZMQ=libcosanta_zmq.a
+LIBBITCOIN_ZMQ=libpiratecash_zmq.a
 endif
 if BUILD_BITCOIN_LIBS
-LIBBITCOINCONSENSUS=libcosantaconsensus.la
+LIBBITCOINCONSENSUS=libpiratecashconsensus.la
 endif
 if ENABLE_WALLET
-LIBBITCOIN_WALLET=libcosanta_wallet.a
+LIBBITCOIN_WALLET=libpiratecash_wallet.a
 endif
 
 LIBBITCOIN_CRYPTO= $(LIBBITCOIN_CRYPTO_BASE)
 if ENABLE_SSE41
-LIBBITCOIN_CRYPTO_SSE41 = crypto/libcosanta_crypto_sse41.a
+LIBBITCOIN_CRYPTO_SSE41 = crypto/libpiratecash_crypto_sse41.a
 LIBBITCOIN_CRYPTO += $(LIBBITCOIN_CRYPTO_SSE41)
 endif
 if ENABLE_AVX2
-LIBBITCOIN_CRYPTO_AVX2 = crypto/libcosanta_crypto_avx2.a
+LIBBITCOIN_CRYPTO_AVX2 = crypto/libpiratecash_crypto_avx2.a
 LIBBITCOIN_CRYPTO += $(LIBBITCOIN_CRYPTO_AVX2)
 endif
 if ENABLE_SHANI
-LIBBITCOIN_CRYPTO_SHANI = crypto/libcosanta_crypto_shani.a
+LIBBITCOIN_CRYPTO_SHANI = crypto/libpiratecash_crypto_shani.a
 LIBBITCOIN_CRYPTO += $(LIBBITCOIN_CRYPTO_SHANI)
 endif
 
@@ -104,18 +104,18 @@ TESTS =
 BENCHMARKS =
 
 if BUILD_BITCOIND
-  bin_PROGRAMS += cosantad
+  bin_PROGRAMS += piratecashd
 endif
 
 if BUILD_BITCOIN_CLI
-  bin_PROGRAMS += cosanta-cli
+  bin_PROGRAMS += piratecash-cli
 endif
 if BUILD_BITCOIN_TX
-  bin_PROGRAMS += cosanta-tx
+  bin_PROGRAMS += piratecash-tx
 endif
 
 .PHONY: FORCE check-symbols check-security
-# cosanta core #
+# piratecash core #
 BITCOIN_CORE_H = \
   addrdb.h \
   addressindex.h \
@@ -318,12 +318,12 @@ obj/build.h: FORCE
 	@$(MKDIR_P) $(builddir)/obj
 	@$(top_srcdir)/share/genbuild.sh "$(abs_top_builddir)/src/obj/build.h" \
 	  "$(abs_top_srcdir)"
-libcosanta_util_a-clientversion.$(OBJEXT): obj/build.h
+libpiratecash_util_a-clientversion.$(OBJEXT): obj/build.h
 
-# server: shared between cosantad and cosanta-qt
-libcosanta_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
-libcosanta_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libcosanta_server_a_SOURCES = \
+# server: shared between piratecashd and piratecash-qt
+libpiratecash_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
+libpiratecash_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libpiratecash_server_a_SOURCES = \
   addrdb.cpp \
   addrman.cpp \
   banman.cpp \
@@ -420,16 +420,16 @@ libcosanta_server_a_SOURCES = \
   $(BITCOIN_CORE_H)
 
 if ENABLE_WALLET
-libcosanta_server_a_SOURCES += wallet/init.cpp
+libpiratecash_server_a_SOURCES += wallet/init.cpp
 endif
 if !ENABLE_WALLET
-libcosanta_server_a_SOURCES += dummywallet.cpp
+libpiratecash_server_a_SOURCES += dummywallet.cpp
 endif
 
 if ENABLE_ZMQ
-libcosanta_zmq_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(ZMQ_CFLAGS)
-libcosanta_zmq_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libcosanta_zmq_a_SOURCES = \
+libpiratecash_zmq_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(ZMQ_CFLAGS)
+libpiratecash_zmq_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libpiratecash_zmq_a_SOURCES = \
   zmq/zmqabstractnotifier.cpp \
   zmq/zmqnotificationinterface.cpp \
   zmq/zmqpublishnotifier.cpp \
@@ -438,11 +438,11 @@ libcosanta_zmq_a_SOURCES = \
 endif
 
 
-# wallet: shared between cosantad and cosanta-qt, but only linked
+# wallet: shared between piratecashd and piratecash-qt, but only linked
 # when wallet enabled
-libcosanta_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libcosanta_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libcosanta_wallet_a_SOURCES = \
+libpiratecash_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libpiratecash_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libpiratecash_wallet_a_SOURCES = \
   coinjoin/client.cpp \
   coinjoin/options.cpp \
   coinjoin/util.cpp \
@@ -464,9 +464,9 @@ libcosanta_wallet_a_SOURCES = \
   $(BITCOIN_CORE_H)
 
 # crypto primitives library
-crypto_libcosanta_crypto_base_a_CPPFLAGS = $(AM_CPPFLAGS) $(PIC_FLAGS)
-crypto_libcosanta_crypto_base_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) $(PIC_FLAGS)
-crypto_libcosanta_crypto_base_a_SOURCES = \
+crypto_libpiratecash_crypto_base_a_CPPFLAGS = $(AM_CPPFLAGS) $(PIC_FLAGS)
+crypto_libpiratecash_crypto_base_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) $(PIC_FLAGS)
+crypto_libpiratecash_crypto_base_a_SOURCES = \
   crypto/aes.cpp \
   crypto/aes.h \
   crypto/chacha_poly_aead.h \
@@ -508,23 +508,23 @@ crypto_libcosanta_crypto_base_a_SOURCES = \
   crypto/siphash.h
 
 if USE_ASM
-crypto_libcosanta_crypto_base_a_SOURCES += crypto/sha256_sse4.cpp
+crypto_libpiratecash_crypto_base_a_SOURCES += crypto/sha256_sse4.cpp
 endif
 
-crypto_libcosanta_crypto_sse41_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-crypto_libcosanta_crypto_sse41_a_CPPFLAGS = $(AM_CPPFLAGS)
-crypto_libcosanta_crypto_sse41_a_CXXFLAGS += $(SSE41_CXXFLAGS)
-crypto_libcosanta_crypto_sse41_a_CPPFLAGS += -DENABLE_SSE41
-crypto_libcosanta_crypto_sse41_a_SOURCES = crypto/sha256_sse41.cpp
+crypto_libpiratecash_crypto_sse41_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+crypto_libpiratecash_crypto_sse41_a_CPPFLAGS = $(AM_CPPFLAGS)
+crypto_libpiratecash_crypto_sse41_a_CXXFLAGS += $(SSE41_CXXFLAGS)
+crypto_libpiratecash_crypto_sse41_a_CPPFLAGS += -DENABLE_SSE41
+crypto_libpiratecash_crypto_sse41_a_SOURCES = crypto/sha256_sse41.cpp
 
-crypto_libcosanta_crypto_avx2_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-crypto_libcosanta_crypto_avx2_a_CPPFLAGS = $(AM_CPPFLAGS)
-crypto_libcosanta_crypto_avx2_a_CXXFLAGS += $(AVX2_CXXFLAGS)
-crypto_libcosanta_crypto_avx2_a_CPPFLAGS += -DENABLE_AVX2
-crypto_libcosanta_crypto_avx2_a_SOURCES = crypto/sha256_avx2.cpp
+crypto_libpiratecash_crypto_avx2_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+crypto_libpiratecash_crypto_avx2_a_CPPFLAGS = $(AM_CPPFLAGS)
+crypto_libpiratecash_crypto_avx2_a_CXXFLAGS += $(AVX2_CXXFLAGS)
+crypto_libpiratecash_crypto_avx2_a_CPPFLAGS += -DENABLE_AVX2
+crypto_libpiratecash_crypto_avx2_a_SOURCES = crypto/sha256_avx2.cpp
 
 # x11
-crypto_libcosanta_crypto_base_a_SOURCES += \
+crypto_libpiratecash_crypto_base_a_SOURCES += \
   crypto/blake.c \
   crypto/bmw.c \
   crypto/cubehash.c \
@@ -553,16 +553,16 @@ crypto_libcosanta_crypto_base_a_SOURCES += \
   crypto/algos/Lyra2Z/Lyra2Z.c \
   crypto/algos/Lyra2Z/Sponge.c
 
-crypto_libcosanta_crypto_shani_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-crypto_libcosanta_crypto_shani_a_CPPFLAGS = $(AM_CPPFLAGS)
-crypto_libcosanta_crypto_shani_a_CXXFLAGS += $(SHANI_CXXFLAGS)
-crypto_libcosanta_crypto_shani_a_CPPFLAGS += -DENABLE_SHANI
-crypto_libcosanta_crypto_shani_a_SOURCES = crypto/sha256_shani.cpp
+crypto_libpiratecash_crypto_shani_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+crypto_libpiratecash_crypto_shani_a_CPPFLAGS = $(AM_CPPFLAGS)
+crypto_libpiratecash_crypto_shani_a_CXXFLAGS += $(SHANI_CXXFLAGS)
+crypto_libpiratecash_crypto_shani_a_CPPFLAGS += -DENABLE_SHANI
+crypto_libpiratecash_crypto_shani_a_SOURCES = crypto/sha256_shani.cpp
 
 # consensus: shared between all executables that validate any consensus rules.
-libcosanta_consensus_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libcosanta_consensus_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libcosanta_consensus_a_SOURCES = \
+libpiratecash_consensus_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libpiratecash_consensus_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libpiratecash_consensus_a_SOURCES = \
   amount.h \
   arith_uint256.cpp \
   arith_uint256.h \
@@ -581,7 +581,7 @@ libcosanta_consensus_a_SOURCES = \
   primitives/transaction.h \
   pubkey.cpp \
   pubkey.h \
-  script/cosantaconsensus.cpp \
+  script/piratecashconsensus.cpp \
   script/interpreter.cpp \
   script/interpreter.h \
   script/script.cpp \
@@ -598,10 +598,10 @@ libcosanta_consensus_a_SOURCES = \
   util/strencodings.h \
   version.h
 
-# common: shared between cosantad, and cosanta-qt and non-server tools
-libcosanta_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libcosanta_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libcosanta_common_a_SOURCES = \
+# common: shared between piratecashd, and piratecash-qt and non-server tools
+libpiratecash_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libpiratecash_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libpiratecash_common_a_SOURCES = \
   base58.cpp \
   bech32.cpp \
   bip39.cpp \
@@ -633,9 +633,9 @@ libcosanta_common_a_SOURCES = \
 # util: shared between all executables.
 # This library *must* be included to make sure that the glibc
 # backward-compatibility objects and their sanity checks are linked.
-libcosanta_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libcosanta_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libcosanta_util_a_SOURCES = \
+libpiratecash_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libpiratecash_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libpiratecash_util_a_SOURCES = \
   bls/bls_batchverifier.h \
   bls/bls_ies.cpp \
   bls/bls_ies.h \
@@ -672,33 +672,33 @@ libcosanta_util_a_SOURCES = \
   $(BITCOIN_CORE_H)
 
 if GLIBC_BACK_COMPAT
-libcosanta_util_a_SOURCES += compat/glibc_compat.cpp
+libpiratecash_util_a_SOURCES += compat/glibc_compat.cpp
 AM_LDFLAGS += -Wl,--wrap=log2f -Wl,--wrap=__divmoddi4
 AM_LDFLAGS += -Wl,--wrap=exp -Wl,--wrap=exp2 -Wl,--wrap=fcntl
 AM_LDFLAGS += -Wl,--wrap=log -Wl,--wrap=log2 -Wl,--wrap=pow
 endif
 
-# cli: shared between cosanta-cli and cosanta-qt
-libcosanta_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libcosanta_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libcosanta_cli_a_SOURCES = \
+# cli: shared between piratecash-cli and piratecash-qt
+libpiratecash_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libpiratecash_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libpiratecash_cli_a_SOURCES = \
   rpc/client.cpp \
   $(BITCOIN_CORE_H)
 
-nodist_libcosanta_util_a_SOURCES = $(srcdir)/obj/build.h
+nodist_libpiratecash_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
-# cosantad binary #
-cosantad_SOURCES = cosantad.cpp
-cosantad_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-cosantad_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-cosantad_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+# piratecashd binary #
+piratecashd_SOURCES = piratecashd.cpp
+piratecashd_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+piratecashd_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+piratecashd_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-cosantad_SOURCES += cosantad-res.rc
+piratecashd_SOURCES += piratecashd-res.rc
 endif
 
-cosantad_LDADD = \
+piratecashd_LDADD = \
   $(LIBBITCOIN_SERVER) \
   $(LIBBITCOIN_WALLET) \
   $(LIBBITCOIN_SERVER) \
@@ -713,37 +713,37 @@ cosantad_LDADD = \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-cosantad_LDADD += $(BACKTRACE_LIB) $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(BLS_LIBS) $(GMP_LIBS)
+piratecashd_LDADD += $(BACKTRACE_LIB) $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(BLS_LIBS) $(GMP_LIBS)
 
-# cosanta-cli binary #
-cosanta_cli_SOURCES = cosanta-cli.cpp
-cosanta_cli_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
-cosanta_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-cosanta_cli_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+# piratecash-cli binary #
+piratecash_cli_SOURCES = piratecash-cli.cpp
+piratecash_cli_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
+piratecash_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+piratecash_cli_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-cosanta_cli_SOURCES += cosanta-cli-res.rc
+piratecash_cli_SOURCES += piratecash-cli-res.rc
 endif
 
-cosanta_cli_LDADD = \
+piratecash_cli_LDADD = \
   $(LIBBITCOIN_CLI) \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_CRYPTO)
-cosanta_cli_LDADD += $(BACKTRACE_LIB) $(BOOST_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(EVENT_LIBS) $(BLS_LIBS) $(GMP_LIBS)
+piratecash_cli_LDADD += $(BACKTRACE_LIB) $(BOOST_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(EVENT_LIBS) $(BLS_LIBS) $(GMP_LIBS)
 #
 
-# cosanta-tx binary #
-cosanta_tx_SOURCES = cosanta-tx.cpp
-cosanta_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-cosanta_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-cosanta_tx_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+# piratecash-tx binary #
+piratecash_tx_SOURCES = piratecash-tx.cpp
+piratecash_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+piratecash_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+piratecash_tx_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-cosanta_tx_SOURCES += cosanta-tx-res.rc
+piratecash_tx_SOURCES += piratecash-tx-res.rc
 endif
 
-cosanta_tx_LDADD = \
+piratecash_tx_LDADD = \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_COMMON) \
   $(LIBBITCOIN_UTIL) \
@@ -751,22 +751,22 @@ cosanta_tx_LDADD = \
   $(LIBBITCOIN_CRYPTO) \
   $(LIBSECP256K1)
 
-cosanta_tx_LDADD += $(BACKTRACE_LIB) $(BOOST_LIBS) $(CRYPTO_LIBS) $(BLS_LIBS) $(GMP_LIBS)
+piratecash_tx_LDADD += $(BACKTRACE_LIB) $(BOOST_LIBS) $(CRYPTO_LIBS) $(BLS_LIBS) $(GMP_LIBS)
 #
 
-# cosantaconsensus library #
+# piratecashconsensus library #
 if BUILD_BITCOIN_LIBS
-include_HEADERS = script/cosantaconsensus.h
-libcosantaconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libcosanta_crypto_base_a_SOURCES) $(libcosanta_consensus_a_SOURCES)
+include_HEADERS = script/piratecashconsensus.h
+libpiratecashconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libpiratecash_crypto_base_a_SOURCES) $(libpiratecash_consensus_a_SOURCES)
 
 if GLIBC_BACK_COMPAT
-  libcosantaconsensus_la_SOURCES += compat/glibc_compat.cpp
+  libpiratecashconsensus_la_SOURCES += compat/glibc_compat.cpp
 endif
 
-libcosantaconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
-libcosantaconsensus_la_LIBADD = $(LIBSECP256K1) $(BLS_LIBS) $(GMP_LIBS)
-libcosantaconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL
-libcosantaconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libpiratecashconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
+libpiratecashconsensus_la_LIBADD = $(LIBSECP256K1) $(BLS_LIBS) $(GMP_LIBS)
+libpiratecashconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL
+libpiratecashconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
 endif
 #
@@ -795,12 +795,12 @@ CLEANFILES += obj/build.h
 
 EXTRA_DIST = $(CTAES_DIST)
 
-config/cosanta-config.h: config/stamp-h1
+config/piratecash-config.h: config/stamp-h1
 	@$(MAKE) -C $(top_builddir) $(subdir)/$(@)
-config/stamp-h1: $(top_srcdir)/$(subdir)/config/cosanta-config.h.in $(top_builddir)/config.status
+config/stamp-h1: $(top_srcdir)/$(subdir)/config/piratecash-config.h.in $(top_builddir)/config.status
 	$(AM_V_at)$(MAKE) -C $(top_builddir) $(subdir)/$(@)
-$(top_srcdir)/$(subdir)/config/cosanta-config.h.in:  $(am__configure_deps)
-	$(AM_V_at)$(MAKE) -C $(top_srcdir) $(subdir)/config/cosanta-config.h.in
+$(top_srcdir)/$(subdir)/config/piratecash-config.h.in:  $(am__configure_deps)
+	$(AM_V_at)$(MAKE) -C $(top_srcdir) $(subdir)/config/piratecash-config.h.in
 
 
 clean-local:

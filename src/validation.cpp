@@ -66,7 +66,7 @@
 #include <boost/thread.hpp>
 
 #if defined(NDEBUG)
-# error "Cosanta Core cannot be compiled without assertions."
+# error "PirateCash Core cannot be compiled without assertions."
 #endif
 
 uint32_t nFirstPoSBlock = 4070908800ULL; //It's depricated version and we'll use this later for improved PoS
@@ -739,7 +739,7 @@ static bool AcceptToMemoryPoolWorker(const CChainParams& chainparams, CTxMemPool
         const CTransaction* ptxConflicting = pool.GetConflictTx(txin.prevout);
         if (ptxConflicting )
         {
-            // Transaction conflicts with mempool and RBF doesn't exist in Cosanta
+            // Transaction conflicts with mempool and RBF doesn't exist in PirateCash
             return state.Invalid(false, REJECT_DUPLICATE, "txn-mempool-conflict");
         }
     }
@@ -1188,7 +1188,7 @@ CAmount GetBlockSubsidy(int nPrevBits, int nPrevHeight, const Consensus::Params&
     CAmount nSubsidyBase;
 
     if (nPrevHeight < 11111) {
-        // Monopoly protection in Cosanta
+        // Monopoly protection in PirateCash
         nSubsidyBase = 1 * COIN / 100;
     } else if (nPrevHeight < 22222) {
         // CPU mining era
@@ -1714,7 +1714,7 @@ int ApplyTxInUndo(Coin&& undo, CCoinsViewCache& view, const COutPoint& out)
         if (!alternate.IsSpent()) {
             undo.nHeight = alternate.nHeight;
             undo.fCoinBase = alternate.fCoinBase;
-            undo.fCoinStake = alternate.fCoinStake; // Cosanta
+            undo.fCoinStake = alternate.fCoinStake; // PirateCash
         } else {
             return DISCONNECT_FAILED; // adding output for transaction without known metadata
         }
@@ -2072,7 +2072,7 @@ static int64_t nTimeSubsidy = 0;
 static int64_t nTimeValueValid = 0;
 static int64_t nTimePayeeValid = 0;
 static int64_t nTimeProcessSpecial = 0;
-static int64_t nTimeCosantaSpecific = 0;
+static int64_t nTimePirateCashSpecific = 0;
 static int64_t nTimeConnect = 0;
 static int64_t nTimeIndex = 0;
 static int64_t nTimeCallbacks = 0;
@@ -2207,7 +2207,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
         }
     }
 
-    /// COSANTA: Check superblock start
+    /// PIRATECASH: Check superblock start
 
     // make sure old budget is the real one
     if (pindex->nHeight == chainparams.GetConsensus().nSuperblockStartBlock &&
@@ -2216,7 +2216,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
             return state.DoS(100, error("ConnectBlock(): invalid superblock start"),
                              REJECT_INVALID, "bad-sb-start");
 
-    /// END COSANTA
+    /// END PIRATECASH
 
     // Start enforcing BIP68 (sequence locks) and BIP112 (CHECKSEQUENCEVERIFY) using versionbits logic.
     int nLockTimeFlags = 0;
@@ -2400,7 +2400,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
     LogPrint(BCLog::BENCHMARK, "    - Verify %u txins: %.2fms (%.3fms/txin) [%.2fs (%.2fms/blk)]\n", nInputs - 1, MILLI * (nTime4 - nTime2), nInputs <= 1 ? 0 : MILLI * (nTime4 - nTime2) / (nInputs-1), nTimeVerify * MICRO, nTimeVerify * MILLI / nBlocksTotal);
 
 
-    // COSANTA
+    // PIRATECASH
 
     // It's possible that we simply don't have enough data and this could fail
     // (i.e. block itself could be a correct one and we need to store it),
@@ -2408,7 +2408,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
     // the peer who sent us this block is missing some data and wasn't able
     // to recognize that block is actually invalid.
 
-    // COSANTA : CHECK TRANSACTIONS FOR INSTANTSEND
+    // PIRATECASH : CHECK TRANSACTIONS FOR INSTANTSEND
 
     if (llmq::RejectConflictingBlocks()) {
         // Require other nodes to comply, send them some data in case they are missing it.
@@ -2425,18 +2425,18 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
             } else {
                 // The node which relayed this should switch to correct chain.
                 // TODO: relay instantsend data/proof.
-                return state.DoS(10, error("ConnectBlock(Cosanta): transaction %s conflicts with transaction lock %s", tx->GetHash().ToString(), conflictLock->txid.ToString()),
+                return state.DoS(10, error("ConnectBlock(PirateCash): transaction %s conflicts with transaction lock %s", tx->GetHash().ToString(), conflictLock->txid.ToString()),
                                  REJECT_INVALID, "conflict-tx-lock");
             }
         }
     } else if (!fReindex && !fImporting) {
-        LogPrintf("ConnectBlock(Cosanta): spork is off, skipping transaction locking checks\n");
+        LogPrintf("ConnectBlock(PirateCash): spork is off, skipping transaction locking checks\n");
     }
 
     int64_t nTime5_1 = GetTimeMicros(); nTimeISFilter += nTime5_1 - nTime4;
     LogPrint(BCLog::BENCHMARK, "      - IS filter: %.2fms [%.2fs]\n", MICRO * (nTime5_1 - nTime4), nTimeISFilter * MICRO, nTimeISFilter * MILLI / nBlocksTotal);
 
-    // COSANTA : MODIFIED TO CHECK MASTERNODE PAYMENTS AND SUPERBLOCKS
+    // PIRATECASH : MODIFIED TO CHECK MASTERNODE PAYMENTS AND SUPERBLOCKS
 
     // TODO: resync data (both ways?) and try to reprocess this block later.
     CAmount blockReward = nFees + GetBlockSubsidy(pindex->pprev->nBits, pindex->pprev->nHeight, chainparams.GetConsensus());
@@ -2446,24 +2446,24 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
     LogPrint(BCLog::BENCHMARK, "      - GetBlockSubsidy: %.2fms [%.2fs (%.2fms/blk)]\n", MICRO * (nTime5_2 - nTime5_1), nTimeSubsidy * MICRO, nTimeSubsidy * MILLI / nBlocksTotal);
 
     if (!IsBlockValueValid(block, pindex->nHeight, blockReward, strError)) {
-        return state.DoS(0, error("ConnectBlock(COSANTA): %s", strError), REJECT_INVALID, "bad-cb-amount");
+        return state.DoS(0, error("ConnectBlock(PIRATECASH): %s", strError), REJECT_INVALID, "bad-cb-amount");
     }
 
     int64_t nTime5_3 = GetTimeMicros(); nTimeValueValid += nTime5_3 - nTime5_2;
     LogPrint(BCLog::BENCHMARK, "      - IsBlockValueValid: %.2fms [%.2fs (%.2fms/blk)]\n", MICRO * (nTime5_3 - nTime5_2), nTimeValueValid * MICRO, nTimeValueValid * MILLI / nBlocksTotal);
 
     if (!IsBlockPayeeValid(*(block.CoinBase()), pindex->nHeight, blockReward)) {
-        return state.DoS(0, error("ConnectBlock(COSANTA): couldn't find masternode or superblock payments"),
+        return state.DoS(0, error("ConnectBlock(PIRATECASH): couldn't find masternode or superblock payments"),
                                 REJECT_INVALID, "bad-cb-payee");
     }
 
     int64_t nTime5_4 = GetTimeMicros(); nTimePayeeValid += nTime5_4 - nTime5_3;
     LogPrint(BCLog::BENCHMARK, "      - IsBlockPayeeValid: %.2fms [%.2fs (%.2fms/blk)]\n", MICRO * (nTime5_4 - nTime5_3), nTimePayeeValid * MICRO, nTimePayeeValid * MILLI / nBlocksTotal);
 
-    int64_t nTime5 = GetTimeMicros(); nTimeCosantaSpecific += nTime5 - nTime4;
-    LogPrint(BCLog::BENCHMARK, "    - Cosanta specific: %.2fms [%.2fs (%.2fms/blk)]\n", MILLI * (nTime5 - nTime4), nTimeCosantaSpecific * MICRO, nTimeCosantaSpecific * MILLI / nBlocksTotal);
+    int64_t nTime5 = GetTimeMicros(); nTimePirateCashSpecific += nTime5 - nTime4;
+    LogPrint(BCLog::BENCHMARK, "    - PirateCash specific: %.2fms [%.2fs (%.2fms/blk)]\n", MILLI * (nTime5 - nTime4), nTimePirateCashSpecific * MICRO, nTimePirateCashSpecific * MILLI / nBlocksTotal);
 
-    // END COSANTA
+    // END PIRATECASH
 
     if (fJustCheck)
         return true;
@@ -3721,7 +3721,7 @@ bool CheckBlock(const CBlock& block, CValidationState& state, const Consensus::P
             return state.DoS(100, false, REJECT_INVALID, "bad-cb-multiple", false, "more than one coinbase");
 
     if (block.IsProofOfStake()) {
-        // CoinStake is a subset of CoinBase in Cosanta
+        // CoinStake is a subset of CoinBase in PirateCash
         if (fCheckProof && !block.HasStake())
             return state.DoS(100, false, REJECT_INVALID, "bad-PoS-stake", false, "stake contraints failed");
     }

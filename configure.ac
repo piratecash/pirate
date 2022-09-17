@@ -7,17 +7,17 @@ define(_CLIENT_VERSION_BUILD, 6)
 define(_CLIENT_VERSION_IS_RELEASE, true)
 define(_COPYRIGHT_YEAR, 2022)
 define(_COPYRIGHT_HOLDERS,[The %s developers])
-define(_COPYRIGHT_HOLDERS_SUBSTITUTION,[[Cosanta Core]])
-AC_INIT([Cosanta Core],[_CLIENT_VERSION_MAJOR._CLIENT_VERSION_MINOR._CLIENT_VERSION_REVISION],[https://github.com/cosanta/cosanta-core/issues],[cosantacore],[https://cosanta.net//])
+define(_COPYRIGHT_HOLDERS_SUBSTITUTION,[[PirateCash Core]])
+AC_INIT([PirateCash Core],[_CLIENT_VERSION_MAJOR._CLIENT_VERSION_MINOR._CLIENT_VERSION_REVISION],[https://github.com/piratecash/piratecash/issues],[piratecashcore],[https://piratecash.net//])
 AC_CONFIG_SRCDIR([src/validation.cpp])
-AC_CONFIG_HEADERS([src/config/cosanta-config.h])
+AC_CONFIG_HEADERS([src/config/piratecash-config.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([build-aux/m4])
 
-BITCOIN_DAEMON_NAME=cosantad
-BITCOIN_GUI_NAME=cosanta-qt
-BITCOIN_CLI_NAME=cosanta-cli
-BITCOIN_TX_NAME=cosanta-tx
+BITCOIN_DAEMON_NAME=piratecashd
+BITCOIN_GUI_NAME=piratecash-qt
+BITCOIN_CLI_NAME=piratecash-cli
+BITCOIN_TX_NAME=piratecash-tx
 
 dnl Unless the user specified ARFLAGS, force it to be cr
 AC_ARG_VAR(ARFLAGS, [Flags for the archiver, defaults to <cr> if not set])
@@ -27,9 +27,9 @@ fi
 
 AC_CANONICAL_HOST
 
-AH_TOP([#ifndef COSANTA_CONFIG_H])
-AH_TOP([#define COSANTA_CONFIG_H])
-AH_BOTTOM([#endif //COSANTA_CONFIG_H])
+AH_TOP([#ifndef PIRATECASH_CONFIG_H])
+AH_TOP([#define PIRATECASH_CONFIG_H])
+AH_BOTTOM([#endif //PIRATECASH_CONFIG_H])
 
 dnl faketime breaks configure and is only needed for make. Disable it here.
 unset FAKETIME
@@ -537,7 +537,7 @@ CPPFLAGS="$CPPFLAGS -DHAVE_BUILD_INFO -D__STDC_FORMAT_MACROS"
 
 AC_ARG_WITH([utils],
   [AS_HELP_STRING([--with-utils],
-  [build cosanta-cli cosanta-tx (default=yes)])],
+  [build piratecash-cli piratecash-tx (default=yes)])],
   [build_bitcoin_utils=$withval],
   [build_bitcoin_utils=yes])
 
@@ -561,7 +561,7 @@ AC_ARG_WITH([libs],
 
 AC_ARG_WITH([daemon],
   [AS_HELP_STRING([--with-daemon],
-  [build cosantad daemon (default=yes)])],
+  [build piratecashd daemon (default=yes)])],
   [build_bitcoind=$withval],
   [build_bitcoind=yes])
 
@@ -750,7 +750,7 @@ AC_C_BIGENDIAN
 dnl Check for pthread compile/link requirements
 AX_PTHREAD
 
-# The following macro will add the necessary defines to cosanta-config.h, but
+# The following macro will add the necessary defines to piratecash-config.h, but
 # they also need to be passed down to any subprojects. Pull the results out of
 # the cache and add them to CPPFLAGS.
 AC_SYS_LARGEFILE
@@ -1447,15 +1447,15 @@ if test x$have_protobuf != xno &&
   BITCOIN_QT_PATH_PROGS([PROTOC], [protoc],$protoc_bin_path)
 fi
 
-AC_MSG_CHECKING([whether to build cosantad])
+AC_MSG_CHECKING([whether to build piratecashd])
 AM_CONDITIONAL([BUILD_BITCOIND], [test x$build_bitcoind = xyes])
 AC_MSG_RESULT($build_bitcoind)
 
-AC_MSG_CHECKING([whether to build cosanta-cli])
+AC_MSG_CHECKING([whether to build piratecash-cli])
 AM_CONDITIONAL([BUILD_BITCOIN_CLI], [test x$build_bitcoin_cli = xyes])
 AC_MSG_RESULT($build_bitcoin_cli)
 
-AC_MSG_CHECKING([whether to build cosanta-tx])
+AC_MSG_CHECKING([whether to build piratecash-tx])
 AM_CONDITIONAL([BUILD_BITCOIN_TX], [test x$build_bitcoin_tx = xyes])
 AC_MSG_RESULT($build_bitcoin_tx)
 
@@ -1463,7 +1463,7 @@ AC_MSG_CHECKING([whether to build libraries])
 AM_CONDITIONAL([BUILD_BITCOIN_LIBS], [test x$build_bitcoin_libs = xyes])
 if test x$build_bitcoin_libs = xyes; then
   AC_DEFINE(HAVE_CONSENSUS_LIB, 1, [Define this symbol if the consensus lib has been built])
-  AC_CONFIG_FILES([libcosantaconsensus.pc:libcosantaconsensus.pc.in])
+  AC_CONFIG_FILES([libpiratecashconsensus.pc:libpiratecashconsensus.pc.in])
 fi
 AC_MSG_RESULT($build_bitcoin_libs)
 
@@ -1561,7 +1561,7 @@ if test x$bitcoin_enable_qt != xno; then
     AC_MSG_WARN("xgettext is required to update qt translations")
   fi
 
-  AC_MSG_CHECKING([whether to build test_cosanta-qt])
+  AC_MSG_CHECKING([whether to build test_piratecash-qt])
   if test x$use_gui_tests$bitcoin_enable_qt_test = xyesyes; then
     AC_MSG_RESULT([yes])
     BUILD_TEST_QT="yes"
@@ -1589,7 +1589,7 @@ fi
 
 AM_CONDITIONAL([ENABLE_ZMQ], [test "x$use_zmq" = "xyes"])
 
-AC_MSG_CHECKING([whether to build test_cosanta])
+AC_MSG_CHECKING([whether to build test_piratecash])
 if test x$use_tests = xyes; then
   AC_MSG_RESULT([yes])
   BUILD_TEST="yes"

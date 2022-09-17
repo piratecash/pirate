@@ -169,7 +169,7 @@ static UniValue gobject_prepare(const JSONRPCRequest& request)
 
     CGovernanceObject govobj(hashParent, nRevision, nTime, uint256(), strDataHex);
 
-    // This command is dangerous because it consumes 5 COSANTA irreversibly.
+    // This command is dangerous because it consumes 5 PIRATECASH irreversibly.
     // If params are lost, it's very hard to bruteforce them and yet
     // users ignore all instructions on dashcentral etc. and do not save them...
     // Let's log them here and hope users do not mess with debug.log
@@ -1171,7 +1171,7 @@ static UniValue getsuperblockbudget(const JSONRPCRequest& request)
 static const CRPCCommand commands[] =
 { //  category              name                      actor (function)         argNames
   //  --------------------- ------------------------  -----------------------  ----------
-    /* Cosanta features */
+    /* PirateCash features */
     { "cosanta",               "getgovernanceinfo",      &getgovernanceinfo,      {} },
     { "cosanta",               "getsuperblockbudget",    &getsuperblockbudget,    {"index"} },
     { "cosanta",               "gobject",                &gobject,                {} },

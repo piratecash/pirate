@@ -1,6 +1,6 @@
 #include <qt/test/addressbooktests.h>
 #include <qt/test/util.h>
-#include <test/test_cosanta.h>
+#include <test/test_piratecash.h>
 
 #include <interfaces/chain.h>
 #include <interfaces/node.h>

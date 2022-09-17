@@ -12,7 +12,7 @@
 
 /**
  * CBaseChainParams defines the base parameters (shared between cosanta-cli and cosantad)
- * of a given instance of the Cosanta system.
+ * of a given instance of the PirateCash system.
  */
 class CBaseChainParams
 {

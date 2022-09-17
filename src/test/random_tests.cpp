@@ -4,7 +4,7 @@
 
 #include <random.h>
 
-#include <test/test_cosanta.h>
+#include <test/test_piratecash.h>
 
 #include <boost/test/unit_test.hpp>
 

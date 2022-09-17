@@ -13,7 +13,7 @@
  * for both cosantad and cosanta-qt, to make it harder for attackers to
  * target servers or GUI users specifically.
  */
-const std::string CLIENT_NAME("Cosanta Core");
+const std::string CLIENT_NAME("PirateCash Core");
 
 /**
  * Client version number

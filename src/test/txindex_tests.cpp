@@ -5,7 +5,7 @@
 #include <chainparams.h>
 #include <index/txindex.h>
 #include <script/standard.h>
-#include <test/test_cosanta.h>
+#include <test/test_piratecash.h>
 #include <util/system.h>
 #include <util/time.h>
 #include <validation.h>

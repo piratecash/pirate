@@ -9,7 +9,7 @@
 #include <key_io.h>
 #include <util/system.h>
 #include <util/strencodings.h>
-#include <test/test_cosanta.h>
+#include <test/test_piratecash.h>
 #include <bip39.h>
 
 #include <boost/test/unit_test.hpp>

@@ -34,7 +34,7 @@
 //
 
 #if defined(HAVE_CONFIG_H)
-#include <config/cosanta-config.h>
+#include <config/piratecash-config.h>
 #endif
 
 #ifdef ENABLE_BIP70

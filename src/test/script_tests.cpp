@@ -12,10 +12,10 @@
 #include <script/sign.h>
 #include <util/system.h>
 #include <util/strencodings.h>
-#include <test/test_cosanta.h>
+#include <test/test_piratecash.h>
 
 #if defined(HAVE_CONSENSUS_LIB)
-#include <script/cosantaconsensus.h>
+#include <script/piratecashconsensus.h>
 #endif
 
 #include <fstream>

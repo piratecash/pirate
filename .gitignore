@@ -8,14 +8,14 @@ reset-files.bash
 *.exe
 src/dash
 <<<<<<< HEAD
-src/cosantad
-src/cosanta-cli
-src/cosanta-tx
-src/test/test_cosanta
-src/test/test_cosanta_fuzzy
-src/qt/test/test_cosanta-qt
+src/piratecashd
+src/piratecash-cli
+src/piratecash-tx
+src/test/test_piratecash
+src/test/test_piratecash_fuzzy
+src/qt/test/test_piratecash-qt
 src/qt/res/css/colors/*
-src/bench/bench_cosanta
+src/bench/bench_piratecash
 
 # autoreconf
 Makefile.in
@@ -38,8 +38,8 @@ config.log
 config.status
 configure
 libtool
-src/config/cosanta-config.h
-src/config/cosanta-config.h.in
+src/config/piratecash-config.h
+src/config/piratecash-config.h.in
 src/config/stamp-h1
 share/setup.nsi
 share/qt/Info.plist
@@ -86,13 +86,13 @@ libconftest.dylib*
 # Compilation and Qt preprocessor part
 *.qm
 Makefile
-cosanta-qt
-Cosanta-Qt.app
+piratecash-qt
+piratecash-Qt.app
 !/depends/Makefile
 
 # Unit-tests
 Makefile.test
-cosanta-qt_test
+piratecash-qt_test
 
 # Resources cpp
 qrc_*.cpp
@@ -106,7 +106,7 @@ build
 *.gcno
 *.gcda
 /*.info
-test_cosanta.coverage/
+test_piratecash.coverage/
 total.coverage/
 coverage_percent.txt
 
@@ -124,15 +124,15 @@ test/cache/*
 .autotools
 /doc/doxygen/
 
-libcosantaconsensus.pc
+libpiratecashconsensus.pc
 contrib/devtools/split-debug.sh
-src/qt/cosanta-qt.bash
+src/qt/piratecash-qt.bash
 qa/pull-tester/tests-config.sh
 
 #development symlinks
-cosanta-cli
-cosantad
-cosanta-qt
+piratecash-cli
+piratecashd
+piratecash-qt
 make
 
 /docker/bin

@@ -5,7 +5,7 @@
 #include <arith_uint256.h>
 #include <uint256.h>
 #include <version.h>
-#include <test/test_cosanta.h>
+#include <test/test_piratecash.h>
 
 #include <boost/test/unit_test.hpp>
 #include <stdint.h>

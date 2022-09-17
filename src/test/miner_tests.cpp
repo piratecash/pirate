@@ -20,7 +20,7 @@
 #include <util/strencodings.h>
 #include <pow.h>
 
-#include <test/test_cosanta.h>
+#include <test/test_piratecash.h>
 
 #include <memory>
 

@@ -281,7 +281,7 @@ void setupAddressWidget(QValidatedLineEdit *widget, QWidget *parent, bool fAllow
 
     // We don't want translators to use own addresses in translations
     // and this is the only place, where this address is supplied.
-    widget->setPlaceholderText(QObject::tr("Enter a Cosanta address (e.g. %1)").arg(
+    widget->setPlaceholderText(QObject::tr("Enter a PirateCash address (e.g. %1)").arg(
         QString::fromStdString(DummyAddress(Params()))));
     widget->setValidator(new BitcoinAddressEntryValidator(parent, fAllowURI));
     widget->setCheckValidator(new BitcoinAddressCheckValidator(parent));
@@ -332,7 +332,7 @@ void setupAppearance(QWidget* parent, OptionsModel* model)
 bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
 {
     // return if URI is not valid or is no cosanta: URI
-    if(!uri.isValid() || uri.scheme() != QString("cosanta"))
+    if(!uri.isValid() || uri.scheme() != QString("piratecash"))
         return false;
 
     SendCoinsRecipient rv;
@@ -374,7 +374,7 @@ bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
         {
             if(!i->second.isEmpty())
             {
-                if(!BitcoinUnits::parse(BitcoinUnits::COSANTA, i->second, &rv.amount))
+                if(!BitcoinUnits::parse(BitcoinUnits::PIRATECASH, i->second, &rv.amount))
                 {
                     return false;
                 }
@@ -411,7 +411,7 @@ QString formatBitcoinURI(const SendCoinsRecipient &info)
 
     if (info.amount)
     {
-        ret += QString("?amount=%1").arg(BitcoinUnits::format(BitcoinUnits::COSANTA, info.amount, false, BitcoinUnits::separatorNever));
+        ret += QString("?amount=%1").arg(BitcoinUnits::format(BitcoinUnits::PIRATECASH, info.amount, false, BitcoinUnits::separatorNever));
         paramCount++;
     }
 
@@ -773,15 +773,15 @@ fs::path static StartupShortcutPath()
 {
     std::string chain = gArgs.GetChainName();
     if (chain == CBaseChainParams::MAIN)
-        return GetSpecialFolderPath(CSIDL_STARTUP) / "Cosanta Core.lnk";
+        return GetSpecialFolderPath(CSIDL_STARTUP) / "PirateCash Core.lnk";
     if (chain == CBaseChainParams::TESTNET) // Remove this special case when CBaseChainParams::TESTNET = "testnet4"
-        return GetSpecialFolderPath(CSIDL_STARTUP) / "Cosanta Core (testnet).lnk";
-    return GetSpecialFolderPath(CSIDL_STARTUP) / strprintf("Cosanta Core (%s).lnk", chain);
+        return GetSpecialFolderPath(CSIDL_STARTUP) / "PirateCash Core (testnet).lnk";
+    return GetSpecialFolderPath(CSIDL_STARTUP) / strprintf("PirateCash Core (%s).lnk", chain);
 }
 
 bool GetStartOnSystemStartup()
 {
-    // check for "Cosanta Core*.lnk"
+    // check for "PirateCash Core*.lnk"
     return fs::exists(StartupShortcutPath());
 }
 
@@ -916,9 +916,9 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
         if (chain == CBaseChainParams::MAIN)
-            optionFile << "Name=Cosanta Core\n";
+            optionFile << "Name=PirateCash Core\n";
         else
-            optionFile << strprintf("Name=Cosanta Core (%s)\n", chain);
+            optionFile << strprintf("Name=PirateCash Core (%s)\n", chain);
         optionFile << "Exec=" << pszExePath << strprintf(" -min -testnet=%d -regtest=%d\n", gArgs.GetBoolArg("-testnet", false), gArgs.GetBoolArg("-regtest", false));
         optionFile << "Terminal=false\n";
         optionFile << "Hidden=false\n";
@@ -939,7 +939,7 @@ LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef
         return nullptr;
     }
 
-    // loop through the list of startup items and try to find the Cosanta Core app
+    // loop through the list of startup items and try to find the PirateCash Core app
     for(int i = 0; i < CFArrayGetCount(listSnapshot); i++) {
         LSSharedFileListItemRef item = (LSSharedFileListItemRef)CFArrayGetValueAtIndex(listSnapshot, i);
         UInt32 resolutionFlags = kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes;
@@ -996,7 +996,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
     LSSharedFileListItemRef foundItem = findStartupItemInList(loginItems, bitcoinAppUrl);
 
     if(fAutoStart && !foundItem) {
-        // add Cosanta Core app to startup item list
+        // add PirateCash Core app to startup item list
         LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst, nullptr, nullptr, bitcoinAppUrl, nullptr, nullptr);
     }
     else if(!fAutoStart && foundItem) {

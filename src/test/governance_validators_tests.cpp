@@ -7,7 +7,7 @@
 #include <test/data/proposals_valid.json.h>
 #include <test/data/proposals_invalid.json.h>
 
-#include <test/test_cosanta.h>
+#include <test/test_piratecash.h>
 
 #include <iostream>
 #include <fstream>

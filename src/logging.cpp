@@ -179,9 +179,9 @@ const CLogCategoryDesc LogCategories[] =
     {BCLog::DASH, "dash"},
     //End Dash
 
-    //Start Cosanta
+    //Start PirateCash
     {BCLog::STAKING, "stake"},
-    //End Cosanta
+    //End PirateCash
 };
 
 bool GetLogCategory(BCLog::LogFlags& flag, const std::string& str)
