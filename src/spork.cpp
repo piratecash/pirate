@@ -128,6 +128,10 @@ void CSporkManager::ProcessSpork(CNode* pfrom, const std::string& strCommand, CD
 {
 
     if (strCommand == NetMsgType::SPORK) {
+	if (pfrom->nVersion < MIN_SPORK_PROTO_VERSION){
+	    // Don't acceps spork messages from outdated network clients
+	    return;
+	}
 
         CSporkMessage spork;
         vRecv >> spork;

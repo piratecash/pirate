@@ -2894,6 +2894,7 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
         LOCK(cs_main);
 
         const auto current_time = GetTime<std::chrono::microseconds>();
+        std::vector<CInv> vToFetch;
 
         for (CInv &inv : vInv)
         {
@@ -2919,6 +2920,12 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
                 CNodeState *state = State(pfrom->GetId());
                 if (!state) {
                     continue;
+                }
+                //Download blocks from old client
+                if (pfrom->nVersion <= NO_HEADERS_NODE){
+                    // Add this to the list of blocks to request
+                    vToFetch.push_back(inv);
+                    LogPrint(BCLog::NET, "getblocks (%d) %s to peer=%d\n", pindexBestHeader->nHeight, inv.hash.ToString(), pfrom->GetId());
                 }
 
                 // Download if this is a nice peer, or we have no nice peers and this one might do.
@@ -2956,6 +2963,8 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
                 }
             }
         }
+        if (!vToFetch.empty())
+            connman->PushMessage(pfrom, msgMaker.Make(NetMsgType::GETDATA, vToFetch));
         return true;
     }
 
@@ -4490,7 +4499,11 @@ bool PeerLogicValidation::SendMessages(CNode* pto)
                 if (pindexStart->pprev)
                     pindexStart = pindexStart->pprev;
                 LogPrint(BCLog::NET, "initial getheaders (%d) to peer=%d (startheight:%d)\n", pindexStart->nHeight, pto->GetId(), pto->nStartingHeight);
-                connman->PushMessage(pto, msgMaker.Make(NetMsgType::GETHEADERS, chainActive.GetLocator(pindexStart), uint256()));
+                if (pto->nVersion <= NO_HEADERS_NODE){
+                    connman->PushMessage(pto, msgMaker.Make(NetMsgType::GETBLOCKS, chainActive.GetLocator(pindexStart), uint256()));
+                } else {
+                    connman->PushMessage(pto, msgMaker.Make(NetMsgType::GETHEADERS, chainActive.GetLocator(pindexStart), uint256()));
+                }
             }
         }
 

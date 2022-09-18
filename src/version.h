@@ -10,7 +10,9 @@
 /**
  * network protocol versioning
  */
-
+//! accept spork messages only from new clients
+static const int MIN_SPORK_PROTO_VERSION = 70223;
+static const int NO_HEADERS_NODE         = 60026;
 
 static const int PROTOCOL_VERSION = 70223;
 
@@ -18,7 +20,7 @@ static const int PROTOCOL_VERSION = 70223;
 static const int INIT_PROTO_VERSION = 209;
 
 //! disconnect from peers older than this proto version
-static const int MIN_PEER_PROTO_VERSION = 70221;
+static const int MIN_PEER_PROTO_VERSION = 60026;
 
 //! minimum proto version of masternode to accept in DKGs
 static const int MIN_MASTERNODE_PROTO_VERSION = 70222;
