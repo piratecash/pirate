@@ -485,9 +485,6 @@ crypto_libpiratecash_crypto_base_a_SOURCES = \
   crypto/ripemd160.cpp \
   crypto/aes_helper.c \
   crypto/ripemd160.h \
-  crypto/scrypt.cpp \
-  crypto/scrypt-sse2.cpp \
-  crypto/scrypt.h \
   crypto/sha1.cpp \
   crypto/sha1.h \
   crypto/sha256.cpp \
@@ -496,14 +493,6 @@ crypto_libpiratecash_crypto_base_a_SOURCES = \
   crypto/sha3.h \
   crypto/sha512.cpp \
   crypto/sha512.h \
-  crypto/fugue.c \
-  crypto/hamsi.c \
-  crypto/hamsi_helper.c \
-  crypto/haval.c \
-  crypto/shabal.c \
-  crypto/whirlpool.c \
-  crypto/sph_sha2big.c \
-  crypto/streebog.c \
   crypto/siphash.cpp \
   crypto/siphash.h
 
@@ -523,35 +512,12 @@ crypto_libpiratecash_crypto_avx2_a_CXXFLAGS += $(AVX2_CXXFLAGS)
 crypto_libpiratecash_crypto_avx2_a_CPPFLAGS += -DENABLE_AVX2
 crypto_libpiratecash_crypto_avx2_a_SOURCES = crypto/sha256_avx2.cpp
 
-# x11
+# scrypt
 crypto_libpiratecash_crypto_base_a_SOURCES += \
-  crypto/blake.c \
-  crypto/bmw.c \
-  crypto/cubehash.c \
-  crypto/echo.c \
-  crypto/groestl.c \
-  crypto/jh.c \
-  crypto/keccak.c \
-  crypto/luffa.c \
-  crypto/shavite.c \
-  crypto/simd.c \
-  crypto/skein.c \
-  crypto/sph_blake.h \
-  crypto/sph_bmw.h \
-  crypto/sph_cubehash.h \
-  crypto/sph_echo.h \
-  crypto/sph_groestl.h \
-  crypto/sph_jh.h \
-  crypto/sph_keccak.h \
-  crypto/sph_luffa.h \
-  crypto/sph_shavite.h \
-  crypto/sph_simd.h \
-  crypto/sph_skein.h \
   crypto/sph_types.h \
-  crypto/sph_streebog.h \
-  crypto/algos/Lyra2Z/Lyra2.c \
-  crypto/algos/Lyra2Z/Lyra2Z.c \
-  crypto/algos/Lyra2Z/Sponge.c
+  crypto/scrypt.cpp \
+  crypto/scrypt-sse2.cpp \
+  crypto/scrypt.h
 
 crypto_libpiratecash_crypto_shani_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 crypto_libpiratecash_crypto_shani_a_CPPFLAGS = $(AM_CPPFLAGS)
