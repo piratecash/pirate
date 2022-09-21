@@ -2941,8 +2941,10 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
                     // fell back to inv we probably have a reorg which we should get the headers for first,
                     // we now only provide a getheaders response here. When we receive the headers, we will
                     // then ask for the blocks we need.
-                    connman->PushMessage(pfrom, msgMaker.Make(NetMsgType::GETHEADERS, chainActive.GetLocator(pindexBestHeader), inv.hash));
-                    LogPrint(BCLog::NET, "getheaders (%d) %s to peer=%d\n", pindexBestHeader->nHeight, inv.hash.ToString(), pfrom->GetId());
+                    if (pfrom->nVersion > NO_HEADERS_NODE){
+                        connman->PushMessage(pfrom, msgMaker.Make(NetMsgType::GETHEADERS, chainActive.GetLocator(pindexBestHeader), inv.hash));
+                        LogPrint(BCLog::NET, "getheaders (%d) %s to peer=%d\n", pindexBestHeader->nHeight, inv.hash.ToString(), pfrom->GetId());
+                    }
                 }
             }
             else
@@ -3744,27 +3746,44 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
 
         std::shared_ptr<CBlock> pblock = std::make_shared<CBlock>();
         vRecv >> *pblock;
+        const uint256& hashBlock = pblock->GetHash();
 
         LogPrint(BCLog::NET, "received block %s peer=%d\n", pblock->GetHash().ToString(), pfrom->GetId());
 
-        bool forceProcessing = false;
-        const uint256 hash(pblock->GetHash());
-        {
-            LOCK(cs_main);
-            // Also always process if we requested the block explicitly, as we may
-            // need it even though it is not a candidate for a new best tip.
-            forceProcessing |= MarkBlockAsReceived(hash);
-            // mapBlockSource is only used for sending reject messages and DoS scores,
-            // so the race between here and cs_main in ProcessNewBlock is fine.
-            mapBlockSource.emplace(hash, std::make_pair(pfrom->GetId(), true));
-        }
-        bool fNewBlock = false;
-        ProcessNewBlock(chainparams, pblock, forceProcessing, &fNewBlock);
-        if (fNewBlock) {
-            pfrom->nLastBlockTime = GetTime();
+        // sometimes we will be sent their most recent block and its not the one we want, in that case tell where we are
+        if (!mapBlockIndex.count(pblock->hashPrevBlock)) {
+            CBlockLocator locator = WITH_LOCK(cs_main, return chainActive.GetLocator(););
+            if (find(pfrom->vBlockRequested.begin(), pfrom->vBlockRequested.end(), hashBlock) != pfrom->vBlockRequested.end()) {
+                // we already asked for this block, so lets work backwards and ask for the previous block
+                connman->PushMessage(pfrom, msgMaker.Make(NetMsgType::GETBLOCKS, locator, pblock->hashPrevBlock));
+                pfrom->vBlockRequested.emplace_back(pblock->hashPrevBlock);
+            }else{
+                // ask to sync to this block
+                connman->PushMessage(pfrom, msgMaker.Make(NetMsgType::GETBLOCKS, locator, hashBlock));
+                pfrom->vBlockRequested.emplace_back(hashBlock);
+            }
+
         } else {
-            LOCK(cs_main);
-            mapBlockSource.erase(pblock->GetHash());
+
+            bool forceProcessing = false;
+            const uint256 hash(pblock->GetHash());
+            {
+                LOCK(cs_main);
+                // Also always process if we requested the block explicitly, as we may
+                // need it even though it is not a candidate for a new best tip.
+                forceProcessing |= MarkBlockAsReceived(hash);
+                // mapBlockSource is only used for sending reject messages and DoS scores,
+                // so the race between here and cs_main in ProcessNewBlock is fine.
+                mapBlockSource.emplace(hash, std::make_pair(pfrom->GetId(), true));
+            }
+            bool fNewBlock = false;
+            ProcessNewBlock(chainparams, pblock, forceProcessing, &fNewBlock);
+            if (fNewBlock) {
+                pfrom->nLastBlockTime = GetTime();
+            } else {
+                LOCK(cs_main);
+                mapBlockSource.erase(pblock->GetHash());
+            }
         }
         return true;
     }

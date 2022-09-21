@@ -1033,6 +1033,7 @@ public:
     // List of non-tx/non-block inventory items
     std::vector<CInv> vInventoryOtherToSend;
     CCriticalSection cs_inventory;
+    std::vector<uint256> vBlockRequested;
     std::chrono::microseconds nNextInvSend{0};
     // Used for headers announcements - unfiltered blocks to relay
     std::vector<uint256> vBlockHashesToAnnounce GUARDED_BY(cs_inventory);
