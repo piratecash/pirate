@@ -1185,95 +1185,7 @@ NOTE:   unlike bitcoin we are using PREVIOUS block height here,
 */
 CAmount GetBlockSubsidy(int nPrevBits, int nPrevHeight, const Consensus::Params& consensusParams, bool fSuperblockPartOnly)
 {
-    CAmount nSubsidyBase;
-
-    if (nPrevHeight < 11111) {
-        // Monopoly protection in PirateCash
-        nSubsidyBase = 1 * COIN / 100;
-    } else if (nPrevHeight < 22222) {
-        // CPU mining era
-        nSubsidyBase = 2 * COIN / 100;
-    } else if (nPrevHeight < 33333) {
-        // CPU mining era
-        nSubsidyBase = 3 * COIN / 100;
-    } else if (nPrevHeight < 44444) {
-        // CPU mining era
-        nSubsidyBase = 4 * COIN / 100;
-    } else if (nPrevHeight < 55555) {
-        // CPU mining era
-        nSubsidyBase = 5 * COIN / 100;
-    } else if (nPrevHeight < 66666) {
-        // CPU mining era
-        nSubsidyBase = 6 * COIN / 100;
-    } else if (nPrevHeight < 77777) {
-        // CPU mining era
-        nSubsidyBase = 7 * COIN / 100;
-    } else if (nPrevHeight < 88888) {
-        // CPU mining era
-        nSubsidyBase = 8 * COIN / 100;
-    } else if (nPrevHeight < 99999) {
-        // CPU mining era
-        nSubsidyBase = 9 * COIN / 100;
-    } else if (nPrevHeight < 111111) {
-        // CPU mining era
-        nSubsidyBase = 10 * COIN / 100;
-    } else if (nPrevHeight < 222222) {
-        // CPU mining era
-        nSubsidyBase = 20 * COIN / 100;
-    } else if (nPrevHeight < 333333) {
-        // CPU mining era
-        nSubsidyBase = 30 * COIN / 100;
-    } else if (nPrevHeight < 444444) {
-        // CPU mining era
-        nSubsidyBase = 40 * COIN / 100;
-    } else if (nPrevHeight < 555555) {
-        // CPU mining era
-        nSubsidyBase = 50 * COIN / 100;
-    } else if (nPrevHeight < 666666) {
-        // CPU mining era
-        nSubsidyBase = 60 * COIN / 100;
-    } else if (nPrevHeight < 700000) {
-        // CPU mining era
-        nSubsidyBase = 1 * COIN;
-    } else if (nPrevHeight < 710000) {
-        // CPU mining era
-        nSubsidyBase = 2 * COIN;
-    } else if (nPrevHeight < 720000) {
-        // CPU mining era
-        nSubsidyBase = 3 * COIN;
-    } else if (nPrevHeight < 730000) {
-        // CPU mining era
-        nSubsidyBase = 4 * COIN;
-    } else if (nPrevHeight < 740000) {
-        // CPU mining era
-        nSubsidyBase = 5 * COIN;
-    } else if (nPrevHeight < 750000) {
-        // CPU mining era
-        nSubsidyBase = 6 * COIN;
-    } else if (nPrevHeight < 760000) {
-        // CPU mining era
-        nSubsidyBase = 7 * COIN;
-    } else if (nPrevHeight < 770000) {
-        // CPU mining era
-        nSubsidyBase = 8 * COIN;
-    } else if (nPrevHeight < 780000) {
-        // CPU mining era
-        nSubsidyBase = 9 * COIN;
-    } else if (nPrevHeight < 790000) {
-        // CPU mining era
-        nSubsidyBase = 10 * COIN;
-    } else if (nPrevHeight < 800000) {
-        // CPU mining era
-        nSubsidyBase = 20 * COIN;
-    } else if (nPrevHeight < 850000) {
-        // CPU mining era
-        nSubsidyBase = 30 * COIN;
-    } else if (nPrevHeight < 900000) {
-        // CPU mining era
-        nSubsidyBase = 40 * COIN;
-    } else {
-        nSubsidyBase = 50 * COIN;
-    }
+    CAmount nSubsidyBase  = 50 * COIN;
 
     int halvings = nPrevHeight >> 20;
     if (halvings >= 34){
@@ -1287,10 +1199,14 @@ CAmount GetBlockSubsidy(int nPrevBits, int nPrevHeight, const Consensus::Params&
 
 CAmount GetMasternodePayment(int nHeight, CAmount blockValue, int nReallocActivationHeight)
 {
-    CAmount ret = 0;
-    const Consensus::Params& consensusParams = Params().GetConsensus();
-    if (nHeight >= consensusParams.nMasternodePaymentsStartBlock) {
-        ret = blockValue * 3 / 5; // start at 60%
+    int64_t ret;
+    if (nHeight < 917000)
+    {
+        // Old scheme with 60% for masternode, it's very expensive for miners just for darksend features.
+        ret = blockValue * 3/5;
+    } else {
+        // We'll increase percent for Masternode owners each time when new service on masternode will be available.
+        ret = blockValue / 1000;
     }
 
     return ret;
