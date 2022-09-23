@@ -2568,7 +2568,7 @@ static UniValue getstakingstatus(const JSONRPCRequest& request)
                     "\nResult:\n"
                     "{\n"
                     "  \"staking_status\": true|false,             (boolean) whether the wallet is staking or not\n"
-                    "  \"staking_enabled\": true|false,            (boolean) whether staking is enabled/disabled in cosanta.conf\n"
+                    "  \"staking_enabled\": true|false,            (boolean) whether staking is enabled/disabled in piratecash.conf\n"
                     "  \"haveconnections\": true|false,            (boolean) whether network connections are present\n"
                     "  \"mnsync\": true|false,                     (boolean) whether the required masternode/spork data is synced\n"
                     "  \"walletunlocked\": true|false,             (boolean) whether the wallet is unlocked\n"

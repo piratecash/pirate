@@ -407,7 +407,7 @@ static void gobject_vote_conf_help()
 {
     throw std::runtime_error(
                 "gobject vote-conf <governance-hash> <vote> <vote-outcome>\n"
-                "Vote on a governance object by masternode configured in cosanta.conf\n"
+                "Vote on a governance object by masternode configured in piratecash.conf\n"
                 "\nArguments:\n"
                 "1. governance-hash   (string, required) hash of the governance object\n"
                 "2. vote              (string, required) vote, possible values: [funding|valid|delete|endorsed]\n"
@@ -462,7 +462,7 @@ static UniValue gobject_vote_conf(const JSONRPCRequest& request)
         nFailed++;
         statusObj.pushKV("result", "failed");
         statusObj.pushKV("errorMessage", "Can't find masternode by collateral output");
-        resultsObj.pushKV("cosanta.conf", statusObj);
+        resultsObj.pushKV("piratecash.conf", statusObj);
         returnObj.pushKV("overall", strprintf("Voted successfully %d time(s) and failed %d time(s).", nSuccessful, nFailed));
         returnObj.pushKV("detail", resultsObj);
         return returnObj;
@@ -486,7 +486,7 @@ static UniValue gobject_vote_conf(const JSONRPCRequest& request)
         nFailed++;
         statusObj.pushKV("result", "failed");
         statusObj.pushKV("errorMessage", "Failure to sign.");
-        resultsObj.pushKV("cosanta.conf", statusObj);
+        resultsObj.pushKV("piratecash.conf", statusObj);
         returnObj.pushKV("overall", strprintf("Voted successfully %d time(s) and failed %d time(s).", nSuccessful, nFailed));
         returnObj.pushKV("detail", resultsObj);
         return returnObj;
@@ -502,7 +502,7 @@ static UniValue gobject_vote_conf(const JSONRPCRequest& request)
         statusObj.pushKV("errorMessage", exception.GetMessage());
     }
 
-    resultsObj.pushKV("cosanta.conf", statusObj);
+    resultsObj.pushKV("piratecash.conf", statusObj);
 
     returnObj.pushKV("overall", strprintf("Voted successfully %d time(s) and failed %d time(s).", nSuccessful, nFailed));
     returnObj.pushKV("detail", resultsObj);
@@ -974,7 +974,7 @@ static UniValue gobject_getcurrentvotes(const JSONRPCRequest& request)
 #ifdef ENABLE_WALLET
             "  vote-alias         - Vote on a governance object by masternode proTxHash\n"
 #endif // ENABLE_WALLET
-            "  vote-conf          - Vote on a governance object by masternode configured in cosanta.conf\n"
+            "  vote-conf          - Vote on a governance object by masternode configured in piratecash.conf\n"
 #ifdef ENABLE_WALLET
             "  vote-many          - Vote on a governance object by all masternodes for which the voting key is in the wallet\n"
 #endif // ENABLE_WALLET

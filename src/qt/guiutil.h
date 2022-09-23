@@ -189,7 +189,7 @@ namespace GUIUtil
     // Open debug.log
     void openDebugLogfile();
 
-    // Open cosanta.conf
+    // Open piratecash.conf
     void openConfigfile();
 
     // Browse backup folder

@@ -243,7 +243,7 @@ bool Intro::pickDataDirectory(interfaces::Node& node)
         settings.setValue("strDataDirDefault", dataDirDefaultCurrent);
     }
     /* Only override -datadir if different from the default, to make it possible to
-     * override -datadir in the cosanta.conf file in the default data directory
+     * override -datadir in the piratecash.conf file in the default data directory
      * (to be consistent with cosantad behavior)
      */
     if(dataDir != dataDirDefaultCurrent) {
