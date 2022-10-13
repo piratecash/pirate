@@ -138,7 +138,7 @@ static const char* DEFAULT_ASMAP_FILENAME="ip_asn.map";
  * The PID file facilities.
  */
 #ifndef WIN32
-static const char* BITCOIN_PID_FILENAME = "cosantad.pid";
+static const char* BITCOIN_PID_FILENAME = "piratecashd.pid";
 
 static fs::path GetPidFile()
 {
@@ -708,7 +708,7 @@ void SetupServerArgs()
     gArgs.AddArg("-printtoconsole", "Send trace/debug info to console (default: 1 when no -daemon. To disable logging to file, set -nodebuglogfile)", false, OptionsCategory::DEBUG_TEST);
     gArgs.AddArg("-pushversion", "Protocol version to report to other nodes", false, OptionsCategory::DEBUG_TEST);
     gArgs.AddArg("-shrinkdebugfile", "Shrink debug.log file on client startup (default: 1 when no -debug)", false, OptionsCategory::DEBUG_TEST);
-    gArgs.AddArg("-sporkaddr=<cosanta_address>", "Override spork address. Only useful for regtest and devnet. Using this on mainnet or testnet will ban you.", false, OptionsCategory::DEBUG_TEST);
+    gArgs.AddArg("-sporkaddr=<piratecash_address>", "Override spork address. Only useful for regtest and devnet. Using this on mainnet or testnet will ban you.", false, OptionsCategory::DEBUG_TEST);
     gArgs.AddArg("-sporkkey=<privatekey>", "Set the private key to be used for signing spork messages.", false, OptionsCategory::DEBUG_TEST);
     gArgs.AddArg("-uacomment=<cmt>", "Append comment to the user agent string", false, OptionsCategory::DEBUG_TEST);
 
@@ -774,8 +774,8 @@ void SetupServerArgs()
 
 std::string LicenseInfo()
 {
-    const std::string URL_SOURCE_CODE = "<https://github.com/cosanta/cosanta-core>";
-    const std::string URL_WEBSITE = "<https://cosanta.net>";
+    const std::string URL_SOURCE_CODE = "<https://github.com/piratecash/piratecash>";
+    const std::string URL_WEBSITE = "<https://piratecash.net>";
 
     return CopyrightHolders(_("Copyright (C)"), 2020, COPYRIGHT_YEAR) + "\n" +
            "\n" +

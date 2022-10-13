@@ -71,7 +71,7 @@ static bool AppInit(int argc, char* argv[])
     //
     // Parameters
     //
-    // If Qt is used, parameters/piratecash.conf are parsed in qt/cosanta.cpp's main()
+    // If Qt is used, parameters/piratecash.conf are parsed in qt/piratecash.cpp's main()
     SetupServerArgs();
     std::string error;
     if (!gArgs.ParseParameters(argc, argv, error)) {
@@ -95,7 +95,7 @@ static bool AppInit(int argc, char* argv[])
         else
         {
             strUsage += "\nUsage:\n"
-                  "  cosantad [options]                     " + strprintf("Start %s Daemon", PACKAGE_NAME) + "\n";
+                  "  piratecashd [options]                     " + strprintf("Start %s Daemon", PACKAGE_NAME) + "\n";
 
             strUsage += "\n" + gArgs.GetHelpMessage();
         }
@@ -132,12 +132,12 @@ static bool AppInit(int argc, char* argv[])
         // Error out when loose non-argument tokens are encountered on command line
         for (int i = 1; i < argc; i++) {
             if (!IsSwitchChar(argv[i][0])) {
-                tfm::format(std::cerr, "Error: Command line contains unexpected token '%s', see cosantad -h for a list of options.\n", argv[i]);
+                tfm::format(std::cerr, "Error: Command line contains unexpected token '%s', see piratecashd -h for a list of options.\n", argv[i]);
                 return false;
             }
         }
 
-        // -server defaults to true for cosantad but not for the GUI so do this here
+        // -server defaults to true for piratecashd but not for the GUI so do this here
         gArgs.SoftSetBoolArg("-server", true);
         // Set this early so that parameter interactions go to console
         InitLogging();
@@ -212,7 +212,7 @@ int main(int argc, char* argv[])
 #endif
     SetupEnvironment();
 
-    // Connect cosantad signal handlers
+    // Connect piratecashd signal handlers
     noui_connect();
 
     return (AppInit(argc, argv) ? EXIT_SUCCESS : EXIT_FAILURE);
