@@ -80,9 +80,11 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
     txNew.nVersion = 1;
     txNew.vin.resize(1);
     txNew.vout.resize(1);
-    txNew.vin[0].scriptSig = CScript() << 486604799 << CScriptNum(4) << std::vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
+    txNew.vin[0].scriptSig = CScript() << 0 << CScriptNum(42) << std::vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
     txNew.vout[0].nValue = genesisReward;
-    txNew.vout[0].scriptPubKey = genesisOutputScript;
+    txNew.vout[0].SetEmpty();
+    txNew.nTime = nTime;
+    txNew.nLockTime = 0;
 
     CBlock genesis;
     genesis.nTime    = nTime;
@@ -132,8 +134,8 @@ static CBlock CreateDevNetGenesisBlock(const uint256 &prevBlockHash, const std::
  */
 static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
-    const char* pszTimestamp = "Sic parvis magna";
-    const CScript genesisOutputScript = CScript() << ParseHex("045b03cb0f02869cfe578880740c00363cc3c58958f737360d1ec5df054a1ad27c801e3a7353333738cf17bd314dd71f8fb8118d7c424d6f69e71017e0d2c3e9e9") << OP_CHECKSIG;
+    const char* pszTimestamp = "2018/11/03 The Pirate Code of Conduct consisted of a number of agreements between the Captain and pirate crew which were called Articles. The Pirate Code of Conduct was necessary as pirates were not governed by any other rules such as Naval regulations. Pirate captains were elected and could lose their position for abuse of their authority.";
+    const CScript genesisOutputScript = CScript() << ParseHex("04c10e83b2703ccf322f7dbd62dd5855ac7c10bd055814ce121ba32607d573b8810c02c0582aed05b4deb9c4b77b26d92428c61256cd42774babea0a073b2ed0c9") << OP_CHECKSIG;
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
 }
 
@@ -414,20 +416,20 @@ public:
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 32-bit integer with any alignment.
          */
-        pchMessageStart[0] = 0x43;
-        pchMessageStart[1] = 0x6f;
-        pchMessageStart[2] = 0x73;
-        pchMessageStart[3] = 0x61;
-        nDefaultPort = 60606;
+        pchMessageStart[0] = 0x70;
+        pchMessageStart[1] = 0x75;
+        pchMessageStart[2] = 0x6d;
+        pchMessageStart[3] = 0x70;
+        nDefaultPort = 56565;
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 1;
         m_assumed_chain_state_size = 1;
 
-        genesis = CreateGenesisBlock(1626442320, 9542573, 0x1e0ffff0, 1, 0 * COIN); //  2021-07-16 13:32:00
+        genesis = CreateGenesisBlock(1541202300, 666, 0x1f00ffff, 1, 0 * COIN); //  2018-11-02 23:45:00
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        uint256 expectedGenesisHash = uint256S("0x00000216af2a362c1833a0a608408bcdc69d23b276e47d7510a776e3b0bb1fce");
-        uint256 expectedGenesisMerkleRoot = uint256S("0xe16337d6f2cd561e3b9b2c470ec2adc11cf94ba2cda40bddfd2f23deff2499fb");
+        uint256 expectedGenesisHash = uint256S("0x33422d3f8e94bae7cd2544e737d64ff8ec3ee140cc3fdc4db3d14656f9a60912");
+        uint256 expectedGenesisMerkleRoot = uint256S("0x212a796316c63f41e26b31b9a947f48b56d5e0df7767774b152e29b08da8b0b7");
 
         #ifdef PIRATECASH_MINE_NEW_GENESIS_BLOCK
         if (consensus.hashGenesisBlock != expectedGenesisHash)
@@ -443,22 +445,22 @@ public:
         // This is fine at runtime as we'll fall back to using them as a oneshot if they don't support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
-        vSeeds.emplace_back("m1.cosanta.net");
-        vSeeds.emplace_back("m2.cosanta.net");
+        vSeeds.emplace_back("dns1.piratecash.net");
+        vSeeds.emplace_back("dns2.piratecash.net");
 
-        // PirateCash addresses start with 'C'
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,28);
+        // PirateCash addresses start with 'P'
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,55);
         // PirateCash script addresses start with '7'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,13);
         // PirateCash private keys start with '7' or 'X'
-        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,204);
+        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,203);
         // PirateCash BIP32 pubkeys start with 'xpub' (Bitcoin defaults)
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x88, 0xB2, 0x1E};
         // PirateCash BIP32 prvkeys start with 'xprv' (Bitcoin defaults)
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
 
         // Type BIP44 coin type is '5'
-        nExtCoinType = 770;
+        nExtCoinType = 660;
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_main, pnSeed6_main + ARRAYLEN(pnSeed6_main));
 
@@ -487,21 +489,12 @@ public:
         nMinSporkKeys = 1;
         fBIP9CheckMasternodesUpgraded = true;
 
-        nStakeMinAge = 24 * 60 * 60; // 24 hours
-        nFirstPoSv2Block = 100000ULL;
+        nStakeMinAge = 8 * 60 * 60; // 8 hours
+        nFirstPoSv2Block = 1ULL;
 
         checkpointData = {
             {
-                {0, uint256S("0x00000216af2a362c1833a0a608408bcdc69d23b276e47d7510a776e3b0bb1fce")},
-                {666, uint256S("0x00000018ea7460307260c065ac63435466b8eb9f433a4ce26b6e1ca56f6c556d")},
-                {73400, uint256S("0x00000000826cf1c50b9316838a1449156a008820d48197f2ef0f95fc48906534")},
-                {97079, uint256S("0x000000006a99d070477085796509db527a7572a94f06d40e128021acd9e3c4e1")},
-                {103066, uint256S("0x000000003a15c5c066a8a1168fa314bcbf8a21295f8a0012052f62687a65f13c")},
-                {114444, uint256S("0x0000000006fae477498ba63e8467859fef34ace0593706b1a67de639e83766f2")},
-                {136336, uint256S("0x0000000044e0cd6b405929c0f581cccb7d8437c3d6b775e4b730728d5487d984")},
-                {161053, uint256S("0x00000000066aba6811bdc9aeec4d56986e617dfa54a4fc0bee49235e1ecaea48")},
-                {201010, uint256S("0x0000000003b9bd34fa0047a2b238e9be27bdadd603fe0d0dcf93c8c373c16159")},
-                {227510, uint256S("0x0000a1c4fa380e46b9f52ef1793ed8992e4c735a1b0a6fdf8180284ef94676ba")},
+                {0, uint256S("0x33422d3f8e94bae7cd2544e737d64ff8ec3ee140cc3fdc4db3d14656f9a60912")},
             }
         };
 
@@ -614,20 +607,20 @@ public:
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x000000000000000000000000000000000000000000000000000000000000000");
 
-        pchMessageStart[0] = 0x43;
-        pchMessageStart[1] = 0x6f;
-        pchMessageStart[2] = 0x73;
-        pchMessageStart[3] = 0x54;
-        nDefaultPort = 60696;
+        pchMessageStart[0] = 0x70;
+        pchMessageStart[1] = 0x69;
+        pchMessageStart[2] = 0x72;
+        pchMessageStart[3] = 0x61;
+        nDefaultPort = 50666;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 1;
         m_assumed_chain_state_size = 1;
 
-        genesis = CreateGenesisBlock(1618221600, 3068881, 0x1e0ffff0, 1, 0 * COIN);
+        genesis = CreateGenesisBlock(1541202300, 120253, 0x1f04ade3, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        uint256 expectedGenesisHash = uint256S("0x000004ba6ec1309022987a66c17fe66b550396bd9710463335ad59de8bfe2c02");
-        uint256 expectedGenesisMerkleRoot = uint256S("e16337d6f2cd561e3b9b2c470ec2adc11cf94ba2cda40bddfd2f23deff2499fb");
+        uint256 expectedGenesisHash = uint256S("0x0003481590d02aa006eb6ed3b943001ac0861fa52649bdce0832bcae6b7f895d");
+        uint256 expectedGenesisMerkleRoot = uint256S("0x212a796316c63f41e26b31b9a947f48b56d5e0df7767774b152e29b08da8b0b7");
 
         #ifdef PIRATECASH_MINE_NEW_GENESIS_BLOCK
         if (consensus.hashGenesisBlock != expectedGenesisHash)
@@ -644,15 +637,15 @@ public:
 
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("m1.cosanta.net");
-        vSeeds.emplace_back("m2.cosanta.net");
+        vSeeds.emplace_back("dnstn1.piratecash.net");
+        vSeeds.emplace_back("dnstn2.piratecash.net");
 
-        // Testnet PirateCash addresses start with 'c'
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,88);
+        // Testnet PirateCash addresses start with 'x' or 'y'
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,75);
         // Testnet PirateCash script addresses start with '8' or '9'
-        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,19);
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,18);
         // Testnet PirateCash keys start with '9' or 'c' (Bitcoin defaults)
-        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
+        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,203);
         // Testnet PirateCash BIP32 pubkeys start with 'tpub' (Bitcoin defaults)
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         // Testnet PirateCash BIP32 prvkeys start with 'tprv' (Bitcoin defaults)
@@ -686,17 +679,12 @@ public:
         nMinSporkKeys = 1;
         fBIP9CheckMasternodesUpgraded = true;
 
-        nStakeMinAge = 24 * 60 * 60; // 24 hours
-        nFirstPoSv2Block = 78200ULL;
+        nStakeMinAge = 8 * 60 * 60; // 8 hours
+        nFirstPoSv2Block = 1ULL;
 
         checkpointData = {
             {
-                {0, uint256S("0x000004ba6ec1309022987a66c17fe66b550396bd9710463335ad59de8bfe2c02")},
-                {256, uint256S("0x00000bf90483dee21e5ec43f44b5065656034c773377c582764de5cd935ee563")},
-                {60000, uint256S("0x00000ea72da4e1acd8d957d34c199ebf0d189015efeb9bdd2ff9f22ecbdb64d4")},
-                {78200, uint256S("0x000008c7d80b614ac6d3770a80c1482dc8047b56afb899a380f5635a45bf93ea")},
-                {94000, uint256S("0x0068a733805059fba4ea3b1b60bbade9401305840a9df89987520e478e6e2465")},
-                {147800,uint256S("0x012ca46fb71629895e065c1900eb5c485e8832dfae8b673373ac49b6a6f505d2")},
+                {0, uint256S("0x0003481590d02aa006eb6ed3b943001ac0861fa52649bdce0832bcae6b7f895d")},
             }
         };
 
@@ -809,21 +797,21 @@ public:
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x000000000000000000000000000000000000000000000000000000000000000");
 
-        pchMessageStart[0] = 0xe2;
-        pchMessageStart[1] = 0xca;
-        pchMessageStart[2] = 0xff;
-        pchMessageStart[3] = 0xce;
+        pchMessageStart[0] = 0x50;
+        pchMessageStart[1] = 0x44;
+        pchMessageStart[2] = 0x45;
+        pchMessageStart[3] = 0x56;
         nDefaultPort = 63636;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 0;
         m_assumed_chain_state_size = 0;
 
         UpdateDevnetSubsidyAndDiffParametersFromArgs(args);
-        genesis = CreateGenesisBlock(1618221600, 98745, 0x207fffff, 1, 0 * COIN);
+        genesis = CreateGenesisBlock(1663759763, 98746, 0x207fffff, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        uint256 expectedGenesisHash = uint256S("0x5cc74fcae11b83a1f00ca81106deaae119486ded33918571a639e7b6eac83150");
-        uint256 expectedGenesisMerkleRoot = uint256S("0xe16337d6f2cd561e3b9b2c470ec2adc11cf94ba2cda40bddfd2f23deff2499fb");
+        uint256 expectedGenesisHash = uint256S("0x45047b2cef27492713216b21914dd260ab3f6081ec1bee5f6111000d5b6ded60");
+        uint256 expectedGenesisMerkleRoot = uint256S("0xb9d7301c0338e68a5acd62f6d4d0fbffe9fa91a0fd0bdb1807ab24a4b47fbce6");
 
         #ifdef PIRATECASH_MINE_NEW_GENESIS_BLOCK
         if (consensus.hashGenesisBlock != expectedGenesisHash)
@@ -840,7 +828,7 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        //vSeeds.push_back(CDNSSeedData("cosanta.org",  "devnet-seed.cosanta.org"));
+        //vSeeds.push_back(CDNSSeedData("dns.piratecash.net",  "devnet-seed.piratecash.net"));
 
         // Testnet PirateCash addresses start with 'o'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,115);
@@ -1024,10 +1012,10 @@ public:
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x00");
 
-        pchMessageStart[0] = 0xff;
-        pchMessageStart[1] = 0x01;
-        pchMessageStart[2] = 0x02;
-        pchMessageStart[3] = 0x03;
+        pchMessageStart[0] = 0x50;
+        pchMessageStart[1] = 0x52;
+        pchMessageStart[2] = 0x45;
+        pchMessageStart[3] = 0x47;
         nDefaultPort = 63646;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 0;
@@ -1038,11 +1026,11 @@ public:
         UpdateDIP8ParametersFromArgs(args);
         UpdateBudgetParametersFromArgs(args);
 
-        genesis = CreateGenesisBlock(1618221600, 98745, 0x207fffff, 1, 0 * COIN);
+        genesis = CreateGenesisBlock(1663759763, 98746, 0x207fffff, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        uint256 expectedGenesisHash = uint256S("0x5cc74fcae11b83a1f00ca81106deaae119486ded33918571a639e7b6eac83150");
-        uint256 expectedGenesisMerkleRoot = uint256S("e16337d6f2cd561e3b9b2c470ec2adc11cf94ba2cda40bddfd2f23deff2499fb");
+        uint256 expectedGenesisHash = uint256S("0x45047b2cef27492713216b21914dd260ab3f6081ec1bee5f6111000d5b6ded60");
+        uint256 expectedGenesisMerkleRoot = uint256S("0xb9d7301c0338e68a5acd62f6d4d0fbffe9fa91a0fd0bdb1807ab24a4b47fbce6");
 
         #ifdef PIRATECASH_MINE_NEW_GENESIS_BLOCK
         if (consensus.hashGenesisBlock != expectedGenesisHash)
