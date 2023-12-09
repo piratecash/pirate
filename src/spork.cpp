@@ -112,11 +112,7 @@ void CSporkManager::ProcessSpork(const CNode* pfrom, std::string_view strCommand
 {
     if (strCommand != NetMsgType::SPORK) return;
     // TODO: Remove it after fork
-    if (strCommand == NetMsgType::SPORK) {
-	if (pfrom->nVersion < MIN_SPORK_PROTO_VERSION){
-	    // Don't acceps spork messages from outdated network clients
-	    return;
-	}
+    if (pfrom->nVersion < MIN_SPORK_PROTO_VERSION) return; // Don't acceps spork messages from outdated network clients
 
     CSporkMessage spork;
     vRecv >> spork;
