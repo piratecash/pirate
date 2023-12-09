@@ -660,7 +660,7 @@ nodist_libpiratecash_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
 # piratecashd binary #
-piratecashd_SOURCES = piratecashd.cpp
+piratecashd_SOURCES = dashd.cpp
 piratecashd_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 piratecashd_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 piratecashd_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
@@ -687,7 +687,7 @@ piratecashd_LDADD = \
 piratecashd_LDADD += $(BACKTRACE_LIB) $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(BLS_LIBS) $(GMP_LIBS)
 
 # piratecash-cli binary #
-piratecash_cli_SOURCES = piratecash-cli.cpp
+piratecash_cli_SOURCES = dash-cli.cpp
 piratecash_cli_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
 piratecash_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 piratecash_cli_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
@@ -705,7 +705,7 @@ piratecash_cli_LDADD += $(BACKTRACE_LIB) $(BOOST_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS
 #
 
 # piratecash-tx binary #
-piratecash_tx_SOURCES = piratecash-tx.cpp
+piratecash_tx_SOURCES = dash-tx.cpp
 piratecash_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 piratecash_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 piratecash_tx_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
