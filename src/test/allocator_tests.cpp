@@ -5,7 +5,7 @@
 #include <util/system.h>
 
 #include <support/allocators/secure.h>
-#include <test/test_piratecash.h>
+#include <test/test_dash.h>
 
 #include <memory>
 

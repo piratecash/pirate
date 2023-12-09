@@ -6,7 +6,7 @@
 #include <script/interpreter.h>
 
 #include <test/lcg.h>
-#include <test/test_piratecash.h>
+#include <test/test_dash.h>
 
 #include <boost/test/unit_test.hpp>
 
