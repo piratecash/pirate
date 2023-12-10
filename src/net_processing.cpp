@@ -3778,8 +3778,8 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
         LogPrint(BCLog::NET, "received block %s peer=%d\n", pblock->GetHash().ToString(), pfrom->GetId());
 
         // sometimes we will be sent their most recent block and its not the one we want, in that case tell where we are
-        if (!mapBlockIndex.count(pblock->hashPrevBlock)) {
-            CBlockLocator locator = WITH_LOCK(cs_main, return chainActive.GetLocator(););
+        if (!::BlockIndex().count(pblock->hashPrevBlock)) {
+            CBlockLocator locator = WITH_LOCK(cs_main, return ::ChainActive().GetLocator(););
             if (find(pfrom->vBlockRequested.begin(), pfrom->vBlockRequested.end(), hashBlock) != pfrom->vBlockRequested.end()) {
                 // we already asked for this block, so lets work backwards and ask for the previous block
                 connman->PushMessage(pfrom, msgMaker.Make(NetMsgType::GETBLOCKS, locator, pblock->hashPrevBlock));

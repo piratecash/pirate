@@ -3,7 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/cosanta-config.h>
+#include <config/piratecash-config.h>
 #endif
 
 #if defined(HAVE_SYS_SELECT_H)

@@ -745,7 +745,7 @@ piratecashd_LDADD = \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-priatecashd_LDADD += $(BACKTRACE_LIB) $(BOOST_LIBS) $(BDB_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(BLS_LIBS) $(GMP_LIBS)
+piratecashd_LDADD += $(BACKTRACE_LIB) $(BOOST_LIBS) $(BDB_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(BLS_LIBS) $(GMP_LIBS)
 
 # piratecash-cli binary #
 piratecash_cli_SOURCES = bitcoin-cli.cpp
@@ -762,7 +762,7 @@ piratecash_cli_LDADD = \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_CRYPTO)
-priatecash_cli_LDADD += $(BACKTRACE_LIB) $(BOOST_LIBS) $(CRYPTO_LIBS) $(EVENT_LIBS) $(BLS_LIBS) $(GMP_LIBS)
+piratecash_cli_LDADD += $(BACKTRACE_LIB) $(BOOST_LIBS) $(CRYPTO_LIBS) $(EVENT_LIBS) $(BLS_LIBS) $(GMP_LIBS)
 #
 
 # piratecash-tx binary #
