@@ -184,9 +184,51 @@ public:
     uint32_t nTime;
     uint32_t nBits;
     uint32_t nNonce;
+
+    std::vector<unsigned char> vchBlockSig;
+    // PirateCash: money supply related block index fields
+    unsigned int nFlags{0};  // PirateCash: block index flags
+    enum
+    {
+        BLOCK_PROOF_OF_STAKE = (1 << 0), // is proof-of-stake block
+        BLOCK_STAKE_ENTROPY  = (1 << 1), // entropy bit for stake modifier
+        BLOCK_STAKE_MODIFIER = (1 << 2), // regenerated stake modifier
+    };
+    // proof-of-stake specific fields
     uint256 posStakeHash;
     uint32_t posStakeN;
-    std::vector<unsigned char> posBlockSig;
+    bool IsProofOfWork() const
+    {
+        return !((nFlags & BLOCK_PROOF_OF_STAKE)||(nVersion & CBlockHeader::POS_BIT));
+    }
+
+    bool IsProofOfStake() const
+    {
+        return ((nFlags & BLOCK_PROOF_OF_STAKE)||(nVersion & CBlockHeader::POS_BIT));
+    }
+
+    void SetProofOfStake()
+    {
+        nFlags |= BLOCK_PROOF_OF_STAKE;
+    }
+
+    unsigned int GetStakeEntropyBit() const
+    {
+        return ((nFlags & BLOCK_STAKE_ENTROPY) >> 1);
+    }
+
+    bool SetStakeEntropyBit(unsigned int nEntropyBit)
+    {
+        if (nEntropyBit > 1)
+            return false;
+        nFlags |= (nEntropyBit? BLOCK_STAKE_ENTROPY : 0);
+        return true;
+    }
+
+    bool GeneratedStakeModifier() const
+    {
+        return (nFlags & BLOCK_STAKE_MODIFIER);
+    }
 
     //! (memory only) Sequential id assigned to distinguish order in which blocks are received.
     int32_t nSequenceId;
@@ -210,6 +252,8 @@ public:
         nSequenceId = 0;
         nTimeMax = 0;
 
+        nFlags = 0;
+
         nVersion       = 0;
         hashMerkleRoot = uint256();
         nTime          = 0;
@@ -217,7 +261,7 @@ public:
         nNonce         = 0;
         posStakeHash   = uint256();
         posStakeN      = 0;
-        posBlockSig.clear();
+        vchBlockSig.clear();
     }
 
     CBlockIndex()
@@ -236,7 +280,8 @@ public:
         nNonce         = block.nNonce;
         posStakeHash   = block.posStakeHash;
         posStakeN      = block.posStakeN;
-        posBlockSig    = block.posBlockSig;
+        vchBlockSig    = block.vchBlockSig;
+        nFlags         = block.nFlags;
     }
 
     FlatFilePos GetBlockPos() const {
@@ -269,7 +314,8 @@ public:
         block.nNonce         = nNonce;
         block.posStakeHash   = posStakeHash;
         block.posStakeN      = posStakeN;
-        block.posBlockSig    = posBlockSig;
+        block.vchBlockSig    = vchBlockSig;
+        block.nFlags         = nFlags;
         return block;
     }
 
@@ -299,6 +345,11 @@ public:
         return (int64_t)nTimeMax;
     }
 
+    bool IsProofOfStakeV2() const
+    {
+        return (nVersion & CBlockHeader::POSV2_BITS) == CBlockHeader::POSV2_BITS;
+    }
+
     static constexpr int nMedianTimeSpan = 11;
 
     int64_t GetMedianTimePast() const
@@ -315,29 +366,8 @@ public:
         return pbegin[(pend - pbegin)/2];
     }
 
-    bool IsProofOfWork() const
-    {
-        return !IsProofOfStake();
-    }
-
-    bool IsProofOfStake() const
-    {
-        return (nVersion & CBlockHeader::POS_BIT) != 0;
-    }
-
-    bool IsProofOfStakeV2() const
-    {
-        return (nVersion & CBlockHeader::POSV2_BITS) == CBlockHeader::POSV2_BITS;
-    }
-
     COutPoint StakeInput() const {
         return COutPoint(posStakeHash, posStakeN);
-    }
-
-    unsigned int GetStakeEntropyBit() const
-    {
-        unsigned int nEntropyBit = (ReadLE64(GetBlockHash().begin()) & 1);
-        return nEntropyBit;
     }
 
     bool IsGeneratedStakeModifier() const
@@ -422,6 +452,7 @@ public:
 
         // block hash
         READWRITE(obj.hash);
+        READWRITE(obj.nFlags);
         // block header
         READWRITE(obj.nVersion);
         READWRITE(obj.hashPrev);
@@ -432,7 +463,7 @@ public:
         if (obj.IsProofOfStake()) {
             READWRITE(obj.posStakeHash);
             READWRITE(obj.posStakeN);
-            READWRITE(obj.posBlockSig);
+            READWRITE(obj.vchBlockSig);
         }
     }
 
@@ -512,5 +543,7 @@ public:
     /** Find the earliest block with timestamp equal or greater than the given time and height equal or greater than the given height. */
     CBlockIndex* FindEarliestAtLeast(int64_t nTime, int height) const;
 };
+
+const CBlockIndex* GetLastBlockIndex(const CBlockIndex* pindex, bool fProofOfStake);
 
 #endif // BITCOIN_CHAIN_H

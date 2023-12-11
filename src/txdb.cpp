@@ -394,9 +394,12 @@ bool CBlockTreeDB::LoadBlockIndexGuts(const Consensus::Params& consensusParams, 
                 pindexNew->nNonce         = diskindex.nNonce;
                 pindexNew->posStakeHash   = diskindex.posStakeHash;
                 pindexNew->posStakeN      = diskindex.posStakeN;
-                pindexNew->posBlockSig    = diskindex.posBlockSig;
+                pindexNew->vchBlockSig    = diskindex.vchBlockSig;
                 pindexNew->nStatus        = diskindex.nStatus;
                 pindexNew->nTx            = diskindex.nTx;
+
+                // PirateCash related block index fields
+                pindexNew->nFlags         = diskindex.nFlags;
 
                 pcursor->Next();
             } else {

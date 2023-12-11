@@ -991,6 +991,10 @@ bool ReadBlockFromDisk(CBlock& block, const FlatFilePos& pos, const Consensus::P
         return error("%s: Deserialize or I/O error - %s at %s", __func__, e.what(), pos.ToString());
     }
 
+    // Set flag if proof of stake
+    if (block.IsProofOfStakeTX())
+        block.nFlags |= CBlockIndex::BLOCK_PROOF_OF_STAKE;
+
     CValidationState state;
 
     if (block.IsProofOfWork() && !CheckProof(state, block, consensusParams)) {
@@ -2014,6 +2018,9 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
     if (block.IsProofOfStakeV2() && !is_posv2_active && !IsPoSV2EnforcedHeight(pindex->nHeight))
         return state.DoS(100, error("ConnectBlock() : PoSv2 period not active"),
                          REJECT_INVALID, "PoSv2-early");
+    if (!block.IsProofOfStakeV2() && pindex->nHeight>= chainparams.GetConsensus().nForkHeight)
+        return state.DoS(100, error("ConnectBlock() : Disable blocks from old version of PirateCash"),
+                         REJECT_INVALID, "Hard-fork-active");
     nBlocksTotal++;
 
     bool fScriptChecks = true;
@@ -3537,6 +3544,8 @@ CBlockIndex* BlockManager::AddToBlockIndex(const CBlockHeader& block, enum Block
         pindexNew->BuildSkip();
     }
     pindexNew->nTimeMax = (pindexNew->pprev ? std::max(pindexNew->pprev->nTimeMax, pindexNew->nTime) : pindexNew->nTime);
+    if (block.nFlags & CBlockIndex::BLOCK_PROOF_OF_STAKE)
+        pindexNew->SetProofOfStake();
     pindexNew->nChainWork = (pindexNew->pprev ? pindexNew->pprev->nChainWork : 0) + GetBlockProof(*pindexNew);
     if (nStatus & BLOCK_VALID_MASK) {
         pindexNew->RaiseValidity(nStatus);
@@ -3683,7 +3692,7 @@ static bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state,
 {
     // NOTE: left here for original behavior, modern check is in the CheckBlock()
     // Check proof of work matches claimed amount
-    if (fCheckProof && block.IsProofOfWork() && !CheckProofOfWork(block.GetHash(), block.nBits, consensusParams))
+    if (fCheckProof && !CheckProofOfWork(block.GetPoWHash(), block.nBits, consensusParams) && block.GetBlockTime() != 1541202300)
         return state.DoS(50, false, REJECT_INVALID, "high-hash", false, "proof of work failed");
 
     // Check DevNet
@@ -3708,7 +3717,7 @@ bool CheckBlock(const CBlock& block, CValidationState& state, const Consensus::P
 
     // Check that the header is valid (particularly PoW).  This is mostly
     // redundant with the call in AcceptBlockHeader.
-    if (!CheckBlockHeader(block, state, consensusParams, fCheckProof))
+    if (!CheckBlockHeader(block, state, consensusParams, fCheckProof && !block.IsProofOfStake()))
         return false;
 
     // Check the merkle root.
@@ -3740,7 +3749,15 @@ bool CheckBlock(const CBlock& block, CValidationState& state, const Consensus::P
         if (block.vtx[i]->IsCoinBase())
             return state.DoS(100, false, REJECT_INVALID, "bad-cb-multiple", false, "more than one coinbase");
 
-    if (block.IsProofOfStake()) {
+    // PirateCash: only the second transaction can be the optional coinstake
+    for (unsigned int i = 2; i < block.vtx.size(); i++)
+        if (block.vtx[i]->IsCoinStake())
+            return state.DoS(100, false, REJECT_INVALID, "bad-cs-missing", "coinstake in wrong position");
+    // PirateCash: first coinbase output should be empty if proof-of-stake block for PoSv1
+    if (block.IsProofOfStake() && !block.IsProofOfStakeV2() && !block.vtx[0]->vout[0].IsEmpty())
+        return state.DoS(100, false, REJECT_INVALID, "bad-cb-notempty", "coinbase output not empty in PoS block");
+
+    if (block.IsProofOfStakeV2()) {
         // CoinStake is a subset of CoinBase in PirateCash
         if (fCheckProof && !block.HasStake())
             return state.DoS(100, false, REJECT_INVALID, "bad-PoS-stake", false, "stake contraints failed");
@@ -3804,6 +3821,10 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationSta
 
     // Check proof of work
     const Consensus::Params& consensusParams = params.GetConsensus();
+    if (nHeight < consensusParams.nForkHeight) {
+        if (block.nBits != GetNextTargetRequired(pindexPrev, ((block.nFlags & CBlockIndex::BLOCK_PROOF_OF_STAKE)||(block.IsProofOfStakeV2())), consensusParams))
+            return state.Invalid(false, REJECT_INVALID, "bad-diffbits", "incorrect proof of work/stake");
+    }else{
     if(Params().NetworkIDString() == CBaseChainParams::MAIN && nHeight <= 68589){
         // architecture issues with DGW v1 and v2)
         unsigned int nBitsNext = GetNextWorkRequired(pindexPrev, &block, consensusParams);
@@ -3817,6 +3838,7 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationSta
         if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams))
             return state.DoS(100, false, REJECT_INVALID, "bad-diffbits", false, strprintf("incorrect proof of work at %d", nHeight));
     }
+    }
 
     // Check against checkpoints
     if (fCheckpointsEnabled) {
@@ -3829,7 +3851,7 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationSta
     }
 
     // Check timestamp against prev
-    if (block.GetBlockTime() <= pindexPrev->GetMedianTimePast()) {
+    if (block.GetBlockTime() <= pindexPrev->GetMedianTimePast() && block.GetBlockTime() > consensusParams.nSkipTimeUntil) {
         LogPrintf("Block time = %d , GetMedianTimePast = %d \n", block.GetBlockTime(), pindexPrev->GetMedianTimePast());
         return state.Invalid(false, REJECT_INVALID, "time-too-old", strprintf("block's timestamp is too early %d %d", block.GetBlockTime(), pindexPrev->GetMedianTimePast()));
     }
@@ -3942,7 +3964,7 @@ bool BlockManager::AcceptBlockHeader(const CBlockHeader& block, CValidationState
             return true;
         }
 
-        if (!CheckBlockHeader(block, state, chainparams.GetConsensus(), true))
+        if (!CheckBlockHeader(block, state, chainparams.GetConsensus(), !((block.nFlags & CBlockIndex::BLOCK_PROOF_OF_STAKE)||(block.IsProofOfStakeV2()))))
             return error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
 
         // Get prev block index
@@ -5431,27 +5453,35 @@ bool IsPowActiveHeight(int nBlockHeight) {
 /** Check PoW or PoS based in block index **/
 bool CheckProof(CValidationState &state, const CBlockIndex &index, const Consensus::Params& params) {
     if (index.IsProofOfWork()) {
-        if (!CheckProofOfWork(index.GetBlockHash(), index.nBits, params)) {
+        if (!CheckProofOfWork(index.GetBlockHash(), index.nBits, params) && index.GetBlockTime() != 1541202300) {
             return state.DoS(100, false, REJECT_INVALID, "bad-pow-proof", false, "block proof mismatch");
         }
 
         return true;
     }
 
-    return CheckProofOfStake(state, index.GetBlockHeader(), params);
+    uint256 hashProofOfStake = uint256();
+    return CheckProofOfStake(state, index.GetBlockHeader(), hashProofOfStake, params);
 }
 
 /** Check PoW or PoS based on actual block **/
 bool CheckProof(CValidationState &state, const CBlockHeader &block, const Consensus::Params& params) {
-    if (block.IsProofOfWork()) {
-        if (!CheckProofOfWork(block.GetHash(), block.nBits, params)) {
+    if (!((block.nFlags & CBlockIndex::BLOCK_PROOF_OF_STAKE)||block.IsProofOfStakeV2())) {
+        if (!CheckProofOfWork(block.GetPoWHash(), block.nBits, params) && block.GetBlockTime() != 1541202300) {
             return state.DoS(100, false, REJECT_INVALID, "bad-pow-proof", false, "block proof mismatch");
         }
 
         return true;
     }
 
-    return CheckProofOfStake(state, block, params);
+    // TODO CheckProofOfStake must use full block info instead of Headers
+    if (block.IsProofOfStakeV2())
+    {
+        uint256 hashProofOfStake = uint256();
+        return CheckProofOfStake(state, block, hashProofOfStake, params);
+    }
+    // TODO Add CheckProof for old PirateCash PoSv1, right now we're cheking checkpoints and it's enough but the better to check outdated PoS
+    return true;
 }
 
 //! Guess how far we are in the verification process at the given block index

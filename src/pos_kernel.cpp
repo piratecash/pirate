@@ -374,12 +374,12 @@ bool CheckStakeKernelHash(
     const COutPoint prevout,
     unsigned int nHashDrift,
     bool fCheck,
+    uint256& hashProofOfStake,
     bool fPrintProofOfStake
 ) {
     // Legacy way of parameter passing
     unsigned int nBits = current.nBits;
     unsigned int& nTimeTx = current.nTime;
-    uint256 hashProofOfStake = current.hashProofOfStake();
     uint32_t &nStakeModifier = current.nStakeModifier();
     //
 
@@ -451,6 +451,7 @@ bool CheckStakeKernelHash(
     //create data stream once instead of repeating it in the loop
     CDataStream ss(SER_GETHASH, 0);
     ss << nStakeModifier;
+    hashProofOfStake = stakeHash(nTimeTx, ss, prevout.n, prevout.hash, nTimeBlockFrom);
 
     // if wallet is simply checking to make sure a hash is valid
     //-------------------
@@ -474,11 +475,9 @@ bool CheckStakeKernelHash(
                 LogPrintf("CheckStakeKernelHash(): failed to get kernel stake modifier V2 \n");
                 return false;
             }
-
-            ss = CDataStream(SER_GETHASH, 0);
-            ss << nStakeModifier;
-            return true;
         }
+        ss = CDataStream(SER_GETHASH, 0);
+        ss << nStakeModifier;
 
         //hash this iteration
         hashProofOfStake = stakeHash(try_time, ss, prevout.n, prevout.hash, nTimeBlockFrom);
@@ -510,9 +509,9 @@ bool CheckStakeKernelHash(
 }
 
 // Check kernel hash target and coinstake signature
-bool CheckProofOfStake(CValidationState &state, const CBlockHeader &header, const Consensus::Params& consensus)
+bool CheckProofOfStake(CValidationState &state, const CBlockHeader &header, uint256& hashProofOfStake, const Consensus::Params& consensus)
 {
-    if (header.posBlockSig.empty()) {
+    if (header.vchBlockSig.empty()) {
         return state.DoS(100, false, REJECT_MALFORMED, "bad-pos-sig", false, "missing PoS signature");
     }
 
@@ -648,6 +647,7 @@ bool CheckProofOfStake(CValidationState &state, const CBlockHeader &header, cons
             prevout,
             nInterval,
             true,
+            hashProofOfStake,
             false);
 
     if (!is_valid) {

@@ -158,6 +158,12 @@ public:
         return (nValue == -1);
     }
 
+    void SetEmpty()
+    {
+        nValue = 0;
+        scriptPubKey.clear();
+    }
+
     bool IsEmpty() const
     {
         return (nValue == 0 && scriptPubKey.empty());
@@ -204,6 +210,7 @@ public:
     const int16_t nVersion;
     const uint16_t nType;
     const uint32_t nLockTime;
+    const uint32_t nTime;
     const std::vector<uint8_t> vExtraPayload; // only available for special transaction types
 
 private:
@@ -282,6 +289,7 @@ struct CMutableTransaction
     int16_t nVersion;
     uint16_t nType;
     uint32_t nLockTime;
+    uint32_t nTime;
     std::vector<uint8_t> vExtraPayload; // only available for special transaction types
 
     CMutableTransaction();
@@ -294,6 +302,9 @@ struct CMutableTransaction
         READWRITE(n32bitVersion);
         SER_READ(obj, obj.nVersion = (int16_t) (n32bitVersion & 0xffff));
         SER_READ(obj, obj.nType = (uint16_t) ((n32bitVersion >> 16) & 0xffff));
+        if (obj.nVersion == 1 || obj.nVersion == 2) {
+            READWRITE(obj.nTime);
+        }
         READWRITE(obj.vin, obj.vout, obj.nLockTime);
         if (obj.nVersion == 3 && obj.nType != TRANSACTION_NORMAL) {
             READWRITE(obj.vExtraPayload);

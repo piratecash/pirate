@@ -598,6 +598,7 @@ void PoSMiner(std::shared_ptr<CWallet> pwallet, CThreadInterrupt &interrupt)
     int nMintableLastCheck = 0;
     int last_height = -1;
     int64_t start_block_time = 0;
+    const CChainParams& chainparams = Params();
 
     while (!interrupt) {
         auto hash_interval = std::max(pwallet->nHashInterval, (unsigned int)1);
@@ -622,6 +623,13 @@ void PoSMiner(std::shared_ptr<CWallet> pwallet, CThreadInterrupt &interrupt)
                 interrupt.sleep_for(std::chrono::seconds(hash_interval));
                 LogPrint(BCLog::STAKING, "%s : PoS is not enabled at height %d \n",
                          __func__, (pindexPrev->nHeight + 1) );
+                continue;
+            }
+
+            if (pindexPrev->nHeight + 1  < chainparams.GetConsensus().nForkHeight) {
+                interrupt.sleep_for(std::chrono::seconds(hash_interval));
+                LogPrint(BCLog::STAKING, "%s : PoSv2 is not enabled at height %d \n",
+                    __func__, (pindexPrev->nHeight + 1) );
                 continue;
             }
         }
