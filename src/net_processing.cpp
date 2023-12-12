@@ -3756,6 +3756,10 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
         headers.resize(nCount);
         for (unsigned int n = 0; n < nCount; n++) {
             vRecv >> headers[n];
+            // TODO: Update PoS flags for old peers becasue all blocks are PoS after 100 000 (it's not needed after hard fork)
+            if (pfrom->nVersion <= NO_HEADERS_NODE && headers[n].nTime > 1675190512){
+                headers[n].nFlags |= CBlockIndex::BLOCK_PROOF_OF_STAKE;
+            }
             ReadCompactSize(vRecv); // ignore tx count; assume it is 0.
             ReadCompactSize(vRecv); // needed for vchBlockSig.
         }
