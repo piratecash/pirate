@@ -67,7 +67,7 @@ public:
                 obj.posPubKey = CPubKey();
             }
         }
-         // piratecash: do not serialize nFlags when computing hash
+        // piratecash: do not serialize nFlags when computing hash
         if (!(s.GetType() & SER_GETHASH) && s.GetType() & SER_POSMARKER)
             READWRITE(obj.nFlags);
     }

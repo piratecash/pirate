@@ -231,6 +231,9 @@ public:
     inline void Serialize(Stream& s) const {
         int32_t n32bitVersion = this->nVersion | (this->nType << 16);
         s << n32bitVersion;
+        if (this->nVersion == 1 || this->nVersion == 2){
+            s << nTime;
+        }
         s << vin;
         s << vout;
         s << nLockTime;
