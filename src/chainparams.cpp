@@ -245,6 +245,7 @@ public:
         consensus.nPosTargetSpacingV2 = 120;
         consensus.nSpecTargetFix = 310000;
         consensus.nForkHeight = 2000000;  // Block Height when we'll use new codebase
+        consensus.nSkipTimeUntil = 1705276800; //2024-01-01
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nPowKGWHeight = 3000000;
