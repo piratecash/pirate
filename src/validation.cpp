@@ -1057,6 +1057,14 @@ CAmount GetBlockSubsidy(int nPrevBits, int nPrevHeight, const Consensus::Params&
 
     nSubsidyBase >>= halvings;
 
+    if (nPrevHeight <= consensusParams.nRestoreRewardV18){
+        if (nPrevHeight > consensusParams.nRewForkDecreaseV18){
+            // Before activating the hard fork, the rewards will be minimal (150 satoshi) to prevent the fear of missing out (FOMO)
+            // among miners. This period will also extend for a few days after the hard fork.
+            nSubsidyBase = 150;
+        }
+    }
+
     return nSubsidyBase;
 }
 
