@@ -3255,6 +3255,11 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
             return true;
         }
 
+        if (pfrom->nVersion <= NO_HEADERS_NODE){
+            LogPrint(BCLog::NET, "transaction sent from old peer=%d\n", pfrom->GetId());
+            return true;
+        }
+
         CTransactionRef ptx;
         CCoinJoinBroadcastTx dstx;
         int nInvType = MSG_TX;
