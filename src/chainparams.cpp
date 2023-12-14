@@ -248,6 +248,7 @@ public:
         consensus.nForkHeight = 4070908800;  // Block Height when we'll use new codebase
         consensus.nRestoreRewardV18 = 4070908800;
         consensus.nSkipTimeUntil = 1705276800; //2024-01-01
+        consensus.nLastPowBlock = 100000;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nPowKGWHeight = 3000000;
@@ -465,6 +466,7 @@ public:
         consensus.nForkHeight = 289000;  // Block Height when we'll use new codebase
         consensus.nRestoreRewardV18 = 290000;
         consensus.nSkipTimeUntil = 1705276800; //2024-01-01
+        consensus.nLastPowBlock = 3000;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = false;
         consensus.nPowKGWHeight = 290030; // nPowKGWHeight >= nPowDGWHeight means "no KGW"
@@ -675,6 +677,7 @@ public:
         consensus.nForkHeight = 1;  // Block Height when we'll use new codebase
         consensus.nRestoreRewardV18 = 1;
         consensus.nSkipTimeUntil = 1672531200; //2023-01-01
+        consensus.nLastPowBlock = 3000;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = false;
         consensus.nPowKGWHeight = 30; // nPowKGWHeight >= nPowDGWHeight means "no KGW"
@@ -954,6 +957,7 @@ public:
         consensus.nForkHeight = 1;  // Block Height when we'll use new codebase
         consensus.nRestoreRewardV18 = 1;
         consensus.nSkipTimeUntil = 1672531200; //2023-01-01
+        consensus.nLastPowBlock = 3000;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = true;
         consensus.nPowKGWHeight = 30; // same as mainnet

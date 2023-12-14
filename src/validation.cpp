@@ -2009,16 +2009,17 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
     }
 
     bool is_pos_active = pindex->pprev && pindex->pprev->IsProofOfStake();
+    bool is_pow_active = pindex->nHeight < chainparams.GetConsensus().nLastPowBlock;
 
     if (block.IsProofOfStake() && !is_pos_active && !IsPoSEnforcedHeight(pindex->nHeight) && !IsPoSV2EnforcedHeight(pindex->nHeight))
         return state.DoS(100, error("ConnectBlock() : PoS period not active"),
                          REJECT_INVALID, "PoS-early");
 
-    if (block.IsProofOfWork() && !IsPowActiveHeight(pindex->nHeight))
+    if (block.IsProofOfWork() && !is_pow_active)
         return state.DoS(100, error("ConnectBlock() : PoW period ended"),
                          REJECT_INVALID, "PoW-ended");
 
-    if (is_pos_active && block.IsProofOfWork() && !IsPowActiveHeight(pindex->nHeight))
+    if (is_pos_active && block.IsProofOfWork() && !is_pow_active)
         return state.DoS(100, error("ConnectBlock() : PoS period already active"),
                          REJECT_INVALID, "PoS-active");
 
@@ -5451,15 +5452,6 @@ bool IsPoSEnforcedHeight(int nBlockHeight) {
 bool IsPoSV2EnforcedHeight(int nBlockHeight) {
     return uint32_t(nBlockHeight) >= Params().FirstPoSv2Block();
 }
-
-bool IsPowActiveHeight(int nBlockHeight) {
-    uint32_t powHeight = sporkManager.GetSporkValue(SPORK_33_LAST_POW_BLOCK);
-    if (powHeight != nlastPoWBlock){
-        nlastPoWBlock = powHeight; // Temporary workaround and it will be in chainparams
-    }
-    return uint32_t(nBlockHeight) <= nlastPoWBlock;
-}
-
 
 /** Check PoW or PoS based in block index **/
 bool CheckProof(CValidationState &state, const CBlockIndex &index, const Consensus::Params& params) {
