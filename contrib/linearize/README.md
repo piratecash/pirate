@@ -1,5 +1,5 @@
 # Linearize
-Construct a linear, no-fork, best version of the Cosanta blockchain.
+Construct a linear, no-fork, best version of the PirateCash blockchain.
 
 ## Step 0: Install cosanta_hash
 

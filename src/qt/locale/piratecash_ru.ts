@@ -3975,7 +3975,7 @@ https://www.transifex.com/projects/p/cosa/</translation>
     </message>
 </context>
 <context>
-    <name>cosanta-core</name>
+    <name>piratecash-core</name>
     <message>
         <source>Error: Listening for incoming connections failed (listen returned error %s)</source>
         <translation>Ошибка: не удалось начать прослушивание входящих подключений (прослушивание вернуло ошибку %s)</translation>

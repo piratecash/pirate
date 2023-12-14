@@ -242,7 +242,7 @@ that run in `-regtest` mode.
 
 ### DEBUG_LOCKORDER
 
-Cosanta Core is a multi-threaded application, and deadlocks or other
+PirateCash Core is a multi-threaded application, and deadlocks or other
 multi-threading bugs can be very difficult to track down. The `--enable-debug`
 configure option adds `-DDEBUG_LOCKORDER` to the compiler flags. This inserts
 run-time checks to keep track of which locks are held, and adds warnings to the
@@ -438,7 +438,7 @@ Ignoring IDE/editor files
 In closed-source environments in which everyone uses the same IDE it is common
 to add temporary files it produces to the project-wide `.gitignore` file.
 
-However, in open source software such as Cosanta Core, where everyone uses
+However, in open source software such as PirateCash Core, where everyone uses
 their own editors/IDE/tools, it is less common. Only you know what files your
 editor produces and this may change from version to version. The canonical way
 to do this is thus to create your local gitignore. Add this to `~/.gitconfig`:
@@ -468,9 +468,9 @@ Development guidelines
 ============================
 
 A few non-style-related recommendations for developers, as well as points to
-pay attention to for reviewers of Cosanta Core code.
+pay attention to for reviewers of PirateCash Core code.
 
-General Cosanta Core
+General PirateCash Core
 ----------------------
 
 - New features should be exposed on RPC first, then can be made available in the GUI
@@ -679,7 +679,7 @@ Strings and formatting
 
 - For `strprintf`, `LogPrint`, `LogPrintf` formatting characters don't need size specifiers
 
-  - *Rationale*: Cosanta Core uses tinyformat, which is type safe. Leave them out to avoid confusion
+  - *Rationale*: PirateCash Core uses tinyformat, which is type safe. Leave them out to avoid confusion
 
 - Use `.c_str()` sparingly. Its only valid use is to pass C++ strings to C functions that take NULL-terminated
   strings.
@@ -834,7 +834,7 @@ directly upstream without being PRed directly against the project.  They will be
 subtree merge.
 
 Others are external projects without a tight relationship with our project.  Changes to these should also
-be sent upstream but bugfixes may also be prudent to PR against Cosanta Core so that they can be integrated
+be sent upstream but bugfixes may also be prudent to PR against PirateCash Core so that they can be integrated
 quickly.  Cosmetic changes should be purely taken upstream.
 
 There is a tool in `test/lint/git-subtree-check.sh` to check a subtree directory for consistency with

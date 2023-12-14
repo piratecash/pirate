@@ -44,7 +44,7 @@ static UniValue debug(const JSONRPCRequest& request)
                 "libevent logging is configured on startup and cannot be modified by this RPC during runtime.\n"
                 "There are also a few meta-categories:\n"
                 " - \"all\", \"1\" and \"\" activate all categories at once;\n"
-                " - \"cosanta\" activates all Cosanta-specific categories at once;\n"
+                " - \"pirate\" activates all Cosanta-specific categories at once;\n"
                 " - \"none\" (or \"0\") deactivates all categories at once.\n"
                 "Note: If specified category doesn't match any of the above, no error is thrown.\n",
                 {
@@ -54,8 +54,8 @@ static UniValue debug(const JSONRPCRequest& request)
             "  result               (string) \"Debug mode: \" followed by the specified category.\n"
                 },
                 RPCExamples {
-                    HelpExampleCli("debug", "cosanta")
-            + HelpExampleRpc("debug", "cosanta+net")
+                    HelpExampleCli("debug", "pirate")
+            + HelpExampleRpc("debug", "pirate+net")
             }}.ToString());
 
     std::string strMode = request.params[0].get_str();
@@ -201,9 +201,9 @@ static UniValue validateaddress(const JSONRPCRequest& request)
     if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
             RPCHelpMan{"validateaddress",
-                "\nReturn information about the given cosanta address.\n",
+                "\nReturn information about the given pirate address.\n",
                 {
-                    {"address", RPCArg::Type::STR, RPCArg::Optional::NO, "The cosanta address to validate"},
+                    {"address", RPCArg::Type::STR, RPCArg::Optional::NO, "The pirate address to validate"},
                 },
                 RPCResult{
             "{\n"
@@ -426,7 +426,7 @@ static UniValue verifymessage(const JSONRPCRequest& request)
             RPCHelpMan{"verifymessage",
                 "\nVerify a signed message\n",
                 {
-                    {"address", RPCArg::Type::STR, RPCArg::Optional::NO, "The cosanta address to use for the signature."},
+                    {"address", RPCArg::Type::STR, RPCArg::Optional::NO, "The pirate address to use for the signature."},
                     {"signature", RPCArg::Type::STR, RPCArg::Optional::NO, "The signature provided by the signer in base 64 encoding (see signmessage)."},
                     {"message", RPCArg::Type::STR, RPCArg::Optional::NO, "The message that was signed."},
                 },
@@ -1208,7 +1208,7 @@ static UniValue logging(const JSONRPCRequest& request)
             "The valid logging categories are: " + ListLogCategories() + "\n"
             "In addition, the following are available as category names with special meanings:\n"
             "  - \"all\",  \"1\" : represent all logging categories.\n"
-            "  - \"cosanta\" activates all PirateCash-specific categories at once.\n"
+            "  - \"pirate\" activates all PirateCash-specific categories at once.\n"
             "To deactivate all categories at once you can specify \"all\" in <exclude>.\n"
             "  - \"none\", \"0\" : even if other logging categories are specified, ignore all of them.\n"
             ,
@@ -1276,7 +1276,7 @@ static UniValue echo(const JSONRPCRequest& request)
                 "\nSimply echo back the input arguments. This command is for testing.\n"
                 "\nIt will return an internal bug report when exactly 100 arguments are passed.\n"
                 "\nThe difference between echo and echojson is that echojson has argument conversion enabled in the client-side table in "
-                "cosanta-cli and the GUI. There is no server-side difference.",
+                "piratecash-cli and the GUI. There is no server-side difference.",
                 {},
                 RPCResult{RPCResult::Type::NONE, "", "Returns whatever was passed in"},
                 RPCExamples{""},
@@ -1311,8 +1311,8 @@ static const CRPCCommand commands[] =
     { "addressindex",       "getaddressbalance",      &getaddressbalance,      {"addresses"} },
 
     /* PirateCash features */
-    { "cosanta",               "mnsync",                 &mnsync,                 {} },
-    { "cosanta",               "spork",                  &spork,                  {"arg0","value"} },
+    { "pirate",               "mnsync",                 &mnsync,                 {} },
+    { "pirate",               "spork",                  &spork,                  {"arg0","value"} },
 
     /* Not shown in help */
     { "hidden",             "setmocktime",            &setmocktime,            {"timestamp"}},

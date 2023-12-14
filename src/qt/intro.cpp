@@ -210,7 +210,7 @@ bool Intro::pickDataDirectory(interfaces::Node& node)
         GUIUtil::disableMacFocusRect(&intro);
         GUIUtil::loadStyleSheet(true);
         intro.setDataDirectory(dataDirDefaultCurrent);
-        intro.setWindowIcon(QIcon(":icons/cosanta"));
+        intro.setWindowIcon(QIcon(":icons/piratecash"));
 
         while(true)
         {
@@ -239,7 +239,7 @@ bool Intro::pickDataDirectory(interfaces::Node& node)
     }
     /* Only override -datadir if different from the default, to make it possible to
      * override -datadir in the piratecash.conf file in the default data directory
-     * (to be consistent with cosantad behavior)
+     * (to be consistent with piratecashd behavior)
      */
     if(dataDir != GUIUtil::getDefaultDataDirectory()) {
         node.softSetArg("-datadir", GUIUtil::qstringToBoostPath(dataDir).string()); // use OS locale for path setting

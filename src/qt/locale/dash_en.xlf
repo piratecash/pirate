@@ -2459,9 +2459,9 @@
       </trans-unit>
       <trans-unit id="_msg455" approved="yes">
         <source xml:space="preserve">Language missing or translation incomplete? Help contributing translations here:
-https://www.transifex.com/projects/p/cosanta/</source>
+https://www.transifex.com/projects/p/piratecash/</source>
         <target xml:space="preserve">Language missing or translation incomplete? Help contributing translations here:
-https://www.transifex.com/projects/p/cosanta/</target>
+https://www.transifex.com/projects/p/piratecash/</target>
         <context-group purpose="location"><context context-type="linenumber">850</context></context-group>
       </trans-unit>
       <trans-unit id="_msg456" approved="yes">
@@ -5491,7 +5491,7 @@ https://www.transifex.com/projects/p/cosanta/</target>
     </group>
   </body></file>
   <file original="../dashstrings.cpp" datatype="cpp" source-language="en" target-language="en"><body>
-    <group restype="x-trolltech-linguist-context" resname="cosantacore">
+    <group restype="x-trolltech-linguist-context" resname="piratecashcore">
       <trans-unit id="_msg998" approved="yes">
         <source xml:space="preserve">Error: Listening for incoming connections failed (listen returned error %s)</source>
         <target xml:space="preserve">Error: Listening for incoming connections failed (listen returned error %s)</target>
@@ -6500,8 +6500,8 @@ https://www.transifex.com/projects/p/cosanta/</target>
         <context-group purpose="location"><context context-type="linenumber">217</context></context-group>
       </trans-unit>
       <trans-unit id="_msg1199" approved="yes">
-        <source xml:space="preserve">%s corrupt. Try using the wallet tool cosanta-wallet to salvage or restoring a backup.</source>
-        <target xml:space="preserve">%s corrupt. Try using the wallet tool cosanta-wallet to salvage or restoring a backup.</target>
+        <source xml:space="preserve">%s corrupt. Try using the wallet tool piratecash-wallet to salvage or restoring a backup.</source>
+        <target xml:space="preserve">%s corrupt. Try using the wallet tool piratecash-wallet to salvage or restoring a backup.</target>
         <context-group purpose="location"><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="_msg1200" approved="yes">

@@ -16,14 +16,14 @@ BEGIN
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
-            VALUE "CompanyName",        "Cosanta Core"
+            VALUE "CompanyName",        "PirateCash Core"
             VALUE "FileDescription",    "cosant-wallet (CLI tool for " PACKAGE_NAME " wallets)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
-            VALUE "InternalName",       "cosanta-wallet"
+            VALUE "InternalName",       "piratecash-wallet"
             VALUE "LegalCopyright",     COPYRIGHT_STR
             VALUE "LegalTrademarks1",   "Distributed under the MIT software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
-            VALUE "OriginalFilename",   "cosanta-wallet.exe"
-            VALUE "ProductName",        "cosanta-wallet"
+            VALUE "OriginalFilename",   "piratecash-wallet.exe"
+            VALUE "ProductName",        "piratecash-wallet"
             VALUE "ProductVersion",     VER_PRODUCTVERSION_STR
         END
     END

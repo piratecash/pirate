@@ -38,7 +38,7 @@ static const int TOOLTIP_WRAP_THRESHOLD = 80;
 #define SPINNER_FRAMES 90
 
 #define QAPP_ORG_NAME "PirateCash"
-#define QAPP_ORG_DOMAIN "cosanta.net"
+#define QAPP_ORG_DOMAIN "p.cash"
 #define QAPP_APP_NAME_DEFAULT "PirateCash-Qt"
 #define QAPP_APP_NAME_TESTNET "PirateCash-Qt-testnet"
 #define QAPP_APP_NAME_DEVNET "PirateCash-Qt-%s"

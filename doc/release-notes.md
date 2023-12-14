@@ -1,9 +1,9 @@
-Cosanta Core version v18.0.0
+PirateCash Core version v18.0.0
 =========================
 
 Release is now available from:
 
-  <https://cosanta.net/en/download/>
+  <https://p.cash/en/download/>
 
 This is a new major version release, bringing new features, various bugfixes
 and other improvements.
@@ -12,7 +12,7 @@ This release is mandatory for all nodes.
 
 Please report bugs using the issue tracker at github:
 
-  <https://github.com/cosanta/cosanta-core/issues>
+  <https://github.com/piratecash/piratecash-core/issues>
 
 
 Upgrading and downgrading
@@ -23,14 +23,14 @@ How to Upgrade
 
 If you are running an older version, shut it down. Wait until it has completely
 shut down (which might take a few minutes for older versions), then run the
-installer (on Windows) or just copy over /Applications/Cosanta-Qt (on Mac) or
-cosantad/cosanta-qt (on Linux). If you upgrade after DIP0003 activation and you were
+installer (on Windows) or just copy over /Applications/PirateCash-Qt (on Mac) or
+piratecashd/piratecash-qt (on Linux). If you upgrade after DIP0003 activation and you were
 using version < 0.13 you will have to reindex (start with -reindex-chainstate
 or -reindex) to make sure your wallet has all the new data synced. Upgrading from
 version 0.13 should not require any additional actions.
 
 When upgrading from a version prior to 0.14.0.3, the
-first startup of Cosanta Core will run a migration process which can take a few minutes
+first startup of PirateCash Core will run a migration process which can take a few minutes
 to finish. After the migration, a downgrade to an older version is only possible with
 a reindex (or reindex-chainstate).
 
@@ -66,7 +66,7 @@ that time will diverge from the rest of the network.
 Deterministic InstantSend
 -------------------------
 Deterministically verifying InstantSend locks at any point in the future has
-been added to support Cosanta Platform. This update introduces versioning to
+been added to support PirateCash Platform. This update introduces versioning to
 InstantSend messages and adds quorum information to them. While the previous
 design was sufficient for core chain payments, the platform chain will benefit
 from this enhanced verification capability. Details about deterministic
@@ -76,7 +76,7 @@ Deterministic InstantSend will be activated with the DIP0024 hard fork.
 
 Governance
 ----------
-Several improvements have been made to Cosanta’s DAO governance system.
+Several improvements have been made to PirateCash’s DAO governance system.
 The governance proposal fee has been reduced from 5 COSA to 1 COSA following
 a vote by masternode owners to do so. For improved security and flexibility,
 proposal payouts to pay-to-script-hash (P2SH) addresses are now supported.
@@ -115,7 +115,7 @@ are:
 - Added support for empty, encrypted-on-creation and watch-only wallets.
 - Wallets can now be created, opened and closed via a GUI menu.
 - No more `salvagewallet` option in cmd-line and Repair tab in GUI. Check the
-`salvage` command in the `cosanta-wallet` tool.
+`salvage` command in the `piratecash-wallet` tool.
 
 Indexes
 -------
@@ -128,7 +128,7 @@ downgrade to a pre-v18.0.0 version.
 Remote Procedure Call (RPC) Changes
 -----------------------------------
 Most changes here were introduced through Bitcoin backports mostly related to
-the deprecation of wallet accounts in CosantaCore v0.17 and introduction of PSBT
+the deprecation of wallet accounts in PirateCashCore v0.17 and introduction of PSBT
 format.
 
 The new RPCs are:
@@ -165,7 +165,7 @@ The removed RPCs are:
 - `signrawtransaction`
 
 Changes in existing RPCs introduced through bitcoin backports:
-- The `testnet` field in `cosanta-cli -getinfo` has been renamed to `chain` and
+- The `testnet` field in `piratecash-cli -getinfo` has been renamed to `chain` and
 now returns the current network name as defined in BIP70 (main, test, regtest).
 - Added `window_final_block_height` in `getchaintxstats`
 - Added `feerate_percentiles` object with feerates at the 10th, 25th, 50th,
@@ -187,7 +187,7 @@ existing `localservices` hex string)
 - Added `solvable`, `desc`, `ischange` and `hdmasterfingerprint` in `getaddressinfo`
 - Added `desc` in `listunspent`
 
-Cosanta-specific changes in existing RPCs:
+PirateCash-specific changes in existing RPCs:
 - Added `quorumIndex` in `quorum getinfo` and `quorum memberof`
 - In rpc `masternodelist` with parameters `full`, `info` and `json` the PoS penalty score of the MN will be returned. For `json` parameter, the field `pospenaltyscore` was added.
 
@@ -243,12 +243,12 @@ Removed cmd-line options:
 
 Changes in existing cmd-line options:
 
-Please check `Help -> Command-line options` in Qt wallet or `cosantad --help` for
+Please check `Help -> Command-line options` in Qt wallet or `piratecashd --help` for
 more information.
 
 Backports from Bitcoin Core
 ---------------------------
-This release introduces over 1000 updates from Bitcoin v0.18/v0.19/v0.20 as well as numerous updates from Bitcoin v0.21 and more recent versions. This includes multi-wallet support in the GUI, support for partially signed transactions (PSBT), Tor version 3 support, and a number of other updates that will benefit Cosanta users. Bitcoin changes that do not align with Cosanta’s product needs, such as SegWit and RBF, are excluded from our backporting. For additional detail on what’s included in Bitcoin, please refer to their release notes – v0.18, v0.19, v0.20.
+This release introduces over 1000 updates from Bitcoin v0.18/v0.19/v0.20 as well as numerous updates from Bitcoin v0.21 and more recent versions. This includes multi-wallet support in the GUI, support for partially signed transactions (PSBT), Tor version 3 support, and a number of other updates that will benefit PirateCash users. Bitcoin changes that do not align with PirateCash’s product needs, such as SegWit and RBF, are excluded from our backporting. For additional detail on what’s included in Bitcoin, please refer to their release notes – v0.18, v0.19, v0.20.
 
 Miscellaneous
 -------------
@@ -297,4 +297,4 @@ As well as everyone that submitted issues, reviewed pull requests, helped debug 
 Older releases
 ==============
 
-Cosanta was forked from Dash Core.
+PirateCash was forked from Dash Core.

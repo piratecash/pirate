@@ -288,7 +288,7 @@ void setupAppearance(QWidget* parent, OptionsModel* model)
         QDialog dlg(parent);
         dlg.setObjectName("AppearanceSetup");
         dlg.setWindowTitle(QObject::tr("Appearance Setup"));
-        dlg.setWindowIcon(QIcon(":icons/cosanta"));
+        dlg.setWindowIcon(QIcon(":icons/piratecash"));
         // And the widgets we add to it
         QLabel lblHeading(QObject::tr("Please choose your preferred settings for the appearance of %1").arg(PACKAGE_NAME), &dlg);
         lblHeading.setObjectName("lblHeading");
@@ -325,7 +325,7 @@ void setupAppearance(QWidget* parent, OptionsModel* model)
 
 bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
 {
-    // return if URI is not valid or is no cosanta: URI
+    // return if URI is not valid or is no pirate: URI
     if(!uri.isValid() || uri.scheme() != QString("piratecash"))
         return false;
 
@@ -400,7 +400,7 @@ bool validateBitcoinURI(const QString& uri)
 
 QString formatBitcoinURI(const SendCoinsRecipient &info)
 {
-    QString ret = QString("cosanta:%1").arg(info.address);
+    QString ret = QString("pirate:%1").arg(info.address);
     int paramCount = 0;
 
     if (info.amount)
@@ -884,8 +884,8 @@ fs::path static GetAutostartFilePath()
 {
     std::string chain = gArgs.GetChainName();
     if (chain == CBaseChainParams::MAIN)
-        return GetAutostartDir() / "cosantacore.desktop";
-    return GetAutostartDir() / strprintf("cosantacore-%s.lnk", chain);
+        return GetAutostartDir() / "piratecore.desktop";
+    return GetAutostartDir() / strprintf("piratecore-%s.lnk", chain);
 }
 
 bool GetStartOnSystemStartup()
@@ -925,7 +925,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         if (!optionFile.good())
             return false;
         std::string chain = gArgs.GetChainName();
-        // Write a cosantacore.desktop file to the autostart directory:
+        // Write a piratecore.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
         if (chain == CBaseChainParams::MAIN)

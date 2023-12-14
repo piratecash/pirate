@@ -179,7 +179,7 @@ static UniValue gobject_prepare(const JSONRPCRequest& request)
 
     // This command is dangerous because it consumes 5 PIRATECASH irreversibly.
     // If params are lost, it's very hard to bruteforce them and yet
-    // users ignore all instructions on cosantacentral etc. and do not save them...
+    // users ignore all instructions on piratecashcentral etc. and do not save them...
     // Let's log them here and hope users do not mess with debug.log
     LogPrintf("gobject_prepare -- params: %s %s %s %s, data: %s, hash: %s\n",
                 request.params[1].getValStr(), request.params[2].getValStr(),
@@ -421,7 +421,7 @@ static UniValue gobject_submit(const JSONRPCRequest& request)
 static void gobject_vote_conf_help(const JSONRPCRequest& request)
 {
     RPCHelpMan{"gobject vote-conf",
-        "Vote on a governance object by masternode configured in cosanta.conf\n",
+        "Vote on a governance object by masternode configured in piratecash.conf\n",
         {
             {"governance-hash", RPCArg::Type::STR_HEX, RPCArg::Optional::NO, "hash of the governance object"},
             {"vote", RPCArg::Type::STR, RPCArg::Optional::NO, "vote, possible values: [funding|valid|delete|endorsed]"},
@@ -1000,7 +1000,7 @@ static UniValue gobject_getcurrentvotes(const JSONRPCRequest& request)
 #ifdef ENABLE_WALLET
         "  vote-alias         - Vote on a governance object by masternode proTxHash\n"
 #endif // ENABLE_WALLET
-        "  vote-conf          - Vote on a governance object by masternode configured in cosanta.conf\n"
+        "  vote-conf          - Vote on a governance object by masternode configured in piratecash.conf\n"
 #ifdef ENABLE_WALLET
         "  vote-many          - Vote on a governance object by all masternodes for which the voting key is in the wallet\n"
 #endif // ENABLE_WALLET
@@ -1219,10 +1219,10 @@ static const CRPCCommand commands[] =
 { //  category              name                      actor (function)         argNames
   //  --------------------- ------------------------  -----------------------  ----------
     /* PirateCash features */
-    { "cosanta",               "getgovernanceinfo",      &getgovernanceinfo,      {} },
-    { "cosanta",               "getsuperblockbudget",    &getsuperblockbudget,    {"index"} },
-    { "cosanta",               "gobject",                &gobject,                {} },
-    { "cosanta",               "voteraw",                &voteraw,                {"tx_hash","tx_index","gov_hash","signal","outcome","time","sig"} },
+    { "pirate",               "getgovernanceinfo",      &getgovernanceinfo,      {} },
+    { "pirate",               "getsuperblockbudget",    &getsuperblockbudget,    {"index"} },
+    { "pirate",               "gobject",                &gobject,                {} },
+    { "pirate",               "voteraw",                &voteraw,                {"tx_hash","tx_index","gov_hash","signal","outcome","time","sig"} },
 
 };
 // clang-format on

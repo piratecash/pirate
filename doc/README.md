@@ -1,7 +1,7 @@
-Cosanta Core
+PirateCash Core
 ==========
 
-This is the official reference wallet for Cosanta digital currency and comprises the backbone of the Cosanta peer-to-peer network. You can [download Cosanta Core](https://www.dash.org/downloads/) or [build it yourself](#building) using the guides below.
+This is the official reference wallet for PirateCash digital currency and comprises the backbone of the PirateCash peer-to-peer network. You can [download PirateCash Core](https://www.dash.org/downloads/) or [build it yourself](#building) using the guides below.
 
 Running
 ---------------------
@@ -11,16 +11,16 @@ The following are some helpful notes on how to run Dash on your native platform.
 
 Unpack the files into a directory and run:
 
-- `bin/cosanta-qt` (GUI) or
-- `bin/cosantad` (headless)
+- `bin/piratecash-qt` (GUI) or
+- `bin/piratecashd` (headless)
 
 ### Windows
 
-Unpack the files into a directory, and then run cosanta-qt.exe.
+Unpack the files into a directory, and then run piratecash-qt.exe.
 
 ### macOS
 
-Drag Cosanta-Qt to your applications folder, and then run Cosanta-Qt.
+Drag PirateCash-Qt to your applications folder, and then run PirateCash-Qt.
 
 ### Need Help?
 
@@ -33,7 +33,7 @@ for technical specifications and implementation details.
 
 Building
 ---------------------
-The following are developer notes on how to build Cosanta Core on your native platform. They are not complete guides, but include notes on the necessary libraries, compile flags, etc.
+The following are developer notes on how to build PirateCash Core on your native platform. They are not complete guides, but include notes on the necessary libraries, compile flags, etc.
 
 - [Dependencies](dependencies.md)
 - [macOS Build Notes](build-osx.md)
@@ -44,7 +44,7 @@ The following are developer notes on how to build Cosanta Core on your native pl
 
 Development
 ---------------------
-The Cosanta Core repo's [root README](/README.md) contains relevant information on the development process and automated testing.
+The PirateCash Core repo's [root README](/README.md) contains relevant information on the development process and automated testing.
 
 - [Developer Notes](developer-notes.md)
 - [Release Notes](release-notes.md)

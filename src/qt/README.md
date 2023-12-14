@@ -1,4 +1,4 @@
-This directory contains the CosantaQT graphical user interface (GUI). It uses the cross-platform framework [Qt](https://www1.qt.io/developers/).
+This directory contains the PirateCashQT graphical user interface (GUI). It uses the cross-platform framework [Qt](https://www1.qt.io/developers/).
 
 The current precise version for Qt 5 is specified in [qt.mk](/depends/packages/qt.mk). Qt 4 is not supported.
 
@@ -32,7 +32,7 @@ Tests.
 
 ### cosantagui.(h/cpp)
 
-Represents the main window of the Cosanta UI.
+Represents the main window of the PirateCash UI.
 
 ### \*model.(h/cpp)
 

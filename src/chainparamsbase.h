@@ -9,7 +9,7 @@
 #include <string>
 
 /**
- * CBaseChainParams defines the base parameters (shared between cosanta-cli and cosantad)
+ * CBaseChainParams defines the base parameters (shared between piratecash-cli and piratecashd)
  * of a given instance of the PirateCash system.
  */
 class CBaseChainParams

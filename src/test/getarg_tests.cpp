@@ -22,7 +22,7 @@ static void ResetArgs(const std::string& strArg)
       boost::split(vecArg, strArg, IsSpace, boost::token_compress_on);
 
     // Insert dummy executable name:
-    vecArg.insert(vecArg.begin(), "testcosanta");
+    vecArg.insert(vecArg.begin(), "testpirate");
 
     // Convert to char*:
     std::vector<const char*> vecChar;
@@ -144,7 +144,7 @@ BOOST_AUTO_TEST_CASE(intarg)
     BOOST_CHECK_EQUAL(gArgs.GetArg("-bar", 11), 0);
 }
 
-BOOST_AUTO_TEST_CASE(doublecosanta)
+BOOST_AUTO_TEST_CASE(doublepirate)
 {
     const auto foo = std::make_pair("-foo", ArgsManager::ALLOW_ANY);
     const auto bar = std::make_pair("-bar", ArgsManager::ALLOW_ANY);

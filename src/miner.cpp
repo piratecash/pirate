@@ -587,7 +587,7 @@ void IncrementExtraNonce(CBlock* pblock, const CBlockIndex* pindexPrev, unsigned
 void PoSMiner(std::shared_ptr<CWallet> pwallet, CThreadInterrupt &interrupt)
 {
     LogPrintf("PoSMiner started\n");
-    util::ThreadRename("cosanta-miner");
+    util::ThreadRename("piratecash-miner");
     SetThreadPriority(THREAD_PRIORITY_NORMAL);
 
     BlockAssembler ba{Params()};

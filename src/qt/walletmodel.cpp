@@ -193,7 +193,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
     {
         if (rcp.fSubtractFeeFromAmount)
             fSubtractFeeFromAmount = true;
-        {   // User-entered cosanta address / amount:
+        {   // User-entered pirate address / amount:
             if(!validateAddress(rcp.address))
             {
                 return InvalidAddress;
