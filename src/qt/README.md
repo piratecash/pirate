@@ -1,4 +1,4 @@
-This directory contains the CosantaQT graphical user interface (GUI). It uses the cross-platform framework [Qt](https://www1.qt.io/developers/).
+This directory contains the PirateCashQT graphical user interface (GUI). It uses the cross-platform framework [Qt](https://www1.qt.io/developers/).
 
 The current precise version for Qt 5 is specified in [qt.mk](/depends/packages/qt.mk). Qt 4 is not supported.
 
@@ -32,7 +32,7 @@ Tests.
 
 ### cosantagui.(h/cpp)
 
-Represents the main window of the Cosanta UI.
+Represents the main window of the PirateCash UI.
 
 ### \*model.(h/cpp)
 
@@ -50,7 +50,7 @@ Various dialogs, e.g. to open a URL. Inherit from [QDialog](http://doc.qt.io/qt-
 
 ### paymentserver.(h/cpp)
 
-Used to process BIP21 and BIP70 (see https://github.com/bitcoin/bitcoin/pull/11622) payment URI / requests. Also handles URI based application switching (e.g. when following a cosanta:... link from a browser).
+Used to process BIP21 payment URI requests. Also handles URI based application switching (e.g. when following a dash:... link from a browser).
 
 ### walletview.(h/cpp)
 

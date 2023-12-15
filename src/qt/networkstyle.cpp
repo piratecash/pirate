@@ -1,6 +1,5 @@
 // Copyright (c) 2014 The Bitcoin Core developers
-// Copyright (c) 2014-2020 The Dash Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
+// Copyright (c) 2014-2021 The Dash Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -70,7 +69,7 @@ NetworkStyle::NetworkStyle(const QString &_appName, const int iconColorHueShift,
     // Allow for separate UI settings for testnets
     QApplication::setApplicationName(appName);
     // load pixmap
-    QPixmap appIconPixmap(":/icons/cosanta");
+    QPixmap appIconPixmap(":/icons/piratecash");
 
     if(iconColorHueShift != 0 && iconColorSaturationReduction != 0)
     {

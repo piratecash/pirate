@@ -1,6 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -22,6 +21,7 @@ enum {
     TRANSACTION_PROVIDER_UPDATE_REVOKE = 4,
     TRANSACTION_COINBASE = 5,
     TRANSACTION_QUORUM_COMMITMENT = 6,
+    TRANSACTION_MNHF_SIGNAL = 7,
 };
 
 /** An outpoint - a combination of a transaction hash and an index n into its vout */
@@ -79,7 +79,7 @@ public:
     /* Below flags apply in the context of BIP 68*/
     /* If this flag set, CTxIn::nSequence is NOT interpreted as a
      * relative lock-time. */
-    static const uint32_t SEQUENCE_LOCKTIME_DISABLE_FLAG = (1 << 31);
+    static const uint32_t SEQUENCE_LOCKTIME_DISABLE_FLAG = (1U << 31);
 
     /* If CTxIn::nSequence encodes a relative lock-time and this flag
      * is set, the relative lock-time has units of 512 seconds,
@@ -158,6 +158,12 @@ public:
         return (nValue == -1);
     }
 
+    void SetEmpty()
+    {
+        nValue = 0;
+        scriptPubKey.clear();
+    }
+
     bool IsEmpty() const
     {
         return (nValue == 0 && scriptPubKey.empty());
@@ -202,8 +208,9 @@ public:
     const std::vector<CTxIn> vin;
     const std::vector<CTxOut> vout;
     const int16_t nVersion;
-    const int16_t nType;
+    const uint16_t nType;
     const uint32_t nLockTime;
+    const uint32_t nTime;
     const std::vector<uint8_t> vExtraPayload; // only available for special transaction types
 
 private:
@@ -224,6 +231,9 @@ public:
     inline void Serialize(Stream& s) const {
         int32_t n32bitVersion = this->nVersion | (this->nType << 16);
         s << n32bitVersion;
+        if (this->nVersion == 1 || this->nVersion == 2){
+            s << nTime;
+        }
         s << vin;
         s << vout;
         s << nLockTime;
@@ -280,8 +290,9 @@ struct CMutableTransaction
     std::vector<CTxIn> vin;
     std::vector<CTxOut> vout;
     int16_t nVersion;
-    int16_t nType;
+    uint16_t nType;
     uint32_t nLockTime;
+    uint32_t nTime;
     std::vector<uint8_t> vExtraPayload; // only available for special transaction types
 
     CMutableTransaction();
@@ -293,7 +304,10 @@ struct CMutableTransaction
         SER_WRITE(obj, n32bitVersion = obj.nVersion | (obj.nType << 16));
         READWRITE(n32bitVersion);
         SER_READ(obj, obj.nVersion = (int16_t) (n32bitVersion & 0xffff));
-        SER_READ(obj, obj.nType = (int16_t) ((n32bitVersion >> 16) & 0xffff));
+        SER_READ(obj, obj.nType = (uint16_t) ((n32bitVersion >> 16) & 0xffff));
+        if (obj.nVersion == 1 || obj.nVersion == 2) {
+            READWRITE(obj.nTime);
+        }
         READWRITE(obj.vin, obj.vout, obj.nLockTime);
         if (obj.nVersion == 3 && obj.nType != TRANSACTION_NORMAL) {
             READWRITE(obj.vExtraPayload);
@@ -311,17 +325,6 @@ struct CMutableTransaction
     uint256 GetHash() const;
 
     std::string ToString() const;
-
-    friend bool operator==(const CMutableTransaction& a, const CMutableTransaction& b)
-    {
-        return a.GetHash() == b.GetHash();
-    }
-
-    friend bool operator!=(const CMutableTransaction& a, const CMutableTransaction& b)
-    {
-        return !(a == b);
-    }
-
 };
 
 typedef std::shared_ptr<const CTransaction> CTransactionRef;

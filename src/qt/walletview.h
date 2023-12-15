@@ -1,5 +1,4 @@
 // Copyright (c) 2011-2015 The Bitcoin Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -129,11 +128,9 @@ public Q_SLOTS:
     void requestedSyncWarningInfo();
 
 
-    /** Update selected COSANTA amount from transactionview */
+    /** Update selected PIRATECASH amount from transactionview */
     void trxAmount(QString amount);
 Q_SIGNALS:
-    /** Signal that we want to show the main window */
-    void showNormalIfMinimized();
     /**  Fired when a message should be reported to the user */
     void message(const QString &title, const QString &message, unsigned int style);
     /** Encryption status of wallet changed */

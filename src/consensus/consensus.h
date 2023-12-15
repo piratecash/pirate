@@ -1,6 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -8,8 +7,8 @@
 #define BITCOIN_CONSENSUS_CONSENSUS_H
 
 /** The maximum allowed size for a serialized block, in bytes (network rule) */
-static const unsigned int MAX_LEGACY_BLOCK_SIZE = 1000000;
-static const unsigned int MAX_DIP0001_BLOCK_SIZE = 2000000;
+static const unsigned int MAX_LEGACY_BLOCK_SIZE = 3000000;
+static const unsigned int MAX_DIP0001_BLOCK_SIZE = 6000000;
 inline unsigned int MaxBlockSize(bool fDIP0001Active = true)
 {
     return fDIP0001Active ? MAX_DIP0001_BLOCK_SIZE : MAX_LEGACY_BLOCK_SIZE;

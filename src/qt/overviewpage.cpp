@@ -1,6 +1,5 @@
 // Copyright (c) 2011-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2020 The Dash Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
+// Copyright (c) 2014-2021 The Dash Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -35,7 +34,7 @@ class TxViewDelegate : public QAbstractItemDelegate
     Q_OBJECT
 public:
     explicit TxViewDelegate(QObject* parent = nullptr) :
-        QAbstractItemDelegate(), unit(BitcoinUnits::COSANTA)
+        QAbstractItemDelegate(), unit(BitcoinUnits::PIRATECASH)
     {
 
     }
@@ -257,7 +256,7 @@ void OverviewPage::setWalletModel(WalletModel *model)
     this->walletModel = model;
     if(model && model->getOptionsModel())
     {
-        // update the display unit, to not use the default ("COSANTA")
+        // update the display unit, to not use the default ("PIRATECASH")
         updateDisplayUnit();
         // Keep up to date with wallet
         interfaces::Wallet& wallet = model->wallet();
@@ -427,7 +426,7 @@ void OverviewPage::updateCoinJoinProgress()
 
 void OverviewPage::updateAdvancedCJUI(bool fShowAdvancedCJUI)
 {
-    if (!walletModel || !clientModel || !clientModel->coinJoinOptions().isEnabled()) return;
+    if (!walletModel || !clientModel) return;
 
     this->fShowAdvancedCJUI = fShowAdvancedCJUI;
     coinJoinStatus(true);

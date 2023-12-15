@@ -1,6 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2016 The Bitcoin Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -12,11 +11,11 @@
 
 #include <vector>
 #include <stdint.h>
-#include <string>
 
 class CPubKey;
 class CScript;
 class CTransaction;
+class CTxOut;
 class uint256;
 
 /** Signature hash types/flags */
@@ -110,6 +109,13 @@ bool CheckSignatureEncoding(const std::vector<unsigned char> &vchSig, unsigned i
 struct PrecomputedTransactionData
 {
     uint256 hashPrevouts, hashSequence, hashOutputs;
+    bool m_ready = false;
+    std::vector<CTxOut> m_spent_outputs;
+
+    PrecomputedTransactionData() = default;
+
+    template <class T>
+    void Init(const T& tx, std::vector<CTxOut>&& spent_outputs);
 
     template <class T>
     explicit PrecomputedTransactionData(const T& tx);

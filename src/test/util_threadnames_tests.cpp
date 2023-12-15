@@ -3,7 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <util/threadnames.h>
-#include <test/test_cosanta.h>
+#include <test/util/setup_common.h>
 
 #include <thread>
 #include <vector>
@@ -11,7 +11,7 @@
 #include <mutex>
 
 #if defined(HAVE_CONFIG_H)
-#include <config/cosanta-config.h>
+#include <config/piratecash-config.h>
 #endif
 
 #include <boost/test/unit_test.hpp>

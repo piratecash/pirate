@@ -1,14 +1,14 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin Core developers
 // Copyright (c) 2014-2021 The Dash Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <chainparams.h>
 #include <consensus/merkle.h>
-
+#include <llmq/params.h>
 #include <tinyformat.h>
+#include <util/ranges.h>
 #include <util/system.h>
 #include <util/strencodings.h>
 #include <versionbitsinfo.h>
@@ -23,8 +23,8 @@
 
 #include "versionbits.h"
 
-//#define COSANTA_MINE_NEW_GENESIS_BLOCK
-#ifdef COSANTA_MINE_NEW_GENESIS_BLOCK
+//#define PIRATECASH_MINE_NEW_GENESIS_BLOCK
+#ifdef PIRATECASH_MINE_NEW_GENESIS_BLOCK
 
 #include <validation.h>
 
@@ -71,7 +71,7 @@ struct GenesisMiner
     }
 
 };
-#endif // COSANTA_MINE_NEW_GENESIS_BLOCK
+#endif // PIRATECASH_MINE_NEW_GENESIS_BLOCK
 
 
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
@@ -80,9 +80,11 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
     txNew.nVersion = 1;
     txNew.vin.resize(1);
     txNew.vout.resize(1);
-    txNew.vin[0].scriptSig = CScript() << 486604799 << CScriptNum(4) << std::vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
+    txNew.vin[0].scriptSig = CScript() << 0 << CScriptNum(42) << std::vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
     txNew.vout[0].nValue = genesisReward;
-    txNew.vout[0].scriptPubKey = genesisOutputScript;
+    txNew.vout[0].SetEmpty();
+    txNew.nTime = nTime;
+    txNew.nLockTime = 0;
 
     CBlock genesis;
     genesis.nTime    = nTime;
@@ -132,8 +134,8 @@ static CBlock CreateDevNetGenesisBlock(const uint256 &prevBlockHash, const std::
  */
 static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
-    const char* pszTimestamp = "Sic parvis magna";
-    const CScript genesisOutputScript = CScript() << ParseHex("045b03cb0f02869cfe578880740c00363cc3c58958f737360d1ec5df054a1ad27c801e3a7353333738cf17bd314dd71f8fb8118d7c424d6f69e71017e0d2c3e9e9") << OP_CHECKSIG;
+    const char* pszTimestamp = "2018/11/03 The Pirate Code of Conduct consisted of a number of agreements between the Captain and pirate crew which were called Articles. The Pirate Code of Conduct was necessary as pirates were not governed by any other rules such as Naval regulations. Pirate captains were elected and could lose their position for abuse of their authority.";
+    const CScript genesisOutputScript = CScript() << ParseHex("04c10e83b2703ccf322f7dbd62dd5855ac7c10bd055814ce121ba32607d573b8810c02c0582aed05b4deb9c4b77b26d92428c61256cd42774babea0a073b2ed0c9") << OP_CHECKSIG;
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
 }
 
@@ -161,144 +163,39 @@ static CBlock FindDevNetGenesisBlock(const CBlock &prevBlock, const CAmount& rew
     assert(false);
 }
 
-// this one is for testing only
-static Consensus::LLMQParams llmq_test = {
-        .type = Consensus::LLMQ_TEST,
-        .name = "llmq_test",
-        .size = 3,
-        .minSize = 2,
-        .threshold = 2,
+void CChainParams::AddLLMQ(Consensus::LLMQType llmqType)
+{
+    assert(!HasLLMQ(llmqType));
+    for (const auto& llmq_param : Consensus::available_llmqs) {
+        if (llmq_param.type == llmqType) {
+            consensus.llmqs.push_back(llmq_param);
+            return;
+        }
+    }
+    error("CChainParams::%s: unknown LLMQ type %d", __func__, static_cast<uint8_t>(llmqType));
+    assert(false);
+}
 
-        .dkgInterval = 24, // one DKG per hour
-        .dkgPhaseBlocks = 2,
-        .dkgMiningWindowStart = 10, // dkgPhaseBlocks * 5 = after finalization
-        .dkgMiningWindowEnd = 18,
-        .dkgBadVotesThreshold = 2,
+const Consensus::LLMQParams& CChainParams::GetLLMQ(Consensus::LLMQType llmqType) const
+{
+    for (const auto& llmq_param : consensus.llmqs) {
+        if (llmq_param.type == llmqType) {
+            return llmq_param;
+        }
+    }
+    error("CChainParams::%s: unknown LLMQ type %d", __func__, static_cast<uint8_t>(llmqType));
+    assert(false);
+}
 
-        .signingActiveQuorumCount = 2, // just a few ones to allow easier testing
-
-        .keepOldConnections = 3,
-        .recoveryMembers = 3,
-};
-
-// this one is for testing only
-static Consensus::LLMQParams llmq_test_v17 = {
-        .type = Consensus::LLMQ_TEST_V17,
-        .name = "llmq_test_v17",
-        .size = 3,
-        .minSize = 2,
-        .threshold = 2,
-
-        .dkgInterval = 24, // one DKG per hour
-        .dkgPhaseBlocks = 2,
-        .dkgMiningWindowStart = 10, // dkgPhaseBlocks * 5 = after finalization
-        .dkgMiningWindowEnd = 18,
-        .dkgBadVotesThreshold = 2,
-
-        .signingActiveQuorumCount = 2, // just a few ones to allow easier testing
-
-        .keepOldConnections = 3,
-        .recoveryMembers = 3,
-};
-
-// this one is for devnets only
-static Consensus::LLMQParams llmq_devnet = {
-        .type = Consensus::LLMQ_DEVNET,
-        .name = "llmq_devnet",
-        .size = 10,
-        .minSize = 7,
-        .threshold = 6,
-
-        .dkgInterval = 24, // one DKG per hour
-        .dkgPhaseBlocks = 2,
-        .dkgMiningWindowStart = 10, // dkgPhaseBlocks * 5 = after finalization
-        .dkgMiningWindowEnd = 18,
-        .dkgBadVotesThreshold = 7,
-
-        .signingActiveQuorumCount = 3, // just a few ones to allow easier testing
-
-        .keepOldConnections = 4,
-        .recoveryMembers = 6,
-};
-
-static Consensus::LLMQParams llmq50_60 = {
-        .type = Consensus::LLMQ_50_60,
-        .name = "llmq_50_60",
-        .size = 50,
-        .minSize = 40,
-        .threshold = 30,
-
-        .dkgInterval = 24, // one DKG per hour
-        .dkgPhaseBlocks = 2,
-        .dkgMiningWindowStart = 10, // dkgPhaseBlocks * 5 = after finalization
-        .dkgMiningWindowEnd = 18,
-        .dkgBadVotesThreshold = 40,
-
-        .signingActiveQuorumCount = 24, // a full day worth of LLMQs
-
-        .keepOldConnections = 25,
-        .recoveryMembers = 25,
-};
-
-static Consensus::LLMQParams llmq400_60 = {
-        .type = Consensus::LLMQ_400_60,
-        .name = "llmq_400_60",
-        .size = 400,
-        .minSize = 300,
-        .threshold = 240,
-
-        .dkgInterval = 24 * 12, // one DKG every 12 hours
-        .dkgPhaseBlocks = 4,
-        .dkgMiningWindowStart = 20, // dkgPhaseBlocks * 5 = after finalization
-        .dkgMiningWindowEnd = 28,
-        .dkgBadVotesThreshold = 300,
-
-        .signingActiveQuorumCount = 4, // two days worth of LLMQs
-
-        .keepOldConnections = 5,
-        .recoveryMembers = 100,
-};
-
-// Used for deployment and min-proto-version signalling, so it needs a higher threshold
-static Consensus::LLMQParams llmq400_85 = {
-        .type = Consensus::LLMQ_400_85,
-        .name = "llmq_400_85",
-        .size = 400,
-        .minSize = 350,
-        .threshold = 340,
-
-        .dkgInterval = 24 * 24, // one DKG every 24 hours
-        .dkgPhaseBlocks = 4,
-        .dkgMiningWindowStart = 20, // dkgPhaseBlocks * 5 = after finalization
-        .dkgMiningWindowEnd = 48, // give it a larger mining window to make sure it is mined
-        .dkgBadVotesThreshold = 300,
-
-        .signingActiveQuorumCount = 4, // four days worth of LLMQs
-
-        .keepOldConnections = 5,
-        .recoveryMembers = 100,
-};
-
-// Used for Platform
-static Consensus::LLMQParams llmq100_67 = {
-        .type = Consensus::LLMQ_100_67,
-        .name = "llmq_100_67",
-        .size = 100,
-        .minSize = 80,
-        .threshold = 67,
-
-        .dkgInterval = 24, // one DKG per hour
-        .dkgPhaseBlocks = 2,
-        .dkgMiningWindowStart = 10, // dkgPhaseBlocks * 5 = after finalization
-        .dkgMiningWindowEnd = 18,
-        .dkgBadVotesThreshold = 80,
-
-        .signingActiveQuorumCount = 24, // a full day worth of LLMQs
-
-        .keepOldConnections = 25,
-        .recoveryMembers = 50,
-};
-
+bool CChainParams::HasLLMQ(Consensus::LLMQType llmqType) const
+{
+    for (const auto& llmq_param : consensus.llmqs) {
+        if (llmq_param.type == llmqType) {
+            return true;
+        }
+    }
+    return false;
+}
 
 /**
  * Main network
@@ -316,79 +213,89 @@ class CMainParams : public CChainParams {
 public:
     CMainParams() {
         strNetworkID = "main";
-        consensus.nSubsidyHalvingInterval = 210240; // Note: actual number of blocks per calendar year with DGW v3 is ~200700 (for example 449750 - 249050)
-        consensus.nMasternodePaymentsStartBlock = 700000; // not true, but it's ok as long as it's less then nMasternodePaymentsIncreaseBlock
+        consensus.nSubsidyHalvingInterval = 2102400; // Note: actual number of blocks per calendar year with DGW v3 is ~200700 (for example 449750 - 249050)
+        consensus.nMasternodePaymentsStartBlock = 7000000; // not true, but it's ok as long as it's less then nMasternodePaymentsIncreaseBlock
         consensus.nInstantSendConfirmationsRequired = 6;
         consensus.nInstantSendKeepLock = 24;
-        consensus.nBudgetPaymentsStartBlock = 700000; // actual historical value
+        consensus.nBudgetPaymentsStartBlock = 7000000; // actual historical value
         consensus.nBudgetPaymentsCycleBlocks = 16616; // ~(60*24*30)/2.6, actual number of blocks per month is 200700 / 12 = 16725
         consensus.nBudgetPaymentsWindowBlocks = 100;
-        consensus.nSuperblockStartBlock = 710000; // The block at which 12.1 goes live (end of final 12.0 budget cycle)
+        consensus.nSuperblockStartBlock = 7100000; // The block at which 12.1 goes live (end of final 12.0 budget cycle)
         consensus.nSuperblockStartHash = uint256(); // do not check this //uint256S("0000000000020cb27c7ef164d21003d5d20cdca2f54dd9a9ca6d45f4d47f8aa3");
         consensus.nSuperblockCycle = 16616; // ~(60*24*30)/2.6, actual number of blocks per month is 200700 / 12 = 16725
         consensus.nGovernanceMinQuorum = 10;
         consensus.nGovernanceFilterElements = 20000;
         consensus.nMasternodeMinimumConfirmations = 15;
-        consensus.BIP34Height = 76;
+        consensus.BIP34Height = 7600000;
         consensus.BIP34Hash = uint256(); //uint256S("0x000001f35e70f7c5705f64c6c5cc3dea9449e74d5b5c7cf74dad1bcca14a8012");
-        consensus.BIP65Height = 2431; // 00000000000076d8fcea02ec0963de4abfd01e771fec0863f960c2c64fe6f357
-        consensus.BIP66Height = 2075; // 00000000000b1fa2dfa312863570e13fae9ca7b5566cb27e55422620b469aefa
-        consensus.DIP0001Height = 5500;
-        consensus.DIP0003Height = 7000;
-        consensus.DIP0003EnforcementHeight = 7300;
+        consensus.BIP65Height = 2431000; // 00000000000076d8fcea02ec0963de4abfd01e771fec0863f960c2c64fe6f357
+        consensus.BIP66Height = 2075000; // 00000000000b1fa2dfa312863570e13fae9ca7b5566cb27e55422620b469aefa
+        consensus.DIP0001Height = 5500000;
+        consensus.DIP0003Height = 7000000;
+        consensus.DIP0003EnforcementHeight = 7300000;
         consensus.DIP0003EnforcementHash = uint256(); //uint256S("000000000000002d1734087b4c5afc3133e4e1c3e1a89218f62bcd9bb3d17f81");
-        consensus.DIP0008Height = 300; // 00000000000000112e41e4b3afda8b233b8cc07c532d2eac5de097b68358c43e
-        consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
-        consensus.posLimit = uint256S("000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 24
-        consensus.nPowTargetTimespan = 24 * 60 * 60; // Cosanta: 1 day
-        consensus.nPowTargetSpacing = 2.5 * 60; // Cosanta: 2.5 minutes
+        consensus.DIP0008Height = 3000000; // 00000000000000112e41e4b3afda8b233b8cc07c532d2eac5de097b68358c43e
+        consensus.powLimit = uint256S("0x0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"); // ~uint256(0) >> 16
+        consensus.posLimit = uint256S("0x00000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"); // ~uint256(0) >> 20
+        consensus.BRRHeight = 700100; // 000000000000000c5a124f3eccfbe6e17876dca79cec9e63dfa70d269113c926
+        consensus.MinBIP9WarningHeight = consensus.DIP0008Height + consensus.nMinerConfirmationWindow;
+        consensus.nPowTargetTimespan = 24 * 60 * 60; // PirateCash: 1 day
+        consensus.nPowTargetSpacing = 2 * 60; // PirateCash: 120 sec
+        consensus.nPosTargetSpacingV1 = 90;
+        consensus.nPosTargetSpacingV2 = 120;
+        consensus.nSpecTargetFix = 310000;
+        consensus.nRewForkDecreaseV18 = 4070908800;
+        consensus.nForkHeight = 4070908800;  // Block Height when we'll use new codebase
+        consensus.nRestoreRewardV18 = 4070908800;
+        consensus.nSkipTimeUntil = 1705276800; //2024-01-01
+        consensus.nLastPowBlock = 100000;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
-        consensus.nPowKGWHeight = 30;
-        consensus.nPowDGWHeight = 40;
+        consensus.nPowKGWHeight = 3000000;
+        consensus.nPowDGWHeight = 4000000;
         consensus.nRuleChangeActivationThreshold = 1916; // 95% of 2016
         consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = VERSIONBITS_NUM_BITS - 1;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1735689600; // 2025-01-01
 
         // Deployment of BIP68, BIP112, and BIP113.
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].bit = 0;
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1735689600; // 2025-01-01
 
         // Deployment of DIP0001
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].bit = 1;
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nThresholdStart = 50; // 50% of 100
 
         // Deployment of BIP147
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].bit = 2;
-        consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nThresholdStart = 50; // 50% of 100
 
         // Deployment of DIP0003
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].bit = 3;
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nWindowSize = 4032;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nThresholdStart = 3226; // 80% of 4032
 
         // Deployment of DIP0008
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].bit = 4;
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nThresholdStart = 50; // 50% of 100
 
         // Deployment of Block Reward Reallocation
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].bit = 5;
-        consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nStartTime = 1664582400; // Oct 1st, 2022
-        consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nTimeout = 1696118400; // Oct 1st, 2023
+        consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nWindowSize = 4032;
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nThresholdStart = 3226; // 80% of 4032
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nThresholdMin = 2420; // 60% of 4032
@@ -396,15 +303,24 @@ public:
 
         // Deployment of DIP0020, DIP0021 and LLMQ_100_67 quorums
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].bit = 6;
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nStartTime = 1625097600; // July 1st, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nTimeout = 1656633600; // July 1st, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nWindowSize = 4032;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nThresholdStart = 3226; // 80% of 4032
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nThresholdMin = 2420; // 60% of 4032
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nFalloffCoeff = 5; // this corresponds to 10 periods
 
+        // Deployment of Quorum Rotation DIP and decreased proposal fee (Values to be determined)
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].bit = 7;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nStartTime = 1705276800; // January 15, 2024 12:00:00 AM
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nTimeout = 1736899200;   // January 15, 2025 12:00:00 AM
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nWindowSize = 4032;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nThresholdStart = 3226; // 80% of 4032
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nThresholdMin = 2420;   // 60% of 4032
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nFalloffCoeff = 5;      // this corresponds to 10 periods
+
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x00000000000000000000000000000000000000000000000000006120b78e779e");
+        consensus.nMinimumChainWork = uint256S("0x000000000000000000000000000000000000000000000000000000000000000");
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x000000000000000000000000000000000000000000000000000000000000000");
@@ -414,27 +330,27 @@ public:
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 32-bit integer with any alignment.
          */
-        pchMessageStart[0] = 0x43;
-        pchMessageStart[1] = 0x6f;
-        pchMessageStart[2] = 0x73;
-        pchMessageStart[3] = 0x61;
-        nDefaultPort = 60606;
+        pchMessageStart[0] = 0x70;
+        pchMessageStart[1] = 0x75;
+        pchMessageStart[2] = 0x6d;
+        pchMessageStart[3] = 0x70;
+        nDefaultPort = 56565;
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 1;
         m_assumed_chain_state_size = 1;
 
-        genesis = CreateGenesisBlock(1626442320, 9542573, 0x1e0ffff0, 1, 0 * COIN); //  2021-07-16 13:32:00
+        genesis = CreateGenesisBlock(1541202300, 666, 0x1f00ffff, 1, 0 * COIN); //  2018-11-02 23:45:00
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        uint256 expectedGenesisHash = uint256S("0x00000216af2a362c1833a0a608408bcdc69d23b276e47d7510a776e3b0bb1fce");
-        uint256 expectedGenesisMerkleRoot = uint256S("0xe16337d6f2cd561e3b9b2c470ec2adc11cf94ba2cda40bddfd2f23deff2499fb");
+        uint256 expectedGenesisHash = uint256S("0x33422d3f8e94bae7cd2544e737d64ff8ec3ee140cc3fdc4db3d14656f9a60912");
+        uint256 expectedGenesisMerkleRoot = uint256S("0x212a796316c63f41e26b31b9a947f48b56d5e0df7767774b152e29b08da8b0b7");
 
-        #ifdef COSANTA_MINE_NEW_GENESIS_BLOCK
+        #ifdef PIRATECASH_MINE_NEW_GENESIS_BLOCK
         if (consensus.hashGenesisBlock != expectedGenesisHash)
         {
             GenesisMiner mine(genesis, strNetworkID);
         }
-        #endif // COSANTA_MINE_NEW_GENESIS_BLOCK
+        #endif // PIRATECASH_MINE_NEW_GENESIS_BLOCK
 
         assert(consensus.hashGenesisBlock == expectedGenesisHash);
         assert(genesis.hashMerkleRoot == expectedGenesisMerkleRoot);
@@ -443,38 +359,41 @@ public:
         // This is fine at runtime as we'll fall back to using them as a oneshot if they don't support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
-        vSeeds.emplace_back("m1.cosanta.net");
-        vSeeds.emplace_back("m2.cosanta.net");
+        vSeeds.emplace_back("dns1.piratecash.net");
+        vSeeds.emplace_back("dns2.piratecash.net");
 
-        // Cosanta addresses start with 'C'
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,28);
-        // Cosanta script addresses start with '7'
+        // PirateCash addresses start with 'P'
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,55);
+        // PirateCash script addresses start with '7'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,13);
-        // Cosanta private keys start with '7' or 'X'
-        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,204);
-        // Cosanta BIP32 pubkeys start with 'xpub' (Bitcoin defaults)
+        // PirateCash private keys start with '7' or 'X'
+        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,203);
+        // PirateCash BIP32 pubkeys start with 'xpub' (Bitcoin defaults)
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x88, 0xB2, 0x1E};
-        // Cosanta BIP32 prvkeys start with 'xprv' (Bitcoin defaults)
+        // PirateCash BIP32 prvkeys start with 'xprv' (Bitcoin defaults)
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
 
         // Type BIP44 coin type is '5'
-        nExtCoinType = 770;
+        nExtCoinType = 660;
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_main, pnSeed6_main + ARRAYLEN(pnSeed6_main));
 
         // long living quorum params
-        consensus.llmqs[Consensus::LLMQ_50_60] = llmq50_60;
-        consensus.llmqs[Consensus::LLMQ_400_60] = llmq400_60;
-        consensus.llmqs[Consensus::LLMQ_400_85] = llmq400_85;
-        consensus.llmqs[Consensus::LLMQ_100_67] = llmq100_67;
-        consensus.llmqTypeChainLocks = Consensus::LLMQ_400_60;
-        consensus.llmqTypeInstantSend = Consensus::LLMQ_50_60;
-        consensus.llmqTypePlatform = Consensus::LLMQ_100_67;
+        AddLLMQ(Consensus::LLMQType::LLMQ_50_60);
+        AddLLMQ(Consensus::LLMQType::LLMQ_60_75);
+        AddLLMQ(Consensus::LLMQType::LLMQ_400_60);
+        AddLLMQ(Consensus::LLMQType::LLMQ_400_85);
+        AddLLMQ(Consensus::LLMQType::LLMQ_100_67);
+        consensus.llmqTypeChainLocks = Consensus::LLMQType::LLMQ_400_60;
+        consensus.llmqTypeInstantSend = Consensus::LLMQType::LLMQ_50_60;
+        consensus.llmqTypeDIP0024InstantSend = Consensus::LLMQType::LLMQ_60_75;
+        consensus.llmqTypePlatform = Consensus::LLMQType::LLMQ_100_67;
+        consensus.llmqTypeMnhf = Consensus::LLMQType::LLMQ_400_85;
 
         fDefaultConsistencyChecks = false;
         fRequireStandard = true;
         fRequireRoutableExternalIP = true;
-        fMineBlocksOnDemand = false;
+        m_is_test_chain = false;
         fAllowMultipleAddressesFromGroup = false;
         fAllowMultiplePorts = false;
         nLLMQConnectionRetryTimeout = 60;
@@ -483,32 +402,23 @@ public:
         nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 60*60; // fulfilled requests expire in 1 hour
 
-        vSporkAddresses = {"CPU5ip4oDKkmcSfbZkmeXnMq5aTQUSRtwz"};
+        vSporkAddresses = {"PPenwMMT56eW136UUyC96opfJDPsAnENaa"};
         nMinSporkKeys = 1;
         fBIP9CheckMasternodesUpgraded = true;
 
-        nStakeMinAge = 24 * 60 * 60; // 24 hours
-        nFirstPoSv2Block = 100000ULL;
+        nStakeMinAge = 8 * 60 * 60; // 8 hours
+        nFirstPoSv2Block = 1ULL;
 
         checkpointData = {
             {
-                {0, uint256S("0x00000216af2a362c1833a0a608408bcdc69d23b276e47d7510a776e3b0bb1fce")},
-                {666, uint256S("0x00000018ea7460307260c065ac63435466b8eb9f433a4ce26b6e1ca56f6c556d")},
-                {73400, uint256S("0x00000000826cf1c50b9316838a1449156a008820d48197f2ef0f95fc48906534")},
-                {97079, uint256S("0x000000006a99d070477085796509db527a7572a94f06d40e128021acd9e3c4e1")},
-                {103066, uint256S("0x000000003a15c5c066a8a1168fa314bcbf8a21295f8a0012052f62687a65f13c")},
-                {114444, uint256S("0x0000000006fae477498ba63e8467859fef34ace0593706b1a67de639e83766f2")},
-                {136336, uint256S("0x0000000044e0cd6b405929c0f581cccb7d8437c3d6b775e4b730728d5487d984")},
-                {161053, uint256S("0x00000000066aba6811bdc9aeec4d56986e617dfa54a4fc0bee49235e1ecaea48")},
-                {201010, uint256S("0x0000000003b9bd34fa0047a2b238e9be27bdadd603fe0d0dcf93c8c373c16159")},
-                {227510, uint256S("0x0000a1c4fa380e46b9f52ef1793ed8992e4c735a1b0a6fdf8180284ef94676ba")},
+                {0, uint256S("0x33422d3f8e94bae7cd2544e737d64ff8ec3ee140cc3fdc4db3d14656f9a60912")},
             }
         };
 
         chainTxData = ChainTxData{
             1626636432, // * UNIX timestamp of last known number of transactions (Block 689)
             704,   // * total number of transactions between genesis and that timestamp
-                        //   (the tx=... number in the SetBestChain debug.log lines)
+                        //   (the tx=... number in the ChainStateFlushed debug.log lines)
             0.2         // * estimated number of transactions per second after that timestamp
         };
     }
@@ -521,79 +431,89 @@ class CTestNetParams : public CChainParams {
 public:
     CTestNetParams() {
         strNetworkID = "test";
-        consensus.nSubsidyHalvingInterval = 210240;
-        consensus.nMasternodePaymentsStartBlock = 333333; // not true, but it's ok as long as it's less then nMasternodePaymentsIncreaseBlock
+        consensus.nSubsidyHalvingInterval = 290000;
+        consensus.nMasternodePaymentsStartBlock = 290000; // not true, but it's ok as long as it's less then nMasternodePaymentsIncreaseBlock
         consensus.nInstantSendConfirmationsRequired = 2;
         consensus.nInstantSendKeepLock = 6;
-        consensus.nBudgetPaymentsStartBlock = 4100;
+        consensus.nBudgetPaymentsStartBlock = 290000;
         consensus.nBudgetPaymentsCycleBlocks = 50;
         consensus.nBudgetPaymentsWindowBlocks = 10;
-        consensus.nSuperblockStartBlock = 4200; // NOTE: Should satisfy nSuperblockStartBlock > nBudgetPeymentsStartBlock
+        consensus.nSuperblockStartBlock = 290000; // NOTE: Should satisfy nSuperblockStartBlock > nBudgetPeymentsStartBlock
         consensus.nSuperblockStartHash = uint256(); // do not check this on testnet
         consensus.nSuperblockCycle = 24; // Superblocks can be issued hourly on testnet
         consensus.nGovernanceMinQuorum = 1;
         consensus.nGovernanceFilterElements = 500;
         consensus.nMasternodeMinimumConfirmations = 1;
-        consensus.BIP34Height = 76;
+        consensus.BIP34Height = 290076;
         consensus.BIP34Hash = uint256();
-        consensus.BIP65Height = 2431; // 00000073c09c20fe2ad2b2d17fb71a87b9f97d8dfee9bc75a51c8cf7c3b04127
-        consensus.BIP66Height = 2075; // 00000071708936a4853ff8d2da260c9b3dc23ed99f72324ddf4a20c320bb4b68
-        consensus.DIP0001Height = 5500;
-        consensus.DIP0003Height = 7000;
-        consensus.DIP0003EnforcementHeight = 7300;
+        consensus.BIP65Height = 292431; // 00000073c09c20fe2ad2b2d17fb71a87b9f97d8dfee9bc75a51c8cf7c3b04127
+        consensus.BIP66Height = 292075; // 00000071708936a4853ff8d2da260c9b3dc23ed99f72324ddf4a20c320bb4b68
+        consensus.DIP0001Height = 295500;
+        consensus.DIP0003Height = 297000;
+        consensus.DIP0003EnforcementHeight = 297300;
         consensus.DIP0003EnforcementHash = uint256();
-        consensus.DIP0008Height = 300; // 000000000e9329d964d80e7dab2e704b43b6bd2b91fea1e9315d38932e55fb55
-        consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
-        consensus.posLimit = uint256S("0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 4
-        consensus.nPowTargetTimespan = 24 * 60 * 60; // Cosanta: 1 day
-        consensus.nPowTargetSpacing = 2.5 * 60; // Cosanta: 2.5 minutes
+        consensus.DIP0008Height = 290300; // 000000000e9329d964d80e7dab2e704b43b6bd2b91fea1e9315d38932e55fb55
+        consensus.powLimit = uint256S("0x0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"); // ~uint256(0) >> 16
+        consensus.posLimit = uint256S("0x00000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"); // ~uint256(0) >> 20
+        consensus.BRRHeight = 300000; // 0000001537dbfd09dea69f61c1f8b2afa27c8dc91c934e144797761c9f10367b
+        consensus.MinBIP9WarningHeight = consensus.DIP0008Height + consensus.nMinerConfirmationWindow;
+        consensus.nPowTargetTimespan = 8 * 60 * 60; // PirateCash: 8 hours
+        consensus.nPowTargetSpacing = 2 * 60; // PirateCash: 120 sec
+        consensus.nPosTargetSpacingV1 = 90;
+        consensus.nPosTargetSpacingV2 = 120;
+        consensus.nSpecTargetFix = 104000;
+        consensus.nRewForkDecreaseV18 = 288882;
+        consensus.nForkHeight = 289000;  // Block Height when we'll use new codebase
+        consensus.nRestoreRewardV18 = 290000;
+        consensus.nSkipTimeUntil = 1705276800; //2024-01-01
+        consensus.nLastPowBlock = 3000;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = false;
-        consensus.nPowKGWHeight = 30; // nPowKGWHeight >= nPowDGWHeight means "no KGW"
-        consensus.nPowDGWHeight = 40; // TODO: make sure to drop all spork6 related code on next testnet reset
+        consensus.nPowKGWHeight = 290030; // nPowKGWHeight >= nPowDGWHeight means "no KGW"
+        consensus.nPowDGWHeight = 290040; // TODO: make sure to drop all spork6 related code on next testnet reset
         consensus.nRuleChangeActivationThreshold = 1512; // 75% for testchains
         consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = VERSIONBITS_NUM_BITS - 1;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1703462400; // 2023-12-25
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1735689600; // 2025-01-01
 
         // Deployment of BIP68, BIP112, and BIP113.
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].bit = 0;
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1618221600; // April 12, 2021 10am
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1703462400; // 2023-12-25
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1735689600; // 2025-01-01
 
         // Deployment of DIP0001
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].bit = 1;
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nStartTime = 1544655600; // Dec 13th, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nTimeout = 1635903900; // Nov 3rd, 2021
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nStartTime = 1703462400; // 2023-12-25
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nThresholdStart = 50; // 50% of 100
 
         // Deployment of BIP147
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].bit = 2;
-        consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nStartTime = 1703462400; // 2023-12-25
+        consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nThresholdStart = 50; // 50% of 100
 
         // Deployment of DIP0003
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].bit = 3;
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nStartTime = 1703462400; // 2023-12-25
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nThresholdStart = 50; // 50% of 100
 
         // Deployment of DIP0008
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].bit = 4;
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nStartTime = 1703462400; // 2023-12-25
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nThresholdStart = 50; // 50% of 100
 
         // Deployment of Block Reward Reallocation
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].bit = 5;
-        consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nStartTime = 1664582400; // Oct 1st, 2022
-        consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nTimeout = 1696118400; // Oct 1st, 2023
+        consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nStartTime = 1703462400; // 2023-12-25
+        consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nThresholdStart = 80; // 80% of 100
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nThresholdMin = 60; // 60% of 100
@@ -601,40 +521,49 @@ public:
 
         // Deployment of DIP0020, DIP0021 and LLMQ_100_67 quorums
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].bit = 6;
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nStartTime = 1625097600; // July 1st, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nTimeout = 1733011200; // December 1st, 2024
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nStartTime = 1703462400; // 2023-12-25
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nThresholdStart = 80; // 80% of 100
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nThresholdMin = 60; // 60% of 100
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nFalloffCoeff = 5; // this corresponds to 10 periods
 
+        // Deployment of Quorum Rotation DIP and decreased proposal fee
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].bit = 7;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nStartTime = 1703462400; // 2023-12-25
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nTimeout = 999999999999ULL;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nWindowSize = 100;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nThresholdStart = 80; // 80% of 100
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nThresholdMin = 60;   // 60% of 100
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nFalloffCoeff = 5;      // this corresponds to 10 periods
+
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x00000000000000000000000000000000000000000000000000000013f294c61a");
+        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x000000000000000000000000000000000000000000000000000000000000000");
 
-        pchMessageStart[0] = 0x43;
-        pchMessageStart[1] = 0x6f;
-        pchMessageStart[2] = 0x73;
-        pchMessageStart[3] = 0x54;
-        nDefaultPort = 60696;
+        pchMessageStart[0] = 0x70;
+        pchMessageStart[1] = 0x69;
+        pchMessageStart[2] = 0x72;
+        pchMessageStart[3] = 0x61;
+        nDefaultPort = 50666;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 1;
         m_assumed_chain_state_size = 1;
 
-        genesis = CreateGenesisBlock(1618221600, 3068881, 0x1e0ffff0, 1, 0 * COIN);
+        genesis = CreateGenesisBlock(1541202300, 120253, 0x1f04ade3, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        uint256 expectedGenesisHash = uint256S("0x000004ba6ec1309022987a66c17fe66b550396bd9710463335ad59de8bfe2c02");
-        uint256 expectedGenesisMerkleRoot = uint256S("e16337d6f2cd561e3b9b2c470ec2adc11cf94ba2cda40bddfd2f23deff2499fb");
+        uint256 expectedGenesisHash = uint256S("0x0003481590d02aa006eb6ed3b943001ac0861fa52649bdce0832bcae6b7f895d");
+        uint256 expectedGenesisMerkleRoot = uint256S("0x212a796316c63f41e26b31b9a947f48b56d5e0df7767774b152e29b08da8b0b7");
 
-        #ifdef COSANTA_MINE_NEW_GENESIS_BLOCK
+        #ifdef PIRATECASH_MINE_NEW_GENESIS_BLOCK
         if (consensus.hashGenesisBlock != expectedGenesisHash)
         {
             GenesisMiner mine(genesis, strNetworkID);
         }
-        #endif // COSANTA_MINE_NEW_GENESIS_BLOCK
+        #endif // PIRATECASH_MINE_NEW_GENESIS_BLOCK
 
         assert(consensus.hashGenesisBlock == expectedGenesisHash);
         assert(genesis.hashMerkleRoot == expectedGenesisMerkleRoot);
@@ -644,36 +573,39 @@ public:
 
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("m1.cosanta.net");
-        vSeeds.emplace_back("m2.cosanta.net");
+        vSeeds.emplace_back("dnstn1.piratecash.net");
+        vSeeds.emplace_back("dnstn2.piratecash.net");
 
-        // Testnet Cosanta addresses start with 'c'
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,88);
-        // Testnet Cosanta script addresses start with '8' or '9'
-        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,19);
-        // Testnet Cosanta keys start with '9' or 'c' (Bitcoin defaults)
-        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
-        // Testnet Cosanta BIP32 pubkeys start with 'tpub' (Bitcoin defaults)
+        // Testnet PirateCash addresses start with 'x' or 'y'
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,75);
+        // Testnet PirateCash script addresses start with '8' or '9'
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,18);
+        // Testnet PirateCash keys start with '9' or 'c' (Bitcoin defaults)
+        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,203);
+        // Testnet PirateCash BIP32 pubkeys start with 'tpub' (Bitcoin defaults)
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
-        // Testnet Cosanta BIP32 prvkeys start with 'tprv' (Bitcoin defaults)
+        // Testnet PirateCash BIP32 prvkeys start with 'tprv' (Bitcoin defaults)
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
-        // Testnet Cosanta BIP44 coin type is '1' (All coin's testnet default)
+        // Testnet PirateCash BIP44 coin type is '1' (All coin's testnet default)
         nExtCoinType = 1;
 
         // long living quorum params
-        consensus.llmqs[Consensus::LLMQ_50_60] = llmq50_60;
-        consensus.llmqs[Consensus::LLMQ_400_60] = llmq400_60;
-        consensus.llmqs[Consensus::LLMQ_400_85] = llmq400_85;
-        consensus.llmqs[Consensus::LLMQ_100_67] = llmq100_67;
-        consensus.llmqTypeChainLocks = Consensus::LLMQ_50_60;
-        consensus.llmqTypeInstantSend = Consensus::LLMQ_50_60;
-        consensus.llmqTypePlatform = Consensus::LLMQ_100_67;
+        AddLLMQ(Consensus::LLMQType::LLMQ_50_60);
+        AddLLMQ(Consensus::LLMQType::LLMQ_60_75);
+        AddLLMQ(Consensus::LLMQType::LLMQ_400_60);
+        AddLLMQ(Consensus::LLMQType::LLMQ_400_85);
+        AddLLMQ(Consensus::LLMQType::LLMQ_100_67);
+        consensus.llmqTypeChainLocks = Consensus::LLMQType::LLMQ_50_60;
+        consensus.llmqTypeInstantSend = Consensus::LLMQType::LLMQ_50_60;
+        consensus.llmqTypeDIP0024InstantSend = Consensus::LLMQType::LLMQ_60_75;
+        consensus.llmqTypePlatform = Consensus::LLMQType::LLMQ_100_67;
+        consensus.llmqTypeMnhf = Consensus::LLMQType::LLMQ_50_60;
 
         fDefaultConsistencyChecks = false;
         fRequireStandard = false;
         fRequireRoutableExternalIP = true;
-        fMineBlocksOnDemand = false;
+        m_is_test_chain = true;
         fAllowMultipleAddressesFromGroup = false;
         fAllowMultiplePorts = true;
         nLLMQConnectionRetryTimeout = 60;
@@ -682,31 +614,25 @@ public:
         nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 5*60; // fulfilled requests expire in 5 minutes
 
-        vSporkAddresses = {"certvWMfGR8ahresKNppg8LZf84kmXUiZy"};
+        vSporkAddresses = {"XRGE2Do6mNwtVvvx9c32c5bCF6CcJpwdkG"};
         nMinSporkKeys = 1;
         fBIP9CheckMasternodesUpgraded = true;
 
-        nStakeMinAge = 24 * 60 * 60; // 24 hours
-        nFirstPoSv2Block = 78200ULL;
+        nStakeMinAge = 8 * 60 * 60; // 8 hours
+        nFirstPoSv2Block = 1ULL;
 
         checkpointData = {
             {
-                {0, uint256S("0x000004ba6ec1309022987a66c17fe66b550396bd9710463335ad59de8bfe2c02")},
-                {256, uint256S("0x00000bf90483dee21e5ec43f44b5065656034c773377c582764de5cd935ee563")},
-                {60000, uint256S("0x00000ea72da4e1acd8d957d34c199ebf0d189015efeb9bdd2ff9f22ecbdb64d4")},
-                {78200, uint256S("0x000008c7d80b614ac6d3770a80c1482dc8047b56afb899a380f5635a45bf93ea")},
-                {94000, uint256S("0x0068a733805059fba4ea3b1b60bbade9401305840a9df89987520e478e6e2465")},
-                {147800,uint256S("0x012ca46fb71629895e065c1900eb5c485e8832dfae8b673373ac49b6a6f505d2")},
+                {0, uint256S("0x0003481590d02aa006eb6ed3b943001ac0861fa52649bdce0832bcae6b7f895d")},
             }
         };
 
         chainTxData = ChainTxData{
             1626622319, // * UNIX timestamp of last known number of transactions (Block 263)
             264,    	// * total number of transactions between genesis and that timestamp
-                        //   (the tx=... number in the SetBestChain debug.log lines)
+                        //   (the tx=... number in the ChainStateFlushed debug.log lines)
             0.01        // * estimated number of transactions per second after that timestamp
         };
-
     }
 };
 
@@ -738,10 +664,20 @@ public:
         consensus.DIP0003EnforcementHeight = 2; // DIP0003 activated immediately on devnet
         consensus.DIP0003EnforcementHash = uint256();
         consensus.DIP0008Height = 2; // DIP0008 activated immediately on devnet
+        consensus.BRRHeight = 300;
+        consensus.MinBIP9WarningHeight = consensus.DIP0008Height + consensus.nMinerConfirmationWindow;
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 1
         consensus.posLimit = uint256S("0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 4
-        consensus.nPowTargetTimespan = 24 * 60 * 60; // Cosanta: 1 day
-        consensus.nPowTargetSpacing = 1 * 60; // Cosanta: 1 minute
+        consensus.nPowTargetTimespan = 24 * 60 * 60; // PirateCash: 1 day
+        consensus.nPowTargetSpacing = 1 * 60; // PirateCash: 1 minute
+        consensus.nPosTargetSpacingV1 = 90;
+        consensus.nPosTargetSpacingV2 = 120;
+        consensus.nSpecTargetFix = 100;
+        consensus.nRewForkDecreaseV18 = 0;
+        consensus.nForkHeight = 1;  // Block Height when we'll use new codebase
+        consensus.nRestoreRewardV18 = 1;
+        consensus.nSkipTimeUntil = 1672531200; //2023-01-01
+        consensus.nLastPowBlock = 3000;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = false;
         consensus.nPowKGWHeight = 30; // nPowKGWHeight >= nPowDGWHeight means "no KGW"
@@ -749,46 +685,46 @@ public:
         consensus.nRuleChangeActivationThreshold = 1512; // 75% for testchains
         consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = VERSIONBITS_NUM_BITS - 1;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1672444800; // 2025-01-01
 
         // Deployment of BIP68, BIP112, and BIP113.
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].bit = 0;
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1735689600; // 2025-01-01
 
         // Deployment of DIP0001
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].bit = 1;
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nThresholdStart = 50; // 50% of 100
 
         // Deployment of BIP147
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].bit = 2;
-        consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_BIP147].nThresholdStart = 50; // 50% of 100
 
         // Deployment of DIP0003
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].bit = 3;
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0003].nThresholdStart = 50; // 50% of 100
 
         // Deployment of DIP0008
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].bit = 4;
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nStartTime = 1619222400; // April 24, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nTimeout = 1672444800; // December 31, 2022
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0008].nThresholdStart = 50; // 50% of 100
 
         // Deployment of Block Reward Reallocation
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].bit = 5;
-        consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nStartTime = 1661990400; // Sep 1st, 2022
-        consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nTimeout = 1679529600; // Mar 21st, 2023
+        consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nThresholdStart = 80; // 80% of 100
         consensus.vDeployments[Consensus::DEPLOYMENT_REALLOC].nThresholdMin = 60; // 60% of 100
@@ -796,12 +732,20 @@ public:
 
         // Deployment of DIP0020, DIP0021 and LLMQ_100_67 quorums
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].bit = 6;
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nStartTime = 1604188800; // November 1st, 2020
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nTimeout = 1635724800; // November 1st, 2021
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nStartTime = 1704067200; // 2024-01-01
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nTimeout = 1735689600; // 2025-01-01
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nWindowSize = 100;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nThresholdStart = 80; // 80% of 100
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nThresholdMin = 60; // 60% of 100
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nFalloffCoeff = 5; // this corresponds to 10 periods
+
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].bit = 7;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nStartTime = 1625097600; // July 1st, 2021
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nTimeout = 999999999999ULL;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nWindowSize = 100;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nThresholdStart = 80; // 80% of 100
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nThresholdMin = 60;   // 60% of 100
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nFalloffCoeff = 5;    // this corresponds to 10 periods
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x000000000000000000000000000000000000000000000000000000000000000");
@@ -809,28 +753,28 @@ public:
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x000000000000000000000000000000000000000000000000000000000000000");
 
-        pchMessageStart[0] = 0xe2;
-        pchMessageStart[1] = 0xca;
-        pchMessageStart[2] = 0xff;
-        pchMessageStart[3] = 0xce;
+        pchMessageStart[0] = 0x50;
+        pchMessageStart[1] = 0x44;
+        pchMessageStart[2] = 0x45;
+        pchMessageStart[3] = 0x56;
         nDefaultPort = 63636;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 0;
         m_assumed_chain_state_size = 0;
 
         UpdateDevnetSubsidyAndDiffParametersFromArgs(args);
-        genesis = CreateGenesisBlock(1618221600, 98745, 0x207fffff, 1, 0 * COIN);
+        genesis = CreateGenesisBlock(1663759763, 98746, 0x207fffff, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        uint256 expectedGenesisHash = uint256S("0x5cc74fcae11b83a1f00ca81106deaae119486ded33918571a639e7b6eac83150");
-        uint256 expectedGenesisMerkleRoot = uint256S("0xe16337d6f2cd561e3b9b2c470ec2adc11cf94ba2cda40bddfd2f23deff2499fb");
+        uint256 expectedGenesisHash = uint256S("0x45047b2cef27492713216b21914dd260ab3f6081ec1bee5f6111000d5b6ded60");
+        uint256 expectedGenesisMerkleRoot = uint256S("0xb9d7301c0338e68a5acd62f6d4d0fbffe9fa91a0fd0bdb1807ab24a4b47fbce6");
 
-        #ifdef COSANTA_MINE_NEW_GENESIS_BLOCK
+        #ifdef PIRATECASH_MINE_NEW_GENESIS_BLOCK
         if (consensus.hashGenesisBlock != expectedGenesisHash)
         {
             GenesisMiner mine(genesis, strNetworkID);
         }
-        #endif // COSANTA_MINE_NEW_GENESIS_BLOCK
+        #endif // PIRATECASH_MINE_NEW_GENESIS_BLOCK
 
         assert(consensus.hashGenesisBlock == expectedGenesisHash);
         assert(genesis.hashMerkleRoot == expectedGenesisMerkleRoot);
@@ -840,40 +784,46 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        //vSeeds.push_back(CDNSSeedData("cosanta.org",  "devnet-seed.cosanta.org"));
+        //vSeeds.push_back(CDNSSeedData("dns.piratecash.net",  "devnet-seed.piratecash.net"));
 
-        // Testnet Cosanta addresses start with 'o'
+        // Testnet PirateCash addresses start with 'o'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,115);
-        // Testnet Cosanta script addresses start with '8' or '9'
+        // Testnet PirateCash script addresses start with '8' or '9'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,19);
         // Testnet private keys start with '9' or 'c' (Bitcoin defaults)
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
-        // Testnet Cosanta BIP32 pubkeys start with 'tpub' (Bitcoin defaults)
+        // Testnet PirateCash BIP32 pubkeys start with 'tpub' (Bitcoin defaults)
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
-        // Testnet Cosanta BIP32 prvkeys start with 'tprv' (Bitcoin defaults)
+        // Testnet PirateCash BIP32 prvkeys start with 'tprv' (Bitcoin defaults)
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
-        // Testnet Cosanta BIP44 coin type is '1' (All coin's testnet default)
+        // Testnet PirateCash BIP44 coin type is '1' (All coin's testnet default)
         nExtCoinType = 1;
 
         // long living quorum params
-        consensus.llmqs[Consensus::LLMQ_DEVNET] = llmq_devnet;
-        consensus.llmqs[Consensus::LLMQ_50_60] = llmq50_60;
-        consensus.llmqs[Consensus::LLMQ_400_60] = llmq400_60;
-        consensus.llmqs[Consensus::LLMQ_400_85] = llmq400_85;
-        consensus.llmqs[Consensus::LLMQ_100_67] = llmq100_67;
-        consensus.llmqTypeChainLocks = Consensus::LLMQ_50_60;
-        consensus.llmqTypeInstantSend = Consensus::LLMQ_50_60;
-        consensus.llmqTypePlatform = Consensus::LLMQ_100_67;
+        AddLLMQ(Consensus::LLMQType::LLMQ_50_60);
+        AddLLMQ(Consensus::LLMQType::LLMQ_60_75);
+        AddLLMQ(Consensus::LLMQType::LLMQ_400_60);
+        AddLLMQ(Consensus::LLMQType::LLMQ_400_85);
+        AddLLMQ(Consensus::LLMQType::LLMQ_100_67);
+        AddLLMQ(Consensus::LLMQType::LLMQ_DEVNET);
+        AddLLMQ(Consensus::LLMQType::LLMQ_DEVNET_DIP0024);
+        consensus.llmqTypeChainLocks = Consensus::LLMQType::LLMQ_50_60;
+        consensus.llmqTypeInstantSend = Consensus::LLMQType::LLMQ_50_60;
+        consensus.llmqTypeDIP0024InstantSend = Consensus::LLMQType::LLMQ_60_75;
+        consensus.llmqTypePlatform = Consensus::LLMQType::LLMQ_100_67;
+        consensus.llmqTypeMnhf = Consensus::LLMQType::LLMQ_50_60;
 
         UpdateDevnetLLMQChainLocksFromArgs(args);
         UpdateDevnetLLMQInstantSendFromArgs(args);
+        UpdateDevnetLLMQInstantSendDIP0024FromArgs(args);
         UpdateLLMQDevnetParametersFromArgs(args);
+        UpdateDevnetPowTargetSpacingFromArgs(args);
 
         fDefaultConsistencyChecks = false;
         fRequireStandard = false;
         fRequireRoutableExternalIP = true;
-        fMineBlocksOnDemand = false;
+        m_is_test_chain = true;
         fAllowMultipleAddressesFromGroup = true;
         fAllowMultiplePorts = true;
         nLLMQConnectionRetryTimeout = 60;
@@ -930,20 +880,39 @@ public:
     {
         consensus.llmqTypeInstantSend = llmqType;
     }
-    void UpdateDevnetLLMQInstantSendFromArgs(const ArgsManager& args);
+
+    /**
+     * Allows modifying the LLMQ type for InstantSend (DIP0024).
+     */
+    void UpdateDevnetLLMQDIP0024InstantSend(Consensus::LLMQType llmqType)
+    {
+        consensus.llmqTypeDIP0024InstantSend = llmqType;
+    }
+
+    /**
+     * Allows modifying PowTargetSpacing
+     */
+    void UpdateDevnetPowTargetSpacing(int64_t nPowTargetSpacing)
+    {
+        consensus.nPowTargetSpacing = nPowTargetSpacing;
+    }
 
     /**
      * Allows modifying parameters of the devnet LLMQ
      */
     void UpdateLLMQDevnetParameters(int size, int threshold)
     {
-        auto& params = consensus.llmqs.at(Consensus::LLMQ_DEVNET);
-        params.size = size;
-        params.minSize = threshold;
-        params.threshold = threshold;
-        params.dkgBadVotesThreshold = threshold;
+        auto params = ranges::find_if(consensus.llmqs, [](const auto& llmq){ return llmq.type == Consensus::LLMQType::LLMQ_DEVNET;});
+        assert(params != consensus.llmqs.end());
+        params->size = size;
+        params->minSize = threshold;
+        params->threshold = threshold;
+        params->dkgBadVotesThreshold = threshold;
     }
     void UpdateLLMQDevnetParametersFromArgs(const ArgsManager& args);
+    void UpdateDevnetLLMQInstantSendFromArgs(const ArgsManager& args);
+    void UpdateDevnetLLMQInstantSendDIP0024FromArgs(const ArgsManager& args);
+    void UpdateDevnetPowTargetSpacingFromArgs(const ArgsManager& args);
 };
 
 /**
@@ -975,10 +944,20 @@ public:
         consensus.DIP0003EnforcementHeight = 105;
         consensus.DIP0003EnforcementHash = uint256();
         consensus.DIP0008Height = 432;
+        consensus.BRRHeight = 2500; // see block_reward_reallocation_tests
+        consensus.MinBIP9WarningHeight = 0;
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 1
         consensus.posLimit = uint256S("0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 4
-        consensus.nPowTargetTimespan = 24 * 60 * 60; // Cosanta: 1 day
-        consensus.nPowTargetSpacing = 1 * 60; // Cosanta: 1 minute
+        consensus.nPowTargetTimespan = 24 * 60 * 60; // PirateCash: 1 day
+        consensus.nPowTargetSpacing = 1 * 60; // PirateCash: 1 minute
+        consensus.nPosTargetSpacingV1 = 90;
+        consensus.nPosTargetSpacingV2 = 120;
+        consensus.nSpecTargetFix = 100;
+        consensus.nRewForkDecreaseV18 = 0;
+        consensus.nForkHeight = 1;  // Block Height when we'll use new codebase
+        consensus.nRestoreRewardV18 = 1;
+        consensus.nSkipTimeUntil = 1672531200; //2023-01-01
+        consensus.nLastPowBlock = 3000;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = true;
         consensus.nPowKGWHeight = 30; // same as mainnet
@@ -1018,16 +997,25 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nThresholdMin = 60;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0020].nFalloffCoeff = 5;
 
+        // Deployment of Quorum Rotation DIP and decreased proposal fee
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].bit = 7;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nStartTime = 0;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nTimeout = 999999999999ULL;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nWindowSize = 300;
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nThresholdStart = 240; // 80% of 300
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nThresholdMin = 180;   // 60% of 300
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0024].nFalloffCoeff = 5;     // this corresponds to 10 periods
+
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x00");
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x00");
 
-        pchMessageStart[0] = 0xff;
-        pchMessageStart[1] = 0x01;
-        pchMessageStart[2] = 0x02;
-        pchMessageStart[3] = 0x03;
+        pchMessageStart[0] = 0x50;
+        pchMessageStart[1] = 0x52;
+        pchMessageStart[2] = 0x45;
+        pchMessageStart[3] = 0x47;
         nDefaultPort = 63646;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 0;
@@ -1038,18 +1026,18 @@ public:
         UpdateDIP8ParametersFromArgs(args);
         UpdateBudgetParametersFromArgs(args);
 
-        genesis = CreateGenesisBlock(1618221600, 98745, 0x207fffff, 1, 0 * COIN);
+        genesis = CreateGenesisBlock(1663759763, 98746, 0x207fffff, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        uint256 expectedGenesisHash = uint256S("0x5cc74fcae11b83a1f00ca81106deaae119486ded33918571a639e7b6eac83150");
-        uint256 expectedGenesisMerkleRoot = uint256S("e16337d6f2cd561e3b9b2c470ec2adc11cf94ba2cda40bddfd2f23deff2499fb");
+        uint256 expectedGenesisHash = uint256S("0x45047b2cef27492713216b21914dd260ab3f6081ec1bee5f6111000d5b6ded60");
+        uint256 expectedGenesisMerkleRoot = uint256S("0xb9d7301c0338e68a5acd62f6d4d0fbffe9fa91a0fd0bdb1807ab24a4b47fbce6");
 
-        #ifdef COSANTA_MINE_NEW_GENESIS_BLOCK
+        #ifdef PIRATECASH_MINE_NEW_GENESIS_BLOCK
         if (consensus.hashGenesisBlock != expectedGenesisHash)
         {
             GenesisMiner mine(genesis, strNetworkID);
         }
-        #endif // COSANTA_MINE_NEW_GENESIS_BLOCK
+        #endif // PIRATECASH_MINE_NEW_GENESIS_BLOCK
 
         assert(consensus.hashGenesisBlock == expectedGenesisHash);
         assert(genesis.hashMerkleRoot == expectedGenesisMerkleRoot);
@@ -1058,9 +1046,9 @@ public:
         vSeeds.clear();      //!< Regtest mode doesn't have any DNS seeds.
 
         fDefaultConsistencyChecks = true;
-        fRequireStandard = false;
+        fRequireStandard = true;
         fRequireRoutableExternalIP = false;
-        fMineBlocksOnDemand = true;
+        m_is_test_chain = true;
         fAllowMultipleAddressesFromGroup = true;
         fAllowMultiplePorts = true;
         nLLMQConnectionRetryTimeout = 1; // must be lower then the LLMQ signing session timeout so that tests have control over failing behavior
@@ -1089,28 +1077,33 @@ public:
             0
         };
 
-        // Regtest Cosanta addresses start with 's'
+        // Regtest PirateCash addresses start with 's'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,125);
-        // Regtest Cosanta script addresses start with '8' or '9'
+        // Regtest PirateCash script addresses start with '8' or '9'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,19);
-        // Regtest Cosanta keys start with '9' or 'c' (Bitcoin defaults)
+        // Regtest PirateCash keys start with '9' or 'c' (Bitcoin defaults)
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
         // Regtest Cosana BIP32 pubkeys start with 'tpub' (Bitcoin defaults)
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         // Regtest Cosana BIP32 prvkeys start with 'tprv' (Bitcoin defaults)
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
-        // Regtest Cosanta BIP44 coin type is '1' (All coin's testnet default)
+        // Regtest PirateCash BIP44 coin type is '1' (All coin's testnet default)
         nExtCoinType = 1;
 
         // long living quorum params
-        consensus.llmqs[Consensus::LLMQ_TEST] = llmq_test;
-        consensus.llmqs[Consensus::LLMQ_TEST_V17] = llmq_test_v17;
-        consensus.llmqTypeChainLocks = Consensus::LLMQ_TEST;
-        consensus.llmqTypeInstantSend = Consensus::LLMQ_TEST;
-        consensus.llmqTypePlatform = Consensus::LLMQ_TEST;
+        AddLLMQ(Consensus::LLMQType::LLMQ_TEST);
+        AddLLMQ(Consensus::LLMQType::LLMQ_TEST_INSTANTSEND);
+        AddLLMQ(Consensus::LLMQType::LLMQ_TEST_V17);
+        AddLLMQ(Consensus::LLMQType::LLMQ_TEST_DIP0024);
+        consensus.llmqTypeChainLocks = Consensus::LLMQType::LLMQ_TEST;
+        consensus.llmqTypeInstantSend = Consensus::LLMQType::LLMQ_TEST_INSTANTSEND;
+        consensus.llmqTypeDIP0024InstantSend = Consensus::LLMQType::LLMQ_TEST_DIP0024;
+        consensus.llmqTypePlatform = Consensus::LLMQType::LLMQ_TEST;
+        consensus.llmqTypeMnhf = Consensus::LLMQType::LLMQ_TEST;
 
-        UpdateLLMQTestParametersFromArgs(args);
+        UpdateLLMQTestParametersFromArgs(args, Consensus::LLMQType::LLMQ_TEST);
+        UpdateLLMQTestParametersFromArgs(args, Consensus::LLMQType::LLMQ_TEST_INSTANTSEND);
     }
 
     /**
@@ -1168,15 +1161,16 @@ public:
     /**
      * Allows modifying parameters of the test LLMQ
      */
-    void UpdateLLMQTestParameters(int size, int threshold)
+    void UpdateLLMQTestParameters(int size, int threshold, const Consensus::LLMQType llmqType)
     {
-        auto& params = consensus.llmqs.at(Consensus::LLMQ_TEST);
-        params.size = size;
-        params.minSize = threshold;
-        params.threshold = threshold;
-        params.dkgBadVotesThreshold = threshold;
+        auto params = ranges::find_if(consensus.llmqs, [llmqType](const auto& llmq){ return llmq.type == llmqType;});
+        assert(params != consensus.llmqs.end());
+        params->size = size;
+        params->minSize = threshold;
+        params->threshold = threshold;
+        params->dkgBadVotesThreshold = threshold;
     }
-    void UpdateLLMQTestParametersFromArgs(const ArgsManager& args);
+    void UpdateLLMQTestParametersFromArgs(const ArgsManager& args, const Consensus::LLMQType llmqType);
 };
 
 void CRegTestParams::UpdateVersionBitsParametersFromArgs(const ArgsManager& args)
@@ -1294,25 +1288,33 @@ void CRegTestParams::UpdateBudgetParametersFromArgs(const ArgsManager& args)
     UpdateBudgetParameters(nMasternodePaymentsStartBlock, nBudgetPaymentsStartBlock, nSuperblockStartBlock);
 }
 
-void CRegTestParams::UpdateLLMQTestParametersFromArgs(const ArgsManager& args)
+void CRegTestParams::UpdateLLMQTestParametersFromArgs(const ArgsManager& args, const Consensus::LLMQType llmqType)
 {
-    if (!args.IsArgSet("-llmqtestparams")) return;
+    assert(llmqType == Consensus::LLMQType::LLMQ_TEST || llmqType == Consensus::LLMQType::LLMQ_TEST_INSTANTSEND);
 
-    std::string strParams = args.GetArg("-llmqtestparams", "");
+    std::string cmd_param{"-llmqtestparams"}, llmq_name{"LLMQ_TEST"};
+    if (llmqType == Consensus::LLMQType::LLMQ_TEST_INSTANTSEND) {
+        cmd_param = "-llmqtestinstantsendparams";
+        llmq_name = "LLMQ_TEST_INSTANTSEND";
+    }
+
+    if (!args.IsArgSet(cmd_param)) return;
+
+    std::string strParams = args.GetArg(cmd_param, "");
     std::vector<std::string> vParams;
     boost::split(vParams, strParams, boost::is_any_of(":"));
     if (vParams.size() != 2) {
-        throw std::runtime_error("LLMQ_TEST parameters malformed, expecting <size>:<threshold>");
+        throw std::runtime_error(strprintf("%s parameters malformed, expecting <size>:<threshold>", llmq_name));
     }
     int size, threshold;
     if (!ParseInt32(vParams[0], &size)) {
-        throw std::runtime_error(strprintf("Invalid LLMQ_TEST size (%s)", vParams[0]));
+        throw std::runtime_error(strprintf("Invalid %s size (%s)", llmq_name, vParams[0]));
     }
     if (!ParseInt32(vParams[1], &threshold)) {
-        throw std::runtime_error(strprintf("Invalid LLMQ_TEST threshold (%s)", vParams[1]));
+        throw std::runtime_error(strprintf("Invalid %s threshold (%s)", llmq_name, vParams[1]));
     }
-    LogPrintf("Setting LLMQ_TEST parameters to size=%ld, threshold=%ld\n", size, threshold);
-    UpdateLLMQTestParameters(size, threshold);
+    LogPrintf("Setting %s parameters to size=%ld, threshold=%ld\n", llmq_name, size, threshold);
+    UpdateLLMQTestParameters(size, threshold, llmqType);
 }
 
 void CDevNetParams::UpdateDevnetSubsidyAndDiffParametersFromArgs(const ArgsManager& args)
@@ -1330,17 +1332,21 @@ void CDevNetParams::UpdateDevnetLLMQChainLocksFromArgs(const ArgsManager& args)
 {
     if (!args.IsArgSet("-llmqchainlocks")) return;
 
-    std::string strLLMQType = gArgs.GetArg("-llmqchainlocks", consensus.llmqs.at(consensus.llmqTypeChainLocks).name);
-    Consensus::LLMQType llmqType = Consensus::LLMQ_NONE;
-    for (const auto& p : consensus.llmqs) {
-        if (p.second.name == strLLMQType) {
-            llmqType = p.first;
+    std::string strLLMQType = gArgs.GetArg("-llmqchainlocks", std::string(GetLLMQ(consensus.llmqTypeChainLocks).name));
+
+    Consensus::LLMQType llmqType = Consensus::LLMQType::LLMQ_NONE;
+    for (const auto& params : consensus.llmqs) {
+        if (params.name == strLLMQType) {
+            if (params.useRotation) {
+                throw std::runtime_error("LLMQ type specified for -llmqchainlocks must NOT use rotation");
+            }
+            llmqType = params.type;
         }
     }
-    if (llmqType == Consensus::LLMQ_NONE) {
+    if (llmqType == Consensus::LLMQType::LLMQ_NONE) {
         throw std::runtime_error("Invalid LLMQ type specified for -llmqchainlocks.");
     }
-    LogPrintf("Setting llmqchainlocks to size=%ld\n", llmqType);
+    LogPrintf("Setting llmqchainlocks to size=%ld\n", static_cast<uint8_t>(llmqType));
     UpdateDevnetLLMQChainLocks(llmqType);
 }
 
@@ -1348,18 +1354,63 @@ void CDevNetParams::UpdateDevnetLLMQInstantSendFromArgs(const ArgsManager& args)
 {
     if (!args.IsArgSet("-llmqinstantsend")) return;
 
-    std::string strLLMQType = gArgs.GetArg("-llmqinstantsend", consensus.llmqs.at(consensus.llmqTypeInstantSend).name);
-    Consensus::LLMQType llmqType = Consensus::LLMQ_NONE;
-    for (const auto& p : consensus.llmqs) {
-        if (p.second.name == strLLMQType) {
-            llmqType = p.first;
+    std::string strLLMQType = gArgs.GetArg("-llmqinstantsend", std::string(GetLLMQ(consensus.llmqTypeInstantSend).name));
+
+    Consensus::LLMQType llmqType = Consensus::LLMQType::LLMQ_NONE;
+    for (const auto& params : consensus.llmqs) {
+        if (params.name == strLLMQType) {
+            if (params.useRotation) {
+                throw std::runtime_error("LLMQ type specified for -llmqinstantsend must NOT use rotation");
+            }
+            llmqType = params.type;
         }
     }
-    if (llmqType == Consensus::LLMQ_NONE) {
+    if (llmqType == Consensus::LLMQType::LLMQ_NONE) {
         throw std::runtime_error("Invalid LLMQ type specified for -llmqinstantsend.");
     }
-    LogPrintf("Setting llmqinstantsend to size=%ld\n", llmqType);
+    LogPrintf("Setting llmqinstantsend to size=%ld\n", static_cast<uint8_t>(llmqType));
     UpdateDevnetLLMQInstantSend(llmqType);
+}
+
+void CDevNetParams::UpdateDevnetLLMQInstantSendDIP0024FromArgs(const ArgsManager& args)
+{
+    if (!args.IsArgSet("-llmqinstantsenddip0024")) return;
+
+    std::string strLLMQType = gArgs.GetArg("-llmqinstantsenddip0024", std::string(GetLLMQ(consensus.llmqTypeDIP0024InstantSend).name));
+
+    Consensus::LLMQType llmqType = Consensus::LLMQType::LLMQ_NONE;
+    for (const auto& params : consensus.llmqs) {
+        if (params.name == strLLMQType) {
+            if (!params.useRotation) {
+                throw std::runtime_error("LLMQ type specified for -llmqinstantsenddip0024 must use rotation");
+            }
+            llmqType = params.type;
+        }
+    }
+    if (llmqType == Consensus::LLMQType::LLMQ_NONE) {
+        throw std::runtime_error("Invalid LLMQ type specified for -llmqinstantsenddip0024.");
+    }
+    LogPrintf("Setting llmqinstantsenddip0024 to size=%ld\n", static_cast<uint8_t>(llmqType));
+    UpdateDevnetLLMQDIP0024InstantSend(llmqType);
+}
+
+void CDevNetParams::UpdateDevnetPowTargetSpacingFromArgs(const ArgsManager& args)
+{
+    if (!args.IsArgSet("-powtargetspacing")) return;
+
+    std::string strPowTargetSpacing = gArgs.GetArg("-powtargetspacing", "");
+
+    int64_t powTargetSpacing;
+    if (!ParseInt64(strPowTargetSpacing, &powTargetSpacing)) {
+        throw std::runtime_error(strprintf("Invalid parsing of powTargetSpacing (%s)", strPowTargetSpacing));
+    }
+
+    if (powTargetSpacing < 1) {
+        throw std::runtime_error(strprintf("Invalid value of powTargetSpacing (%s)", strPowTargetSpacing));
+    }
+
+    LogPrintf("Setting powTargetSpacing to %ld\n", powTargetSpacing);
+    UpdateDevnetPowTargetSpacing(powTargetSpacing);
 }
 
 void CDevNetParams::UpdateLLMQDevnetParametersFromArgs(const ArgsManager& args)
@@ -1393,13 +1444,13 @@ const CChainParams &Params() {
 std::unique_ptr<const CChainParams> CreateChainParams(const std::string& chain)
 {
     if (chain == CBaseChainParams::MAIN)
-        return std::unique_ptr<CChainParams>(new CMainParams());
+        return std::make_unique<CMainParams>();
     else if (chain == CBaseChainParams::TESTNET)
-        return std::unique_ptr<CChainParams>(new CTestNetParams());
-    else if (chain == CBaseChainParams::DEVNET) {
-        return std::unique_ptr<CChainParams>(new CDevNetParams(gArgs));
-    } else if (chain == CBaseChainParams::REGTEST)
-        return std::unique_ptr<CChainParams>(new CRegTestParams(gArgs));
+        return std::make_unique<CTestNetParams>();
+    else if (chain == CBaseChainParams::DEVNET)
+        return std::make_unique<CDevNetParams>(gArgs);
+    else if (chain == CBaseChainParams::REGTEST)
+        return std::make_unique<CRegTestParams>(gArgs);
 
     throw std::runtime_error(strprintf("%s: Unknown chain %s.", __func__, chain));
 }

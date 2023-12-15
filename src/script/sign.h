@@ -1,13 +1,11 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef BITCOIN_SCRIPT_SIGN_H
 #define BITCOIN_SCRIPT_SIGN_H
 
-#include <boost/optional.hpp>
 #include <hash.h>
 #include <pubkey.h>
 #include <script/interpreter.h>
@@ -23,8 +21,24 @@ struct CMutableTransaction;
 
 struct KeyOriginInfo
 {
-    unsigned char fingerprint[4];
+    unsigned char fingerprint[4]; //!< First 32 bits of the Hash160 of the public key at the root of the path
     std::vector<uint32_t> path;
+
+    friend bool operator==(const KeyOriginInfo& a, const KeyOriginInfo& b)
+    {
+        return std::equal(std::begin(a.fingerprint), std::end(a.fingerprint), std::begin(b.fingerprint)) && a.path == b.path;
+    }
+
+    SERIALIZE_METHODS(KeyOriginInfo, obj)
+    {
+        READWRITE(obj.fingerprint, obj.path);
+    }
+
+    void clear()
+    {
+        memset(fingerprint, 0, 4);
+        path.clear();
+    }
 };
 
 /** An interface to be implemented by keystores that support signing. */
@@ -59,7 +73,7 @@ struct FlatSigningProvider final : public SigningProvider
 {
     std::map<CScriptID, CScript> scripts;
     std::map<CKeyID, CPubKey> pubkeys;
-    std::map<CKeyID, KeyOriginInfo> origins;
+    std::map<CKeyID, std::pair<CPubKey, KeyOriginInfo>> origins;
     std::map<CKeyID, CKey> keys;
 
     bool GetCScript(const CScriptID& scriptid, CScript& script) const override;
@@ -119,26 +133,24 @@ struct SignatureData {
     void MergeSignatureData(SignatureData sigdata);
 };
 
-// Takes a stream and multiple arguments and serializes them into a vector and then into the stream
+// Takes a stream and multiple arguments and serializes them as if first serialized into a vector and then into the stream
 // The resulting output into the stream has the total serialized length of all of the objects followed by all objects concatenated with each other.
 template<typename Stream, typename... X>
 void SerializeToVector(Stream& s, const X&... args)
 {
-    std::vector<unsigned char> ret;
-    CVectorWriter ss(SER_NETWORK, PROTOCOL_VERSION, ret, 0);
-    SerializeMany(ss, args...);
-    s << ret;
+    WriteCompactSize(s, GetSerializeSizeMany(s, args...));
+    SerializeMany(s, args...);
 }
 
 // Takes a stream and multiple arguments and unserializes them first as a vector then each object individually in the order provided in the arguments
 template<typename Stream, typename... X>
 void UnserializeFromVector(Stream& s, X&... args)
 {
-    std::vector<unsigned char> data;
-    s >> data;
-    CDataStream ss(data, SER_NETWORK, PROTOCOL_VERSION);
-    UnserializeMany(ss, args...);
-    if (!ss.eof()) {
+    size_t expected_size = ReadCompactSize(s);
+    size_t remaining_before = s.size();
+    UnserializeMany(s, args...);
+    size_t remaining_after = s.size();
+    if (remaining_after + expected_size != remaining_before) {
         throw std::ios_base::failure("Size of value was not the stated size");
     }
 }
@@ -183,6 +195,9 @@ template<typename Stream>
 void SerializeHDKeypaths(Stream& s, const std::map<CPubKey, KeyOriginInfo>& hd_keypaths, uint8_t type)
 {
     for (auto keypath_pair : hd_keypaths) {
+        if (!keypath_pair.first.IsValid()) {
+            throw std::ios_base::failure("Invalid CPubKey being serialized");
+        }
         SerializeToVector(s, type, MakeSpan(keypath_pair.first));
         WriteCompactSize(s, (keypath_pair.second.path.size() + 1) * sizeof(uint32_t));
         s << keypath_pair.second.fingerprint;

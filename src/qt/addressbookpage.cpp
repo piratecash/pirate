@@ -1,11 +1,10 @@
 // Copyright (c) 2011-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2019 The Dash Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
+// Copyright (c) 2014-2022 The Dash Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include <config/cosanta-config.h>
+#include <config/piratecash-config.h>
 #endif
 
 #include <qt/addressbookpage.h>
@@ -69,6 +68,9 @@ AddressBookPage::AddressBookPage(Mode _mode, Tabs _tab, QWidget* parent) :
     ui->setupUi(this);
 
     ui->showAddressQRCode->setIcon(QIcon());
+#ifndef USE_QRCODE
+    ui->showAddressQRCode->setEnabled(false);
+#endif
 
     switch(mode)
     {
@@ -95,12 +97,12 @@ AddressBookPage::AddressBookPage(Mode _mode, Tabs _tab, QWidget* parent) :
     switch(tab)
     {
     case SendingTab:
-        ui->labelExplanation->setText(tr("These are your Cosanta addresses for sending payments. Always check the amount and the receiving address before sending coins."));
+        ui->labelExplanation->setText(tr("These are your PirateCash addresses for sending payments. Always check the amount and the receiving address before sending coins."));
         ui->deleteAddress->setVisible(true);
         ui->newAddress->setVisible(true);
         break;
     case ReceivingTab:
-        ui->labelExplanation->setText(tr("These are your Cosanta addresses for receiving payments. It is recommended to use a new receiving address for each transaction."));
+        ui->labelExplanation->setText(tr("These are your PirateCash addresses for receiving payments. It is recommended to use a new receiving address for each transaction."));
         ui->deleteAddress->setVisible(false);
         ui->newAddress->setVisible(false);
         break;
@@ -112,6 +114,9 @@ AddressBookPage::AddressBookPage(Mode _mode, Tabs _tab, QWidget* parent) :
     QAction *editAction = new QAction(tr("&Edit"), this);
     QAction *showAddressQRCodeAction = new QAction(tr("&Show address QR code"), this);
     deleteAction = new QAction(ui->deleteAddress->text(), this);
+#ifndef USE_QRCODE
+    showAddressQRCodeAction->setEnabled(false);
+#endif
 
     // Build context menu
     contextMenu = new QMenu(this);
@@ -242,7 +247,7 @@ void AddressBookPage::on_showAddressQRCode_clicked()
     QRDialog* dialog = new QRDialog(this);
 
     dialog->setAttribute(Qt::WA_DeleteOnClose);
-    dialog->setInfo(tr("QR code"), "cosanta:"+strAddress, "", strAddress);
+    dialog->setInfo(tr("QR code"), "pirate:"+strAddress, "", strAddress);
     dialog->show();
 }
 
@@ -271,13 +276,17 @@ void AddressBookPage::selectionChanged()
             break;
         }
         ui->copyAddress->setEnabled(true);
+#ifdef USE_QRCODE
         ui->showAddressQRCode->setEnabled(true);
+#endif
     }
     else
     {
         ui->deleteAddress->setEnabled(false);
         ui->copyAddress->setEnabled(false);
+#ifdef USE_QRCODE
         ui->showAddressQRCode->setEnabled(false);
+#endif
     }
 }
 
@@ -323,7 +332,8 @@ void AddressBookPage::on_exportButton_clicked()
 
     if(!writer.write()) {
         QMessageBox::critical(this, tr("Exporting Failed"),
-            tr("There was an error trying to save the address list to %1. Please try again.").arg(filename));
+            //: %1 is a name of the file (e.g., "addrbook.csv") that the bitcoin addresses were exported to.
+            tr("There was an error trying to save the address list to %1. Please try again.", "An error message.").arg(filename));
     }
 }
 

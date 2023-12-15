@@ -17,23 +17,26 @@
 
 uint256 CBlockHeader::GetHash() const
 {
-    if (IsProofOfStake()) {
-        return hashProofOfStake();
+    if (nVersion < 4)
+    {
+        uint256 thash;
+        scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
+        return thash;
     }
-
-    std::vector<unsigned char> vch(80);
-    CVectorWriter ss(SER_NETWORK, PROTOCOL_VERSION, vch, 0);
-    ss << *this;
-    return HashX11((const char *)vch.data(), (const char *)vch.data() + vch.size());
+    return SerializeHash(*this);
 }
 
-uint256 CBlockHeader::hashProofOfStake() const{
-    return SerializeHash(*this);
+uint256 CBlockHeader::GetPoWHash() const
+{
+    uint256 thash;
+    scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
+    return thash;
 }
 
 std::string CBlock::ToString() const
 {
     std::stringstream s;
+
     if (IsProofOfStake()) {
          s << strprintf("CBlock(hash=%s, ver=0x%08x, hashPrevBlock=%s, hashMerkleRoot=%s, nTime=%u, nBits=%08x, nNonce=%u, posStakeHash=%s, posStakeN=%u, posPubKey=%u, posBlockSig=%u vtx=%u)\n",
                         GetHash().ToString(),
@@ -45,7 +48,7 @@ std::string CBlock::ToString() const
                         posStakeHash.ToString(),
                         posStakeN,
                         posPubKey.size(),
-                        posBlockSig.size(),
+                        vchBlockSig.size(),
                         vtx.size());
     }else{
         s << strprintf("CBlock(hash=%s, ver=0x%08x, hashPrevBlock=%s, hashMerkleRoot=%s, nTime=%u, nBits=%08x, nNonce=%u, vtx=%u)\n",
@@ -78,7 +81,7 @@ bool CBlockHeader::SignBlock(const CKeyStore& keystore)
             return false;
         }
 
-        if (!key.SignCompact(GetHash(), posBlockSig)) {
+        if (!key.SignCompact(GetHash(), vchBlockSig)) {
             return false;
         }
 
@@ -94,12 +97,12 @@ bool CBlockHeader::CheckBlockSignature(const CKeyID& key_id) const
         return true;
     }
 
-    if (posBlockSig.empty()) {
+    if (vchBlockSig.empty()) {
         return false;
     }
 
     auto hash = GetHash();
-    posPubKey.RecoverCompact(hash, posBlockSig);
+    posPubKey.RecoverCompact(hash, vchBlockSig);
 
     if (!posPubKey.IsValid()) {
         return false;
@@ -111,8 +114,8 @@ bool CBlockHeader::CheckBlockSignature(const CKeyID& key_id) const
 const CPubKey& CBlockHeader::BlockPubKey() const
 {
     // In case it's read from disk
-    if (!posPubKey.IsValid() && !posBlockSig.empty()) {
-        posPubKey.RecoverCompact(GetHash(), posBlockSig);
+    if (!posPubKey.IsValid() && !vchBlockSig.empty()) {
+        posPubKey.RecoverCompact(GetHash(), vchBlockSig);
     }
 
     return posPubKey;

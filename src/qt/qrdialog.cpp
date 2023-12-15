@@ -8,7 +8,7 @@
 #include <qt/bitcoinunits.h>
 #include <qt/guiconstants.h>
 #include <qt/guiutil.h>
-#include <qt/optionsmodel.h>
+#include <qt/qrimagewidget.h>
 
 #include <QClipboard>
 #include <QDrag>
@@ -22,7 +22,7 @@
 #endif
 
 #if defined(HAVE_CONFIG_H)
-#include <config/cosanta-config.h> /* for USE_QRCODE */
+#include <config/piratecash-config.h> /* for USE_QRCODE */
 #endif
 
 #ifdef USE_QRCODE

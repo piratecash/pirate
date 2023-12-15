@@ -1,4 +1,3 @@
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // Copyright (c) 2012-2013 The PPCoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
@@ -29,10 +28,11 @@ bool CheckStakeKernelHash(
     const COutPoint prevout,
     unsigned int nHashDrift,
     bool fCheck,
+    uint256& hashProofOfStake,
     bool fPrintProofOfStake = false);
 
 // Check kernel hash target and coinstake signature
 // Sets hashProofOfStake on success return
-bool CheckProofOfStake(CValidationState &state, const CBlockHeader &block, const Consensus::Params& consensus);
+bool CheckProofOfStake(CValidationState &state, const CBlockHeader &block, uint256& hashProofOfStake, const Consensus::Params& consensus);
 
 #endif // BITCOIN_KERNEL_H

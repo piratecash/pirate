@@ -1,6 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2016 The Bitcoin Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -22,7 +21,7 @@ static const unsigned int DEFAULT_BLOCK_MAX_SIZE = 2000000;
 /** Default for -blockmintxfee, which sets the minimum feerate for a transaction in blocks created by mining code **/
 static const unsigned int DEFAULT_BLOCK_MIN_TX_FEE = 1000;
 /** The maximum size for transactions we're willing to relay/mine */
-static const unsigned int MAX_STANDARD_TX_SIZE = 100000;
+static const unsigned int MAX_STANDARD_TX_SIZE = 2900000;
 /** The minimum size for transactions we're willing to relay/mine (1 empty scriptSig input + 1 P2SH output = 83 bytes) */
 static const unsigned int MIN_STANDARD_TX_SIZE = 83;
 /** Maximum number of signature check operations in an IsStandard() P2SH script */
@@ -35,6 +34,8 @@ static const unsigned int DEFAULT_MAX_MEMPOOL_SIZE = 300;
 static const unsigned int DEFAULT_INCREMENTAL_RELAY_FEE = 1000;
 /** Default for -bytespersigop */
 static const unsigned int DEFAULT_BYTES_PER_SIGOP = 20;
+/** Default for -permitbaremultisig */
+static const bool DEFAULT_PERMIT_BAREMULTISIG = true;
 /** Min feerate for defining dust. Historically this has been based on the
  * minRelayTxFee, however changing the dust limit changes which transactions are
  * standard and should be done with care and ideally rarely. It makes sense to
@@ -84,12 +85,8 @@ bool IsStandardTx(const CTransaction& tx, std::string& reason);
      */
 bool AreInputsStandard(const CTransaction& tx, const CCoinsViewCache& mapInputs);
 
-extern unsigned int nBytesPerSigOp;
-
 /** Compute the virtual transaction size (taking sigops into account). */
 int64_t GetVirtualTransactionSize(int64_t nSize, int64_t nSigOp);
 int64_t GetVirtualTransactionSize(const CTransaction& tx, int64_t nSigOp = 0);
 
-extern CFeeRate incrementalRelayFee;
-extern CFeeRate dustRelayFee;
 #endif // BITCOIN_POLICY_POLICY_H

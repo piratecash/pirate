@@ -1,67 +1,70 @@
-Cosanta Core staging tree 0.17
+PirateCash Core staging tree 18.0
 ===========================
 
-https://www.cosanta.net/
+It's temporary branch and it was merged into v18 branch https://github.com/piratecash/piratecash/tree/v18
 
 
-What is Cosanta?
+
+What is PirateCash?
 -------------
 
-Cosanta is an experimental digital ecosystem for provide services B2B, private
-payments to anyone, anywhere in the world. Cosanta uses peer-to-peer technology
+PirateCash is an experimental digital ecosystem for provide services B2B, private
+payments to anyone, anywhere in the world. PirateCash uses peer-to-peer technology
 to operate with no central authority: managing transactions and issuing money
-are carried out collectively by the network. Cosanta Core is the name of the open
+are carried out collectively by the network. PirateCash Core is the name of the open
 source software which enables the use of this currency.
 
 For more information, as well as an immediately useable, binary version of
-the Cosanta Core software, see https://www.cosanta.net/.
+the PirateCash Core software, see https://www.p.cash/.
 
 
 ## Pow / PoS Rewards Breakdown
 
-| Block                 | Reward              | Masternodes | Miners / Stakers   |
-|---------------------- |:------------------- |:----------- |:------------------ |
-| <11111                | 0.01  COSA + fees   |             |                    |
-| <22222                | 0.02  COSA + fees   |             |                    |
-| <33333                | 0.03  COSA + fees   |             |                    |
-| <44444                | 0.04  COSA + fees   |             |                    |
-| <55555                | 0.05  COSA + fees   |             |                    |
-| <66666                | 0.06  COSA + fees   |             |                    |
-| <77777                | 0.07  COSA + fees   |             |                    |
-| <88888                | 0.08  COSA + fees   |             |                    |
-| <99999                | 0.09  COSA + fees   |             |                    |
-| <111111               | 0.10  COSA + fees   |             |                    |
-| <222222               | 0.20  COSA + fees   |             |                    |
-| <333333               | 0.30  COSA + fees   |             |                    |
-| <444444               | 0.40  COSA + fees   |             |                    |
-| <555555               | 0.50  COSA + fees   |             |                    |
-| <666666               | 0.60  COSA + fees   |             |                    |
-| <700000               |  1    COSA + fees   |             |                    |
-| <710000               |  2    COSA + fees   |             |                    |
-| <720000               |  3    COSA + fees   |             |                    |
-| <730000               |  4    COSA + fees   |             |                    |
-| <740000               |  5    COSA + fees   |             |                    |
-| <750000               |  6    COSA + fees   |             |                    |
-| <760000               |  7    COSA + fees   |             |                    |
-| <770000               |  8    COSA + fees   |             |                    |
-| <780000               |  9    COSA + fees   |             |                    |
-| <790000               | 10    COSA + fees   |             |                    |
-| <800000               | 20    COSA + fees   |             |                    |
-| <850000               | 30    COSA + fees   |             |                    |
-| <900000               | 40    COSA + fees   |             |                    |
-|  900000               | 50    COSA + fees   |             |                    |
-| 1048576 (0x100000)    | 25    COSA + fees   | 60%         | 40%                |
-| 2097152 (0x200000)    | 12.5  COSA + fees   | 60%         | 40%                |
-| 3145728 (0x300000)    | 6.25  COSA + fees   | 60%         | 40%                |
-| 4194304 (0x400000)    | 3.125 COSA + fees   | 60%         | 40%                |
-| ...                   | ...                 | 60%         | 40%                |
-| 34603008 (0x2100000)  | ~0    COSA + fees   | 60%         | 40%                |
+| Block                 | Reward            | Masternodes | Stakers    |
+|---------------------- |:----------------- |:----------- |:---------- |
+| 0                     | 50         PIRATE | 60%         | 40%        |
+| 917000  (0x0DFE08)    | 50         PIRATE | 0.1%        | 99.9%      |
+| 1048577 (0x100001)    | 25         PIRATE | 0.1%        | 99.9%      |
+| 2097153 (0x200001)    | 12.5       PIRATE | 0.1%        | 99.9%      |
+| 3145729 (0x300001)    | 6.25       PIRATE | 0.1%        | 99.9%      |
+| 4194305 (0x400001)    | 3.125      PIRATE | 0.1%        | 99.9%      |
+| 5242881 (0x500001)    | 1.625      PIRATE | 0.1%        | 99.9%      |
+| 6291457 (0x600001)    | 0.78125    PIRATE | 0.1%        | 99.9%      |
+| 7340033 (0x700001)    | 0.390625   PIRATE | 0.1%        | 99.9%      |
+| 8388609 (0x800001)    | 0.1953125  PIRATE | 0.1%        | 99.9%      |
+| 9437185 (0x900001)    | 0.09765625 PIRATE | 0.1%        | 99.9%      |
+| 10485761 (0xA00001)   | 0.04882812 PIRATE | 0.1%        | 99.9%      |
+| 11534337 (0xB00001)   | 0.02441406 PIRATE | 0.1%        | 99.9%      |
+| 12582913 (0xC00001)   | 0.01220703 PIRATE | 0.1%        | 99.9%      |
+| 13631489 (0xD00001)   | 0.00610351 PIRATE | 0.1%        | 99.9%      |
+| 14680065 (0xE00001)   | 0.00305175 PIRATE | 0.1%        | 99.9%      |
+| 15728641 (0xF00001)   | 0.00152587 PIRATE | 0.1%        | 99.9%      |
+| 16777217 (0x1000001)  | 0.00076293 PIRATE | 0.1%        | 99.9%      |
+| 17825793 (0x1100001)  | 0.00038146 PIRATE | 0.1%        | 99.9%      |
+| 18874369 (0x1200001)  | 0.00019073 PIRATE | 0.1%        | 99.9%      |
+| 19922945 (0x1300001)  | 0.00009536 PIRATE | 0.1%        | 99.9%      |
+| 20971521 (0x1400001)  | 0.00004768 PIRATE | 0.1%        | 99.9%      |
+| 22020097 (0x1500001)  | 0.00002384 PIRATE | 0.1%        | 99.9%      |
+| 23068673 (0x1600001)  | 0.00001192 PIRATE | 0.1%        | 99.9%      |
+| 24117249 (0x1700001)  | 0.00000596 PIRATE | 0.1%        | 99.9%      |
+| 25165825 (0x1800001)  | 0.00000298 PIRATE | 0.1%        | 99.9%      |
+| 26214401 (0x1900001)  | 0.00000149 PIRATE | 0.1%        | 99.9%      |
+| 27262977 (0x1A00001)  | 0.00000074 PIRATE | 0.1%        | 99.9%      |
+| 28311553 (0x1B00001)  | 0.00000037 PIRATE | 0.1%        | 99.9%      |
+| 29360129 (0x1C00001)  | 0.00000018 PIRATE | 0.1%        | 99.9%      |
+| 30408705 (0x1D00001)  | 0.00000009 PIRATE | 0.1%        | 99.9%      |
+| 31457281 (0x1E00001)  | 0.00000004 PIRATE | 0.1%        | 99.9%      |
+| 32505857 (0x1F00001)  | 0.00000002 PIRATE | 0.1%        | 99.9%      |
+| 33554433 (0x2000001)  | 0.00000001 PIRATE | 0.1%        | 99.9%      |
+| 34603009 (0x2100001)  | 0 + fees   PIRATE | 0.1%        | 99.9%      |
 
+For more information, as well as an immediately usable, binary version of
+the PirateCash Core software, see https://p.cash/en/download/.
 
 License
 -------
 
-Cosanta Core is released under the terms of the MIT license. See [COPYING](COPYING) for more
+PirateCash Core is released under the terms of the MIT license. See [COPYING](COPYING) for more
 information or see https://opensource.org/licenses/MIT.
 
 Development Process
@@ -69,7 +72,7 @@ Development Process
 
 The `master` branch is meant to be stable. Development is normally done in separate branches.
 [Tags](https://github.com/cosanta/cosanta-core/tags) are created to indicate new official,
-stable release versions of Cosanta Core.
+stable release versions of PirateCash Core.
 
 The contribution workflow is described in [CONTRIBUTING.md](CONTRIBUTING.md).
 
@@ -105,7 +108,7 @@ Translations
 ------------
 
 Changes to translations as well as new translations can be submitted to
-[Cosanta Core's Transifex page](https://www.transifex.com/projects/p/cosanta/).
+[PirateCash Core's Transifex page](https://www.transifex.com/projects/p/cosanta/).
 
 Translations are periodically pulled from Transifex and merged into the git repository. See the
 [translation process](doc/translation_process.md) for details on how this works.

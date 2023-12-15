@@ -5,11 +5,12 @@
 #include <test/data/key_io_invalid.json.h>
 #include <test/data/key_io_valid.json.h>
 
+#include <chainparams.h>
 #include <key.h>
 #include <key_io.h>
 #include <script/script.h>
 #include <util/strencodings.h>
-#include <test/test_cosanta.h>
+#include <test/util/setup_common.h>
 
 #include <boost/test/unit_test.hpp>
 
@@ -107,7 +108,7 @@ BOOST_AUTO_TEST_CASE(key_io_valid_gen)
         } else {
             CTxDestination dest;
             CScript exp_script(exp_payload.begin(), exp_payload.end());
-            ExtractDestination(exp_script, dest);
+            BOOST_CHECK(ExtractDestination(exp_script, dest));
             std::string address = EncodeDestination(dest);
 
             BOOST_CHECK_EQUAL(address, exp_base58string);

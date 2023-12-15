@@ -1,5 +1,4 @@
 // Copyright (c) 2011-2015 The Bitcoin Core developers
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -41,7 +40,7 @@ class QUrl;
 class QWidget;
 QT_END_NAMESPACE
 
-/** Utility functions used by the Cosanta Qt UI.
+/** Utility functions used by the PirateCash Qt UI.
  */
 namespace GUIUtil
 {
@@ -116,7 +115,7 @@ namespace GUIUtil
     // Setup appearance settings if not done yet
     void setupAppearance(QWidget* parent, OptionsModel* model);
 
-    // Parse "cosanta:" URI into recipient object, return true on successful parsing
+    // Parse "pirate:" URI into recipient object, return true on successful parsing
     bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out);
     bool parseBitcoinURI(QString uri, SendCoinsRecipient *out);
     bool validateBitcoinURI(const QString& uri);
@@ -145,6 +144,11 @@ namespace GUIUtil
     QList<QModelIndex> getEntryData(QAbstractItemView *view, int column);
 
     void setClipboard(const QString& str);
+
+    /**
+     * Determine default data directory for operating system.
+     */
+    QString getDefaultDataDirectory();
 
     /** Get save filename, mimics QFileDialog::getSaveFileName, except that it appends a default suffix
         when no suffix is provided by the user.
@@ -189,7 +193,7 @@ namespace GUIUtil
     // Open debug.log
     void openDebugLogfile();
 
-    // Open cosanta.conf
+    // Open piratecash.conf
     void openConfigfile();
 
     // Browse backup folder
@@ -211,6 +215,21 @@ namespace GUIUtil
 
     private:
         int size_threshold;
+    };
+
+    /**
+     * Qt event filter that intercepts QEvent::FocusOut events for QLabel objects, and
+     * resets their `textInteractionFlags' property to get rid of the visible cursor.
+     *
+     * This is a temporary fix of QTBUG-59514.
+     */
+    class LabelOutOfFocusEventFilter : public QObject
+    {
+        Q_OBJECT
+
+    public:
+        explicit LabelOutOfFocusEventFilter(QObject* parent);
+        bool eventFilter(QObject* watched, QEvent* event) override;
     };
 
     /**
@@ -272,7 +291,7 @@ namespace GUIUtil
     const QString getDefaultTheme();
 
     /** Check if the given theme name is valid or not */
-    const bool isValidTheme(const QString& strTheme);
+    bool isValidTheme(const QString& strTheme);
 
     /** Sets the stylesheet of the whole app and updates it if the
     related css files has been changed and -debug-ui mode is active. */
@@ -456,6 +475,11 @@ namespace GUIUtil
      * In Qt 5.11 the QFontMetrics::horizontalAdvance() was introduced.
      */
     int TextWidth(const QFontMetrics& fm, const QString& text);
+
+    /**
+     * Writes to debug.log short info about the used Qt and the host system.
+     */
+    void LogQtInfo();
 } // namespace GUIUtil
 
 #endif // BITCOIN_QT_GUIUTIL_H

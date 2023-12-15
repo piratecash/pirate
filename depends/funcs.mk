@@ -141,7 +141,7 @@ $(1)_config_env+=PKG_CONFIG_PATH=$($($(1)_type)_prefix)/share/pkgconfig
 $(1)_config_env+=PATH=$(build_prefix)/bin:$(PATH)
 $(1)_build_env+=PATH=$(build_prefix)/bin:$(PATH)
 $(1)_stage_env+=PATH=$(build_prefix)/bin:$(PATH)
-$(1)_autoconf=./configure --host=$($($(1)_type)_host) --disable-dependency-tracking --prefix=$($($(1)_type)_prefix) $$($(1)_config_opts) CC="$$($(1)_cc)" CXX="$$($(1)_cxx)"
+$(1)_autoconf=./configure --host=$($($(1)_type)_host) --prefix=$($($(1)_type)_prefix) $$($(1)_config_opts) CC="$$($(1)_cc)" CXX="$$($(1)_cxx)"
 
 ifneq ($($(1)_nm),)
 $(1)_autoconf += NM="$$($(1)_nm)"
@@ -179,13 +179,13 @@ $($(1)_extracted): | $($(1)_fetched)
 	$(AT)mkdir -p $$(@D)
 	$(AT)cd $$(@D); $(call $(1)_extract_cmds,$(1))
 	$(AT)touch $$@
-$($(1)_preprocessed): | $($(1)_dependencies) $($(1)_extracted)
+$($(1)_preprocessed): | $($(1)_extracted)
 	$(AT)echo Preprocessing $(1)...
 	$(AT)mkdir -p $$(@D) $($(1)_patch_dir)
 	$(AT)$(foreach patch,$($(1)_patches),cd $(PATCHES_PATH)/$(1); cp $(patch) $($(1)_patch_dir) ;)
 	$(AT)cd $$(@D); $(call $(1)_preprocess_cmds, $(1))
 	$(AT)touch $$@
-$($(1)_configured): | $($(1)_preprocessed)
+$($(1)_configured): | $($(1)_dependencies) $($(1)_preprocessed)
 	$(AT)echo Configuring $(1)...
 	$(AT)rm -rf $(host_prefix); mkdir -p $(host_prefix)/lib; cd $(host_prefix); $(foreach package,$($(1)_all_dependencies), tar --no-same-owner -xf $($(package)_cached); )
 	$(AT)mkdir -p $$(@D)
@@ -222,6 +222,14 @@ $(1): | $($(1)_cached_checksum)
 
 endef
 
+stages = fetched extracted preprocessed configured built staged postprocessed cached cached_checksum
+
+define ext_add_stages
+$(foreach stage,$(stages),
+          $(1)_$(stage): $($(1)_$(stage))
+          .PHONY: $(1)_$(stage))
+endef
+
 # These functions create the build targets for each package. They must be
 # broken down into small steps so that each part is done for all packages
 # before moving on to the next step. Otherwise, a package's info
@@ -236,7 +244,8 @@ $(foreach package,$(packages),$(eval $(package)_type=$(host_arch)_$(host_os)))
 $(foreach package,$(all_packages),$(eval $(call int_vars,$(package))))
 
 #include package files
-$(foreach package,$(all_packages),$(eval include packages/$(package).mk))
+$(foreach native_package,$(native_packages),$(eval include packages/$(native_package).mk))
+$(foreach package,$(packages),$(eval include packages/$(package).mk))
 
 #compute a hash of all files that comprise this package's build recipe
 $(foreach package,$(all_packages),$(eval $(call int_get_build_recipe_hash,$(package))))
@@ -251,4 +260,4 @@ $(foreach package,$(all_packages),$(eval $(call int_config_attach_build_config,$
 $(foreach package,$(all_packages),$(eval $(call int_add_cmds,$(package))))
 
 #special exception: if a toolchain package exists, all non-native packages depend on it
-$(foreach package,$(packages),$(eval $($(package)_unpacked): |$($($(host_arch)_$(host_os)_native_toolchain)_cached) $($($(host_arch)_$(host_os)_native_binutils)_cached) ))
+$(foreach package,$(packages),$(eval $($(package)_extracted): |$($($(host_arch)_$(host_os)_native_toolchain)_cached) $($($(host_arch)_$(host_os)_native_binutils)_cached) ))

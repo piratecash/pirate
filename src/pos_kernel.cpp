@@ -1,4 +1,3 @@
-// Copyright (c) 2020-2022 The Cosanta Core developers
 // Distributed under the MIT software license, see the accompanying
 /* @flow */
 // Copyright (c) 2012-2013 The PPCoin developers
@@ -112,10 +111,10 @@ static bool SelectBlockFromCandidates(
             break;
         }
 
-        if (!mapBlockIndex.count(iter->second))
+        if (!::BlockIndex().count(iter->second))
             return error("SelectBlockFromCandidates: failed to find block index for candidate block %s", iter->second.ToString().c_str());
 
-        const CBlockIndex* pindex = mapBlockIndex[iter->second];
+        const CBlockIndex* pindex = ::BlockIndex()[iter->second];
         if (fSelected && pindex->GetBlockTime() > nSelectionIntervalStop) {
             // No point to re-consider the blocks
             vSortedByTimestamp.erase(vSortedByTimestamp.begin(), iter+1);
@@ -375,12 +374,12 @@ bool CheckStakeKernelHash(
     const COutPoint prevout,
     unsigned int nHashDrift,
     bool fCheck,
+    uint256& hashProofOfStake,
     bool fPrintProofOfStake
 ) {
     // Legacy way of parameter passing
     unsigned int nBits = current.nBits;
     unsigned int& nTimeTx = current.nTime;
-    uint256 hashProofOfStake = current.hashProofOfStake();
     uint32_t &nStakeModifier = current.nStakeModifier();
     //
 
@@ -452,6 +451,7 @@ bool CheckStakeKernelHash(
     //create data stream once instead of repeating it in the loop
     CDataStream ss(SER_GETHASH, 0);
     ss << nStakeModifier;
+    hashProofOfStake = stakeHash(nTimeTx, ss, prevout.n, prevout.hash, nTimeBlockFrom);
 
     // if wallet is simply checking to make sure a hash is valid
     //-------------------
@@ -475,11 +475,9 @@ bool CheckStakeKernelHash(
                 LogPrintf("CheckStakeKernelHash(): failed to get kernel stake modifier V2 \n");
                 return false;
             }
-
-            ss = CDataStream(SER_GETHASH, 0);
-            ss << nStakeModifier;
-            return true;
         }
+        ss = CDataStream(SER_GETHASH, 0);
+        ss << nStakeModifier;
 
         //hash this iteration
         hashProofOfStake = stakeHash(try_time, ss, prevout.n, prevout.hash, nTimeBlockFrom);
@@ -511,9 +509,9 @@ bool CheckStakeKernelHash(
 }
 
 // Check kernel hash target and coinstake signature
-bool CheckProofOfStake(CValidationState &state, const CBlockHeader &header, const Consensus::Params& consensus)
+bool CheckProofOfStake(CValidationState &state, const CBlockHeader &header, uint256& hashProofOfStake, const Consensus::Params& consensus)
 {
-    if (header.posBlockSig.empty()) {
+    if (header.vchBlockSig.empty()) {
         return state.DoS(100, false, REJECT_MALFORMED, "bad-pos-sig", false, "missing PoS signature");
     }
 
@@ -525,10 +523,10 @@ bool CheckProofOfStake(CValidationState &state, const CBlockHeader &header, cons
     CBlockIndex* pindex_tx = nullptr;
     CBlockIndex* pindex_prev = nullptr;
 
-    if (!GetTransaction(prevout.hash, txinPrevRef, consensus, txinHashBlock, true)) {
-        BlockMap::iterator it = mapBlockIndex.find(header.hashPrevBlock);
+    if (!GetTransaction(prevout.hash, txinPrevRef, consensus, txinHashBlock)) {
+        BlockMap::iterator it = ::BlockIndex().find(header.hashPrevBlock);
         
-        if ((it != mapBlockIndex.end()) && chainActive.Contains(it->second)) {
+        if ((it != ::BlockIndex().end()) && ::ChainActive().Contains(it->second)) {
             return state.DoS(100, false, REJECT_INVALID, "bad-unkown-stake");
         } else {
             // We do not have the previous block, so the block may be valid
@@ -538,14 +536,14 @@ bool CheckProofOfStake(CValidationState &state, const CBlockHeader &header, cons
 
     // Check tx input block is known
     {
-        BlockMap::iterator it = mapBlockIndex.find(txinHashBlock);
+        BlockMap::iterator it = ::BlockIndex().find(txinHashBlock);
 
-        if ((it != mapBlockIndex.end()) && chainActive.Contains(it->second)) {
+        if ((it != ::BlockIndex().end()) && ::ChainActive().Contains(it->second)) {
             pindex_tx = it->second;
         } else {
-            it = mapBlockIndex.find(header.hashPrevBlock);
+            it = ::BlockIndex().find(header.hashPrevBlock);
             
-            if ((it != mapBlockIndex.end()) && chainActive.Contains(it->second)) {
+            if ((it != ::BlockIndex().end()) && ::ChainActive().Contains(it->second)) {
                 return state.DoS(100, false, REJECT_INVALID, "bad-stake-mempool",
                                  false, "stake from mempool");
             } else {
@@ -557,16 +555,16 @@ bool CheckProofOfStake(CValidationState &state, const CBlockHeader &header, cons
 
     // Header-only chain specific validation
     {
-        BlockMap::iterator it = mapBlockIndex.find(header.hashPrevBlock);
+        BlockMap::iterator it = ::BlockIndex().find(header.hashPrevBlock);
 
         // It must never happen as it's part of header validation.
-        if (it == mapBlockIndex.end()) {
+        if (it == ::BlockIndex().end()) {
             return state.DoS(100, false, REJECT_INVALID, "bad-prev-header",
                                 false, "previous PoS header is not known");
         }
 
         pindex_prev = it->second;
-        const auto pindex_fork = chainActive.FindFork(pindex_prev);
+        const auto pindex_fork = ::ChainActive().FindFork(pindex_prev);
 
         // Just in case, it must never happen.
         if (!pindex_fork) {
@@ -598,7 +596,7 @@ bool CheckProofOfStake(CValidationState &state, const CBlockHeader &header, cons
 
     // Check stake maturity (double checking with other functionality for DoS mitigation)
     if (txinPrevRef->IsCoinBase() &&
-        ((chainActive.Tip()->nHeight - pindex_tx->nHeight) <= COINBASE_MATURITY)
+        ((::ChainActive().Tip()->nHeight - pindex_tx->nHeight) <= COINBASE_MATURITY)
     ) {
         return state.DoS(100, false, REJECT_INVALID, "bad-stake-coinbase-maturity",
                             false, "coinbase maturity mismatch for stake");
@@ -611,7 +609,9 @@ bool CheckProofOfStake(CValidationState &state, const CBlockHeader &header, cons
         CKeyID key_id;
         const auto &spk = txinPrevRef->vout[prevout.n].scriptPubKey;
 
-        if (!Solver(spk, whichType, vSolutions)) {
+        whichType = Solver(spk, vSolutions);
+
+        if (whichType == TX_NONSTANDARD) {
             return state.DoS(100, false, REJECT_MALFORMED, "bad-pos-input",
                              false, "invalid Stake Input script");
         }
@@ -647,6 +647,7 @@ bool CheckProofOfStake(CValidationState &state, const CBlockHeader &header, cons
             prevout,
             nInterval,
             true,
+            hashProofOfStake,
             false);
 
     if (!is_valid) {

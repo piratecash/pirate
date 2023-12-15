@@ -4,8 +4,8 @@
 
 #include <dbwrapper.h>
 #include <uint256.h>
-#include <random.h>
-#include <test/test_cosanta.h>
+#include <test/util/setup_common.h>
+#include <util/memory.h>
 
 #include <memory>
 
@@ -147,7 +147,7 @@ BOOST_AUTO_TEST_CASE(dbwrapper_batch)
         // Remove key3 before it's even been written
         batch.Erase(key3);
 
-        dbw.WriteBatch(batch);
+        BOOST_CHECK(dbw.WriteBatch(batch));
 
         BOOST_CHECK(dbw.Read(key, res));
         BOOST_CHECK_EQUAL(res.ToString(), in.ToString());

@@ -42,7 +42,7 @@ static bool GetCScript(const SigningProvider& provider, const SignatureData& sig
     return false;
 }
 
-static bool GetPubKey(const SigningProvider& provider, SignatureData& sigdata, const CKeyID& address, CPubKey& pubkey)
+static bool GetPubKey(const SigningProvider& provider, const SignatureData& sigdata, const CKeyID& address, CPubKey& pubkey)
 {
     // Look for pubkey in all partial sigs
     const auto it = sigdata.signatures.find(address);
@@ -57,14 +57,7 @@ static bool GetPubKey(const SigningProvider& provider, SignatureData& sigdata, c
         return true;
     }
     // Query the underlying provider
-    if (provider.GetPubKey(address, pubkey)) {
-        KeyOriginInfo info;
-        if (provider.GetKeyOrigin(address, info)) {
-            sigdata.misc_pubkeys.emplace(address, std::make_pair(pubkey, std::move(info)));
-        }
-        return true;
-    }
-    return false;
+    return provider.GetPubKey(address, pubkey);
 }
 
 static bool CreateSig(const BaseSignatureCreator& creator, SignatureData& sigdata, const SigningProvider& provider, std::vector<unsigned char>& sig_out, const CPubKey& pubkey, const CScript& scriptcode, SigVersion sigversion)
@@ -104,11 +97,7 @@ static bool SignStep(const SigningProvider& provider, const BaseSignatureCreator
     std::vector<unsigned char> sig;
 
     std::vector<valtype> vSolutions;
-    if (!Solver(scriptPubKey, whichTypeRet, vSolutions))
-    {
-        LogPrintf("*** solver solver failed \n");
-        return false;
-    }
+    whichTypeRet = Solver(scriptPubKey, vSolutions);
 
     switch (whichTypeRet)
     {
@@ -210,6 +199,7 @@ bool ProduceSignature(const SigningProvider& provider, const BaseSignatureCreato
     return sigdata.complete;
 }
 
+namespace {
 class SignatureExtractorChecker final : public BaseSignatureChecker
 {
 private:
@@ -218,21 +208,17 @@ private:
 
 public:
     SignatureExtractorChecker(SignatureData& sigdata, BaseSignatureChecker& checker) : sigdata(sigdata), checker(checker) {}
-    bool CheckSig(const std::vector<unsigned char>& scriptSig, const std::vector<unsigned char>& vchPubKey, const CScript& scriptCode, SigVersion sigversion) const override;
+    bool CheckSig(const std::vector<unsigned char>& scriptSig, const std::vector<unsigned char>& vchPubKey, const CScript& scriptCode, SigVersion sigversion) const override
+    {
+        if (checker.CheckSig(scriptSig, vchPubKey, scriptCode, sigversion)) {
+            CPubKey pubkey(vchPubKey);
+            sigdata.signatures.emplace(pubkey.GetID(), SigPair(pubkey, scriptSig));
+            return true;
+        }
+        return false;
+    }
 };
 
-bool SignatureExtractorChecker::CheckSig(const std::vector<unsigned char>& scriptSig, const std::vector<unsigned char>& vchPubKey, const CScript& scriptCode, SigVersion sigversion) const
-{
-    if (checker.CheckSig(scriptSig, vchPubKey, scriptCode, sigversion)) {
-        CPubKey pubkey(vchPubKey);
-        sigdata.signatures.emplace(pubkey.GetID(), SigPair(pubkey, scriptSig));
-        return true;
-    }
-    return false;
-}
-
-namespace
-{
 struct Stacks
 {
     std::vector<valtype> script;
@@ -268,9 +254,8 @@ SignatureData DataFromTransaction(const CMutableTransaction& tx, unsigned int nI
     }
 
     // Get scripts
-    txnouttype script_type;
     std::vector<std::vector<unsigned char>> solutions;
-    Solver(txout.scriptPubKey, script_type, solutions);
+    txnouttype script_type = Solver(txout.scriptPubKey, solutions);
     SigVersion sigversion = SigVersion::BASE;
     CScript next_script = txout.scriptPubKey;
 
@@ -281,7 +266,7 @@ SignatureData DataFromTransaction(const CMutableTransaction& tx, unsigned int nI
         next_script = std::move(redeem_script);
 
         // Get redeemScript type
-        Solver(next_script, script_type, solutions);
+        script_type = Solver(next_script, solutions);
         stack.script.pop_back();
     }
 
@@ -436,7 +421,13 @@ bool HidingSigningProvider::GetKeyOrigin(const CKeyID& keyid, KeyOriginInfo& inf
 
 bool FlatSigningProvider::GetCScript(const CScriptID& scriptid, CScript& script) const { return LookupHelper(scripts, scriptid, script); }
 bool FlatSigningProvider::GetPubKey(const CKeyID& keyid, CPubKey& pubkey) const { return LookupHelper(pubkeys, keyid, pubkey); }
-bool FlatSigningProvider::GetKeyOrigin(const CKeyID& keyid, KeyOriginInfo& info) const { return LookupHelper(origins, keyid, info); }
+bool FlatSigningProvider::GetKeyOrigin(const CKeyID& keyid, KeyOriginInfo& info) const
+{
+    std::pair<CPubKey, KeyOriginInfo> out;
+    bool ret = LookupHelper(origins, keyid, out);
+    if (ret) info = std::move(out.second);
+    return ret;
+}
 bool FlatSigningProvider::GetKey(const CKeyID& keyid, CKey& key) const { return LookupHelper(keys, keyid, key); }
 
 FlatSigningProvider Merge(const FlatSigningProvider& a, const FlatSigningProvider& b)
@@ -448,5 +439,7 @@ FlatSigningProvider Merge(const FlatSigningProvider& a, const FlatSigningProvide
     ret.pubkeys.insert(b.pubkeys.begin(), b.pubkeys.end());
     ret.keys = a.keys;
     ret.keys.insert(b.keys.begin(), b.keys.end());
+    ret.origins = a.origins;
+    ret.origins.insert(b.origins.begin(), b.origins.end());
     return ret;
 }

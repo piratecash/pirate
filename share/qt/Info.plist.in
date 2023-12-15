@@ -11,7 +11,7 @@
   </array>
 
   <key>CFBundleIconFile</key>
-  <string>cosanta.icns</string>
+  <string>piratecash.icns</string>
 
   <key>CFBundlePackageType</key>
   <string>APPL</string>
@@ -26,16 +26,15 @@
   <string>????</string>
 
   <key>CFBundleExecutable</key>
-  <string>Cosanta-Qt</string>
-
+  <string>PirateCash-Qt</string>
   <key>CFBundleName</key>
-  <string>Cosanta-Qt</string>
+  <string>PirateCash-Qt</string>
 
   <key>LSHasLocalizedDisplayName</key>
   <true/>
 
   <key>CFBundleIdentifier</key>
-  <string>org.cosanta.Cosanta-Qt</string>
+  <string>cash.p.PirateCash-Qt</string>
 
   <key>CFBundleURLTypes</key>
   <array>
@@ -43,48 +42,11 @@
       <key>CFBundleTypeRole</key>
       <string>Editor</string>
       <key>CFBundleURLName</key>
-      <string>net.cosanta</string>
+      <string>cash.p</string>
       <key>CFBundleURLSchemes</key>
       <array>
-        <string>cosanta</string>
+        <string>piratecash</string>
       </array>
-    </dict>
-  </array>
-
-  <key>UTExportedTypeDeclarations</key>
-  <array>
-    <dict>
-      <key>UTTypeIdentifier</key>
-      <string>net.cosanta</string>
-      <key>UTTypeDescription</key>
-      <string>Cosanta</string>
-      <key>UTTypeConformsTo</key>
-      <array>
-        <string>public.data</string>
-      </array>
-      <key>UTTypeTagSpecification</key>
-      <dict>
-        <key>public.mime-type</key>
-        <string>application/x-cosanta</string>
-        <key>public.filename-extension</key>
-        <array>
-          <string>cosanta</string>
-        </array>
-      </dict>
-    </dict>
-  </array>
-
-  <key>CFBundleDocumentTypes</key>
-  <array>
-    <dict>
-      <key>CFBundleTypeRole</key>
-      <string>Editor</string>
-      <key>LSItemContentTypes</key>
-      <array>
-        <string>net.cosanta</string>
-      </array>
-      <key>LSHandlerRank</key>
-      <string>Owner</string>
     </dict>
   </array>
 
@@ -99,7 +61,6 @@
 
   <key>NSHumanReadableCopyright</key>
   <string>Copyright © 2009-@COPYRIGHT_YEAR@ The Bitcoin Core developers, 2020-@COPYRIGHT_YEAR@ @COPYRIGHT_HOLDERS_FINAL@</string>
-
   <key>LSApplicationCategoryType</key>
     <string>public.app-category.finance</string>
 </dict>
